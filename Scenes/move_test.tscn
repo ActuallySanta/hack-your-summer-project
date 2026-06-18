@@ -10,8 +10,6 @@ size = Vector2(1166, 76)
 
 [node name="Player" parent="." unique_id=840937925 instance=ExtResource("1_7rk6c")]
 position = Vector2(358, 311)
-moveSpeed = 500.0
-jumpForce = 600.0
 
 [node name="Ground" type="StaticBody2D" parent="." unique_id=412341354]
 position = Vector2(568, 611)

@@ -1,25 +1,51 @@
 extends CharacterBody2D
 
 
-@export var moveSpeed := 300.0
-@export var jumpForce := 400.0
+@export var moveSpeed := 500.0
+@export var jumpForce := 600.0
+@export var jumpBufferTime := 0.25
+@export var coyoteTime := 0.2
 
+var _moveInput : float
+var _jumpBufferTimer : float
+var _coyoteTimer : float
+
+func jump() -> void:
+	velocity.y = -jumpForce
+	_jumpBufferTimer = 0
+	_coyoteTimer = 0
 
 func _physics_process(delta: float) -> void:
 	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
+		_coyoteTimer -= delta
+	else:
+		_coyoteTimer = coyoteTime
 
 	# Handle jump.
-	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
-		velocity.y = -jumpForce
+	if _jumpBufferTimer > 0:
+		if is_on_floor() or _coyoteTimer > 0:
+			jump()
+		else:
+			_jumpBufferTimer -= delta
 
 	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
-	var direction := Input.get_axis("ui_left", "ui_right")
-	if direction:
-		velocity.x = direction * moveSpeed
+	if _moveInput:
+		velocity.x = _moveInput * moveSpeed
 	else:
 		velocity.x = move_toward(velocity.x, 0, moveSpeed)
 
 	move_and_slide()
+
+func set_jump_input() -> void:
+	_jumpBufferTimer = jumpBufferTime
+
+func handle_inputs() -> void:
+	_moveInput = Input.get_axis("ui_left", "ui_right")
+	if Input.is_action_just_pressed("ui_accept"):
+		set_jump_input()
+
+func _process(delta: float) -> void:
+	handle_inputs()
+	#animation code would go here eventually
