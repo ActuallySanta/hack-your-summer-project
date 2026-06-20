@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://c8jdrquxbl6nn"]
 
 [ext_resource type="Script" uid="uid://bvsm4sk88uy1i" path="res://Scripts/UI/animate_menu_button.gd" id="1_xcsdu"]
+[ext_resource type="Script" uid="uid://plxmmpvyj10i" path="res://Scripts/UI/switch_menu_on_click.gd" id="2_4hf0m"]
 
 [node name="Main Menu Button" type="Button" unique_id=1030041492]
 anchors_preset = 8
@@ -25,5 +26,9 @@ offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("1_xcsdu")
 
+[node name="Switch Menu On Click" type="Node" parent="." unique_id=2092892122]
+script = ExtResource("2_4hf0m")
+
 [connection signal="mouse_entered" from="." to="Animate Menu Button" method="_on_button_mouse_entered"]
 [connection signal="mouse_exited" from="." to="Animate Menu Button" method="_on_button_mouse_exited"]
+[connection signal="pressed" from="." to="Switch Menu On Click" method="_on_main_menu_button_pressed"]
