@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://ut4n31f8o3hm" path="res://Scripts/UI/main_menu.gd" id="1_o14dv"]
 [ext_resource type="LabelSettings" uid="uid://b20e3wnv8fqv0" path="res://Label Settings/Menu Header Settings.tres" id="2_u7lva"]
 [ext_resource type="PackedScene" uid="uid://c8jdrquxbl6nn" path="res://Scenes/UI/main_menu_button.tscn" id="3_mrfpk"]
+[ext_resource type="Script" uid="uid://plxmmpvyj10i" path="res://Scripts/UI/switch_menu_on_click.gd" id="4_u7lva"]
 
 [node name="Main Menu" type="Control" unique_id=766264186]
 layout_mode = 3
@@ -70,7 +71,8 @@ layout_mode = 2
 size_flags_vertical = 3
 text = "CREDITS"
 
-[node name="Switch Menu On Click" parent="Main Menu/Button Container/Main Menu Button3" index="2" unique_id=2092892122 node_paths=PackedStringArray("nodeToSwitchTo", "menuNode")]
+[node name="Switch Menu On Click" type="Node" parent="Main Menu/Button Container/Main Menu Button3" unique_id=475388405 node_paths=PackedStringArray("nodeToSwitchTo", "menuNode")]
+script = ExtResource("4_u7lva")
 nodeToSwitchTo = NodePath("../../../../Credits Menu")
 menuNode = NodePath("../../..")
 
@@ -112,7 +114,8 @@ grow_vertical = 0
 text = "GO BACK
 "
 
-[node name="Switch Menu On Click" parent="Credits Menu/Main Menu Button" index="2" unique_id=2092892122 node_paths=PackedStringArray("nodeToSwitchTo", "menuNode")]
+[node name="Switch Menu On Click" type="Node" parent="Credits Menu/Main Menu Button" unique_id=1856496329 node_paths=PackedStringArray("nodeToSwitchTo", "menuNode")]
+script = ExtResource("4_u7lva")
 nodeToSwitchTo = NodePath("../../../Main Menu")
 menuNode = NodePath("../..")
 
@@ -136,5 +139,5 @@ Etiam tortor erat, consequat ullamcorper blandit sed, posuere ut tortor. In pell
 Morbi sagittis lectus ut ex sollicitudin, at congue sapien semper. Suspendisse nulla libero, venenatis nec mauris sit amet, scelerisque bibendum nisi. Nunc eu arcu in lorem imperdiet porta. Vivamus sapien purus, euismod ac mattis ut, dignissim vitae orci. Integer eu ex et urna vehicula fermentum. Aliquam fringilla mi ut elit maximus pellentesque at sed nunc. In at augue nec mi dignissim blandit non at libero."
 fit_content = true
 
-[editable path="Main Menu/Button Container/Main Menu Button3"]
-[editable path="Credits Menu/Main Menu Button"]
+[connection signal="pressed" from="Main Menu/Button Container/Main Menu Button3" to="Main Menu/Button Container/Main Menu Button3/Switch Menu On Click" method="_on_main_menu_button_pressed"]
+[connection signal="pressed" from="Credits Menu/Main Menu Button" to="Credits Menu/Main Menu Button/Switch Menu On Click" method="_on_main_menu_button_pressed"]
