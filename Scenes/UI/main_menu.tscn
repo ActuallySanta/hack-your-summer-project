@@ -1,0 +1,68 @@
+[gd_scene format=3 uid="uid://dbr2sfm8y3rni"]
+
+[ext_resource type="Script" uid="uid://ut4n31f8o3hm" path="res://Scripts/UI/main_menu.gd" id="1_o14dv"]
+[ext_resource type="LabelSettings" uid="uid://b20e3wnv8fqv0" path="res://Label Settings/Menu Header Settings.tres" id="2_u7lva"]
+[ext_resource type="PackedScene" uid="uid://c8jdrquxbl6nn" path="res://Scenes/UI/main_menu_button.tscn" id="3_mrfpk"]
+
+[node name="Main Menu" type="Control" unique_id=766264186]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_o14dv")
+
+[node name="Background" type="Panel" parent="." unique_id=1563919755]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title Text" type="Label" parent="." unique_id=1441537417]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -44.0
+offset_right = 676.0
+offset_bottom = 44.0
+grow_vertical = 2
+text = "SPACE SCAVENGER 3D"
+label_settings = ExtResource("2_u7lva")
+horizontal_alignment = 1
+
+[node name="Button Container" type="VBoxContainer" parent="." unique_id=240547198]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -460.0
+offset_top = -135.0
+offset_bottom = 135.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="Main Menu Button" parent="Button Container" unique_id=1030041492 instance=ExtResource("3_mrfpk")]
+layout_mode = 2
+size_flags_vertical = 3
+text = "START GAME"
+
+[node name="Main Menu Button2" parent="Button Container" unique_id=2098235088 instance=ExtResource("3_mrfpk")]
+layout_mode = 2
+size_flags_vertical = 3
+text = "LOAD GAME"
+
+[node name="Main Menu Button3" parent="Button Container" unique_id=218845620 instance=ExtResource("3_mrfpk")]
+layout_mode = 2
+size_flags_vertical = 3
+text = "CREDITS"
+
+[node name="Main Menu Button4" parent="Button Container" unique_id=1364985603 instance=ExtResource("3_mrfpk")]
+layout_mode = 2
+size_flags_vertical = 3
+text = "QUIT GAME"
