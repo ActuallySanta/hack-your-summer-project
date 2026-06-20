@@ -27,6 +27,10 @@ project/assembly_name="Hack Your Summer Project"
 
 enabled=PackedStringArray("res://addons/MetroidvaniaSystem/EditorExtension/plugin.cfg", "res://addons/MetroidvaniaSystem/plugin.cfg")
 
+[global_group]
+
+player=""
+
 [input]
 
 Left={
