@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://c8jdrquxbl6nn"]
+
+[ext_resource type="Script" uid="uid://bvsm4sk88uy1i" path="res://Scripts/UI/animate_menu_button.gd" id="1_xcsdu"]
+
+[node name="Main Menu Button" type="Button" unique_id=1030041492]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -57.5
+offset_top = -19.0
+offset_right = 57.5
+offset_bottom = 19.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0.5)
+text = "BUTTON TEXT"
+
+[node name="Menu Click SFX" type="AudioStreamPlayer" parent="." unique_id=1602644803]
+
+[node name="Animate Menu Button" type="Control" parent="." unique_id=1544133040]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_xcsdu")
+
+[connection signal="mouse_entered" from="." to="Animate Menu Button" method="_on_button_mouse_entered"]
+[connection signal="mouse_exited" from="." to="Animate Menu Button" method="_on_button_mouse_exited"]
