@@ -140,4 +140,5 @@ Morbi sagittis lectus ut ex sollicitudin, at congue sapien semper. Suspendisse n
 fit_content = true
 
 [connection signal="pressed" from="Main Menu/Button Container/Main Menu Button3" to="Main Menu/Button Container/Main Menu Button3/Switch Menu On Click" method="_on_main_menu_button_pressed"]
+[connection signal="pressed" from="Main Menu/Button Container/Main Menu Button4" to="." method="_quit_game"]
 [connection signal="pressed" from="Credits Menu/Main Menu Button" to="Credits Menu/Main Menu Button/Switch Menu On Click" method="_on_main_menu_button_pressed"]

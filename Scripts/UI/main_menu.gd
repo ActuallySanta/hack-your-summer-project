@@ -16,8 +16,6 @@ func _start_game() -> void:
 func _load_game() -> void:
 	pass
 
-func _open_credits_menu() -> void:
-	pass
-
 func _quit_game() -> void:
+	get_tree().quit()
 	pass
