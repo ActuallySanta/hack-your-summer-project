@@ -1,0 +1,144 @@
+[gd_scene format=3 uid="uid://dbr2sfm8y3rni"]
+
+[ext_resource type="Script" uid="uid://ut4n31f8o3hm" path="res://Scripts/UI/main_menu.gd" id="1_o14dv"]
+[ext_resource type="LabelSettings" uid="uid://b20e3wnv8fqv0" path="res://Label Settings/Menu Header Settings.tres" id="2_u7lva"]
+[ext_resource type="PackedScene" uid="uid://c8jdrquxbl6nn" path="res://Scenes/UI/main_menu_button.tscn" id="3_mrfpk"]
+[ext_resource type="Script" uid="uid://plxmmpvyj10i" path="res://Scripts/UI/switch_menu_on_click.gd" id="4_u7lva"]
+
+[node name="Main Menu" type="Control" unique_id=766264186]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_o14dv")
+
+[node name="Background" type="Panel" parent="." unique_id=1563919755]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Main Menu" type="Control" parent="." unique_id=1941217421]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title Text" type="Label" parent="Main Menu" unique_id=1441537417]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -44.0
+offset_right = 676.0
+offset_bottom = 44.0
+grow_vertical = 2
+text = "SPACE SCAVENGER 3D"
+label_settings = ExtResource("2_u7lva")
+horizontal_alignment = 1
+
+[node name="Button Container" type="VBoxContainer" parent="Main Menu" unique_id=240547198]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -460.0
+offset_top = -135.0
+offset_bottom = 135.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="Main Menu Button" parent="Main Menu/Button Container" unique_id=1030041492 instance=ExtResource("3_mrfpk")]
+layout_mode = 2
+size_flags_vertical = 3
+text = "START GAME"
+
+[node name="Main Menu Button2" parent="Main Menu/Button Container" unique_id=2098235088 instance=ExtResource("3_mrfpk")]
+layout_mode = 2
+size_flags_vertical = 3
+text = "LOAD GAME"
+
+[node name="Main Menu Button3" parent="Main Menu/Button Container" unique_id=218845620 instance=ExtResource("3_mrfpk")]
+layout_mode = 2
+size_flags_vertical = 3
+text = "CREDITS"
+
+[node name="Switch Menu On Click" type="Node" parent="Main Menu/Button Container/Main Menu Button3" unique_id=475388405 node_paths=PackedStringArray("nodeToSwitchTo", "menuNode")]
+script = ExtResource("4_u7lva")
+nodeToSwitchTo = NodePath("../../../../Credits Menu")
+menuNode = NodePath("../../..")
+
+[node name="Main Menu Button4" parent="Main Menu/Button Container" unique_id=1364985603 instance=ExtResource("3_mrfpk")]
+layout_mode = 2
+size_flags_vertical = 3
+text = "QUIT GAME"
+
+[node name="Credits Menu" type="Control" parent="." unique_id=2097890309]
+process_mode = 4
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="Credits Menu" unique_id=750805829]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 23.0
+grow_horizontal = 2
+text = "CREDITS"
+label_settings = ExtResource("2_u7lva")
+
+[node name="Main Menu Button" parent="Credits Menu" unique_id=1749704636 instance=ExtResource("3_mrfpk")]
+layout_mode = 1
+anchors_preset = 7
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -38.0
+offset_bottom = 0.0
+grow_vertical = 0
+text = "GO BACK
+"
+
+[node name="Switch Menu On Click" type="Node" parent="Credits Menu/Main Menu Button" unique_id=1856496329 node_paths=PackedStringArray("nodeToSwitchTo", "menuNode")]
+script = ExtResource("4_u7lva")
+nodeToSwitchTo = NodePath("../../../Main Menu")
+menuNode = NodePath("../..")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Credits Menu" unique_id=1833341048]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -427.0
+offset_top = -207.0
+offset_right = 427.0
+offset_bottom = 207.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vitae tempus dui, ultrices semper turpis. Vivamus sit amet magna ut ex finibus sollicitudin sit amet vitae nibh. Sed nec velit ac eros elementum interdum. Nullam tincidunt lectus commodo maximus mattis. Nulla mollis elementum risus eu iaculis. Fusce vitae lacus finibus, egestas neque vel, faucibus tellus. Praesent sit amet placerat dolor. Nunc vitae eros ut dui ullamcorper facilisis ac quis diam. Proin iaculis odio urna, scelerisque pretium ante volutpat et. Vestibulum at libero pharetra, imperdiet risus sit amet, gravida mauris. Nulla facilisi. Pellentesque sapien justo, laoreet non nisi et, tempor porttitor libero. Duis tristique sit amet lorem at luctus. Praesent eleifend metus quis quam mattis, sed faucibus mauris aliquam.
+
+Etiam tortor erat, consequat ullamcorper blandit sed, posuere ut tortor. In pellentesque lorem eget elit suscipit, non dignissim arcu maximus. Nunc interdum nulla velit, in feugiat nisi malesuada a. Morbi eget vestibulum enim. Aliquam justo eros, dignissim non nibh finibus, ornare tincidunt nibh. Sed vestibulum nisl non rutrum elementum. Nunc cursus massa a risus fermentum ullamcorper.
+
+Morbi sagittis lectus ut ex sollicitudin, at congue sapien semper. Suspendisse nulla libero, venenatis nec mauris sit amet, scelerisque bibendum nisi. Nunc eu arcu in lorem imperdiet porta. Vivamus sapien purus, euismod ac mattis ut, dignissim vitae orci. Integer eu ex et urna vehicula fermentum. Aliquam fringilla mi ut elit maximus pellentesque at sed nunc. In at augue nec mi dignissim blandit non at libero."
+fit_content = true
+
+[connection signal="pressed" from="Main Menu/Button Container/Main Menu Button3" to="Main Menu/Button Container/Main Menu Button3/Switch Menu On Click" method="_on_main_menu_button_pressed"]
+[connection signal="pressed" from="Main Menu/Button Container/Main Menu Button4" to="." method="_quit_game"]
+[connection signal="pressed" from="Credits Menu/Main Menu Button" to="Credits Menu/Main Menu Button/Switch Menu On Click" method="_on_main_menu_button_pressed"]
