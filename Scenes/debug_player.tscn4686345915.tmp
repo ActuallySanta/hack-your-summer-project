@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://n6qeued4uv1k"]
+
+[ext_resource type="Texture2D" uid="uid://c4d3pjctljcqp" path="res://Textures/LilGuy/lilGuy_0.png" id="1_ch6ae"]
+[ext_resource type="Script" uid="uid://dqth1elotk2os" path="res://Scripts/debugMoveScript.gd" id="2_kocv4"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ch6ae"]
+radius = 36.0
+height = 84.0
+
+[node name="DebugPlayer" type="Node2D" unique_id=1496809797]
+texture_filter = 1
+
+[node name="RigidBody2D" type="RigidBody2D" parent="." unique_id=657912612]
+script = ExtResource("2_kocv4")
+jumpSpeed = 2000
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D" unique_id=807239017]
+shape = SubResource("CapsuleShape2D_ch6ae")
+
+[node name="Sprite" type="Sprite2D" parent="RigidBody2D" unique_id=1171154116]
+scale = Vector2(5, 5)
+texture = ExtResource("1_ch6ae")
