@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://dohmyoeiilp0v"]
+
+[ext_resource type="Texture2D" uid="uid://d1irxkv8rmbly" path="res://Sprites/SpaceStation_Character_Sheet.png" id="1_pv8u5"]
+[ext_resource type="Script" uid="uid://cuyc4v3bd5vyw" path="res://Player/Scripts/player.gd" id="1_xwm4p"]
+[ext_resource type="Texture2D" uid="uid://cc2bpmkui6luy" path="res://Sprites/SpaceStation_Projectiles_Sheet.png" id="2_yb4o1"]
+[ext_resource type="AnimationLibrary" uid="uid://vr4581rerisb" path="res://.res" id="3_2hw6s"]
+[ext_resource type="Script" uid="uid://cmxeifgfb32s0" path="res://Player/Scripts/state_machine.gd" id="5_0q5xf"]
+[ext_resource type="Script" uid="uid://c3sovkbkip726" path="res://Player/Scripts/state_idle.gd" id="6_5cm5i"]
+[ext_resource type="Script" uid="uid://bmoxuttu1oblt" path="res://Player/Scripts/state_walk.gd" id="7_vtle1"]
+[ext_resource type="Script" uid="uid://k75444dcwhw8" path="res://Player/Scripts/state_attack.gd" id="8_od3ui"]
+[ext_resource type="Script" uid="uid://di0vg1qd8o15w" path="res://Player/Scripts/PlayerCamera.gd" id="9_00tjw"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_5fk43"]
+
+[node name="Player" type="CharacterBody2D" unique_id=862395343]
+script = ExtResource("1_xwm4p")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1301816998]
+shape = SubResource("CapsuleShape2D_5fk43")
+
+[node name="Character" type="Sprite2D" parent="." unique_id=295087923]
+texture = ExtResource("1_pv8u5")
+hframes = 8
+vframes = 9
+
+[node name="Attacks" type="Sprite2D" parent="Character" unique_id=1184458465]
+visible = false
+texture = ExtResource("2_yb4o1")
+offset = Vector2(-18, 25)
+hframes = 8
+vframes = 3
+frame = 23
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=480447104]
+libraries/ = ExtResource("3_2hw6s")
+
+[node name="StateMachine" type="Node" parent="." unique_id=95289598]
+script = ExtResource("5_0q5xf")
+
+[node name="Idle" type="Node" parent="StateMachine" unique_id=582333302]
+script = ExtResource("6_5cm5i")
+
+[node name="Walk" type="Node" parent="StateMachine" unique_id=934769681]
+script = ExtResource("7_vtle1")
+
+[node name="Attack" type="Node" parent="StateMachine" unique_id=768465736]
+script = ExtResource("8_od3ui")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=207190594]
+zoom = Vector2(2, 2)
+script = ExtResource("9_00tjw")
