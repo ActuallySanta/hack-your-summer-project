@@ -7,15 +7,15 @@
 radius = 7.0
 height = 16.0
 
-[node name="DebugPlayer" type="Node2D" unique_id=1496809797]
+[node name="DebugPlayer" type="Node2D" unique_id=1496809797 groups=["player"]]
 texture_filter = 1
 
-[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=436298267]
+[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=436298267 groups=["player"]]
 script = ExtResource("2_kocv4")
 JUMP_VELOCITY = -700.0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D" unique_id=807239017]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D" unique_id=807239017 groups=["player"]]
 shape = SubResource("CapsuleShape2D_ch6ae")
 
-[node name="Sprite" type="Sprite2D" parent="CharacterBody2D" unique_id=1171154116]
+[node name="Sprite" type="Sprite2D" parent="CharacterBody2D" unique_id=1171154116 groups=["player"]]
 texture = ExtResource("1_ch6ae")

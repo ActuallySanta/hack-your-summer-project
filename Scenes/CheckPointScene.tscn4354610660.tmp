@@ -40,7 +40,7 @@ tile_map_data = PackedByteArray("AAAAAP//AAAAAAAAAAABAP//AgAAAAAAAAACAP//AgAAAAA
 tile_set = SubResource("TileSet_as7xb")
 
 [node name="DebugPlayer" parent="." unique_id=1496809797 instance=ExtResource("5_cqfsm")]
-position = Vector2(44.5, 105.25)
+position = Vector2(47.25, 105.25)
 
 [node name="Collision" type="StaticBody2D" parent="." unique_id=2097431941]
 
@@ -73,8 +73,4 @@ position = Vector2(136, 120)
 position = Vector2(152, 120)
 
 [node name="CheckpointDemo" parent="." unique_id=2090508415 instance=ExtResource("7_060qr")]
-position = Vector2(24.5, 24.25)
-
-[node name="CheckpointDemo2" parent="." unique_id=175559830 instance=ExtResource("7_060qr")]
-position = Vector2(103.5, 88.5)
-is_default = false
+position = Vector2(55.25, 28.75)
