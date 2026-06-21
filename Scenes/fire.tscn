@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://blil7bygpxjxo"]
+
+[ext_resource type="Texture2D" uid="uid://xheewmukqlws" path="res://Sprites/FUHYAAAAH/Fire_0.png" id="1_idb68"]
+[ext_resource type="Script" uid="uid://5ysbvrajx77h" path="res://Scripts/fireBehavior.gd" id="1_s2jnl"]
+[ext_resource type="Texture2D" uid="uid://c5ynuw6vdsh8l" path="res://Sprites/FUHYAAAAH/Fire_1.png" id="2_s2jnl"]
+[ext_resource type="Texture2D" uid="uid://cswiuhfugu452" path="res://Sprites/FUHYAAAAH/Fire_2.png" id="3_8uni6"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_hrujk"]
+animations = [{
+"frames": [{
+"duration": 0.5,
+"texture": ExtResource("1_idb68")
+}, {
+"duration": 0.5,
+"texture": ExtResource("2_s2jnl")
+}, {
+"duration": 0.5,
+"texture": ExtResource("3_8uni6")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_idb68"]
+size = Vector2(16, 15)
+
+[node name="Fire" type="Node2D" unique_id=251775038]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=332793417]
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_hrujk")
+autoplay = "default"
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1866343027]
+script = ExtResource("1_s2jnl")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=344210810]
+position = Vector2(0, 0.5)
+shape = SubResource("RectangleShape2D_idb68")
+
+[connection signal="body_entered" from="Area2D" to="Area2D" method="_on_body_entered"]

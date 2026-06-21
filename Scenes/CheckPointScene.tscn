@@ -1,0 +1,80 @@
+[gd_scene format=4 uid="uid://oh3wgmycv8as"]
+
+[ext_resource type="Texture2D" uid="uid://dnr3x2a37m670" path="res://Textures/DebugPixelMappings/Text_0.png" id="1_t3bed"]
+[ext_resource type="Texture2D" uid="uid://6e7uotohqrrn" path="res://Textures/DebugPixelMappings/Text_1.png" id="2_cqfsm"]
+[ext_resource type="Texture2D" uid="uid://dcak0k18sqkel" path="res://Textures/DebugPixelMappings/Text_2.png" id="3_3uf5p"]
+[ext_resource type="Texture2D" uid="uid://canyxaq130uct" path="res://Textures/DebugPixelMappings/Text_3.png" id="4_060qr"]
+[ext_resource type="PackedScene" uid="uid://n6qeued4uv1k" path="res://Scenes/debug_player.tscn" id="5_cqfsm"]
+[ext_resource type="PackedScene" uid="uid://blil7bygpxjxo" path="res://Scenes/fire.tscn" id="6_3uf5p"]
+[ext_resource type="PackedScene" uid="uid://dtv1i40ltg77i" path="res://Scenes/checkpoint_demo.tscn" id="7_060qr"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gx1ob"]
+texture = ExtResource("1_t3bed")
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_i271o"]
+texture = ExtResource("2_cqfsm")
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_v1jf1"]
+texture = ExtResource("3_3uf5p")
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_sggk2"]
+texture = ExtResource("4_060qr")
+0:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_as7xb"]
+sources/0 = SubResource("TileSetAtlasSource_gx1ob")
+sources/1 = SubResource("TileSetAtlasSource_i271o")
+sources/2 = SubResource("TileSetAtlasSource_v1jf1")
+sources/3 = SubResource("TileSetAtlasSource_sggk2")
+
+[node name="TemplateScene" type="Node2D" unique_id=1284532580]
+scale = Vector2(4, 4)
+
+[node name="Rendering" type="TileMapLayer" parent="." unique_id=747571529]
+texture_filter = 1
+position = Vector2(0, 144)
+tile_map_data = PackedByteArray("AAAAAP//AAAAAAAAAAABAP//AgAAAAAAAAACAP//AgAAAAAAAAADAP//AgAAAAAAAAAEAP//AgAAAAAAAAAFAP//AgAAAAAAAAAGAP//AgAAAAAAAAAHAP//AgAAAAAAAAAIAP//AgAAAAAAAAAJAP//AgAAAAAAAAAKAP//AAAAAAAAAAAAAP7/AQAAAAAAAAAAAP3/AQAAAAAAAAAAAPz/AQAAAAAAAAAAAPv/AQAAAAAAAAAAAPr/AQAAAAAAAAAAAPn/AQAAAAAAAAAAAPj/AQAAAAAAAAAAAPf/AAAAAAAAAAAKAPf/AAAAAAAAAAADAPv/AAAAAAAAAAAEAPv/AAAAAAAAAAAFAPv/AAAAAAAAAAAGAPv/AAAAAAAAAAAHAPv/AAAAAAAAAAAKAP7/AQAAAAAAAAAKAP3/AQAAAAAAAAAKAPz/AQAAAAAAAAAKAPv/AQAAAAAAAAAKAPr/AQAAAAAAAAAKAPn/AQAAAAAAAAAKAPj/AQAAAAAAAAABAPf/AgAAAAAAAAACAPf/AgAAAAAAAAADAPf/AgAAAAAAAAAEAPf/AgAAAAAAAAAFAPf/AgAAAAAAAAAGAPf/AgAAAAAAAAAHAPf/AgAAAAAAAAAIAPf/AgAAAAAAAAAJAPf/AgAAAAAAAAACAP7/AwAAAAAAAAACAP3/AwAAAAAAAAACAPz/AwAAAAAAAAACAPv/AwAAAAAAAAACAPr/AwAAAAAAAAACAPn/AwAAAAAAAAACAPj/AwAAAAAAAAABAPj/AwAAAAAAAAABAPn/AwAAAAAAAAABAPr/AwAAAAAAAAABAPv/AwAAAAAAAAABAPz/AwAAAAAAAAABAP3/AwAAAAAAAAABAP7/AwAAAAAAAAADAPj/AwAAAAAAAAADAPn/AwAAAAAAAAADAPr/AwAAAAAAAAAEAPr/AwAAAAAAAAAEAPn/AwAAAAAAAAAEAPj/AwAAAAAAAAAFAPj/AwAAAAAAAAAFAPn/AwAAAAAAAAAFAPr/AwAAAAAAAAAGAPr/AwAAAAAAAAAGAPn/AwAAAAAAAAAGAPj/AwAAAAAAAAAHAPj/AwAAAAAAAAAHAPn/AwAAAAAAAAAHAPr/AwAAAAAAAAAIAPr/AwAAAAAAAAAIAPn/AwAAAAAAAAAIAPj/AwAAAAAAAAAJAPj/AwAAAAAAAAAJAPn/AwAAAAAAAAAJAPr/AwAAAAAAAAAJAPv/AwAAAAAAAAAIAPv/AwAAAAAAAAAIAPz/AwAAAAAAAAAHAPz/AAAAAAAAAAAGAPz/AwAAAAAAAAAFAPz/AwAAAAAAAAAEAPz/AwAAAAAAAAADAPz/AwAAAAAAAAADAP3/AwAAAAAAAAADAP7/AwAAAAAAAAAEAP7/AwAAAAAAAAAEAP3/AwAAAAAAAAAFAP3/AwAAAAAAAAAFAP7/AwAAAAAAAAAGAP7/AwAAAAAAAAAGAP3/AwAAAAAAAAAHAP3/AAAAAAAAAAAIAP7/AwAAAAAAAAAIAP3/AwAAAAAAAAAJAP3/AwAAAAAAAAAJAPz/AwAAAAAAAAAJAP7/AwAAAAAAAAAHAP7/AAAAAAAAAAA=")
+tile_set = SubResource("TileSet_as7xb")
+
+[node name="DebugPlayer" parent="." unique_id=1496809797 instance=ExtResource("5_cqfsm")]
+position = Vector2(44.5, 105.25)
+
+[node name="Collision" type="StaticBody2D" parent="." unique_id=2097431941]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Collision" unique_id=521640921]
+polygon = PackedVector2Array(16, 128, 0, 144, 176, 144, 160, 128)
+
+[node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="Collision" unique_id=1340517505]
+position = Vector2(144.25, -31.75)
+rotation = 1.5707964
+polygon = PackedVector2Array(16, 128, 0, 144, 176, 144, 160, 128)
+
+[node name="CollisionPolygon2D3" type="CollisionPolygon2D" parent="Collision" unique_id=558518705]
+position = Vector2(32, 144)
+rotation = -1.5707964
+polygon = PackedVector2Array(16, 128, 0, 144, 176, 144, 160, 128)
+
+[node name="CollisionPolygon2D4" type="CollisionPolygon2D" parent="Collision" unique_id=367968140]
+position = Vector2(176, 144.75)
+rotation = -3.1415927
+polygon = PackedVector2Array(16, 128, 0, 144, 176, 144, 160, 128)
+
+[node name="CollisionPolygon2D5" type="CollisionPolygon2D" parent="Collision" unique_id=997503001]
+position = Vector2(88, 71.5)
+polygon = PackedVector2Array(40, 56.75, 40, 8.5, 40, -7.5, -40, -7.5, -40, 8.5, 23.75, 8.5, 23.75, 56.75)
+
+[node name="Fire" parent="." unique_id=251775038 instance=ExtResource("6_3uf5p")]
+position = Vector2(136, 120)
+
+[node name="Fire2" parent="." unique_id=1135885597 instance=ExtResource("6_3uf5p")]
+position = Vector2(152, 120)
+
+[node name="CheckpointDemo" parent="." unique_id=2090508415 instance=ExtResource("7_060qr")]
+position = Vector2(24.5, 24.25)
+
+[node name="CheckpointDemo2" parent="." unique_id=175559830 instance=ExtResource("7_060qr")]
+position = Vector2(103.5, 88.5)
+is_default = false
