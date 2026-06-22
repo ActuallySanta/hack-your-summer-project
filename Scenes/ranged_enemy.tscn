@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://2y0le27aj44w" path="res://Sprites/Characters/Space Marine Enemy/scifi_marine_stand_2.png" id="4_0cvt3"]
 [ext_resource type="Texture2D" uid="uid://dn5u00wbsi2a0" path="res://Sprites/Characters/Space Marine Enemy/scifi_marine_run_1.png" id="5_eejfn"]
 [ext_resource type="Texture2D" uid="uid://b6ercphm16gss" path="res://Sprites/Characters/Space Marine Enemy/scifi_marine_run_2.png" id="6_dj2jm"]
+[ext_resource type="Texture2D" uid="uid://bg10y0vh53oub" path="res://Sprites/Characters/Space Marine Enemy/scifi_marine_die_1.png" id="6_nmng3"]
 [ext_resource type="Texture2D" uid="uid://dmx3sw6hmanu1" path="res://Sprites/Characters/Space Marine Enemy/scifi_marine_die_2.png" id="6_qj8iq"]
 [ext_resource type="Texture2D" uid="uid://c7fgblnrma5wo" path="res://Sprites/Characters/Space Marine Enemy/scifi_marine_die_3.png" id="7_i4bsx"]
 [ext_resource type="Texture2D" uid="uid://88bk511xhkq5" path="res://Sprites/Characters/Space Marine Enemy/scifi_marine_run_3.png" id="7_yingu"]
@@ -65,9 +66,25 @@ tracks/1/keys = {
 }]
 }
 
-[sub_resource type="Animation" id="Animation_86kn8"]
+[sub_resource type="Animation" id="Animation_nmng3"]
 resource_name = "die"
 length = 0.6
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visual:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.100080535, 0.20130484, 0.3, 0.40000004),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("6_nmng3"), ExtResource("6_qj8iq"), ExtResource("7_i4bsx"), ExtResource("8_xtnlt"), ExtResource("9_86kn8")]
+}
+
+[sub_resource type="Animation" id="Animation_86kn8"]
+resource_name = "die"
+length = 0.36666667
 loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -76,10 +93,10 @@ tracks/0/path = NodePath("Visual:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.10000001, 0.20000002, 0.3, 0.40000004),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.09950864, 0.10000001, 0.20000002, 0.20016107, 0.3, 0.3008135),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [ExtResource("3_654aa"), ExtResource("6_qj8iq"), ExtResource("7_i4bsx"), ExtResource("8_xtnlt"), ExtResource("9_86kn8")]
+"values": [ExtResource("6_nmng3"), ExtResource("6_qj8iq"), ExtResource("6_qj8iq"), ExtResource("7_i4bsx"), ExtResource("6_nmng3"), ExtResource("8_xtnlt"), ExtResource("6_qj8iq")]
 }
 
 [sub_resource type="Animation" id="Animation_2nh82"]
@@ -119,7 +136,8 @@ tracks/0/keys = {
 _data = {
 &"RESET": SubResource("Animation_i4bsx"),
 &"attack": SubResource("Animation_xtnlt"),
-&"die": SubResource("Animation_86kn8"),
+&"die": SubResource("Animation_nmng3"),
+&"hurt": SubResource("Animation_86kn8"),
 &"idle": SubResource("Animation_2nh82"),
 &"run": SubResource("Animation_u7u8m")
 }
@@ -145,18 +163,21 @@ libraries/ = SubResource("AnimationLibrary_07m26")
 [node name="Visual" type="Sprite2D" parent="." unique_id=930293805]
 texture = ExtResource("1_t0t5w")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=281236112]
+[node name="Hurtbox" type="CollisionShape2D" parent="." unique_id=281236112]
 position = Vector2(0, 13)
 shape = SubResource("CapsuleShape2D_mgs6e")
 
 [node name="Player Detection Check" type="ShapeCast2D" parent="." unique_id=1092179563]
+visible = false
 shape = SubResource("CircleShape2D_aajnb")
 target_position = Vector2(0, 0)
 collision_mask = 2
 
 [node name="Player Obstruction Check" type="RayCast2D" parent="." unique_id=1481630674]
+visible = false
 target_position = Vector2(150, 0)
 collision_mask = 3
 
 [node name="Target Location Check" type="RayCast2D" parent="." unique_id=240777974]
+visible = false
 target_position = Vector2(50, 0)

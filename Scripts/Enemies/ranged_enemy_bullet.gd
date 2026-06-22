@@ -18,6 +18,9 @@ func _on_bullet_lifetime_timeout() -> void:
 
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
-
-	print(name + " HIT" + body.name)
+	if(body is Player):
+		print("PLAYER TOOK DAMAGE HERE")
+		pass
+	
+	print(name + " HIT: " + body.name)
 	queue_free()

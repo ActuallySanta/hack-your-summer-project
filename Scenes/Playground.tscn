@@ -41,7 +41,6 @@ scale = Vector2(0.3510907, 0.3510907)
 
 [node name="Ranged Enemy" parent="." unique_id=1835408748 instance=ExtResource("2_exwnq")]
 position = Vector2(228, -54)
-attackCooldown = 1.5
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1968292425]
 position = Vector2(0, -210)
