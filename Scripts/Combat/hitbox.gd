@@ -14,5 +14,5 @@ class_name Hitbox extends Area2D
 
 signal hit(hitbox: Hitbox, hit_info: HitInfo, source: Hurtbox)
 
-func register_hit(hit_info: HitInfo) -> void:
-	hit.emit(self, hit_info)
+func register_hit(hit_info: HitInfo, source: Hurtbox) -> void:
+	hit.emit(self, hit_info, source)

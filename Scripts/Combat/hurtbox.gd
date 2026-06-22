@@ -23,4 +23,4 @@ func _on_area_entered(area: Area2D) -> void:
 		return
 	on_hit.emit(self, hitbox)
 	var hit_info := HitInfo.new(damage, knockback_strength, knockback_duration)
-	hitbox.register_hit(hit_info)
+	hitbox.register_hit(hit_info, self)
