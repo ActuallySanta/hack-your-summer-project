@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://hvml3duqxjnn"]
 
-[ext_resource type="PackedScene" uid="uid://c01coktor3stl" path="res://Scenes/enemy_placeholder.tscn" id="1_q16qq"]
+[ext_resource type="PackedScene" uid="uid://c01coktor3stl" path="res://Scenes/Enemies/enemy_placeholder.tscn" id="1_q16qq"]
 [ext_resource type="Texture2D" uid="uid://bp1qv2dhalftv" path="res://icon.svg" id="2_opkgf"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wdmp5"]

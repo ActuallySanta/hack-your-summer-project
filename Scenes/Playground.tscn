@@ -1,7 +1,8 @@
 [gd_scene format=3 uid="uid://bd5vs7l4wx7e4"]
 
 [ext_resource type="PackedScene" uid="uid://c5wawk83tlcux" path="res://Scenes/player.tscn" id="1_iualk"]
-[ext_resource type="PackedScene" uid="uid://b2ibnxde1hrva" path="res://Scenes/ranged_enemy.tscn" id="2_exwnq"]
+[ext_resource type="PackedScene" uid="uid://b2ibnxde1hrva" path="res://Scenes/Enemies/ranged_enemy.tscn" id="2_exwnq"]
+[ext_resource type="PackedScene" uid="uid://41tgjv6lxsko" path="res://Scenes/Enemies/melee_enemy.tscn" id="3_eqbnc"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_xtv6o"]
 
@@ -55,3 +56,6 @@ shape = SubResource("RectangleShape2D_exwnq")
 [node name="Polygon2D" type="Polygon2D" parent="Obstruction" unique_id=1545743674]
 polygon = PackedVector2Array(-7.9999695, -144, -16, -144.00002, 8, -144.00002, 8, -8, 7.9999695, 24, -24, 24, -23.99997, -144, -16, -144)
 uv = PackedVector2Array(-16, -136.00002, -16, -144.00002, 8, -144.00002, 8, -8, 7.9999695, 24, -24, 24, -23.99997, -144, -16, -144)
+
+[node name="Melee Enemy" parent="." unique_id=21105245 instance=ExtResource("3_eqbnc")]
+position = Vector2(66, -36)

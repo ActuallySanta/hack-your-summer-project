@@ -15,6 +15,22 @@ const SPEED:float = 50
 @onready var target_location_check: RayCast2D = $"Target Location Check"
 @onready var bt_player: BTPlayer = $BTPlayer
 
+var isFlipped : bool
+
+func move(targetPos : Vector2, delta :float):
+	var dir : Vector2 = Vector2(targetPos.x - global_position.x,0).normalized()
+	
+	velocity.x = dir.x * SPEED
+	update_flip(dir.x)
+
+func update_flip(dir:float):
+	var doFlip : bool = dir<0
+	if(doFlip != isFlipped):
+		scale.x =-1
+	else:
+		scale.x = 1
+	isFlipped = doFlip
+
 func _physics_process(delta: float) -> void:
 	# Add the gravity.
 	if not is_on_floor():

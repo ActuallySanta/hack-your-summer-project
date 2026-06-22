@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" uid="uid://bnl3twyy3dcyt" path="res://Sprites/Characters/Space Marine Enemy/scifi_marine_die_5.png" id="9_86kn8"]
 [ext_resource type="Texture2D" uid="uid://dse2uwvsbme7u" path="res://Sprites/Characters/Space Marine Enemy/scifi_marine_run_5.png" id="9_yfht6"]
 [ext_resource type="Texture2D" uid="uid://brfbg8o7ofbvf" path="res://Sprites/Characters/Space Marine Enemy/scifi_marine_run_6.png" id="10_qj8iq"]
+[ext_resource type="PackedScene" uid="uid://djmeyycufny61" path="res://Scenes/Components/Hurtbox.tscn" id="18_6j4xf"]
 
 [sub_resource type="BlackboardPlan" id="BlackboardPlan_be0ij"]
 
@@ -163,7 +164,7 @@ libraries/ = SubResource("AnimationLibrary_07m26")
 [node name="Visual" type="Sprite2D" parent="." unique_id=930293805]
 texture = ExtResource("1_t0t5w")
 
-[node name="Hurtbox" type="CollisionShape2D" parent="." unique_id=281236112]
+[node name="Physics Body" type="CollisionShape2D" parent="." unique_id=281236112]
 position = Vector2(0, 13)
 shape = SubResource("CapsuleShape2D_mgs6e")
 
@@ -181,3 +182,9 @@ collision_mask = 3
 [node name="Target Location Check" type="RayCast2D" parent="." unique_id=240777974]
 visible = false
 target_position = Vector2(50, 0)
+
+[node name="Hurtbox2" parent="." unique_id=470143312 instance=ExtResource("18_6j4xf")]
+
+[node name="Shape" type="CollisionShape2D" parent="Hurtbox2" unique_id=326280550]
+position = Vector2(0, 13)
+shape = SubResource("CapsuleShape2D_mgs6e")

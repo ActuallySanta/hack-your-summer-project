@@ -1,0 +1,198 @@
+[gd_scene format=3 uid="uid://41tgjv6lxsko"]
+
+[ext_resource type="Script" uid="uid://mg2g6xuu4xeq" path="res://Scripts/Enemies/melee_enemy.gd" id="1_vrdla"]
+[ext_resource type="BehaviorTree" uid="uid://d1xmalrj37niq" path="res://ai/trees/melee_enemy.tres" id="2_ony87"]
+[ext_resource type="PackedScene" uid="uid://liprjmtialrh" path="res://Scenes/Components/Hitbox.tscn" id="10_eyhix"]
+[ext_resource type="Texture2D" uid="uid://b8o1up866gpb4" path="res://Sprites/SpaceStation_Android_Sheet.png" id="14_dn20t"]
+[ext_resource type="PackedScene" uid="uid://djmeyycufny61" path="res://Scenes/Components/Hurtbox.tscn" id="18_jgjap"]
+
+[sub_resource type="BlackboardPlan" id="BlackboardPlan_be0ij"]
+
+[sub_resource type="Animation" id="Animation_i4bsx"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visual:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [8]
+}
+
+[sub_resource type="Animation" id="Animation_xtnlt"]
+resource_name = "attack"
+length = 0.6
+loop_mode = 1
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.4),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"generateAttack"
+}]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visual:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.10000001, 0.2, 0.3, 0.40000004, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [14, 15, 16, 17, 18, 19]
+}
+
+[sub_resource type="Animation" id="Animation_nmng3"]
+resource_name = "die"
+length = 0.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visual:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.099999994, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [21, 22, 23, 24, 25, 26]
+}
+
+[sub_resource type="Animation" id="Animation_86kn8"]
+resource_name = "die"
+length = 0.2
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visual:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.099999994),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [14, 21]
+}
+
+[sub_resource type="Animation" id="Animation_2nh82"]
+resource_name = "idle"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visual:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.10000001, 0.20000002, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [8, 9, 10, 10]
+}
+
+[sub_resource type="Animation" id="Animation_u7u8m"]
+resource_name = "run"
+length = 0.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visual:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.10000001, 0.20000002, 0.3, 0.40000004, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_07m26"]
+_data = {
+&"RESET": SubResource("Animation_i4bsx"),
+&"attack": SubResource("Animation_xtnlt"),
+&"die": SubResource("Animation_nmng3"),
+&"hurt": SubResource("Animation_86kn8"),
+&"idle": SubResource("Animation_2nh82"),
+&"run": SubResource("Animation_u7u8m")
+}
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_mgs6e"]
+radius = 14.0
+height = 40.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_aajnb"]
+radius = 150.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_eyhix"]
+radius = 13.0
+height = 48.0
+
+[node name="Melee Enemy" type="CharacterBody2D" unique_id=1835408748]
+collision_layer = 4
+script = ExtResource("1_vrdla")
+
+[node name="BTPlayer" type="BTPlayer" parent="." unique_id=1291468803]
+behavior_tree = ExtResource("2_ony87")
+blackboard_plan = SubResource("BlackboardPlan_be0ij")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1653717036]
+libraries/ = SubResource("AnimationLibrary_07m26")
+
+[node name="Visual" type="Sprite2D" parent="." unique_id=930293805]
+texture = ExtResource("14_dn20t")
+hframes = 7
+vframes = 4
+frame = 8
+
+[node name="Physics Body" type="CollisionShape2D" parent="." unique_id=281236112]
+position = Vector2(0, -4)
+shape = SubResource("CapsuleShape2D_mgs6e")
+
+[node name="Player Detection Check" type="ShapeCast2D" parent="." unique_id=1092179563]
+visible = false
+shape = SubResource("CircleShape2D_aajnb")
+target_position = Vector2(0, 0)
+collision_mask = 2
+
+[node name="Player Obstruction Check" type="RayCast2D" parent="." unique_id=1481630674]
+visible = false
+target_position = Vector2(150, 0)
+collision_mask = 3
+
+[node name="Target Location Check" type="RayCast2D" parent="." unique_id=240777974]
+visible = false
+target_position = Vector2(50, 0)
+
+[node name="Hurtbox2" parent="." unique_id=470143312 instance=ExtResource("18_jgjap")]
+
+[node name="Shape" type="CollisionShape2D" parent="Hurtbox2" unique_id=326280550]
+position = Vector2(0, -4)
+shape = SubResource("CapsuleShape2D_mgs6e")
+
+[node name="Melee Hitbox" parent="." unique_id=125498642 instance=ExtResource("10_eyhix")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Melee Hitbox" unique_id=1312867447]
+position = Vector2(31, -8)
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_eyhix")
+
+[node name="Attack Duration" type="Timer" parent="." unique_id=1202308613]
+wait_time = 0.25
+
+[connection signal="hit" from="Melee Hitbox" to="." method="_on_melee_hitbox_hit"]
