@@ -12,6 +12,10 @@ var _start_position := Vector2.ZERO
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	if ItemCollectionTooling.item_aquired[item]:
+		queue_free()
+		return
+	
 	sprite.texture = texture
 	_start_position = global_position
 	_occilation_amount = 2 * PI / hover_cycle_seconds
