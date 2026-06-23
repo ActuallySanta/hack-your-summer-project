@@ -18,17 +18,11 @@ signal on_hit(hitbox: Hitbox, target: Hurtbox)
 @export var knockback_duration: float
 
 func _on_area_entered(area: Area2D) -> void:
-	print(area.name)
+	#print(area.name)
 	
 	var hurtbox := area as Hurtbox
 	if not hurtbox:
 		return
-
-func _physics_process(delta: float) -> void:
-	
-	var results = get_overlapping_areas()
-	for hurtbox in results:
-		if hurtbox is Hurtbox:
-			on_hit.emit(self, hurtbox)
-			var hit_info := HitInfo.new(damage, knockback_strength, knockback_duration)
-			hurtbox.register_hit(hit_info, self)
+	on_hit.emit(self, hurtbox)
+	var hit_info := HitInfo.new(damage, knockback_strength, knockback_duration)
+	hurtbox.register_hit(hit_info, self)

@@ -47,7 +47,7 @@ func knockback_movement(delta: float) -> void:
 	velocity.x = _current_knockback_strength
 	_knockback_timer -= delta
 
-func _when_hit(_hitbox: Hitbox, hit_info: HitInfo, _source: Hurtbox) -> void:
+func _when_hit(_hurtbox: Hurtbox, hit_info: HitInfo, _source: Hitbox) -> void:
 	_current_health -= hit_info.damage
 	_current_knockback_strength = hit_info.knockback_strength
 	_knockback_timer = hit_info.knockback_duration
