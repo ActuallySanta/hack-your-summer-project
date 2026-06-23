@@ -14,12 +14,9 @@ var _coyoteTimer : float
 
 func _ready() -> void:
 	CheckpointEventBus.move_player_position.connect(warp_player_to_position)
-	jetpack.jetpack_updated.connect(do_jetpack_logic);
-
-func jump() -> void:
-	velocity.y = -jumpForce
-	_jumpBufferTimer = 0
-	_coyoteTimer = 0
+	ItemCollectionTooling.item_collected.connect(handle_item_aquisition)
+	jetpack.jetpack_updated.connect(do_jetpack_logic)
+	disable_item(jetpack)
 
 func _physics_process(delta: float) -> void:
 	# Add the gravity.
@@ -28,21 +25,30 @@ func _physics_process(delta: float) -> void:
 		_coyoteTimer -= delta
 	else:
 		_coyoteTimer = coyoteTime
-
+	
 	# Handle jump.
 	if _jumpBufferTimer > 0:
 		if is_on_floor() or _coyoteTimer > 0:
 			jump()
 		else:
 			_jumpBufferTimer -= delta
-
+	
 	# Get the input direction and handle the movement/deceleration.
 	if _moveInput:
 		velocity.x = _moveInput * moveSpeed
 	else:
 		velocity.x = move_toward(velocity.x, 0, moveSpeed)
-
+	
 	move_and_slide()
+
+func _process(delta: float) -> void:
+	handle_inputs()
+	#animation code would go here eventually
+
+func jump() -> void:
+	velocity.y = -jumpForce
+	_jumpBufferTimer = 0
+	_coyoteTimer = 0
 
 func set_jump_input() -> void:
 	_jumpBufferTimer = jumpBufferTime
@@ -52,13 +58,23 @@ func handle_inputs() -> void:
 	if Input.is_action_just_pressed("Jump"):
 		set_jump_input()
 
-func _process(delta: float) -> void:
-	handle_inputs()
-	#animation code would go here eventually
-
 func warp_player_to_position(new_position: Vector2):
 	global_position = new_position
 
 func do_jetpack_logic(speed: float):
 	velocity.y -= speed;
+
+func disable_item(item_node: Node):
+	item_node.process_mode = Node.PROCESS_MODE_DISABLED
+	if item_node is CanvasItem:
+		item_node.hide()
+
+func enable_item(item_node: Node):
+	item_node.process_mode = Node.PROCESS_MODE_INHERIT
+	if item_node is CanvasItem:
+		item_node.show()
+
+func handle_item_aquisition(item_name: String):
+	var item = jetpack if item_name == "Jetpack" else null
+	enable_item(item)
 	pass
