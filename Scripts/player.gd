@@ -10,6 +10,12 @@ var _moveInput : float
 var _jumpBufferTimer : float
 var _coyoteTimer : float
 
+@onready var jetpack: Sprite2D = $JetpackAsset
+
+func _ready() -> void:
+	CheckpointEventBus.move_player_position.connect(warp_player_to_position)
+	jetpack.jetpack_updated.connect(do_jetpack_logic);
+
 func jump() -> void:
 	velocity.y = -jumpForce
 	_jumpBufferTimer = 0
@@ -42,10 +48,17 @@ func set_jump_input() -> void:
 	_jumpBufferTimer = jumpBufferTime
 
 func handle_inputs() -> void:
-	_moveInput = Input.get_axis("ui_left", "ui_right")
-	if Input.is_action_just_pressed("ui_accept"):
+	_moveInput = Input.get_axis("Left", "Right")
+	if Input.is_action_just_pressed("Jump"):
 		set_jump_input()
 
 func _process(delta: float) -> void:
 	handle_inputs()
 	#animation code would go here eventually
+
+func warp_player_to_position(new_position: Vector2):
+	global_position = new_position
+
+func do_jetpack_logic(speed: float):
+	velocity.y -= speed;
+	pass
