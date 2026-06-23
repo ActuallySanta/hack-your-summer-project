@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bs0loqfendiak" path="res://Scripts/player.gd" id="1_cvnsp"]
 [ext_resource type="Texture2D" uid="uid://bp1qv2dhalftv" path="res://icon.svg" id="1_v0iea"]
+[ext_resource type="PackedScene" uid="uid://djmeyycufny61" path="res://Scenes/Components/Hurtbox.tscn" id="3_6t5aa"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cvnsp"]
 size = Vector2(128, 128)
@@ -26,3 +27,10 @@ shape = SubResource("RectangleShape2D_cvnsp")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=822804838]
 sprite_frames = SubResource("SpriteFrames_6t5aa")
+
+[node name="Hurtbox" parent="." unique_id=125498642 instance=ExtResource("3_6t5aa")]
+collision_layer = 2
+collision_mask = 5
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Hurtbox" unique_id=2128149372]
+shape = SubResource("RectangleShape2D_cvnsp")

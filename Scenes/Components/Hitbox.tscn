@@ -1,7 +1,9 @@
-[gd_scene format=3 uid="uid://liprjmtialrh"]
+[gd_scene format=3 uid="uid://djmeyycufny61"]
 
-[ext_resource type="Script" uid="uid://ctc17oyja7fup" path="res://Scripts/Combat/hitbox.gd" id="1_5o28e"]
+[ext_resource type="Script" uid="uid://dhgcprjrtfobr" path="res://Scripts/Combat/hitbox.gd" id="1_5o28e"]
 
-[node name="Hitbox" type="Area2D" unique_id=125498642]
-monitoring = false
+[node name="Hitbox" type="Area2D" unique_id=470143312]
+monitorable = false
 script = ExtResource("1_5o28e")
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]

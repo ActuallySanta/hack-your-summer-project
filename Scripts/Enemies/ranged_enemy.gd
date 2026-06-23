@@ -5,8 +5,7 @@ extends Enemy
 
 
 
-func _ready() -> void:
-	bt_player.blackboard.set_var("canAttack",true)
+
 
 
 func spawnBullet():

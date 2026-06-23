@@ -17,6 +17,9 @@ const SPEED:float = 50
 
 var isFlipped : bool
 
+func _ready() -> void:
+	bt_player.blackboard.set_var("canAttack",true)
+
 func move(targetPos : Vector2, delta :float):
 	var dir : Vector2 = Vector2(targetPos.x - global_position.x,0).normalized()
 	

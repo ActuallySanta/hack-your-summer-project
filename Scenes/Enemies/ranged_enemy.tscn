@@ -17,7 +17,7 @@
 [ext_resource type="Texture2D" uid="uid://bnl3twyy3dcyt" path="res://Sprites/Characters/Space Marine Enemy/scifi_marine_die_5.png" id="9_86kn8"]
 [ext_resource type="Texture2D" uid="uid://dse2uwvsbme7u" path="res://Sprites/Characters/Space Marine Enemy/scifi_marine_run_5.png" id="9_yfht6"]
 [ext_resource type="Texture2D" uid="uid://brfbg8o7ofbvf" path="res://Sprites/Characters/Space Marine Enemy/scifi_marine_run_6.png" id="10_qj8iq"]
-[ext_resource type="PackedScene" uid="uid://djmeyycufny61" path="res://Scenes/Components/Hurtbox.tscn" id="18_6j4xf"]
+[ext_resource type="PackedScene" uid="uid://djmeyycufny61" path="res://Scenes/Components/Hitbox.tscn" id="18_6j4xf"]
 
 [sub_resource type="BlackboardPlan" id="BlackboardPlan_be0ij"]
 

@@ -2,8 +2,8 @@
 
 [ext_resource type="Texture2D" uid="uid://b8o1up866gpb4" path="res://Sprites/SpaceStation_Android_Sheet.png" id="1_17wxa"]
 [ext_resource type="Script" uid="uid://ripo3gf2cwwb" path="res://Scripts/Enemies/enemy_placeholder.gd" id="1_skq3i"]
-[ext_resource type="PackedScene" uid="uid://liprjmtialrh" path="res://Scenes/Components/Hitbox.tscn" id="2_nm0se"]
-[ext_resource type="PackedScene" uid="uid://djmeyycufny61" path="res://Scenes/Components/Hurtbox.tscn" id="3_nm0se"]
+[ext_resource type="PackedScene" uid="uid://liprjmtialrh" path="res://Scenes/Components/Hurtbox.tscn" id="2_nm0se"]
+[ext_resource type="PackedScene" uid="uid://liprjmtialrh" path="res://Scenes/Components/Hitbox.tscn" id="3_nm0se"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2t4yw"]
 size = Vector2(80, 128)

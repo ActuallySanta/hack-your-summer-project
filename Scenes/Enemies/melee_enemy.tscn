@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://mg2g6xuu4xeq" path="res://Scripts/Enemies/melee_enemy.gd" id="1_vrdla"]
 [ext_resource type="BehaviorTree" uid="uid://d1xmalrj37niq" path="res://ai/trees/melee_enemy.tres" id="2_ony87"]
-[ext_resource type="PackedScene" uid="uid://liprjmtialrh" path="res://Scenes/Components/Hitbox.tscn" id="10_eyhix"]
+[ext_resource type="Script" uid="uid://dhgcprjrtfobr" path="res://Scripts/Combat/hitbox.gd" id="6_0u8ws"]
 [ext_resource type="Texture2D" uid="uid://b8o1up866gpb4" path="res://Sprites/SpaceStation_Android_Sheet.png" id="14_dn20t"]
 [ext_resource type="PackedScene" uid="uid://djmeyycufny61" path="res://Scenes/Components/Hurtbox.tscn" id="18_jgjap"]
 
@@ -161,6 +161,7 @@ vframes = 4
 frame = 8
 
 [node name="Physics Body" type="CollisionShape2D" parent="." unique_id=281236112]
+visible = false
 position = Vector2(0, -4)
 shape = SubResource("CapsuleShape2D_mgs6e")
 
@@ -182,17 +183,26 @@ target_position = Vector2(50, 0)
 [node name="Hurtbox2" parent="." unique_id=470143312 instance=ExtResource("18_jgjap")]
 
 [node name="Shape" type="CollisionShape2D" parent="Hurtbox2" unique_id=326280550]
+visible = false
 position = Vector2(0, -4)
 shape = SubResource("CapsuleShape2D_mgs6e")
 
-[node name="Melee Hitbox" parent="." unique_id=125498642 instance=ExtResource("10_eyhix")]
+[node name="Attack Duration" type="Timer" parent="." unique_id=1202308613]
+wait_time = 0.25
+
+[node name="Melee Hitbox" parent="." unique_id=1651839670 instance=ExtResource("18_jgjap")]
+process_mode = 4
+collision_layer = 4
+collision_mask = 2
+monitoring = true
+script = ExtResource("6_0u8ws")
+damage = 1
+knockback_strength = 0.0
+knockback_duration = 0.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Melee Hitbox" unique_id=1312867447]
 position = Vector2(31, -8)
 rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_eyhix")
 
-[node name="Attack Duration" type="Timer" parent="." unique_id=1202308613]
-wait_time = 0.25
-
-[connection signal="hit" from="Melee Hitbox" to="." method="_on_melee_hitbox_hit"]
+[connection signal="on_hit" from="Melee Hitbox" to="." method="_on_melee_hitbox_on_hit"]

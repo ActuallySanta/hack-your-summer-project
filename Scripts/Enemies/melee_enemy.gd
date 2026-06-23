@@ -1,21 +1,24 @@
 extends Enemy
 
-@onready var melee_hitbox: Hitbox = $"Melee Hitbox"
+@onready var melee_hitbox : Hitbox= $"Melee Hitbox"
+
 @onready var attack_duration: Timer = $"Attack Duration"
 
 func generateAttack():
 	velocity = Vector2.ZERO
-	melee_hitbox.monitoring = true
+	melee_hitbox.process_mode = Node.PROCESS_MODE_INHERIT
 	attack_duration.start()
 	
 	await attack_duration.timeout
-	
-	melee_hitbox.monitoring = false
+	melee_hitbox.process_mode = Node.PROCESS_MODE_DISABLED
 	
 	pass
 
-
-func _on_melee_hitbox_hit(hitbox: Hitbox, hit_info: HitInfo, source: Hurtbox) -> void:
-	if(source.get_parent() is Player):
+func _on_melee_hitbox_on_hit(hitbox: Hitbox, target: Hurtbox) -> void:
+	print(target.owner)
+	
+	if(target.owner is Player):
 		print(name + " has hit the player!")
+	else:
+		print(target.owner)
 	pass # Replace with function body.
