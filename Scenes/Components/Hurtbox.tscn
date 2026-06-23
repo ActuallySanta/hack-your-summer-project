@@ -1,8 +1,7 @@
 [gd_scene format=3 uid="uid://djmeyycufny61"]
 
-[ext_resource type="Script" uid="uid://dhgcprjrtfobr" path="res://Scripts/Combat/hurtbox.gd" id="1_ap2yb"]
+[ext_resource type="Script" uid="uid://ctc17oyja7fup" path="res://Scripts/Combat/hurtbox.gd" id="1_ap2yb"]
 
-[node name="Hurtbox" type="Area2D" unique_id=470143312]
-collision_mask = 0
+[node name="Hurtbox" type="Area2D" unique_id=125498642]
 monitoring = false
 script = ExtResource("1_ap2yb")
