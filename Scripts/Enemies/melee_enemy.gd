@@ -7,6 +7,7 @@ extends Enemy
 func generateAttack():
 	velocity = Vector2.ZERO
 	melee_hitbox.process_mode = Node.PROCESS_MODE_INHERIT
+	melee_hitbox.reset()
 	attack_duration.start()
 	
 	await attack_duration.timeout
