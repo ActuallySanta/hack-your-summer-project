@@ -1,0 +1,191 @@
+[gd_scene format=3 uid="uid://b2ibnxde1hrva"]
+
+[ext_resource type="Texture2D" uid="uid://ch5hi7bj4svnc" path="res://Sprites/Characters/Space Marine Enemy/scifi_marine_stand_1.png" id="1_t0t5w"]
+[ext_resource type="Script" uid="uid://ji4q20pb7lkf" path="res://Scripts/Enemies/ranged_enemy.gd" id="1_yfht6"]
+[ext_resource type="Texture2D" uid="uid://0prsb54qja34" path="res://Sprites/Characters/Space Marine Enemy/scifi_marine_shoot_1.png" id="2_oxo1n"]
+[ext_resource type="BehaviorTree" uid="uid://bk3pchousfnbu" path="res://ai/trees/ranged_enemy.tres" id="2_qj8iq"]
+[ext_resource type="Texture2D" uid="uid://v5rtj7iyjv0o" path="res://Sprites/Characters/Space Marine Enemy/scifi_marine_shoot_2.png" id="3_654aa"]
+[ext_resource type="Texture2D" uid="uid://2y0le27aj44w" path="res://Sprites/Characters/Space Marine Enemy/scifi_marine_stand_2.png" id="4_0cvt3"]
+[ext_resource type="Texture2D" uid="uid://dn5u00wbsi2a0" path="res://Sprites/Characters/Space Marine Enemy/scifi_marine_run_1.png" id="5_eejfn"]
+[ext_resource type="Texture2D" uid="uid://b6ercphm16gss" path="res://Sprites/Characters/Space Marine Enemy/scifi_marine_run_2.png" id="6_dj2jm"]
+[ext_resource type="Texture2D" uid="uid://bg10y0vh53oub" path="res://Sprites/Characters/Space Marine Enemy/scifi_marine_die_1.png" id="6_nmng3"]
+[ext_resource type="Texture2D" uid="uid://dmx3sw6hmanu1" path="res://Sprites/Characters/Space Marine Enemy/scifi_marine_die_2.png" id="6_qj8iq"]
+[ext_resource type="Texture2D" uid="uid://c7fgblnrma5wo" path="res://Sprites/Characters/Space Marine Enemy/scifi_marine_die_3.png" id="7_i4bsx"]
+[ext_resource type="Texture2D" uid="uid://88bk511xhkq5" path="res://Sprites/Characters/Space Marine Enemy/scifi_marine_run_3.png" id="7_yingu"]
+[ext_resource type="Texture2D" uid="uid://ri8nu5o1wixs" path="res://Sprites/Characters/Space Marine Enemy/scifi_marine_die_4.png" id="8_xtnlt"]
+[ext_resource type="Texture2D" uid="uid://bxpwdgo7pqiys" path="res://Sprites/Characters/Space Marine Enemy/scifi_marine_run_4.png" id="8_y8gpg"]
+[ext_resource type="Texture2D" uid="uid://bnl3twyy3dcyt" path="res://Sprites/Characters/Space Marine Enemy/scifi_marine_die_5.png" id="9_86kn8"]
+[ext_resource type="Texture2D" uid="uid://dse2uwvsbme7u" path="res://Sprites/Characters/Space Marine Enemy/scifi_marine_run_5.png" id="9_yfht6"]
+[ext_resource type="Texture2D" uid="uid://brfbg8o7ofbvf" path="res://Sprites/Characters/Space Marine Enemy/scifi_marine_run_6.png" id="10_qj8iq"]
+[ext_resource type="PackedScene" uid="uid://djmeyycufny61" path="res://Scenes/Components/Hurtbox.tscn" id="18_6j4xf"]
+
+[sub_resource type="BlackboardPlan" id="BlackboardPlan_be0ij"]
+
+[sub_resource type="Animation" id="Animation_i4bsx"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visual:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("1_t0t5w")]
+}
+
+[sub_resource type="Animation" id="Animation_xtnlt"]
+resource_name = "attack"
+length = 0.2
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visual:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.09893014),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("2_oxo1n"), ExtResource("3_654aa")]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"spawnBullet"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_nmng3"]
+resource_name = "die"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visual:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.100080535, 0.20130484, 0.3, 0.40000004),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("6_nmng3"), ExtResource("6_qj8iq"), ExtResource("7_i4bsx"), ExtResource("8_xtnlt"), ExtResource("9_86kn8")]
+}
+
+[sub_resource type="Animation" id="Animation_86kn8"]
+resource_name = "die"
+length = 0.36666667
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visual:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.09950864, 0.10000001, 0.20000002, 0.20016107, 0.3, 0.3008135),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("6_nmng3"), ExtResource("6_qj8iq"), ExtResource("6_qj8iq"), ExtResource("7_i4bsx"), ExtResource("6_nmng3"), ExtResource("8_xtnlt"), ExtResource("6_qj8iq")]
+}
+
+[sub_resource type="Animation" id="Animation_2nh82"]
+resource_name = "idle"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visual:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("1_t0t5w"), ExtResource("4_0cvt3")]
+}
+
+[sub_resource type="Animation" id="Animation_u7u8m"]
+resource_name = "run"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visual:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.10000001, 0.1998931, 0.3, 0.40000004, 0.5, 0.6, 0.6986094, 0.8000001, 0.89985776),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("5_eejfn"), ExtResource("6_dj2jm"), ExtResource("7_yingu"), ExtResource("8_y8gpg"), ExtResource("9_yfht6"), ExtResource("10_qj8iq"), ExtResource("9_yfht6"), ExtResource("8_y8gpg"), ExtResource("7_yingu"), ExtResource("6_dj2jm")]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_07m26"]
+_data = {
+&"RESET": SubResource("Animation_i4bsx"),
+&"attack": SubResource("Animation_xtnlt"),
+&"die": SubResource("Animation_nmng3"),
+&"hurt": SubResource("Animation_86kn8"),
+&"idle": SubResource("Animation_2nh82"),
+&"run": SubResource("Animation_u7u8m")
+}
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_mgs6e"]
+radius = 13.0
+height = 44.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_aajnb"]
+radius = 150.0
+
+[node name="Ranged Enemy" type="CharacterBody2D" unique_id=1835408748]
+collision_layer = 4
+script = ExtResource("1_yfht6")
+
+[node name="BTPlayer" type="BTPlayer" parent="." unique_id=1291468803]
+behavior_tree = ExtResource("2_qj8iq")
+blackboard_plan = SubResource("BlackboardPlan_be0ij")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1653717036]
+libraries/ = SubResource("AnimationLibrary_07m26")
+
+[node name="Visual" type="Sprite2D" parent="." unique_id=930293805]
+texture = ExtResource("1_t0t5w")
+
+[node name="Physics Body" type="CollisionShape2D" parent="." unique_id=281236112]
+position = Vector2(0, 13)
+shape = SubResource("CapsuleShape2D_mgs6e")
+
+[node name="Player Detection Check" type="ShapeCast2D" parent="." unique_id=1092179563]
+visible = false
+shape = SubResource("CircleShape2D_aajnb")
+target_position = Vector2(0, 0)
+collision_mask = 2
+
+[node name="Player Obstruction Check" type="RayCast2D" parent="." unique_id=1481630674]
+visible = false
+target_position = Vector2(150, 0)
+collision_mask = 3
+
+[node name="Target Location Check" type="RayCast2D" parent="." unique_id=240777974]
+visible = false
+target_position = Vector2(50, 0)
+
+[node name="Hurtbox2" parent="." unique_id=470143312 instance=ExtResource("18_6j4xf")]
+collision_layer = 4
+
+[node name="Shape" type="CollisionShape2D" parent="Hurtbox2" unique_id=326280550]
+position = Vector2(0, 13)
+shape = SubResource("CapsuleShape2D_mgs6e")

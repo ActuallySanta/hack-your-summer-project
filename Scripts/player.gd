@@ -1,3 +1,4 @@
+class_name Player
 extends CharacterBody2D
 
 
@@ -9,6 +10,9 @@ extends CharacterBody2D
 var _moveInput : float
 var _jumpBufferTimer : float
 var _coyoteTimer : float
+
+func _ready() -> void:
+	PlayerManager.player = self
 
 func jump() -> void:
 	velocity.y = -jumpForce
@@ -42,8 +46,8 @@ func set_jump_input() -> void:
 	_jumpBufferTimer = jumpBufferTime
 
 func handle_inputs() -> void:
-	_moveInput = Input.get_axis("ui_left", "ui_right")
-	if Input.is_action_just_pressed("ui_accept"):
+	_moveInput = Input.get_axis("Left", "Right")
+	if Input.is_action_just_pressed("Jump"):
 		set_jump_input()
 
 func _process(delta: float) -> void:

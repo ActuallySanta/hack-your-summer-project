@@ -1,4 +1,4 @@
-class_name Player extends CharacterBody2D
+extends CharacterBody2D
 
 var cardinal_direction : Vector2 = Vector2.DOWN
 const DIR_4 = [ Vector2.RIGHT, Vector2.DOWN, Vector2.LEFT, Vector2.UP ]
@@ -12,8 +12,7 @@ signal DirectionChanged( new_direction : Vector2 )
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	PlayerManager.player = self
-	state_machine.Initialize(self)
+	#state_machine.Initialize(self)
 	pass # Replace with function body.
 
 

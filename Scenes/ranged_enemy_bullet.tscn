@@ -1,0 +1,56 @@
+[gd_scene format=3 uid="uid://dmxbgtwmp5c0q"]
+
+[ext_resource type="Texture2D" uid="uid://d2bn5f3iju4g5" path="res://Sprites/Characters/scifi_blasterfire_1.png" id="1_ipo11"]
+[ext_resource type="Script" uid="uid://brqm5b8nf417m" path="res://Scripts/Enemies/ranged_enemy_bullet.gd" id="1_k6rrm"]
+[ext_resource type="Texture2D" uid="uid://cxrd2d61nr7xu" path="res://Sprites/Characters/scifi_blasterfire_2.png" id="2_k6rrm"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_e6f28"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_ipo11")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_k6rrm")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_k6rrm"]
+size = Vector2(15, 4)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ipo11"]
+size = Vector2(19, 6)
+
+[node name="Ranged Enemy Bullet" type="CharacterBody2D" unique_id=1138320876]
+collision_layer = 8
+collision_mask = 3
+script = ExtResource("1_k6rrm")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=742210317]
+sprite_frames = SubResource("SpriteFrames_e6f28")
+autoplay = "default"
+frame_progress = 0.31567594
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2046364853]
+position = Vector2(3.5, 0)
+shape = SubResource("RectangleShape2D_k6rrm")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1462196635]
+collision_layer = 8
+collision_mask = 3
+collision_priority = 2.0
+priority = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=2098150402]
+position = Vector2(3.5, 0)
+shape = SubResource("RectangleShape2D_ipo11")
+
+[node name="Bullet Lifetime" type="Timer" parent="." unique_id=1057932148]
+wait_time = 3.0
+autostart = true
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="timeout" from="Bullet Lifetime" to="." method="_on_bullet_lifetime_timeout"]

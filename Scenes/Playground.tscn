@@ -1,0 +1,61 @@
+[gd_scene format=3 uid="uid://bd5vs7l4wx7e4"]
+
+[ext_resource type="PackedScene" uid="uid://c5wawk83tlcux" path="res://Scenes/player.tscn" id="1_iualk"]
+[ext_resource type="PackedScene" uid="uid://b2ibnxde1hrva" path="res://Scenes/Enemies/ranged_enemy.tscn" id="2_exwnq"]
+[ext_resource type="PackedScene" uid="uid://41tgjv6lxsko" path="res://Scenes/Enemies/melee_enemy.tscn" id="3_eqbnc"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_xtv6o"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_exwnq"]
+size = Vector2(20, 154)
+
+[node name="Playground" type="Node2D" unique_id=31627231]
+
+[node name="Ground" type="StaticBody2D" parent="." unique_id=613494579]
+position = Vector2(0, -6)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground" unique_id=179421933]
+shape = SubResource("WorldBoundaryShape2D_xtv6o")
+
+[node name="Wall" type="StaticBody2D" parent="." unique_id=412615473]
+position = Vector2(-384, 0)
+rotation = 1.5707964
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Wall" unique_id=1413475226]
+shape = SubResource("WorldBoundaryShape2D_xtv6o")
+
+[node name="Wall2" type="StaticBody2D" parent="." unique_id=273672064]
+position = Vector2(383, 0)
+rotation = -1.5707964
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Wall2" unique_id=939719404]
+shape = SubResource("WorldBoundaryShape2D_xtv6o")
+
+[node name="Polygon2D" type="Polygon2D" parent="." unique_id=1781504455]
+scale = Vector2(4.944841, 0.7524827)
+polygon = PackedVector2Array(-32, 8, 415.99994, 8, 415.99994, -8, -352, -8, -352, 8)
+uv = PackedVector2Array(-32, 8, 415.99994, 8, 415.99994, -8, -352, -8, -352, 8)
+
+[node name="Player" parent="." unique_id=840937925 instance=ExtResource("1_iualk")]
+position = Vector2(-318, -78)
+scale = Vector2(0.3510907, 0.3510907)
+
+[node name="Ranged Enemy" parent="." unique_id=1835408748 instance=ExtResource("2_exwnq")]
+position = Vector2(228, -54)
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1968292425]
+position = Vector2(0, -210)
+zoom = Vector2(1.5, 1.5)
+
+[node name="Obstruction" type="StaticBody2D" parent="." unique_id=1355854674]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Obstruction" unique_id=457818989]
+position = Vector2(0, -67)
+shape = SubResource("RectangleShape2D_exwnq")
+
+[node name="Polygon2D" type="Polygon2D" parent="Obstruction" unique_id=1545743674]
+polygon = PackedVector2Array(-7.9999695, -144, -16, -144.00002, 8, -144.00002, 8, -8, 7.9999695, 24, -24, 24, -23.99997, -144, -16, -144)
+uv = PackedVector2Array(-16, -136.00002, -16, -144.00002, 8, -144.00002, 8, -8, 7.9999695, 24, -24, 24, -23.99997, -144, -16, -144)
+
+[node name="Melee Enemy" parent="." unique_id=21105245 instance=ExtResource("3_eqbnc")]
+position = Vector2(66, -36)

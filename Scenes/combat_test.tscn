@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://hvml3duqxjnn"]
+
+[ext_resource type="PackedScene" uid="uid://c01coktor3stl" path="res://Scenes/Enemies/enemy_placeholder.tscn" id="1_q16qq"]
+[ext_resource type="Texture2D" uid="uid://bp1qv2dhalftv" path="res://icon.svg" id="2_opkgf"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wdmp5"]
+size = Vector2(1166, 76)
+
+[node name="CombatTest" type="Node2D" unique_id=2114056636]
+
+[node name="EnemyPlaceholder" parent="." unique_id=2010580726 instance=ExtResource("1_q16qq")]
+position = Vector2(260, 509)
+
+[node name="Ground" type="StaticBody2D" parent="." unique_id=585368845]
+position = Vector2(568, 611)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground" unique_id=59869820]
+shape = SubResource("RectangleShape2D_wdmp5")
+
+[node name="Sprite2D" type="Sprite2D" parent="Ground" unique_id=1246934480]
+modulate = Color(1, 1, 0, 1)
+scale = Vector2(9.120003, 0.56)
+texture = ExtResource("2_opkgf")
+
+[node name="Right Wall" type="StaticBody2D" parent="." unique_id=1976228662]
+position = Vector2(1121, 323)
+scale = Vector2(0.04465892, 9.45056)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Right Wall" unique_id=904410440]
+shape = SubResource("RectangleShape2D_wdmp5")
+
+[node name="Sprite2D" type="Sprite2D" parent="Right Wall" unique_id=10671035]
+modulate = Color(1, 1, 0, 1)
+scale = Vector2(9.120003, 0.56)
+texture = ExtResource("2_opkgf")
+
+[node name="Left Wall" type="StaticBody2D" parent="." unique_id=1161454124]
+position = Vector2(20, 323)
+scale = Vector2(0.04465892, 9.45056)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Left Wall" unique_id=1513922259]
+shape = SubResource("RectangleShape2D_wdmp5")
+
+[node name="Sprite2D" type="Sprite2D" parent="Left Wall" unique_id=907860979]
+modulate = Color(1, 1, 0, 1)
+scale = Vector2(9.120003, 0.56)
+texture = ExtResource("2_opkgf")

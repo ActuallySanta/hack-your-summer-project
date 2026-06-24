@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://c01coktor3stl"]
+
+[ext_resource type="Texture2D" uid="uid://b8o1up866gpb4" path="res://Sprites/SpaceStation_Android_Sheet.png" id="1_17wxa"]
+[ext_resource type="Script" uid="uid://ripo3gf2cwwb" path="res://Scripts/Enemies/enemy_placeholder.gd" id="1_skq3i"]
+[ext_resource type="PackedScene" uid="uid://liprjmtialrh" path="res://Scenes/Components/Hitbox.tscn" id="2_nm0se"]
+[ext_resource type="PackedScene" uid="uid://djmeyycufny61" path="res://Scenes/Components/Hurtbox.tscn" id="3_nm0se"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2t4yw"]
+size = Vector2(80, 128)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_skq3i"]
+size = Vector2(56, 100)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gfrdw"]
+size = Vector2(96, 150)
+
+[node name="EnemyPlaceholder" type="CharacterBody2D" unique_id=2010580726]
+collision_layer = 4
+script = ExtResource("1_skq3i")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1905837147]
+position = Vector2(4, 0)
+scale = Vector2(4, 4)
+texture = ExtResource("1_17wxa")
+region_enabled = true
+region_rect = Rect2(0, 32, 32, 32)
+region_filter_clip_enabled = true
+
+[node name="EnvironmentCollider" type="CollisionShape2D" parent="." unique_id=1221305620]
+shape = SubResource("RectangleShape2D_2t4yw")
+
+[node name="Hitbox" parent="." unique_id=125498642 instance=ExtResource("2_nm0se")]
+collision_layer = 4
+collision_mask = 0
+
+[node name="HitboxCollider" type="CollisionShape2D" parent="Hitbox" unique_id=1796288862]
+shape = SubResource("RectangleShape2D_skq3i")
+debug_color = Color(0.9509389, 0.16812256, 0.3787481, 0.41960785)
+
+[node name="Hurtbox" parent="." unique_id=470143312 instance=ExtResource("3_nm0se")]
+
+[node name="HurtboxCollider" type="CollisionShape2D" parent="Hurtbox" unique_id=513152900]
+position = Vector2(0, -1)
+shape = SubResource("RectangleShape2D_gfrdw")
+debug_color = Color(0.59384274, 0.8723371, 0, 0.41960785)
+
+[connection signal="hit" from="Hurtbox" to="." method="_when_hit"]
