@@ -194,6 +194,8 @@ wait_time = 0.25
 [node name="Melee Hitbox" parent="." unique_id=1651839670 instance=ExtResource("18_jgjap")]
 process_mode = 4
 collision_mask = 2
+knockback_strength = 80.0
+knockback_duration = 0.1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Melee Hitbox" unique_id=1312867447]
 position = Vector2(31, -8)

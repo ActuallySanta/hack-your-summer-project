@@ -23,6 +23,8 @@ animations = [{
 collision_layer = 2
 script = ExtResource("1_cvnsp")
 swingScene = ExtResource("2_vgqql")
+hitInvulnTime = 1.2
+knockbackDI = 200.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=499297263]
 shape = SubResource("RectangleShape2D_cvnsp")
