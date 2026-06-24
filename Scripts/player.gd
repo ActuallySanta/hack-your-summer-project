@@ -88,3 +88,6 @@ func handle_inputs() -> void:
 func _process(delta: float) -> void:
 	handle_inputs()
 	#animation code would go here eventually
+
+func _on_hit(hurtBox: Hurtbox, hit_info: HitInfo, source: Hitbox) -> void:
+	print("Player took damage!")

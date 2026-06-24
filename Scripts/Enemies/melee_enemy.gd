@@ -16,10 +16,13 @@ func generateAttack():
 	pass
 
 func _on_melee_hitbox_on_hit(hitbox: Hitbox, target: Hurtbox) -> void:
-	print(target.owner)
-	
-	if(target.owner is Player):
-		print(name + " has hit the player!")
-	else:
-		print(target.owner)
-	pass # Replace with function body.
+	#print(target.owner)
+	#
+	#if(target.owner is Player):
+		#print(name + " has hit the player!")
+	#else:
+		#print(target.owner)
+	pass
+
+func _on_take_hit(hurtBox: Hurtbox, hit_info: HitInfo, source: Hitbox) -> void:
+	print(name + " took damage!")
