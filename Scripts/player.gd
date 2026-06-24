@@ -1,14 +1,25 @@
-extends CharacterBody2D
+class_name Player extends CharacterBody2D
 
+var cardinal_direction : Vector2 = Vector2.DOWN
+var direction : Vector2 = Vector2.ZERO
+
+@onready var animation_player : AnimationPlayer = $AnimationPlayer
+@onready var state_machine : PlayerStateMachine = $StateMachine
 
 @export var moveSpeed := 500.0
 @export var jumpForce := 600.0
 @export var jumpBufferTime := 0.25
 @export var coyoteTime := 0.2
 
+signal DirectionChanged( new_direction : Vector2 )
+
 var _moveInput : float
 var _jumpBufferTimer : float
 var _coyoteTimer : float
+
+func _ready() -> void:
+	PlayerManager.player = self
+	state_machine.Initialize(self)
 
 func jump() -> void:
 	velocity.y = -jumpForce
@@ -49,3 +60,17 @@ func handle_inputs() -> void:
 func _process(delta: float) -> void:
 	handle_inputs()
 	#animation code would go here eventually
+
+func UpdateAnimation( state : String ) -> void:
+	#if state == "RESET":
+		#animation_player.play("RESET")  # just play RESET with no direction suffix
+	#else:
+	animation_player.play(state + "_" + AnimDirection())
+
+func AnimDirection() -> String:
+	if cardinal_direction == Vector2.DOWN:
+		return "down"
+	elif cardinal_direction == Vector2.UP:
+		return "up"
+	else:
+		return "side"

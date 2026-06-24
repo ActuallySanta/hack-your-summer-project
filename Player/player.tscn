@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dohmyoeiilp0v"]
 
+[ext_resource type="Script" uid="uid://bs0loqfendiak" path="res://Scripts/player.gd" id="1_00tjw"]
 [ext_resource type="Texture2D" uid="uid://d1irxkv8rmbly" path="res://Sprites/SpaceStation_Character_Sheet.png" id="1_pv8u5"]
-[ext_resource type="Script" uid="uid://cuyc4v3bd5vyw" path="res://Player/Scripts/player.gd" id="1_xwm4p"]
 [ext_resource type="Texture2D" uid="uid://cc2bpmkui6luy" path="res://Sprites/SpaceStation_Projectiles_Sheet.png" id="2_yb4o1"]
 [ext_resource type="AnimationLibrary" uid="uid://vr4581rerisb" path="res://.res" id="3_2hw6s"]
 [ext_resource type="Script" uid="uid://cmxeifgfb32s0" path="res://Player/Scripts/state_machine.gd" id="5_0q5xf"]
@@ -13,7 +13,7 @@
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_5fk43"]
 
 [node name="Player" type="CharacterBody2D" unique_id=862395343]
-script = ExtResource("1_xwm4p")
+script = ExtResource("1_00tjw")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1301816998]
 shape = SubResource("CapsuleShape2D_5fk43")

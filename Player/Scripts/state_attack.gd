@@ -5,7 +5,7 @@ var attacking : bool = false
 @export var attack_sound : AudioStream
 @export_range(1,20,0.5) var decelerate_speed : float = 5.0
 
-@onready var audio : AudioStreamPlayer2D = $"../../Audio/AudioStreamPlayer2D"
+#@onready var audio : AudioStreamPlayer2D = $"../../Audio/AudioStreamPlayer2D"
 @onready var animation_player: AnimationPlayer = $"../../AnimationPlayer"
 @onready var idle: State = $"../Idle"
 @onready var walk : State = $"../Walk"
@@ -16,9 +16,9 @@ func Enter() -> void:
 	player.UpdateAnimation("attack")
 	animation_player.animation_finished.connect( EndAttack )
 	
-	audio.stream = attack_sound
-	audio.pitch_scale = randf_range(0.9, 1.1)
-	audio.play()
+	#audio.stream = attack_sound
+	#audio.pitch_scale = randf_range(0.9, 1.1)
+	#audio.play()
 	
 	attacking = true
 	
