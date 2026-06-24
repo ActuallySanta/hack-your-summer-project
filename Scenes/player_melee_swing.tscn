@@ -12,6 +12,7 @@ script = ExtResource("1_66lfr")
 lifetime = 0.15
 
 [node name="Hitbox" parent="." unique_id=125498642 instance=ExtResource("1_pt7ge")]
+collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=1403102374]
 shape = SubResource("RectangleShape2D_66lfr")
