@@ -5,8 +5,8 @@
 [ext_resource type="PackedScene" uid="uid://ch0cbeo8ehblm" path="res://Scenes/player_melee_swing.tscn" id="2_vgqql"]
 [ext_resource type="PackedScene" uid="uid://djmeyycufny61" path="res://Scenes/Components/Hurtbox.tscn" id="3_6t5aa"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_cvnsp"]
-size = Vector2(128, 128)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vgqql"]
+size = Vector2(42.667, 42.667)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_6t5aa"]
 animations = [{
@@ -19,6 +19,9 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cvnsp"]
+size = Vector2(42.667, 42.667)
+
 [node name="Player" type="CharacterBody2D" unique_id=840937925 groups=["player"]]
 collision_layer = 2
 script = ExtResource("1_cvnsp")
@@ -27,9 +30,10 @@ hitInvulnTime = 1.2
 knockbackDI = 200.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=499297263]
-shape = SubResource("RectangleShape2D_cvnsp")
+shape = SubResource("RectangleShape2D_vgqql")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=822804838]
+scale = Vector2(0.333, 0.333)
 sprite_frames = SubResource("SpriteFrames_6t5aa")
 
 [node name="Hurtbox" parent="." unique_id=125498642 instance=ExtResource("3_6t5aa")]
