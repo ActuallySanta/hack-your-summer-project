@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://ch0cbeo8ehblm"]
+
+[ext_resource type="Script" uid="uid://ck7bij8q437xm" path="res://Scripts/Combat/player_melee_swing.gd" id="1_66lfr"]
+[ext_resource type="PackedScene" uid="uid://liprjmtialrh" path="res://Scenes/Components/Hitbox.tscn" id="1_pt7ge"]
+[ext_resource type="Texture2D" uid="uid://d2bn5f3iju4g5" path="res://Sprites/Characters/scifi_blasterfire_1.png" id="2_qau70"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_66lfr"]
+size = Vector2(84, 18)
+
+[node name="PlayerMeleeSwing" type="Node2D" unique_id=1167296193]
+script = ExtResource("1_66lfr")
+lifetime = 0.15
+
+[node name="Hitbox" parent="." unique_id=125498642 instance=ExtResource("1_pt7ge")]
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=1403102374]
+shape = SubResource("RectangleShape2D_66lfr")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1635296192]
+scale = Vector2(3, 3)
+texture = ExtResource("2_qau70")
