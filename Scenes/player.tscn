@@ -5,7 +5,6 @@
 [ext_resource type="PackedScene" uid="uid://ch0cbeo8ehblm" path="res://Scenes/player_melee_swing.tscn" id="2_vgqql"]
 [ext_resource type="PackedScene" uid="uid://djmeyycufny61" path="res://Scenes/Components/Hurtbox.tscn" id="3_6t5aa"]
 [ext_resource type="PackedScene" uid="uid://jammv02ygc7v" path="res://Scenes/player_bullet.tscn" id="3_fkybt"]
-[ext_resource type="PackedScene" uid="uid://ne13j5tl7gbr" path="res://Scenes/UI/player_hud.tscn" id="4_vgqql"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vgqql"]
 size = Vector2(42.667, 42.667)
@@ -45,9 +44,5 @@ collision_mask = 5
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="Hurtbox" unique_id=2128149372]
 shape = SubResource("RectangleShape2D_cvnsp")
+
 [connection signal="hit" from="Hurtbox" to="." method="_on_hit"]
-
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=981329365]
-
-[node name="Player HUD" parent="CanvasLayer" unique_id=890844106 instance=ExtResource("4_vgqql")]
-
