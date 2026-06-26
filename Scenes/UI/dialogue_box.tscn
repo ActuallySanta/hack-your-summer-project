@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bnwse5pqyludv"]
 
 [ext_resource type="Script" uid="uid://d0trrtt1a1erw" path="res://Scripts/Dialogue System/dialogue_controller.gd" id="1_obhul"]
-[ext_resource type="Texture2D" uid="uid://hmsy6k7cpjs1" path="res://Sprites/Game UI/Grey/Default/button_square_header_small_square.png" id="1_tpmx7"]
+[ext_resource type="Texture2D" uid="uid://hmsy6k7cpjs1" path="res://Sprites/Game UI/UI Visual Elements/Grey/Default/button_square_header_small_square.png" id="1_tpmx7"]
 [ext_resource type="Texture2D" uid="uid://bp1qv2dhalftv" path="res://icon.svg" id="2_qb1dv"]
 [ext_resource type="LabelSettings" uid="uid://bjbq1gnk4t1el" path="res://Label Settings/Dialogue Box Text Settings.tres" id="3_c67c5"]
 
