@@ -17,12 +17,21 @@ signal on_hit(hitbox: Hitbox, target: Hurtbox)
 @export var knockback_strength: float
 @export var knockback_duration: float
 
+var previous_hits : Array[Hurtbox]
+
+func _ready() -> void:
+	previous_hits = []
+
+func reset() -> void:
+	previous_hits = []
+
 func _on_area_entered(area: Area2D) -> void:
 	#print(area.name)
 	
 	var hurtbox := area as Hurtbox
-	if not hurtbox:
+	if not hurtbox or previous_hits.has(hurtbox):
 		return
 	on_hit.emit(self, hurtbox)
+	previous_hits.append(hurtbox)
 	var hit_info := HitInfo.new(damage, knockback_strength, knockback_duration)
 	hurtbox.register_hit(hit_info, self)
