@@ -2,6 +2,9 @@
 
 [ext_resource type="Script" uid="uid://bs0loqfendiak" path="res://Scripts/player.gd" id="1_cvnsp"]
 [ext_resource type="Texture2D" uid="uid://bp1qv2dhalftv" path="res://icon.svg" id="1_v0iea"]
+[ext_resource type="PackedScene" uid="uid://ch0cbeo8ehblm" path="res://Scenes/player_melee_swing.tscn" id="2_vgqql"]
+[ext_resource type="PackedScene" uid="uid://djmeyycufny61" path="res://Scenes/Components/Hurtbox.tscn" id="3_6t5aa"]
+[ext_resource type="PackedScene" uid="uid://ne13j5tl7gbr" path="res://Scenes/UI/player_hud.tscn" id="4_vgqql"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cvnsp"]
 size = Vector2(128, 128)
@@ -17,11 +20,28 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Player" type="CharacterBody2D" unique_id=840937925]
+[node name="Player" type="CharacterBody2D" unique_id=840937925 groups=["player"]]
+collision_layer = 2
 script = ExtResource("1_cvnsp")
+swingScene = ExtResource("2_vgqql")
+hitInvulnTime = 1.2
+knockbackDI = 200.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=499297263]
 shape = SubResource("RectangleShape2D_cvnsp")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=822804838]
 sprite_frames = SubResource("SpriteFrames_6t5aa")
+
+[node name="Hurtbox" parent="." unique_id=125498642 instance=ExtResource("3_6t5aa")]
+collision_layer = 2
+collision_mask = 5
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Hurtbox" unique_id=2128149372]
+shape = SubResource("RectangleShape2D_cvnsp")
+[connection signal="hit" from="Hurtbox" to="." method="_on_hit"]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=981329365]
+
+[node name="Player HUD" parent="CanvasLayer" unique_id=890844106 instance=ExtResource("4_vgqql")]
+

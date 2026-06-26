@@ -64,31 +64,31 @@ Behavior Trees are powerful hierarchical structures used to model and control th
 ## Features
 
 - **Behavior Trees (BT):**
-    - Easily create, edit, and save `BehaviorTree` resources in the editor.
-    - Execute `BehaviorTree` resources using the `BTPlayer` node.
-    - Create complex behaviors by combining and nesting tasks in a hierarchy.
-    - Control execution flow using composite, decorator, and condition tasks.
-    - [Create custom tasks](https://limboai.readthedocs.io/en/stable/behavior-trees/custom-tasks.html) by extending core classes: `BTAction`, `BTCondition`, `BTDecorator`, and `BTComposite`.
-    - Built-in class documentation.
-    - Blackboard system: Share data seamlessly between tasks using the `Blackboard`.
-      - Blackboard plans: Define variables in the BehaviorTree resource and override their values in the BTPlayer node.
-      - Plan editor: Manage variables, their data types and property hints.
-      - Blackboard scopes: Prevent name conflicts and enable advanced techniques like [sharing data between several agents](https://limboai.readthedocs.io/en/stable/behavior-trees/using-blackboard.html#sharing-data-between-several-agents).
-      - Blackboard parameters: [Export a BB parameter](https://limboai.readthedocs.io/en/stable/behavior-trees/using-blackboard.html#task-parameters), for which user can provide a value or bind it to a blackboard variable (can be used in custom tasks).
-      - Inspector support for specifying blackboard variables (custom editor for exported `StringName` properties ending with "_var").
-    - Use the `BTSubtree` task to execute a tree from a different resource file, promoting organization and reusability.
-    - Visual Debugger: Inspect the execution of any BT in a running scene to identify and troubleshoot issues.
-    - Visualize BT in-game using `BehaviorTreeView` node (for custom in-game tools).
-    - Monitor tree performance with custom performance monitors.
+	- Easily create, edit, and save `BehaviorTree` resources in the editor.
+	- Execute `BehaviorTree` resources using the `BTPlayer` node.
+	- Create complex behaviors by combining and nesting tasks in a hierarchy.
+	- Control execution flow using composite, decorator, and condition tasks.
+	- [Create custom tasks](https://limboai.readthedocs.io/en/stable/behavior-trees/custom-tasks.html) by extending core classes: `BTAction`, `BTCondition`, `BTDecorator`, and `BTComposite`.
+	- Built-in class documentation.
+	- Blackboard system: Share data seamlessly between tasks using the `Blackboard`.
+	  - Blackboard plans: Define variables in the BehaviorTree resource and override their values in the BTPlayer node.
+	  - Plan editor: Manage variables, their data types and property hints.
+	  - Blackboard scopes: Prevent name conflicts and enable advanced techniques like [sharing data between several agents](https://limboai.readthedocs.io/en/stable/behavior-trees/using-blackboard.html#sharing-data-between-several-agents).
+	  - Blackboard parameters: [Export a BB parameter](https://limboai.readthedocs.io/en/stable/behavior-trees/using-blackboard.html#task-parameters), for which user can provide a value or bind it to a blackboard variable (can be used in custom tasks).
+	  - Inspector support for specifying blackboard variables (custom editor for exported `StringName` properties ending with "_var").
+	- Use the `BTSubtree` task to execute a tree from a different resource file, promoting organization and reusability.
+	- Visual Debugger: Inspect the execution of any BT in a running scene to identify and troubleshoot issues.
+	- Visualize BT in-game using `BehaviorTreeView` node (for custom in-game tools).
+	- Monitor tree performance with custom performance monitors.
 
 - **Hierarchical State Machines (HSM):**
-    - Extend the `LimboState` class to implement state logic.
-    - `LimboHSM` node serves as a state machine that manages `LimboState` instances and transitions.
-    - `LimboHSM` is a state itself and can be nested within other `LimboHSM` instances.
-    - [Event-based](https://limboai.readthedocs.io/en/stable/hierarchical-state-machines/create-hsm.html#events-and-transitions): Transitions are associated with events and are triggered by the state machine when the relevant event is dispatched, allowing for better decoupling of transitions from state logic.
-    - Combine state machines with behavior trees using `BTState` for advanced reactive AI.
-    - Delegation Option: Using the vanilla `LimboState`, [delegate the implementation](https://limboai.readthedocs.io/en/stable/hierarchical-state-machines/create-hsm.html#single-file-state-machine-setup) to your callback functions, making it perfect for rapid prototyping and game jams.
-    - Note: State machine setup and initialization require code; there is no GUI editor.
+	- Extend the `LimboState` class to implement state logic.
+	- `LimboHSM` node serves as a state machine that manages `LimboState` instances and transitions.
+	- `LimboHSM` is a state itself and can be nested within other `LimboHSM` instances.
+	- [Event-based](https://limboai.readthedocs.io/en/stable/hierarchical-state-machines/create-hsm.html#events-and-transitions): Transitions are associated with events and are triggered by the state machine when the relevant event is dispatched, allowing for better decoupling of transitions from state logic.
+	- Combine state machines with behavior trees using `BTState` for advanced reactive AI.
+	- Delegation Option: Using the vanilla `LimboState`, [delegate the implementation](https://limboai.readthedocs.io/en/stable/hierarchical-state-machines/create-hsm.html#single-file-state-machine-setup) to your callback functions, making it perfect for rapid prototyping and game jams.
+	- Note: State machine setup and initialization require code; there is no GUI editor.
 
 - **Tested:** Behavior tree tasks and HSM are covered by unit tests.
 
