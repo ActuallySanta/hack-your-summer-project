@@ -12,6 +12,7 @@ class_name Hitbox extends Area2D
 ## The object that the Hitbox is attached to is what processes the hit.
 
 signal on_hit(hitbox: Hitbox, target: Hurtbox)
+signal environment_hit(target: Node2D)
 
 @export var damage: int = 1
 @export var knockback_strength: float
@@ -29,9 +30,16 @@ func _on_area_entered(area: Area2D) -> void:
 	#print(area.name)
 	
 	var hurtbox := area as Hurtbox
-	if not hurtbox or previous_hits.has(hurtbox):
+	if not hurtbox:
+		return
+	if previous_hits.has(hurtbox):
 		return
 	on_hit.emit(self, hurtbox)
 	previous_hits.append(hurtbox)
 	var hit_info := HitInfo.new(damage, knockback_strength, knockback_duration)
 	hurtbox.register_hit(hit_info, self)
+
+func _on_body_entered(body: Node2D) -> void:
+	print("on_body_entered " + body.to_string())
+	if body is TileMapLayer or (body as PhysicsBody2D).collision_layer & 1:
+		environment_hit.emit(body)

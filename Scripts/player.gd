@@ -12,6 +12,10 @@ extends CharacterBody2D
 @export var attackBufferTime := 0.15
 @export var swingOffset := 100.0
 @export var swingScene : PackedScene
+@export var shootCooldown := 0.6
+@export var shootBufferTime := 0.15
+@export var bulletOffset := 100.0
+@export var bulletScene : PackedScene
 @export var hitInvulnTime := 1.0
 @export var invulnBlinkInterval := 0.15
 @export var knockbackDI := 300.0
@@ -23,6 +27,8 @@ var _coyoteTimer : float
 var _currentHealth : int
 var _attackCooldownTimer : float
 var _attackBufferTimer : float
+var _shootCooldownTimer : float
+var _shootBufferTimer : float
 var _knockbackTimer : float
 var _knockbackForce : float
 var _invulnTimer : float
@@ -50,6 +56,18 @@ func attack() -> void:
 	add_child(newAttack)
 	_attackCooldownTimer = attackCooldown
 	_attackBufferTimer = 0
+
+func shoot() -> void:
+	print("Fire!")
+	var newBullet := bulletScene.instantiate() as PlayerBullet
+	var bulletX := bulletOffset
+	if !_facingRight:
+		bulletX *= -1
+	newBullet.position = position + Vector2(bulletX, 0)
+	newBullet.direction = Vector2.RIGHT if _facingRight else Vector2.LEFT
+	get_tree().root.add_child(newBullet)
+	_shootCooldownTimer = shootCooldown
+	_shootBufferTimer = 0
 
 func handle_jump_and_gravity(delta: float) -> void:
 	# Add the gravity.
@@ -94,6 +112,15 @@ func _physics_process(delta: float) -> void:
 			attack()
 		else:
 			_attackBufferTimer -= delta
+	# Handle shooting
+	if _shootCooldownTimer > 0:
+		_shootCooldownTimer -= delta
+	if _shootBufferTimer > 0:
+		if _shootCooldownTimer <= 0:
+			shoot()
+		else:
+			_shootBufferTimer -= delta
+	
 	if _invulnTimer > 0:
 		_invulnTimer -= delta
 	move_and_slide()
@@ -104,12 +131,17 @@ func set_jump_input() -> void:
 func set_attack_input() -> void:
 	_attackBufferTimer = attackBufferTime
 
+func set_shoot_input() -> void:
+	_shootBufferTimer = shootBufferTime
+
 func handle_inputs() -> void:
 	_moveInput = Input.get_axis("Left", "Right")
 	if Input.is_action_just_pressed("Jump"):
 		set_jump_input()
 	if Input.is_action_just_pressed("Attack"):
 		set_attack_input()
+	if Input.is_action_just_pressed("Shoot"):
+		set_shoot_input()
 
 func handle_invuln_blinking(delta: float) -> void:
 	if _invulnTimer <= 0:
