@@ -2,7 +2,6 @@
 
 [ext_resource type="PackedScene" uid="uid://c5wawk83tlcux" path="res://Scenes/player.tscn" id="1_iualk"]
 [ext_resource type="PackedScene" uid="uid://b2ibnxde1hrva" path="res://Scenes/Enemies/ranged_enemy.tscn" id="2_exwnq"]
-[ext_resource type="PackedScene" uid="uid://jammv02ygc7v" path="res://Scenes/player_bullet.tscn" id="2_npy7o"]
 [ext_resource type="PackedScene" uid="uid://41tgjv6lxsko" path="res://Scenes/Enemies/melee_enemy.tscn" id="3_eqbnc"]
 [ext_resource type="TileSet" uid="uid://hkvfy5by8aqr" path="res://Tileset/Main_Level.tres" id="4_a4k3g"]
 
@@ -34,7 +33,6 @@ shape = SubResource("WorldBoundaryShape2D_xtv6o")
 position = Vector2(-318, -78)
 swingOffset = 40.0
 bulletOffset = 30.0
-bulletScene = ExtResource("2_npy7o")
 
 [node name="Ranged Enemy" parent="." unique_id=1835408748 instance=ExtResource("2_exwnq")]
 position = Vector2(228, -54)

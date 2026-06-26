@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://bp1qv2dhalftv" path="res://icon.svg" id="1_v0iea"]
 [ext_resource type="PackedScene" uid="uid://ch0cbeo8ehblm" path="res://Scenes/player_melee_swing.tscn" id="2_vgqql"]
 [ext_resource type="PackedScene" uid="uid://djmeyycufny61" path="res://Scenes/Components/Hurtbox.tscn" id="3_6t5aa"]
+[ext_resource type="PackedScene" uid="uid://jammv02ygc7v" path="res://Scenes/player_bullet.tscn" id="3_fkybt"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vgqql"]
 size = Vector2(42.667, 42.667)
@@ -26,6 +27,7 @@ size = Vector2(42.667, 42.667)
 collision_layer = 2
 script = ExtResource("1_cvnsp")
 swingScene = ExtResource("2_vgqql")
+bulletScene = ExtResource("3_fkybt")
 hitInvulnTime = 1.2
 knockbackDI = 200.0
 
