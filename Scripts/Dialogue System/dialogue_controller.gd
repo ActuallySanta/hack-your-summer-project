@@ -23,12 +23,13 @@ func _ready() -> void:
 func BeginDialogue(_conversation : Dialogue_Conversation):
 	dialogue_box.visible = true
 	isSpeaking = true
+	PlayerManager.inDialogue = true
 	print(_conversation.conversationContents)
 	for entry in _conversation.conversationContents:
 		conversationContents.push_back(entry.entryText)
 		conversationSpeaker.push_back(entry.speaker)
 		conversationSpeakerEmotion.push_back(entry.speakerEmotion)
-	PresentLine()
+
 	pass
 
 func PresentLine():
@@ -50,5 +51,6 @@ func PresentLine():
 func EndDialogue():
 	isSpeaking = false
 	dialogue_box.visible = false
+	PlayerManager.inDialogue = false
 	GlobalSignals.OnDialogueEnd.emit()
 	pass

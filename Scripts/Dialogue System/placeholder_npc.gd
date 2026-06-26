@@ -1,3 +1,4 @@
+class_name NPC
 extends Node2D
 
 @onready var in_range_indicator: Polygon2D = $"In Range Indicator"
