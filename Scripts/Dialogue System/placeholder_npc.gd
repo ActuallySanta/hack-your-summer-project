@@ -1,7 +1,7 @@
 class_name NPC
 extends Node2D
 
-@onready var in_range_indicator: Polygon2D = $"In Range Indicator"
+@onready var in_range_indicator: Sprite2D = $"In Range Indicator"
 
 func _on_dialogue_trigger_body_entered(body: Node2D) -> void:
 	if(body is Player):

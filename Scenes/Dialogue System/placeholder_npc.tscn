@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://bdh437kih1wx8" path="res://Scripts/Resources/Dialogue/dialogue_entry.gd" id="2_hpuli"]
 [ext_resource type="Script" uid="uid://bf316n5tk84lf" path="res://Scripts/Resources/Dialogue/dialogue_conversation.gd" id="2_su5eh"]
 [ext_resource type="Resource" uid="uid://ncxfmcocxh4q" path="res://Dialogue/Speakers/main_character_speaker.tres" id="3_7jg2w"]
+[ext_resource type="Texture2D" uid="uid://cfalrguvcdj5v" path="res://Sprites/Game UI/Keyboard and Mouse Icons/keyboard_e.png" id="6_c5vyv"]
 
 [sub_resource type="Resource" id="Resource_hrlft"]
 script = ExtResource("2_hpuli")
@@ -41,17 +42,16 @@ script = ExtResource("1_xv5i2")
 polygon = PackedVector2Array(-31.999975, -48, -31.999975, 56, 32.00001, 56.000008, 32.00001, -47.999992, 9.536743e-06, -47.999992)
 uv = PackedVector2Array(-208, -63.999992, -208, 40.000008, -168, 40.000008, -168, -63.999992, -200, -63.999992)
 
-[node name="In Range Indicator" type="Polygon2D" parent="." unique_id=1867081557]
-visible = false
-position = Vector2(0, -80)
-polygon = PackedVector2Array(0, 8, -16, -32, 16.00003, -32)
-uv = PackedVector2Array(0, 8, -23.99997, -32, 32, -32)
-
 [node name="DialogueTrigger" parent="." unique_id=1367779263 instance=ExtResource("1_0duqt")]
 loadedConversation = SubResource("Resource_hpuli")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DialogueTrigger" unique_id=1312127664]
 shape = SubResource("CircleShape2D_su5eh")
+
+[node name="In Range Indicator" type="Sprite2D" parent="." unique_id=611005810]
+visible = false
+position = Vector2(0, -109)
+texture = ExtResource("6_c5vyv")
 
 [connection signal="body_entered" from="DialogueTrigger" to="." method="_on_dialogue_trigger_body_entered"]
 [connection signal="body_exited" from="DialogueTrigger" to="." method="_on_dialogue_trigger_body_exited"]
