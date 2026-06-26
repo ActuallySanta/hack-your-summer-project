@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://c5wawk83tlcux" path="res://Scenes/player.tscn" id="1_iualk"]
 [ext_resource type="PackedScene" uid="uid://b2ibnxde1hrva" path="res://Scenes/Enemies/ranged_enemy.tscn" id="2_exwnq"]
 [ext_resource type="PackedScene" uid="uid://41tgjv6lxsko" path="res://Scenes/Enemies/melee_enemy.tscn" id="3_eqbnc"]
+[ext_resource type="PackedScene" uid="uid://n6x2kgtwhbba" path="res://Scenes/Dialogue System/placeholder_npc.tscn" id="4_a4k3g"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_xtv6o"]
 
@@ -44,7 +45,7 @@ scale = Vector2(0.3510907, 0.3510907)
 position = Vector2(228, -54)
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1968292425]
-position = Vector2(0, -210)
+position = Vector2(0, -100)
 zoom = Vector2(1.5, 1.5)
 
 [node name="Obstruction" type="StaticBody2D" parent="." unique_id=1355854674]
@@ -59,3 +60,6 @@ uv = PackedVector2Array(-16, -136.00002, -16, -144.00002, 8, -144.00002, 8, -8, 
 
 [node name="Melee Enemy" parent="." unique_id=21105245 instance=ExtResource("3_eqbnc")]
 position = Vector2(66, -36)
+
+[node name="Placeholder NPC" parent="." unique_id=1942218757 instance=ExtResource("4_a4k3g")]
+position = Vector2(-67, -65)
