@@ -1,0 +1,57 @@
+[gd_scene format=3 uid="uid://n6x2kgtwhbba"]
+
+[ext_resource type="PackedScene" uid="uid://k8xepgfoggiq" path="res://Scenes/Dialogue System/dialogue_trigger.tscn" id="1_0duqt"]
+[ext_resource type="Script" uid="uid://by3dkt06ka3j7" path="res://Scripts/Dialogue System/placeholder_npc.gd" id="1_xv5i2"]
+[ext_resource type="Script" uid="uid://bdh437kih1wx8" path="res://Scripts/Resources/Dialogue/dialogue_entry.gd" id="2_hpuli"]
+[ext_resource type="Script" uid="uid://bf316n5tk84lf" path="res://Scripts/Resources/Dialogue/dialogue_conversation.gd" id="2_su5eh"]
+[ext_resource type="Resource" uid="uid://ncxfmcocxh4q" path="res://Dialogue/Speakers/main_character_speaker.tres" id="3_7jg2w"]
+[ext_resource type="Texture2D" uid="uid://cfalrguvcdj5v" path="res://Sprites/Game UI/Keyboard and Mouse Icons/keyboard_e.png" id="6_c5vyv"]
+
+[sub_resource type="Resource" id="Resource_hrlft"]
+script = ExtResource("2_hpuli")
+entryText = "This is the first line of text"
+speaker = ExtResource("3_7jg2w")
+metadata/_custom_type_script = "uid://bdh437kih1wx8"
+
+[sub_resource type="Resource" id="Resource_7jg2w"]
+script = ExtResource("2_hpuli")
+entryText = "This is the second line of text"
+speakerEmotion = 1
+speaker = ExtResource("3_7jg2w")
+metadata/_custom_type_script = "uid://bdh437kih1wx8"
+
+[sub_resource type="Resource" id="Resource_xv5i2"]
+script = ExtResource("2_hpuli")
+entryText = "This is the final line of text"
+speakerEmotion = 2
+speaker = ExtResource("3_7jg2w")
+metadata/_custom_type_script = "uid://bdh437kih1wx8"
+
+[sub_resource type="Resource" id="Resource_hpuli"]
+script = ExtResource("2_su5eh")
+conversationContents = Array[ExtResource("2_hpuli")]([SubResource("Resource_hrlft"), SubResource("Resource_7jg2w"), SubResource("Resource_xv5i2")])
+metadata/_custom_type_script = "uid://bf316n5tk84lf"
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_su5eh"]
+radius = 158.94
+
+[node name="Placeholder NPC" type="Node2D" unique_id=1942218757]
+script = ExtResource("1_xv5i2")
+
+[node name="Visual" type="Polygon2D" parent="." unique_id=468813294]
+polygon = PackedVector2Array(-31.999975, -48, -31.999975, 56, 32.00001, 56.000008, 32.00001, -47.999992, 9.536743e-06, -47.999992)
+uv = PackedVector2Array(-208, -63.999992, -208, 40.000008, -168, 40.000008, -168, -63.999992, -200, -63.999992)
+
+[node name="DialogueTrigger" parent="." unique_id=1367779263 instance=ExtResource("1_0duqt")]
+loadedConversation = SubResource("Resource_hpuli")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DialogueTrigger" unique_id=1312127664]
+shape = SubResource("CircleShape2D_su5eh")
+
+[node name="In Range Indicator" type="Sprite2D" parent="." unique_id=611005810]
+visible = false
+position = Vector2(0, -109)
+texture = ExtResource("6_c5vyv")
+
+[connection signal="body_entered" from="DialogueTrigger" to="." method="_on_dialogue_trigger_body_entered"]
+[connection signal="body_exited" from="DialogueTrigger" to="." method="_on_dialogue_trigger_body_exited"]
