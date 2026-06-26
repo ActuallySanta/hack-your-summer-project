@@ -1,3 +1,3 @@
-extends Node
-
-var player : Player
+#extends Node
+#
+#var player : Player

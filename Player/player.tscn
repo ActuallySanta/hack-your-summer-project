@@ -4,13 +4,79 @@
 [ext_resource type="Texture2D" uid="uid://d1irxkv8rmbly" path="res://Sprites/SpaceStation_Character_Sheet.png" id="1_pv8u5"]
 [ext_resource type="Texture2D" uid="uid://cc2bpmkui6luy" path="res://Sprites/SpaceStation_Projectiles_Sheet.png" id="2_yb4o1"]
 [ext_resource type="AnimationLibrary" uid="uid://vr4581rerisb" path="res://.res" id="3_2hw6s"]
-[ext_resource type="Script" uid="uid://cmxeifgfb32s0" path="res://Player/Scripts/state_machine.gd" id="5_0q5xf"]
-[ext_resource type="Script" uid="uid://c3sovkbkip726" path="res://Player/Scripts/state_idle.gd" id="6_5cm5i"]
-[ext_resource type="Script" uid="uid://bmoxuttu1oblt" path="res://Player/Scripts/state_walk.gd" id="7_vtle1"]
-[ext_resource type="Script" uid="uid://k75444dcwhw8" path="res://Player/Scripts/state_attack.gd" id="8_od3ui"]
 [ext_resource type="Script" uid="uid://di0vg1qd8o15w" path="res://Player/Scripts/PlayerCamera.gd" id="9_00tjw"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_5fk43"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_00tjw"]
+animation = &"cover_shoot"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_x3vf3"]
+animation = &"crouch"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_apopc"]
+animation = &"crouch_shoot"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_5htga"]
+animation = &"death"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_p5o4e"]
+animation = &"idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_gu6f8"]
+animation = &"jump"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_dkpta"]
+animation = &"knockback"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_lfmf2"]
+animation = &"run"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_pisgm"]
+animation = &"stand_shoot"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_b1ygp"]
+switch_mode = 2
+advance_mode = 0
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_o28un"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_n471f"]
+switch_mode = 2
+advance_mode = 0
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_7emwf"]
+switch_mode = 2
+advance_mode = 0
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_k53q1"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_hshwv"]
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_gpjlu"]
+states/Start/position = Vector2(180.00002, 99.80765)
+states/cover_shoot/node = SubResource("AnimationNodeAnimation_00tjw")
+states/cover_shoot/position = Vector2(438, 256)
+states/crouch/node = SubResource("AnimationNodeAnimation_x3vf3")
+states/crouch/position = Vector2(570.8, 200.8)
+states/crouch_shoot/node = SubResource("AnimationNodeAnimation_apopc")
+states/crouch_shoot/position = Vector2(332.4, 181.6)
+states/death/node = SubResource("AnimationNodeAnimation_5htga")
+states/death/position = Vector2(755.6, 29.599998)
+states/idle/node = SubResource("AnimationNodeAnimation_p5o4e")
+states/idle/position = Vector2(270, 100.0384)
+states/jump/node = SubResource("AnimationNodeAnimation_gu6f8")
+states/jump/position = Vector2(546.8, 10.399994)
+states/knockback/node = SubResource("AnimationNodeAnimation_dkpta")
+states/knockback/position = Vector2(803.6, 236)
+states/run/node = SubResource("AnimationNodeAnimation_lfmf2")
+states/run/position = Vector2(789.2, 144.8)
+states/stand_shoot/node = SubResource("AnimationNodeAnimation_pisgm")
+states/stand_shoot/position = Vector2(627.6, 256.8)
+transitions = ["idle", "run", SubResource("AnimationNodeStateMachineTransition_b1ygp"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_o28un"), "run", "jump", SubResource("AnimationNodeStateMachineTransition_n471f"), "idle", "jump", SubResource("AnimationNodeStateMachineTransition_7emwf"), "Start", "idle", SubResource("AnimationNodeStateMachineTransition_k53q1"), "jump", "idle", SubResource("AnimationNodeStateMachineTransition_hshwv")]
+graph_offset = Vector2(-11, -32.889812)
 
 [node name="Player" type="CharacterBody2D" unique_id=862395343]
 script = ExtResource("1_00tjw")
@@ -29,23 +95,23 @@ texture = ExtResource("2_yb4o1")
 offset = Vector2(-18, 25)
 hframes = 8
 vframes = 3
-frame = 23
+frame = 19
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=480447104]
 libraries/ = ExtResource("3_2hw6s")
 
 [node name="StateMachine" type="Node" parent="." unique_id=95289598]
-script = ExtResource("5_0q5xf")
 
 [node name="Idle" type="Node" parent="StateMachine" unique_id=582333302]
-script = ExtResource("6_5cm5i")
 
 [node name="Walk" type="Node" parent="StateMachine" unique_id=934769681]
-script = ExtResource("7_vtle1")
 
 [node name="Attack" type="Node" parent="StateMachine" unique_id=768465736]
-script = ExtResource("8_od3ui")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=207190594]
 zoom = Vector2(2, 2)
 script = ExtResource("9_00tjw")
+
+[node name="AnimationTree" type="AnimationTree" parent="." unique_id=738334773]
+tree_root = SubResource("AnimationNodeStateMachine_gpjlu")
+anim_player = NodePath("../AnimationPlayer")
