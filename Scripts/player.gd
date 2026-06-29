@@ -5,8 +5,10 @@ extends CharacterBody2D
 @onready var playback = anim_tree.get("parameters/playback") # Controls the transitions
 
 @export_group("Movement")
-@export var moveSpeed := 250.0
-@export var jumpForce := 300.0
+
+@export var moveSpeed := 500.0
+@export var crouchSpeedmult := 0.5
+@export var jumpForce := 600.0
 @export var jumpBufferTime := 0.25
 @export var coyoteTime := 0.2
 @export_group("Combat")
@@ -30,6 +32,14 @@ var _knockbackTimer : float
 var _knockbackForce : float
 var _invulnTimer : float
 var _invulnBlinkTimer : float
+
+enum MoveState{
+	Standing,
+	Crouching,
+	Climbing
+}
+
+var playerMoveState: MoveState
 
 @onready var sprite : AnimatedSprite2D = $AnimatedSprite2D
 
@@ -63,7 +73,7 @@ func handle_jump_and_gravity(delta: float) -> void:
 		_coyoteTimer = coyoteTime
 	# Handle jump.
 	if _jumpBufferTimer > 0:
-		if is_on_floor() or _coyoteTimer > 0:
+		if is_on_floor() or _coyoteTimer > 0 and playerMoveState != MoveState.Climbing:
 			jump()
 		else:
 			_jumpBufferTimer -= delta

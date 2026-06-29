@@ -23,8 +23,21 @@ animations = [{
 [node name="Player" type="CharacterBody2D" unique_id=840937925 groups=["player"]]
 collision_layer = 2
 script = ExtResource("1_cvnsp")
+moveSpeed = null
+jumpForce = null
+jumpBufferTime = null
+coyoteTime = null
+baseHealth = null
+attackCooldown = null
+attackBufferTime = null
+swingOffset = null
 swingScene = ExtResource("2_vgqql")
+shootCooldown = null
+shootBufferTime = null
+bulletOffset = null
+bulletScene = ExtResource("3_x3wgy")
 hitInvulnTime = 1.2
+invulnBlinkInterval = null
 knockbackDI = 200.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=499297263]
