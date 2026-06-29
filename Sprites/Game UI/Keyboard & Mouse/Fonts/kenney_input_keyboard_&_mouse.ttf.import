@@ -2,6 +2,7 @@
 
 importer="font_data_dynamic"
 type="FontFile"
+<<<<<<<< HEAD:Sprites/Game UI/Keyboard & Mouse/Fonts/kenney_input_keyboard_&_mouse.ttf.import
 uid="uid://bug0fen5mlw6n"
 path="res://.godot/imported/kenney_input_keyboard_&_mouse.ttf-6d6c544a59593cb07d0f05c60b1d71ac.fontdata"
 
@@ -9,6 +10,15 @@ path="res://.godot/imported/kenney_input_keyboard_&_mouse.ttf-6d6c544a59593cb07d
 
 source_file="res://Sprites/Game UI/Keyboard & Mouse/Fonts/kenney_input_keyboard_&_mouse.ttf"
 dest_files=["res://.godot/imported/kenney_input_keyboard_&_mouse.ttf-6d6c544a59593cb07d0f05c60b1d71ac.fontdata"]
+========
+uid="uid://dhm45nttm5i3s"
+path="res://.godot/imported/monaspace_argon_italic.otf-69d64783adde526699a99a191cd14ed6.fontdata"
+
+[deps]
+
+source_file="res://addons/limbo_console/res/fonts/monaspace_argon_italic.otf"
+dest_files=["res://.godot/imported/monaspace_argon_italic.otf-69d64783adde526699a99a191cd14ed6.fontdata"]
+>>>>>>>> combat:addons/limbo_console/res/fonts/monaspace_argon_italic.otf.import
 
 [params]
 
@@ -23,7 +33,7 @@ allow_system_fallback=true
 force_autohinter=false
 modulate_color_glyphs=false
 hinting=1
-subpixel_positioning=4
+subpixel_positioning=1
 keep_rounding_remainders=true
 oversampling=0.0
 Fallbacks=null
