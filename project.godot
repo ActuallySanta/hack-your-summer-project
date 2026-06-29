@@ -21,6 +21,7 @@ MetSys="*uid://c01ibpvrp2wsd"
 PlayerManager="*uid://y1qk4kbpcvve"
 LevelManager="*uid://cd4f1h6qke8ex"
 CheckpointEventBus="*uid://dhboilckmjc7f"
+GlobalSignals="*uid://bac60hesolscg"
 
 [dotnet]
 
