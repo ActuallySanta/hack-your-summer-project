@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://bdh437kih1wx8" path="res://Scripts/Resources/Dialogue/dialogue_entry.gd" id="2_hpuli"]
 [ext_resource type="Script" uid="uid://bf316n5tk84lf" path="res://Scripts/Resources/Dialogue/dialogue_conversation.gd" id="2_su5eh"]
 [ext_resource type="Resource" uid="uid://ncxfmcocxh4q" path="res://Dialogue/Speakers/main_character_speaker.tres" id="3_7jg2w"]
-[ext_resource type="Texture2D" uid="uid://cfalrguvcdj5v" path="res://Sprites/Game UI/Keyboard and Mouse Icons/keyboard_e.png" id="6_c5vyv"]
+[ext_resource type="Texture2D" uid="uid://41l8davx2eth" path="res://Sprites/Game UI/Keyboard & Mouse/Default/keyboard_e.png" id="6_c5vyv"]
 
 [sub_resource type="Resource" id="Resource_hrlft"]
 script = ExtResource("2_hpuli")

@@ -1,4 +1,4 @@
 extends Node
 
 var player : Player
-var inDialogue : bool = false
+var inDialogue: bool = false
