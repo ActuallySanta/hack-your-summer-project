@@ -1,9 +1,8 @@
 class_name Player
 extends CharacterBody2D
 ## Get animationtree ##
-@onready var anim_tree: AnimationTree = $AnimationTree
-@onready var playback = anim_tree.get("parameters/playback") # Controls the transitions
-
+@onready var animation_tree: AnimationTree = $AnimationTree
+@onready var playback = animation_tree.get("parameters/playback") # Controls the transitions
 @export_group("Movement")
 
 @export var moveSpeed := 500.0
@@ -47,12 +46,12 @@ enum MoveState{
 
 var playerMoveState: MoveState
 
-@onready var sprite : AnimatedSprite2D = $AnimatedSprite2D
-
+@onready var sprite : Sprite2D = $Character
 func _ready() -> void:
 	PlayerManager.player = self
 	_facingRight = true
 	_currentHealth = baseHealth
+	
 
 func jump() -> void:
 	velocity.y = -jumpForce
@@ -189,7 +188,7 @@ func handle_invuln_blinking(delta: float) -> void:
 
 func _process( _delta: float) -> void:
 	handle_inputs()
-	handle_invuln_blinking(delta)
+	handle_invuln_blinking(_delta)
 	#animation code would go here eventually
 
 func die() -> void:

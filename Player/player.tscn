@@ -2,9 +2,12 @@
 
 [ext_resource type="Script" uid="uid://bs0loqfendiak" path="res://Scripts/player.gd" id="1_00tjw"]
 [ext_resource type="Texture2D" uid="uid://d1irxkv8rmbly" path="res://Sprites/SpaceStation_Character_Sheet.png" id="1_pv8u5"]
+[ext_resource type="PackedScene" uid="uid://ch0cbeo8ehblm" path="res://Scenes/player_melee_swing.tscn" id="2_vtle1"]
 [ext_resource type="Texture2D" uid="uid://cc2bpmkui6luy" path="res://Sprites/SpaceStation_Projectiles_Sheet.png" id="2_yb4o1"]
 [ext_resource type="AnimationLibrary" uid="uid://vr4581rerisb" path="res://.res" id="3_2hw6s"]
-[ext_resource type="Script" uid="uid://di0vg1qd8o15w" path="res://Player/Scripts/PlayerCamera.gd" id="9_00tjw"]
+[ext_resource type="PackedScene" uid="uid://jammv02ygc7v" path="res://Scenes/player_bullet.tscn" id="3_od3ui"]
+[ext_resource type="PackedScene" uid="uid://djmeyycufny61" path="res://Scenes/Components/Hurtbox.tscn" id="4_00tjw"]
+[ext_resource type="PackedScene" uid="uid://ne13j5tl7gbr" path="res://Scenes/UI/player_hud.tscn" id="8_od3ui"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_5fk43"]
 
@@ -80,9 +83,22 @@ graph_offset = Vector2(-11, -32.889812)
 
 [node name="Player" type="CharacterBody2D" unique_id=862395343]
 script = ExtResource("1_00tjw")
+moveSpeed = 125.0
+swingOffset = 10.0
+swingScene = ExtResource("2_vtle1")
+bulletOffset = 25.0
+bulletScene = ExtResource("3_od3ui")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1301816998]
+[node name="Hurtbox" parent="." unique_id=470143312 instance=ExtResource("4_00tjw")]
+collision_layer = 2
+collision_mask = 5
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=1301816998]
 shape = SubResource("CapsuleShape2D_5fk43")
+
+[node name="AnimationTree" type="AnimationTree" parent="." unique_id=738334773]
+tree_root = SubResource("AnimationNodeStateMachine_gpjlu")
+anim_player = NodePath("../AnimationPlayer")
 
 [node name="Character" type="Sprite2D" parent="." unique_id=295087923]
 texture = ExtResource("1_pv8u5")
@@ -108,10 +124,9 @@ libraries/ = ExtResource("3_2hw6s")
 
 [node name="Attack" type="Node" parent="StateMachine" unique_id=768465736]
 
-[node name="Camera2D" type="Camera2D" parent="." unique_id=207190594]
-zoom = Vector2(2, 2)
-script = ExtResource("9_00tjw")
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1087993730]
 
-[node name="AnimationTree" type="AnimationTree" parent="." unique_id=738334773]
-tree_root = SubResource("AnimationNodeStateMachine_gpjlu")
-anim_player = NodePath("../AnimationPlayer")
+[node name="Player HUD" parent="CanvasLayer" unique_id=890844106 instance=ExtResource("8_od3ui")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=973966651]
+shape = SubResource("CapsuleShape2D_5fk43")
