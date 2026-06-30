@@ -6,3 +6,4 @@
 [resource]
 script = ExtResource("1_ui0vk")
 theme = ExtResource("2_ui0vk")
+in_game_cell_size = Vector2(1152, 672)

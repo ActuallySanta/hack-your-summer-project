@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://cdsjsvuyovomn"]
+
+[ext_resource type="TileSet" uid="uid://hkvfy5by8aqr" path="res://Tileset/Main_Level.tres" id="1_xaund"]
+
+[node name="TileMapForRooms" type="Node2D" unique_id=1359070375]
+
+[node name="Foreground" type="TileMapLayer" parent="." unique_id=605937932]
+tile_set = ExtResource("1_xaund")
+
+[node name="Background" type="TileMapLayer" parent="." unique_id=860372690]
+tile_set = ExtResource("1_xaund")
