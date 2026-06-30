@@ -6,7 +6,7 @@ extends CharacterBody2D
 @export_group("Movement")
 
 @export var moveSpeed := 500.0
-@export var crouchSpeedmult := 0.5
+@export var crouchSpeedMult := 0.5
 @export var jumpForce := 600.0
 @export var jumpBufferTime := 0.25
 @export var coyoteTime := 0.2
@@ -99,7 +99,10 @@ func handle_jump_and_gravity(delta: float) -> void:
 func handle_standard_movement(_delta: float) -> void:
 	# Get the input direction and handle the movement/deceleration.
 	if _moveInput:
-		velocity.x = _moveInput * moveSpeed
+		if(playerMoveState == MoveState.Standing):
+			velocity.x = _moveInput * moveSpeed
+		else: if(playerMoveState == MoveState.Crouching):
+			velocity.x = _moveInput *moveSpeed*crouchSpeedMult
 		_facingRight = _moveInput > 0
 	else:
 		velocity.x = move_toward(velocity.x, 0, moveSpeed)
@@ -144,7 +147,10 @@ func _physics_process(delta: float) -> void:
 	else:
 		# 2. If we are grounded, swap between running and idling
 		if velocity.x != 0:
-			playback.travel("run")
+			if(playerMoveState == MoveState.Standing):
+				playback.travel("run")
+			else: if(playerMoveState == MoveState.Crouching):
+				playback.travel("crawl")
 		else:
 			playback.travel("idle")
 			
@@ -165,6 +171,17 @@ func set_shoot_input() -> void:
 
 func handle_inputs() -> void:
 	_moveInput = Input.get_axis("Left", "Right")
+	
+	if(Input.is_action_pressed("Crouch") and is_on_floor()):
+		playerMoveState = MoveState.Crouching
+	else : if(Input.is_action_pressed("Climb") and !is_on_floor()):
+		playerMoveState = MoveState.Climbing
+	else:
+		playerMoveState = MoveState.Standing
+	
+	print(playerMoveState)
+	
+	
 	if Input.is_action_just_pressed("Jump"):
 		set_jump_input()
 	if Input.is_action_just_pressed("Attack"):
