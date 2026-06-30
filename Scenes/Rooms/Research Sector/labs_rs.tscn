@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://b0nn5vano5iv0"]
+
+[ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="1_0pxnl"]
+
+[node name="LabsRS" type="Node2D" unique_id=1113987352]
+
+[node name="RoomInstance" parent="." unique_id=135135878 instance=ExtResource("1_0pxnl")]

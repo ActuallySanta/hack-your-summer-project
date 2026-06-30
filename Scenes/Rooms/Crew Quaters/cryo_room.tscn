@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://esk4fom87pxl"]
+
+[ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="1_odual"]
+
+[node name="CryoRoom" type="Node2D" unique_id=1425201056]
+
+[node name="RoomInstance" parent="." unique_id=1008156915 instance=ExtResource("1_odual")]

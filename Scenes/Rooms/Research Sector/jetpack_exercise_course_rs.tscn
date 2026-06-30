@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://dp2f4xg6u84tw"]
+
+[ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="1_73cw5"]
+
+[node name="JetpackExerciseCourseRS" type="Node2D" unique_id=374256645]
+
+[node name="RoomInstance" parent="." unique_id=809930185 instance=ExtResource("1_73cw5")]
