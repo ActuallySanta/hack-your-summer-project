@@ -192,7 +192,7 @@ func handle_inputs() -> void:
 	_vertMoveInput = Input.get_axis("Up","Down")
 	if(Input.is_action_pressed("Crouch") and is_on_floor()):
 		playerMoveState = MoveState.Crouching
-	else : if(Input.is_action_pressed("Climb") and !is_on_floor() and is_on_wall()):
+	elif(Input.is_action_pressed("Climb") and !is_on_floor() and is_on_wall()):
 		playerMoveState = MoveState.Climbing
 	else:
 		playerMoveState = MoveState.Standing
