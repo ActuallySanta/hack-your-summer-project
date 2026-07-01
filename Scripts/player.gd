@@ -54,7 +54,10 @@ func _ready() -> void:
 	PlayerManager.player = self
 	_facingRight = true
 	_currentHealth = baseHealth
-	
+	CheckpointEventBus.move_player_position.connect(_move_player_pos)
+
+func _move_player_pos(pos: Vector2) -> void:
+	position = pos
 
 func jump() -> void:
 	velocity.y = -jumpForce
@@ -227,6 +230,8 @@ func _process( _delta: float) -> void:
 func die() -> void:
 	print("Player Died! (and revived at full health)")
 	_currentHealth = baseHealth
+	_knockbackTimer = 0
+	CheckpointEventBus.player_needs_to_use_checkpoint.emit()
 
 func _on_hit(_hurtBox: Hurtbox, hit_info: HitInfo, _source: Hitbox) -> void:
 	if _invulnTimer > 0:
