@@ -170,7 +170,6 @@ func _physics_process(delta: float) -> void:
 				playback.travel("crawl")
 		else:
 			playback.travel("idle")
-	print(playback.get_current_node())
 	# 3. Flip the sprite visually based on which way we are running
 	if _moveInput > 0:
 		$Character.flip_h = false  # Facing Right
@@ -197,8 +196,6 @@ func handle_inputs() -> void:
 		playerMoveState = MoveState.Climbing
 	else:
 		playerMoveState = MoveState.Standing
-	
-	print(str(playerMoveState))
 	
 	
 	if Input.is_action_just_pressed("Jump"):
