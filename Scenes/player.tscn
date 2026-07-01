@@ -1,49 +1,160 @@
-[gd_scene format=3 uid="uid://c5wawk83tlcux"]
+[gd_scene format=3 uid="uid://dohmyoeiilp0v"]
 
-[ext_resource type="Script" uid="uid://bs0loqfendiak" path="res://Scripts/player.gd" id="1_cvnsp"]
-[ext_resource type="Texture2D" uid="uid://bp1qv2dhalftv" path="res://icon.svg" id="1_v0iea"]
-[ext_resource type="PackedScene" uid="uid://ch0cbeo8ehblm" path="res://Scenes/player_melee_swing.tscn" id="2_vgqql"]
-[ext_resource type="PackedScene" uid="uid://djmeyycufny61" path="res://Scenes/Components/Hurtbox.tscn" id="3_6t5aa"]
-[ext_resource type="PackedScene" uid="uid://jammv02ygc7v" path="res://Scenes/player_bullet.tscn" id="3_x3wgy"]
-[ext_resource type="PackedScene" uid="uid://ne13j5tl7gbr" path="res://Scenes/UI/player_hud.tscn" id="4_vgqql"]
+[ext_resource type="Script" uid="uid://bs0loqfendiak" path="res://Scripts/player.gd" id="1_00tjw"]
+[ext_resource type="Texture2D" uid="uid://d1irxkv8rmbly" path="res://Sprites/SpaceStation_Character_Sheet.png" id="1_pv8u5"]
+[ext_resource type="PackedScene" uid="uid://ch0cbeo8ehblm" path="res://Scenes/player_melee_swing.tscn" id="2_vtle1"]
+[ext_resource type="Texture2D" uid="uid://cc2bpmkui6luy" path="res://Sprites/SpaceStation_Projectiles_Sheet.png" id="2_yb4o1"]
+[ext_resource type="AnimationLibrary" uid="uid://vr4581rerisb" path="res://.res" id="3_2hw6s"]
+[ext_resource type="PackedScene" uid="uid://jammv02ygc7v" path="res://Scenes/player_bullet.tscn" id="3_od3ui"]
+[ext_resource type="PackedScene" uid="uid://djmeyycufny61" path="res://Scenes/Components/Hurtbox.tscn" id="4_00tjw"]
+[ext_resource type="PackedScene" uid="uid://ne13j5tl7gbr" path="res://Scenes/UI/player_hud.tscn" id="8_od3ui"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_cvnsp"]
-size = Vector2(128, 128)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_5fk43"]
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_6t5aa"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("1_v0iea")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_x3vf3"]
+animation = &"climb"
 
-[node name="Player" type="CharacterBody2D" unique_id=840937925 groups=["player"]]
-collision_layer = 2
-script = ExtResource("1_cvnsp")
-swingScene = ExtResource("2_vgqql")
-bulletScene = ExtResource("3_x3wgy")
-hitInvulnTime = 1.2
-knockbackDI = 200.0
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_00tjw"]
+animation = &"cover_shoot"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=499297263]
-shape = SubResource("RectangleShape2D_cvnsp")
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_od3ui"]
+animation = &"crawl"
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=822804838]
-sprite_frames = SubResource("SpriteFrames_6t5aa")
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_apopc"]
+animation = &"crouch_shoot"
 
-[node name="Hurtbox" parent="." unique_id=125498642 instance=ExtResource("3_6t5aa")]
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_5htga"]
+animation = &"death"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_p5o4e"]
+animation = &"idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_gu6f8"]
+animation = &"jump"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_dkpta"]
+animation = &"knockback"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_lfmf2"]
+animation = &"run"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_pisgm"]
+animation = &"stand_shoot"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_b1ygp"]
+switch_mode = 2
+advance_mode = 0
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_o28un"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_n471f"]
+switch_mode = 2
+advance_mode = 0
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_7emwf"]
+switch_mode = 2
+advance_mode = 0
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_k53q1"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_hshwv"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_x3vf3"]
+advance_mode = 0
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_apopc"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_od3ui"]
+advance_mode = 0
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_00tjw"]
+advance_mode = 0
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_5htga"]
+advance_mode = 0
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_p5o4e"]
+advance_mode = 0
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_gu6f8"]
+advance_mode = 0
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_dkpta"]
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_gpjlu"]
+states/Start/position = Vector2(180.00002, 99.80765)
+states/climb/node = SubResource("AnimationNodeAnimation_x3vf3")
+states/climb/position = Vector2(403, -21.889816)
+states/cover_shoot/node = SubResource("AnimationNodeAnimation_00tjw")
+states/cover_shoot/position = Vector2(438, 256)
+states/crawl/node = SubResource("AnimationNodeAnimation_od3ui")
+states/crawl/position = Vector2(819.2, 181.6)
+states/crouch_shoot/node = SubResource("AnimationNodeAnimation_apopc")
+states/crouch_shoot/position = Vector2(332.4, 181.6)
+states/death/node = SubResource("AnimationNodeAnimation_5htga")
+states/death/position = Vector2(755.6, 29.599998)
+states/idle/node = SubResource("AnimationNodeAnimation_p5o4e")
+states/idle/position = Vector2(270, 100.0384)
+states/jump/node = SubResource("AnimationNodeAnimation_gu6f8")
+states/jump/position = Vector2(546.8, 10.399994)
+states/knockback/node = SubResource("AnimationNodeAnimation_dkpta")
+states/knockback/position = Vector2(803.6, 236)
+states/run/node = SubResource("AnimationNodeAnimation_lfmf2")
+states/run/position = Vector2(819.2, 103.007645)
+states/stand_shoot/node = SubResource("AnimationNodeAnimation_pisgm")
+states/stand_shoot/position = Vector2(627.6, 256.8)
+transitions = ["idle", "run", SubResource("AnimationNodeStateMachineTransition_b1ygp"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_o28un"), "run", "jump", SubResource("AnimationNodeStateMachineTransition_n471f"), "idle", "jump", SubResource("AnimationNodeStateMachineTransition_7emwf"), "Start", "idle", SubResource("AnimationNodeStateMachineTransition_k53q1"), "jump", "idle", SubResource("AnimationNodeStateMachineTransition_hshwv"), "crawl", "run", SubResource("AnimationNodeStateMachineTransition_x3vf3"), "crawl", "idle", SubResource("AnimationNodeStateMachineTransition_apopc"), "idle", "crawl", SubResource("AnimationNodeStateMachineTransition_od3ui"), "run", "crawl", SubResource("AnimationNodeStateMachineTransition_00tjw"), "jump", "climb", SubResource("AnimationNodeStateMachineTransition_5htga"), "climb", "jump", SubResource("AnimationNodeStateMachineTransition_p5o4e"), "idle", "climb", SubResource("AnimationNodeStateMachineTransition_gu6f8"), "climb", "idle", SubResource("AnimationNodeStateMachineTransition_dkpta")]
+graph_offset = Vector2(-336, -117.88982)
+
+[node name="Player" type="CharacterBody2D" unique_id=862395343]
+script = ExtResource("1_00tjw")
+moveSpeed = 125.0
+crouchSpeedMult = 0.35
+swingOffset = 10.0
+swingScene = ExtResource("2_vtle1")
+bulletOffset = 25.0
+bulletScene = ExtResource("3_od3ui")
+
+[node name="Hurtbox" parent="." unique_id=470143312 instance=ExtResource("4_00tjw")]
 collision_layer = 2
 collision_mask = 5
 
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="Hurtbox" unique_id=2128149372]
-shape = SubResource("RectangleShape2D_cvnsp")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=1301816998]
+shape = SubResource("CapsuleShape2D_5fk43")
 
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=2115225094]
+[node name="AnimationTree" type="AnimationTree" parent="." unique_id=738334773]
+tree_root = SubResource("AnimationNodeStateMachine_gpjlu")
+anim_player = NodePath("../AnimationPlayer")
 
-[node name="Player HUD" parent="CanvasLayer" unique_id=890844106 instance=ExtResource("4_vgqql")]
+[node name="Character" type="Sprite2D" parent="." unique_id=295087923]
+texture = ExtResource("1_pv8u5")
+hframes = 8
+vframes = 9
 
-[connection signal="hit" from="Hurtbox" to="." method="_on_hit"]
+[node name="Attacks" type="Sprite2D" parent="Character" unique_id=1184458465]
+visible = false
+texture = ExtResource("2_yb4o1")
+offset = Vector2(-18, 25)
+hframes = 8
+vframes = 3
+frame = 19
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=480447104]
+libraries/ = ExtResource("3_2hw6s")
+
+[node name="StateMachine" type="Node" parent="." unique_id=95289598]
+
+[node name="Idle" type="Node" parent="StateMachine" unique_id=582333302]
+
+[node name="Walk" type="Node" parent="StateMachine" unique_id=934769681]
+
+[node name="Attack" type="Node" parent="StateMachine" unique_id=768465736]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1087993730]
+
+[node name="Player HUD" parent="CanvasLayer" unique_id=890844106 instance=ExtResource("8_od3ui")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=973966651]
+shape = SubResource("CapsuleShape2D_5fk43")
