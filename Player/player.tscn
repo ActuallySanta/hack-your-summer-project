@@ -11,6 +11,9 @@
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_5fk43"]
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_x3vf3"]
+animation = &"climb"
+
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_00tjw"]
 animation = &"cover_shoot"
 
@@ -69,8 +72,21 @@ advance_mode = 0
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_00tjw"]
 advance_mode = 0
 
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_5htga"]
+advance_mode = 0
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_p5o4e"]
+advance_mode = 0
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_gu6f8"]
+advance_mode = 0
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_dkpta"]
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_gpjlu"]
 states/Start/position = Vector2(180.00002, 99.80765)
+states/climb/node = SubResource("AnimationNodeAnimation_x3vf3")
+states/climb/position = Vector2(403, -21.889816)
 states/cover_shoot/node = SubResource("AnimationNodeAnimation_00tjw")
 states/cover_shoot/position = Vector2(438, 256)
 states/crawl/node = SubResource("AnimationNodeAnimation_od3ui")
@@ -89,12 +105,13 @@ states/run/node = SubResource("AnimationNodeAnimation_lfmf2")
 states/run/position = Vector2(819.2, 103.007645)
 states/stand_shoot/node = SubResource("AnimationNodeAnimation_pisgm")
 states/stand_shoot/position = Vector2(627.6, 256.8)
-transitions = ["idle", "run", SubResource("AnimationNodeStateMachineTransition_b1ygp"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_o28un"), "run", "jump", SubResource("AnimationNodeStateMachineTransition_n471f"), "idle", "jump", SubResource("AnimationNodeStateMachineTransition_7emwf"), "Start", "idle", SubResource("AnimationNodeStateMachineTransition_k53q1"), "jump", "idle", SubResource("AnimationNodeStateMachineTransition_hshwv"), "crawl", "run", SubResource("AnimationNodeStateMachineTransition_x3vf3"), "crawl", "idle", SubResource("AnimationNodeStateMachineTransition_apopc"), "idle", "crawl", SubResource("AnimationNodeStateMachineTransition_od3ui"), "run", "crawl", SubResource("AnimationNodeStateMachineTransition_00tjw")]
-graph_offset = Vector2(-158, -18.889816)
+transitions = ["idle", "run", SubResource("AnimationNodeStateMachineTransition_b1ygp"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_o28un"), "run", "jump", SubResource("AnimationNodeStateMachineTransition_n471f"), "idle", "jump", SubResource("AnimationNodeStateMachineTransition_7emwf"), "Start", "idle", SubResource("AnimationNodeStateMachineTransition_k53q1"), "jump", "idle", SubResource("AnimationNodeStateMachineTransition_hshwv"), "crawl", "run", SubResource("AnimationNodeStateMachineTransition_x3vf3"), "crawl", "idle", SubResource("AnimationNodeStateMachineTransition_apopc"), "idle", "crawl", SubResource("AnimationNodeStateMachineTransition_od3ui"), "run", "crawl", SubResource("AnimationNodeStateMachineTransition_00tjw"), "jump", "climb", SubResource("AnimationNodeStateMachineTransition_5htga"), "climb", "jump", SubResource("AnimationNodeStateMachineTransition_p5o4e"), "idle", "climb", SubResource("AnimationNodeStateMachineTransition_gu6f8"), "climb", "idle", SubResource("AnimationNodeStateMachineTransition_dkpta")]
+graph_offset = Vector2(-336, -117.88982)
 
 [node name="Player" type="CharacterBody2D" unique_id=862395343]
 script = ExtResource("1_00tjw")
 moveSpeed = 125.0
+crouchSpeedMult = 0.35
 swingOffset = 10.0
 swingScene = ExtResource("2_vtle1")
 bulletOffset = 25.0
