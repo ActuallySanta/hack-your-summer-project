@@ -1,0 +1,63 @@
+[gd_scene format=3 uid="uid://cqgpjvs8t5bxt"]
+
+[ext_resource type="Texture2D" uid="uid://bp1qv2dhalftv" path="res://icon.svg" id="2_qa1gj"]
+[ext_resource type="PackedScene" uid="uid://dtv1i40ltg77i" path="res://Scenes/checkpoint_demo.tscn" id="3_5sjav"]
+[ext_resource type="PackedScene" uid="uid://coa2xk3320f3l" path="res://Scenes/test_damage_spot.tscn" id="4_h0lox"]
+[ext_resource type="PackedScene" uid="uid://dohmyoeiilp0v" path="res://Scenes/player.tscn" id="5_hp0dg"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wyf0l"]
+size = Vector2(128, 128)
+
+[node name="PlayerHurtTest" type="Node2D" unique_id=429911382]
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=222395639]
+zoom = Vector2(2, 2)
+
+[node name="Platform" type="StaticBody2D" parent="." unique_id=765840849]
+position = Vector2(190, 76)
+scale = Vector2(1.5010605, 0.18019128)
+
+[node name="Sprite2D" type="Sprite2D" parent="Platform" unique_id=375753559]
+texture = ExtResource("2_qa1gj")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform" unique_id=940993465]
+shape = SubResource("RectangleShape2D_wyf0l")
+
+[node name="Ground" type="StaticBody2D" parent="." unique_id=1817562945]
+position = Vector2(-2, 149)
+scale = Vector2(4.56301, 0.24533664)
+
+[node name="Sprite2D" type="Sprite2D" parent="Ground" unique_id=1695471501]
+texture = ExtResource("2_qa1gj")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground" unique_id=1207515761]
+shape = SubResource("RectangleShape2D_wyf0l")
+
+[node name="CheckpointDemo" parent="." unique_id=2090508415 instance=ExtResource("3_5sjav")]
+position = Vector2(-271, 122)
+
+[node name="CheckpointDemo2" parent="." unique_id=1266150369 instance=ExtResource("3_5sjav")]
+position = Vector2(238, 48)
+is_default = false
+
+[node name="Platform2" type="StaticBody2D" parent="." unique_id=1511517433]
+position = Vector2(-62, 8)
+scale = Vector2(1.5010605, 0.18019128)
+
+[node name="Sprite2D" type="Sprite2D" parent="Platform2" unique_id=770010936]
+texture = ExtResource("2_qa1gj")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform2" unique_id=2041700686]
+shape = SubResource("RectangleShape2D_wyf0l")
+
+[node name="CheckpointDemo3" parent="." unique_id=109606886 instance=ExtResource("3_5sjav")]
+position = Vector2(-14, -20)
+is_default = false
+
+[node name="DamageSpot" parent="." unique_id=1154618209 instance=ExtResource("4_h0lox")]
+position = Vector2(134, 125)
+
+[node name="Player" parent="." unique_id=840937925 instance=ExtResource("5_hp0dg")]
+position = Vector2(-206, 111)
+moveSpeed = 200.0
+jumpForce = 450.0

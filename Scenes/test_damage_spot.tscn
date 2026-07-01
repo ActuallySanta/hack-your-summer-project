@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://coa2xk3320f3l"]
+
+[ext_resource type="Script" uid="uid://dvxt5f7v8brpn" path="res://Scripts/damage_spot.gd" id="1_fldyf"]
+[ext_resource type="PackedScene" uid="uid://liprjmtialrh" path="res://Scenes/Components/Hitbox.tscn" id="2_e0iox"]
+[ext_resource type="Texture2D" uid="uid://xheewmukqlws" path="res://Sprites/FUHYAAAAH/Fire_0.png" id="3_crvph"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_crvph"]
+size = Vector2(16, 16)
+
+[node name="DamageSpot" type="Node2D" unique_id=943704440]
+script = ExtResource("1_fldyf")
+
+[node name="Hitbox" parent="." unique_id=125498642 instance=ExtResource("2_e0iox")]
+collision_mask = 6
+knockback_strength = -50.0
+knockback_duration = 0.2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=1866103222]
+shape = SubResource("RectangleShape2D_crvph")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=764641904]
+texture = ExtResource("3_crvph")
