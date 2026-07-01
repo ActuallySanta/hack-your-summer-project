@@ -1,7 +1,19 @@
 [gd_scene format=3 uid="uid://n5oo0nvaktcg"]
 
 [ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="1_in688"]
+[ext_resource type="PackedScene" uid="uid://cdsjsvuyovomn" path="res://Scenes/tile_map_for_rooms.tscn" id="2_roh7i"]
+[ext_resource type="TileSet" uid="uid://hkvfy5by8aqr" path="res://Tileset/Main_Level.tres" id="3_315hi"]
 
 [node name="AnalysisRoomBRS" type="Node2D" unique_id=1019046132]
 
 [node name="RoomInstance" parent="." unique_id=1714915880 instance=ExtResource("1_in688")]
+
+[node name="TileMapForRooms" parent="." unique_id=1359070375 instance=ExtResource("2_roh7i")]
+
+[node name="Foreground2" type="TileMapLayer" parent="TileMapForRooms" unique_id=574539740]
+scale = Vector2(3, 3)
+tile_set = ExtResource("3_315hi")
+
+[node name="Background2" type="TileMapLayer" parent="TileMapForRooms" unique_id=1345169085]
+scale = Vector2(3, 3)
+tile_set = ExtResource("3_315hi")

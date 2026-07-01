@@ -7,6 +7,7 @@
 [node name="ShipInternals" type="Node2D" unique_id=580732893]
 
 [node name="RoomInstance" parent="." unique_id=1358496038 instance=ExtResource("1_ykojf")]
+position = Vector2(1, 0)
 
 [node name="TileMapForRooms" parent="." unique_id=1359070375 instance=ExtResource("2_docjl")]
 
