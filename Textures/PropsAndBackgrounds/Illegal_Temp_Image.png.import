@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://obolf0ilo8kp"
-path="res://.godot/imported/ResearchSector_Tileset.png-f340ce6a9caff5d3135f60ab790a6ee6.ctex"
+uid="uid://6ooirgr7gm10"
+path="res://.godot/imported/Illegal_Temp_Image.png-508cb0cc8ced144b14c33ddae524f982.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Textures/ResearchSector_Tileset.png"
-dest_files=["res://.godot/imported/ResearchSector_Tileset.png-f340ce6a9caff5d3135f60ab790a6ee6.ctex"]
+source_file="res://Textures/PropsAndBackgrounds/Illegal_Temp_Image.png"
+dest_files=["res://.godot/imported/Illegal_Temp_Image.png-508cb0cc8ced144b14c33ddae524f982.ctex"]
 
 [params]
 
