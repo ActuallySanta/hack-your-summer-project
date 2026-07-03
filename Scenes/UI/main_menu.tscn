@@ -39,9 +39,10 @@ offset_top = -44.0
 offset_right = 676.0
 offset_bottom = 44.0
 grow_vertical = 2
-text = "SPACE SCAVENGER 3D"
+text = "SPACE STATION: OUROBOROS"
 label_settings = ExtResource("2_u7lva")
 horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Button Container" type="VBoxContainer" parent="Main Menu" unique_id=240547198]
 layout_mode = 1
