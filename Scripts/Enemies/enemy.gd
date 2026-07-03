@@ -14,11 +14,13 @@ const SPEED:float = 50
 @onready var playerReference : CharacterBody2D = get_tree().get_first_node_in_group("player")
 @onready var target_location_check: RayCast2D = $"Target Location Check"
 @onready var bt_player: BTPlayer = $BTPlayer
+@onready var hurtbox: Hurtbox = $Hurtbox
 
 var isFlipped : bool
 
 func _ready() -> void:
 	bt_player.blackboard.set_var("canAttack",true)
+	hurtbox.hit.connect(takeDamage)
 
 func move(targetPos : Vector2, delta :float):
 	var dir : Vector2 = Vector2(targetPos.x - global_position.x,0).normalized()
@@ -39,12 +41,13 @@ func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 	
-	if(player_detection_check.collision_result.find(playerReference)):
-		if(player_obstruction_check.is_colliding() && player_obstruction_check.get_collider() == playerReference):
-			bt_player.blackboard.set_var("state","attacking")
-			bt_player.restart()
-		else:
-			bt_player.blackboard.set_var("state","patrolling")
+	if(bt_player.blackboard.get_var("state") != "hurt"):
+		if(player_detection_check.collision_result.find(playerReference)):
+			if(player_obstruction_check.is_colliding() && player_obstruction_check.get_collider() == playerReference):
+				bt_player.blackboard.set_var("state","attacking")
+				bt_player.restart()
+			else:
+				bt_player.blackboard.set_var("state","patrolling")
 	
 	move_and_slide()
 
@@ -61,3 +64,8 @@ func getValidPos() -> Vector2:
 		return Vector2(position.x + currWanderDistance,position.y)
 	
 	return Vector2.ZERO
+	
+func takeDamage(hurtBox: Hurtbox, hit_info: HitInfo, source: Hitbox):
+	print(name +" took damage")
+	bt_player.blackboard.set_var("state","hurt")
+	bt_player.restart()

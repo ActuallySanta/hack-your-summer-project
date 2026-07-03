@@ -184,9 +184,9 @@ collision_mask = 3
 visible = false
 target_position = Vector2(50, 0)
 
-[node name="Hurtbox2" parent="." unique_id=470143312 instance=ExtResource("18_6j4xf")]
+[node name="Hurtbox" parent="." unique_id=470143312 instance=ExtResource("18_6j4xf")]
 collision_layer = 4
 
-[node name="Shape" type="CollisionShape2D" parent="Hurtbox2" unique_id=326280550]
+[node name="Shape" type="CollisionShape2D" parent="Hurtbox" unique_id=326280550]
 position = Vector2(0, 13)
 shape = SubResource("CapsuleShape2D_mgs6e")
