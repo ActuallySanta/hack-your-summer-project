@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://ne13j5tl7gbr" path="res://Scenes/UI/player_hud.tscn" id="8_od3ui"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_5fk43"]
+height = 48.0
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_x3vf3"]
 animation = &"climb"
@@ -108,7 +109,7 @@ states/stand_shoot/position = Vector2(627.6, 256.8)
 transitions = ["idle", "run", SubResource("AnimationNodeStateMachineTransition_b1ygp"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_o28un"), "run", "jump", SubResource("AnimationNodeStateMachineTransition_n471f"), "idle", "jump", SubResource("AnimationNodeStateMachineTransition_7emwf"), "Start", "idle", SubResource("AnimationNodeStateMachineTransition_k53q1"), "jump", "idle", SubResource("AnimationNodeStateMachineTransition_hshwv"), "crawl", "run", SubResource("AnimationNodeStateMachineTransition_x3vf3"), "crawl", "idle", SubResource("AnimationNodeStateMachineTransition_apopc"), "idle", "crawl", SubResource("AnimationNodeStateMachineTransition_od3ui"), "run", "crawl", SubResource("AnimationNodeStateMachineTransition_00tjw"), "jump", "climb", SubResource("AnimationNodeStateMachineTransition_5htga"), "climb", "jump", SubResource("AnimationNodeStateMachineTransition_p5o4e"), "idle", "climb", SubResource("AnimationNodeStateMachineTransition_gu6f8"), "climb", "idle", SubResource("AnimationNodeStateMachineTransition_dkpta")]
 graph_offset = Vector2(-336, -117.88982)
 
-[node name="Player" type="CharacterBody2D" unique_id=862395343]
+[node name="Player" type="CharacterBody2D" unique_id=862395343 groups=["player"]]
 script = ExtResource("1_00tjw")
 moveSpeed = 125.0
 crouchSpeedMult = 0.35

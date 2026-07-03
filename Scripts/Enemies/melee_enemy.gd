@@ -25,6 +25,3 @@ func _on_melee_hitbox_on_hit(hitbox: Hitbox, target: Hurtbox) -> void:
 	#else:
 		#print(target.owner)
 	pass
-
-func _on_take_hit(hurtBox: Hurtbox, hit_info: HitInfo, source: Hitbox) -> void:
-	print(name + " took damage!")
