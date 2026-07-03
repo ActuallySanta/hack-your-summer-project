@@ -1,13 +1,17 @@
 class_name Player
 extends CharacterBody2D
 ## Get animationtree ##
-@onready var animation_tree: AnimationTree = $AnimationTree
-@onready var playback = animation_tree.get("parameters/playback") # Controls the transitions
-@export_group("Movement")
+@onready var animator: AnimationTree = $AnimationTree
+@onready var animPlayback: AnimationNodeStateMachinePlayback = animator.get("parameters/playback")
 
+const IDLESTATEPARAM := "parameters/StandardMovement/Idle/MoveState/transition_request"
+const MOVESTATEPARAM := "parameters/StandardMovement/Move/MoveState/transition_request"
+const FIRESTATEPARAM := "parameters/RangedFire/MoveState/transition_request"
+
+@export_group("Movement")
 @export var moveSpeed := 500.0
 @export var crouchSpeedMult := 0.5
-@export var climingSpeedMult := 0.75
+@export var climbingSpeed := 100
 @export var jumpForce := 600.0
 @export var jumpBufferTime := 0.25
 @export var coyoteTime := 0.2
@@ -25,9 +29,12 @@ extends CharacterBody2D
 @export var hitInvulnTime := 1.0
 @export var invulnBlinkInterval := 0.15
 @export var knockbackDI := 300.0
+@export var deathRespawnDelay := 2.0
 
 var _moveInput : float
 var _vertMoveInput :float
+var _crouchInput : bool
+var _climbInput : bool
 var _facingRight : bool
 var _jumpBufferTimer : float
 var _coyoteTimer : float
@@ -40,14 +47,24 @@ var _knockbackTimer : float
 var _knockbackForce : float
 var _invulnTimer : float
 var _invulnBlinkTimer : float
+var _deathRespawnTimer : float
 
 enum MoveState{
 	Standing,
 	Crouching,
-	Climbing
+	Climbing,
+	Jumping,
+	Knockback
 }
 
 var playerMoveState: MoveState
+
+var anim_moving : bool
+var anim_jumping : bool
+var anim_hurt : bool
+var anim_death : bool
+var anim_swing : bool
+var anim_fire : bool
 
 @onready var sprite : Sprite2D = $Character
 func _ready() -> void:
@@ -74,6 +91,7 @@ func attack() -> void:
 	add_child(newAttack)
 	_attackCooldownTimer = attackCooldown
 	_attackBufferTimer = 0
+	anim_swing = true
 
 func shoot() -> void:
 	print("Fire!")
@@ -86,6 +104,7 @@ func shoot() -> void:
 	get_tree().root.add_child(newBullet)
 	_shootCooldownTimer = shootCooldown
 	_shootBufferTimer = 0
+	anim_fire = true
 
 func handle_jump_and_gravity(delta: float) -> void:
 	# Add the gravity.
@@ -95,47 +114,95 @@ func handle_jump_and_gravity(delta: float) -> void:
 		_coyoteTimer -= delta
 	else:
 		_coyoteTimer = coyoteTime
-
 		
 	# Handle jump.
 	if _jumpBufferTimer > 0:
-		if is_on_floor() or _coyoteTimer > 0 and playerMoveState != MoveState.Climbing:
+		if (is_on_floor() or _coyoteTimer > 0) and playerMoveState != MoveState.Climbing:
 			jump()
 		else:
 			_jumpBufferTimer -= delta
-	
 
 func handle_standard_movement(_delta: float) -> void:
 	# Get the input direction and handle the movement/deceleration.
-	if _moveInput or _vertMoveInput:
-		if(playerMoveState == MoveState.Climbing):
-			velocity.y = _vertMoveInput*moveSpeed*climingSpeedMult
-		else:
-			if(playerMoveState == MoveState.Standing):
-				velocity.x = _moveInput * moveSpeed
-			else: if(playerMoveState == MoveState.Crouching):
-				velocity.x = _moveInput *moveSpeed*crouchSpeedMult
-			_facingRight = _moveInput > 0
+	if _moveInput:
+		velocity.x = _moveInput * moveSpeed
+		if(playerMoveState == MoveState.Crouching):
+			velocity.x *= crouchSpeedMult
+		_facingRight = _moveInput > 0
 	else:
 		velocity.x = move_toward(velocity.x, 0, moveSpeed)
-		if(playerMoveState == MoveState.Climbing):
-			velocity.y = move_toward(velocity.y, 0, moveSpeed)
+	set_anim_move_state(playerMoveState, _moveInput != 0)
+
+func handle_climbing_movement(_delta: float) -> void:
+	velocity.x = 0
+	velocity.y = _vertMoveInput * climbingSpeed
+	set_anim_move_state(MoveState.Climbing, _vertMoveInput != 0)
 
 func handle_knockback_movement(delta: float) -> void:
 	velocity.x = _knockbackForce
 	if _moveInput:
 		velocity.x += _moveInput * knockbackDI
 	_knockbackTimer -= delta
+	set_anim_move_state(MoveState.Knockback, false)
+
+func determine_move_state() -> MoveState:
+	if _knockbackTimer > 0:
+		return MoveState.Knockback
+	
+	if is_on_wall() and _climbInput:
+		return MoveState.Climbing
+	
+	if !is_on_floor():
+		return MoveState.Jumping
+	
+	if _crouchInput:
+		return MoveState.Crouching
+	
+	return MoveState.Standing
+		
+
+func set_anim_move_state(moveState: MoveState, moving: bool) -> void:
+	match moveState:
+		MoveState.Standing:
+			animator.set(IDLESTATEPARAM, "Stand")
+			animator.set(MOVESTATEPARAM, "Stand")
+			animator.set(FIRESTATEPARAM, "Stand")
+			anim_jumping = false
+			anim_moving = moving
+			anim_hurt = false
+		MoveState.Crouching:
+			animator.set(IDLESTATEPARAM, "Crouch")
+			animator.set(MOVESTATEPARAM, "Crouch")
+			animator.set(FIRESTATEPARAM, "Crouch")
+			anim_jumping = false
+			anim_moving = moving
+			anim_hurt = false
+		MoveState.Climbing:
+			animator.set(IDLESTATEPARAM, "Climb")
+			animator.set(MOVESTATEPARAM, "Climb")
+			animator.set(FIRESTATEPARAM, "Jump")
+			anim_jumping = false
+			anim_moving = moving
+			anim_hurt = false
+		MoveState.Jumping:
+			animator.set(FIRESTATEPARAM, "Jump")
+			anim_jumping = true
+			anim_moving = true
+			anim_hurt = false
+		MoveState.Knockback:
+			anim_hurt = true
 
 func _physics_process(delta: float) -> void:
-	
+	playerMoveState = determine_move_state()
 	
 	handle_jump_and_gravity(delta)
 	
-	if _knockbackTimer <= 0:
-		handle_standard_movement(delta)
-	else:
+	if playerMoveState == MoveState.Knockback:
 		handle_knockback_movement(delta)
+	elif playerMoveState == MoveState.Climbing:
+		handle_climbing_movement(delta)
+	else:
+		handle_standard_movement(delta)
 	# Handle attack
 	if _attackCooldownTimer > 0:
 		_attackCooldownTimer -= delta
@@ -157,22 +224,6 @@ func _physics_process(delta: float) -> void:
 		_invulnTimer -= delta
 	move_and_slide()
 
-	# --- ANIMATION TREE ENGINE LINK ---
-	# 1. Check if we are mid-air (jumping or falling)
-	if not is_on_floor():
-		if(playerMoveState == MoveState.Climbing):
-			playback.travel("climb")
-		else:
-			playback.travel("jump")
-	else:
-		# 2. If we are grounded, swap between running and idling
-		if velocity.x != 0:
-			if(playerMoveState == MoveState.Standing):
-				playback.travel("run")
-			else: if(playerMoveState == MoveState.Crouching):
-				playback.travel("crawl")
-		else:
-			playback.travel("idle")
 	# 3. Flip the sprite visually based on which way we are running
 	if _moveInput > 0:
 		$Character.flip_h = false  # Facing Right
@@ -181,25 +232,29 @@ func _physics_process(delta: float) -> void:
 
 func set_jump_input() -> void:
 	_jumpBufferTimer = jumpBufferTime
+	
+func unset_jump_input() -> void:
+	_jumpBufferTimer = 0
 
 func set_attack_input() -> void:
 	_attackBufferTimer = attackBufferTime
+	
+func unset_attack_input() -> void:
+	_attackBufferTimer = 0
 
 func set_shoot_input() -> void:
 	_shootBufferTimer = shootBufferTime
+	
+func unset_shoot_input() -> void:
+	_shootBufferTimer = 0
 
 func handle_inputs() -> void:
-	if(!PlayerManager.canMove): return
+	if(!PlayerManager.canMove or _currentHealth <= 0): return
 	
 	_moveInput = Input.get_axis("Left", "Right")
 	_vertMoveInput = Input.get_axis("Up","Down")
-	if(Input.is_action_pressed("Crouch") and is_on_floor()):
-		playerMoveState = MoveState.Crouching
-	elif(Input.is_action_pressed("Climb") and !is_on_floor() and is_on_wall()):
-		playerMoveState = MoveState.Climbing
-	else:
-		playerMoveState = MoveState.Standing
-	
+	_crouchInput = Input.is_action_pressed("Crouch")
+	_climbInput = Input.is_action_pressed("Climb")	
 	
 	if Input.is_action_just_pressed("Jump"):
 		set_jump_input()
@@ -225,12 +280,28 @@ func handle_invuln_blinking(delta: float) -> void:
 func _process( _delta: float) -> void:
 	handle_inputs()
 	handle_invuln_blinking(_delta)
-	#animation code would go here eventually
+	
+	if _deathRespawnTimer > 0:
+		_deathRespawnTimer -= _delta
+		if _deathRespawnTimer <= 0:
+			respawn()
+	if animPlayback.get_current_node() == "RangedFire" or animPlayback.get_current_node() == "MeleeSwing":
+		anim_fire = false
+		anim_swing = false
 
 func die() -> void:
-	print("Player Died! (and revived at full health)")
+	_invulnTimer = 0
+	anim_death = true
+	_deathRespawnTimer = deathRespawnDelay
+	unset_attack_input()
+	unset_jump_input()
+	unset_shoot_input()
+	_moveInput = 0
+
+func respawn() -> void:
 	_currentHealth = baseHealth
-	_knockbackTimer = 0
+	_deathRespawnTimer = 0
+	anim_death = false
 	CheckpointEventBus.player_needs_to_use_checkpoint.emit()
 
 func _on_hit(_hurtBox: Hurtbox, hit_info: HitInfo, _source: Hitbox) -> void:
@@ -242,5 +313,6 @@ func _on_hit(_hurtBox: Hurtbox, hit_info: HitInfo, _source: Hitbox) -> void:
 	_knockbackForce = hit_info.knockback_strength / _knockbackTimer
 	_invulnTimer = hitInvulnTime
 	_invulnBlinkTimer = invulnBlinkInterval
+	anim_hurt = true
 	if _currentHealth <= 0:
 		die()
