@@ -1263,7 +1263,7 @@ _data = {
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_5fk43"]
 radius = 8.0
 
-[node name="Player" type="CharacterBody2D" unique_id=862395343]
+[node name="Player" type="CharacterBody2D" unique_id=862395343 groups=["player"]]
 script = ExtResource("1_00tjw")
 moveSpeed = 200.0
 crouchSpeedMult = 0.35
