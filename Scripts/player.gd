@@ -87,6 +87,7 @@ func attack() -> void:
 	var swingX := swingOffset
 	if !_facingRight:
 		swingX *= -1
+		newAttack.scale.x = -1
 	newAttack.position = Vector2(swingX, 0)
 	add_child(newAttack)
 	_attackCooldownTimer = attackCooldown
@@ -100,6 +101,7 @@ func shoot() -> void:
 	var bulletX := bulletOffset
 	if !_facingRight:
 		bulletX *= -1
+		newBullet.scale.x = -1
 	newBullet.position = position + Vector2(bulletX, 0)
 	newBullet.direction = Vector2.RIGHT if _facingRight else Vector2.LEFT
 	get_tree().root.add_child(newBullet)
