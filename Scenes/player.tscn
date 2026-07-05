@@ -12,8 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://btpjpn1y6y23a" path="res://Sprites/character_swing.png" id="9_tx1dd"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_f1ek2"]
-radius = 12.0
-height = 48.0
+radius = 8.0
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_l6n3p"]
 animation = &"swing_standing"
@@ -336,7 +335,7 @@ tracks/8/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [48.0]
+"values": [30.0]
 }
 tracks/9/type = "value"
 tracks/9/imported = false
@@ -348,31 +347,7 @@ tracks/9/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [48.0]
-}
-tracks/10/type = "value"
-tracks/10/imported = false
-tracks/10/enabled = true
-tracks/10/path = NodePath("CollisionShape2D:shape:radius")
-tracks/10/interp = 1
-tracks/10/loop_wrap = true
-tracks/10/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [12.0]
-}
-tracks/11/type = "value"
-tracks/11/imported = false
-tracks/11/enabled = true
-tracks/11/path = NodePath("Hurtbox/CollisionShape2D:shape:radius")
-tracks/11/interp = 1
-tracks/11/loop_wrap = true
-tracks/11/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [12.0]
+"values": [30.0]
 }
 
 [sub_resource type="Animation" id="Animation_5fcxh"]
@@ -518,7 +493,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, 12)]
+"values": [Vector2(0, 7)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
@@ -530,7 +505,7 @@ tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, 12)]
+"values": [Vector2(0, 7)]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
@@ -590,7 +565,7 @@ tracks/8/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [40.0]
+"values": [24.0]
 }
 tracks/9/type = "value"
 tracks/9/imported = false
@@ -602,31 +577,7 @@ tracks/9/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [40.0]
-}
-tracks/10/type = "value"
-tracks/10/imported = false
-tracks/10/enabled = true
-tracks/10/path = NodePath("CollisionShape2D:shape:radius")
-tracks/10/interp = 1
-tracks/10/loop_wrap = true
-tracks/10/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [12.0]
-}
-tracks/11/type = "value"
-tracks/11/imported = false
-tracks/11/enabled = true
-tracks/11/path = NodePath("Hurtbox/CollisionShape2D:shape:radius")
-tracks/11/interp = 1
-tracks/11/loop_wrap = true
-tracks/11/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [12.0]
+"values": [24.0]
 }
 
 [sub_resource type="Animation" id="Animation_apopc"]
@@ -642,7 +593,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [30.0]
+"values": [20.0]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -654,7 +605,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, 12)]
+"values": [Vector2(0, 7)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -690,7 +641,7 @@ tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, 12)]
+"values": [Vector2(0, 7)]
 }
 tracks/5/type = "value"
 tracks/5/imported = false
@@ -702,7 +653,7 @@ tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [30.0]
+"values": [20.0]
 }
 tracks/6/type = "value"
 tracks/6/imported = false
@@ -752,30 +703,6 @@ tracks/9/keys = {
 "update": 0,
 "values": [59]
 }
-tracks/10/type = "value"
-tracks/10/imported = false
-tracks/10/enabled = true
-tracks/10/path = NodePath("Hurtbox/CollisionShape2D:shape:radius")
-tracks/10/interp = 1
-tracks/10/loop_wrap = true
-tracks/10/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [12.0]
-}
-tracks/11/type = "value"
-tracks/11/imported = false
-tracks/11/enabled = true
-tracks/11/path = NodePath("CollisionShape2D:shape:radius")
-tracks/11/interp = 1
-tracks/11/loop_wrap = true
-tracks/11/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [12.0]
-}
 
 [sub_resource type="Animation" id="Animation_qtfl5"]
 resource_name = "crouch_shoot"
@@ -802,7 +729,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, 12)]
+"values": [Vector2(0, 7)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -826,7 +753,7 @@ tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [30.0]
+"values": [20.0]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
@@ -838,7 +765,7 @@ tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [30.0]
+"values": [20.0]
 }
 tracks/5/type = "value"
 tracks/5/imported = false
@@ -850,7 +777,7 @@ tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, 12)]
+"values": [Vector2(0, 7)]
 }
 tracks/6/type = "value"
 tracks/6/imported = false
@@ -899,30 +826,6 @@ tracks/9/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [9]
-}
-tracks/10/type = "value"
-tracks/10/imported = false
-tracks/10/enabled = true
-tracks/10/path = NodePath("CollisionShape2D:shape:radius")
-tracks/10/interp = 1
-tracks/10/loop_wrap = true
-tracks/10/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [12.0]
-}
-tracks/11/type = "value"
-tracks/11/imported = false
-tracks/11/enabled = true
-tracks/11/path = NodePath("Hurtbox/CollisionShape2D:shape:radius")
-tracks/11/interp = 1
-tracks/11/loop_wrap = true
-tracks/11/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [12.0]
 }
 
 [sub_resource type="Animation" id="Animation_k53q1"]
@@ -1310,8 +1213,7 @@ _data = {
 }
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_5fk43"]
-radius = 12.0
-height = 48.0
+radius = 8.0
 
 [node name="Player" type="CharacterBody2D" unique_id=862395343 groups=["player"]]
 script = ExtResource("1_00tjw")
@@ -1331,7 +1233,6 @@ collision_layer = 2
 shape = SubResource("CapsuleShape2D_f1ek2")
 
 [node name="AnimationTree" type="AnimationTree" parent="." unique_id=738334773]
-active = false
 tree_root = SubResource("AnimationNodeStateMachine_gpjlu")
 advance_expression_base_node = NodePath("..")
 anim_player = NodePath("../AnimationPlayer")
