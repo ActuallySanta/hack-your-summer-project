@@ -62,4 +62,5 @@ position = Vector2(-206, 111)
 moveSpeed = 200.0
 jumpForce = 450.0
 baseHealth = 2
+swingOffset = 20.0
 knockbackDI = 100.0

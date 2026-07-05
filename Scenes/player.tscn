@@ -9,15 +9,16 @@
 [ext_resource type="Texture2D" uid="uid://bqj73yi85o2dx" path="res://Sprites/Main Character Climb.png" id="7_f1ek2"]
 [ext_resource type="PackedScene" uid="uid://ne13j5tl7gbr" path="res://Scenes/UI/player_hud.tscn" id="8_od3ui"]
 [ext_resource type="Texture2D" uid="uid://c8km3q4omapxt" path="res://Sprites/Main Character Crawl.png" id="8_tx1dd"]
+[ext_resource type="Texture2D" uid="uid://btpjpn1y6y23a" path="res://Sprites/character_swing.png" id="9_tx1dd"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_f1ek2"]
 radius = 8.0
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_l6n3p"]
-animation = &"crouch_shoot"
+animation = &"swing_standing"
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_8erm5"]
-graph_offset = Vector2(-190, -20.666666)
+graph_offset = Vector2(-286.66666, 0)
 nodes/Animation/node = SubResource("AnimationNodeAnimation_l6n3p")
 nodes/Animation/position = Vector2(93.333336, 146.66667)
 node_connections = [&"output", 0, &"Animation"]
@@ -1190,6 +1191,58 @@ tracks/3/keys = {
 "values": [9]
 }
 
+[sub_resource type="Animation" id="Animation_gymyn"]
+resource_name = "swing_standing"
+length = 0.33333668
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Character:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("9_tx1dd")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Character:hframes")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [3]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Character:vframes")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Character:frame")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.06687407, 0.13605414),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [0, 1, 2]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_gymyn"]
 _data = {
 &"RESET": SubResource("Animation_btcbx"),
@@ -1203,7 +1256,8 @@ _data = {
 &"jump": SubResource("Animation_00tjw"),
 &"knockback": SubResource("Animation_4ntmi"),
 &"run": SubResource("Animation_gwnis"),
-&"stand_shoot": SubResource("Animation_x3vf3")
+&"stand_shoot": SubResource("Animation_x3vf3"),
+&"swing_standing": SubResource("Animation_gymyn")
 }
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_5fk43"]
@@ -1211,12 +1265,14 @@ radius = 8.0
 
 [node name="Player" type="CharacterBody2D" unique_id=862395343]
 script = ExtResource("1_00tjw")
-moveSpeed = 125.0
+moveSpeed = 200.0
 crouchSpeedMult = 0.35
-swingOffset = 10.0
+jumpForce = 450.0
+swingOffset = 20.0
 swingScene = ExtResource("2_vtle1")
 bulletOffset = 25.0
 bulletScene = ExtResource("3_od3ui")
+knockbackDI = 100.0
 
 [node name="Hurtbox" parent="." unique_id=470143312 instance=ExtResource("4_00tjw")]
 collision_layer = 2
