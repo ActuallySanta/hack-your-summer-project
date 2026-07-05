@@ -227,6 +227,7 @@ func _process( _delta: float) -> void:
 func die() -> void:
 	print("Player Died! (and revived at full health)")
 	_currentHealth = baseHealth
+	GlobalHUD.update_hearts()
 
 func _on_hit(_hurtBox: Hurtbox, hit_info: HitInfo, _source: Hitbox) -> void:
 	if _invulnTimer > 0:
@@ -239,3 +240,5 @@ func _on_hit(_hurtBox: Hurtbox, hit_info: HitInfo, _source: Hitbox) -> void:
 	_invulnBlinkTimer = invulnBlinkInterval
 	if _currentHealth <= 0:
 		die()
+	else:
+		GlobalHUD.update_hearts()

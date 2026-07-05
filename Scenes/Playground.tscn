@@ -49,3 +49,9 @@ position = Vector2(-307, -339)
 
 [node name="Player" parent="." unique_id=862395343 instance=ExtResource("5_u6rxl")]
 position = Vector2(-275, -52)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1459083964]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer" unique_id=435857801]
+offset_right = 40.0
+offset_bottom = 40.0
