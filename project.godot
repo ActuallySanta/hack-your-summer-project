@@ -22,6 +22,7 @@ PlayerManager="*uid://y1qk4kbpcvve"
 LevelManager="*uid://cd4f1h6qke8ex"
 CheckpointEventBus="*uid://dhboilckmjc7f"
 GlobalSignals="*uid://bac60hesolscg"
+SceneLoader="*uid://bdtr22633bwcl"
 
 [dotnet]
 
