@@ -23,7 +23,6 @@ LevelManager="*uid://cd4f1h6qke8ex"
 CheckpointEventBus="*uid://dhboilckmjc7f"
 GlobalSignals="*uid://bac60hesolscg"
 LimboConsole="*uid://dyxornv8vwibg"
-GlobalHUD="*uid://dfkryqnd3tpr1"
 
 [dotnet]
 

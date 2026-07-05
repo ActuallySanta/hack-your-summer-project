@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://jammv02ygc7v" path="res://Scenes/player_bullet.tscn" id="3_od3ui"]
 [ext_resource type="PackedScene" uid="uid://djmeyycufny61" path="res://Scenes/Components/Hurtbox.tscn" id="4_00tjw"]
 [ext_resource type="PackedScene" uid="uid://ne13j5tl7gbr" path="res://Scenes/UI/player_hud.tscn" id="8_od3ui"]
+[ext_resource type="PackedScene" uid="uid://c214glttpaw83" path="res://Scenes/UI/player_health.tscn" id="9_f1ek2"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_5fk43"]
 
@@ -158,3 +159,7 @@ libraries/ = ExtResource("3_2hw6s")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=973966651]
 shape = SubResource("CapsuleShape2D_5fk43")
+
+[node name="PlayerHealth" parent="." unique_id=1360041974 instance=ExtResource("9_f1ek2")]
+position = Vector2(-13, 16)
+scale = Vector2(0.01, 0.01)

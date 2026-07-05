@@ -1,0 +1,45 @@
+[gd_scene format=3 uid="uid://c214glttpaw83"]
+
+[ext_resource type="Texture2D" uid="uid://d106uyf7ocvcy" path="res://Sprites/NicePng_blue-heart-png_9608428.png" id="1_g3ga3"]
+[ext_resource type="Shader" uid="uid://ddqrxquv3je4l" path="res://Scenes/UI/HP1.gdshader" id="2_mp5vj"]
+[ext_resource type="Shader" uid="uid://csk0gt8wpos62" path="res://Scenes/UI/HP2.gdshader" id="3_f4jxr"]
+[ext_resource type="Shader" uid="uid://chgb71xstp5sn" path="res://Scenes/UI/HP3.gdshader" id="4_x6bjy"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_msvqn"]
+shader = ExtResource("2_mp5vj")
+shader_parameter/heart_color = Color(0, 0, 0.9607843, 1)
+shader_parameter/heart_replace_color = Color(0.13755062, 0.13755065, 0.13755062, 1)
+shader_parameter/fill_amount = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_skuto"]
+shader = ExtResource("3_f4jxr")
+shader_parameter/heart_color = Color(0, 0, 0.9882353, 1)
+shader_parameter/heart_replace_color = Color(0.13755062, 0.13755065, 0.13755062, 1)
+shader_parameter/fill_amount = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_g3ga3"]
+shader = ExtResource("4_x6bjy")
+shader_parameter/heart_color = Color(0, 0, 0.9607843, 1)
+shader_parameter/heart_replace_color = Color(0.13755062, 0.13755065, 0.13755062, 1)
+shader_parameter/fill_amount = 0.5600000266
+
+[node name="PlayerHealth" type="Node2D" unique_id=1360041974]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=341523077]
+offset_right = 1787.0
+offset_bottom = 556.0
+
+[node name="HP1" type="TextureRect" parent="HBoxContainer" unique_id=1693688635]
+material = SubResource("ShaderMaterial_msvqn")
+layout_mode = 2
+texture = ExtResource("1_g3ga3")
+
+[node name="HP2" type="TextureRect" parent="HBoxContainer" unique_id=1869149690]
+material = SubResource("ShaderMaterial_skuto")
+layout_mode = 2
+texture = ExtResource("1_g3ga3")
+
+[node name="HP3" type="TextureRect" parent="HBoxContainer" unique_id=1349740751]
+material = SubResource("ShaderMaterial_g3ga3")
+layout_mode = 2
+texture = ExtResource("1_g3ga3")
