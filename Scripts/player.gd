@@ -90,6 +90,7 @@ func attack() -> void:
 	newAttack.position = Vector2(swingX, 0)
 	add_child(newAttack)
 	_attackCooldownTimer = attackCooldown
+	_shootCooldownTimer = attackCooldown
 	_attackBufferTimer = 0
 	anim_swing = true
 
@@ -103,6 +104,7 @@ func shoot() -> void:
 	newBullet.direction = Vector2.RIGHT if _facingRight else Vector2.LEFT
 	get_tree().root.add_child(newBullet)
 	_shootCooldownTimer = shootCooldown
+	_attackCooldownTimer = shootCooldown
 	_shootBufferTimer = 0
 	anim_fire = true
 
