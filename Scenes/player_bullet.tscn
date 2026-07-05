@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://jammv02ygc7v"]
+
+[ext_resource type="PackedScene" uid="uid://liprjmtialrh" path="res://Scenes/Components/Hitbox.tscn" id="1_3m2mg"]
+[ext_resource type="Script" uid="uid://bkgqdy25cw61r" path="res://Scripts/Combat/player_bullet.gd" id="2_jskx8"]
+[ext_resource type="Texture2D" uid="uid://d2bn5f3iju4g5" path="res://Sprites/Characters/scifi_blasterfire_1.png" id="3_jskx8"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nocgn"]
+size = Vector2(28, 6)
+
+[node name="PlayerBullet" unique_id=125498642 instance=ExtResource("1_3m2mg")]
+collision_layer = 8
+collision_mask = 5
+script = ExtResource("2_jskx8")
+speed = 600.0
+lifetime = 1.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." index="0" unique_id=704812034]
+shape = SubResource("RectangleShape2D_nocgn")
+
+[node name="Sprite2D" type="Sprite2D" parent="." index="1" unique_id=1518511123]
+modulate = Color(0.16862746, 1, 1, 1)
+texture = ExtResource("3_jskx8")
+
+[connection signal="environment_hit" from="." to="." method="_on_environment_hit"]
+[connection signal="on_hit" from="." to="." method="_on_hit"]

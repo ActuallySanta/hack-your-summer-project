@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://d2bn5f3iju4g5" path="res://Sprites/Characters/scifi_blasterfire_1.png" id="2_qau70"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_66lfr"]
-size = Vector2(84, 18)
+size = Vector2(28, 6)
 
 [node name="PlayerMeleeSwing" type="Node2D" unique_id=1167296193]
 script = ExtResource("1_66lfr")
@@ -18,5 +18,4 @@ collision_mask = 4
 shape = SubResource("RectangleShape2D_66lfr")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1635296192]
-scale = Vector2(3, 3)
 texture = ExtResource("2_qau70")

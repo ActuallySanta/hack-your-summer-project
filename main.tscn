@@ -1,13 +1,14 @@
 [gd_scene format=3 uid="uid://bsshwlda5ak5d"]
 
 [ext_resource type="Texture2D" uid="uid://dq6ckp1thwc2u" path="res://Textures/paul-lichtblau-qVotvbsuM_c-unsplash.jpg" id="1_0xm2m"]
-[ext_resource type="PackedScene" uid="uid://dohmyoeiilp0v" path="res://Player/player.tscn" id="2_h2yge"]
 [ext_resource type="PackedScene" uid="uid://cdumyovckvgyr" path="res://Textures/Scenes/level-01.tscn" id="3_1bvp3"]
+[ext_resource type="PackedScene" uid="uid://bb8750313ho6d" path="res://Scenes/main_platform.tscn" id="4_1bvp3"]
 [ext_resource type="Script" uid="uid://dpm1m1a7ewttn" path="res://Scripts/LevelTileMap.gd" id="4_lquwl"]
 
 [node name="Main" type="Node2D" unique_id=217308607]
 
 [node name="Parallax2D" type="Parallax2D" parent="." unique_id=1537627198]
+visible = false
 repeat_size = Vector2(5456, 0)
 autoscroll = Vector2(-25, 0)
 ignore_camera_scroll = true
@@ -18,5 +19,6 @@ texture = ExtResource("1_0xm2m")
 [node name="Level02" parent="." unique_id=1161622945 instance=ExtResource("3_1bvp3")]
 script = ExtResource("4_lquwl")
 
-[node name="Player" parent="." unique_id=862395343 instance=ExtResource("2_h2yge")]
-position = Vector2(0, -16)
+[node name="Main_Platform" parent="." unique_id=1585885430 instance=ExtResource("4_1bvp3")]
+visible = false
+position = Vector2(-402, -478)
