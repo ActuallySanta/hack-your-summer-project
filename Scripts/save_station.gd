@@ -21,6 +21,7 @@ func activate() -> void:
 	is_on = true;
 
 func set_idle() -> void:
+	is_on = false
 	idle.enabled = true
 	green.enabled = false
 	pink.enabled = false
