@@ -30,11 +30,8 @@ func _process(_delta: float) -> void:
 	var camPos := camera.position
 	var playerPos := player.position
 	var posDiff := camPos - playerPos
-	print("posDiff: " + str(posDiff))
 	if abs(posDiff.x) > cameraDeadzone.x:
-		print("Adjusting cam X")
 		camPos.x = playerPos.x + (cameraDeadzone.x * sign(posDiff.x))
 	if abs(posDiff.y) > cameraDeadzone.y:
-		print("Adjusting cam X")
 		camPos.y = playerPos.y + (cameraDeadzone.y * sign(posDiff.y))
 	camera.position = camPos
