@@ -7,6 +7,7 @@ var _lifetime_timer : float
 
 func _ready() -> void:
 	_lifetime_timer = lifetime
+	$AnimatedSprite2D.play("default")
 
 func _physics_process(delta: float) -> void:
 	_lifetime_timer -= delta
