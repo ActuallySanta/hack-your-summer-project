@@ -133,7 +133,6 @@ _data = {
 }
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_mgs6e"]
-radius = 14.0
 height = 40.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_aajnb"]
@@ -160,9 +159,8 @@ hframes = 7
 vframes = 4
 frame = 8
 
-[node name="Physics Body" type="CollisionShape2D" parent="." unique_id=281236112]
-visible = false
-position = Vector2(0, -4)
+[node name="Physics Body" type="CollisionShape2D" parent="." unique_id=2103185324]
+position = Vector2(-2, -1)
 shape = SubResource("CapsuleShape2D_mgs6e")
 
 [node name="Player Detection Check" type="ShapeCast2D" parent="." unique_id=1092179563]
@@ -180,12 +178,11 @@ collision_mask = 3
 visible = false
 target_position = Vector2(50, 0)
 
-[node name="Hurtbox2" parent="." unique_id=470143312 instance=ExtResource("19_jgjap")]
+[node name="Hurtbox" parent="." unique_id=470143312 instance=ExtResource("19_jgjap")]
 collision_layer = 4
 
-[node name="Shape" type="CollisionShape2D" parent="Hurtbox2" unique_id=326280550]
-visible = false
-position = Vector2(0, -4)
+[node name="Shape" type="CollisionShape2D" parent="Hurtbox" unique_id=326280550]
+position = Vector2(-2, -1)
 shape = SubResource("CapsuleShape2D_mgs6e")
 
 [node name="Attack Duration" type="Timer" parent="." unique_id=1202308613]
@@ -202,5 +199,4 @@ position = Vector2(31, -8)
 rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_eyhix")
 
-[connection signal="hit" from="Hurtbox2" to="." method="_on_take_hit"]
 [connection signal="on_hit" from="Melee Hitbox" to="." method="_on_melee_hitbox_on_hit"]

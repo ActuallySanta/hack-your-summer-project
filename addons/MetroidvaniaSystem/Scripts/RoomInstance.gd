@@ -164,11 +164,14 @@ func _draw() -> void:
 	for p in cells:
 		var coords := Vector2(p.x - min_cell.x, p.y - min_cell.y)
 		for i in 4:
-			var width := 1
+			var width := 4
 			var color := GRID_COLOR
-			if MetSys.map_data.cells[p].get_border(i) > 0:
-				width = 2
+			var borderType = MetSys.map_data.cells[p].get_border(i)
+			if borderType > 0:
+				width = 4
 				color = GRID_PASSAGE_COLOR
+			elif borderType == -1:
+				continue
 			
 			match i:
 				MetroidvaniaSystem.R:

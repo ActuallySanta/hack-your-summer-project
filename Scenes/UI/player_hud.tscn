@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://ne13j5tl7gbr"]
 
 [ext_resource type="PackedScene" uid="uid://bnwse5pqyludv" path="res://Scenes/UI/dialogue_box.tscn" id="1_vkk4g"]
+[ext_resource type="PackedScene" uid="uid://dch8dyylb7526" path="res://addons/MetroidvaniaSystem/Template/Nodes/Minimap.tscn" id="2_y31ga"]
 
 [node name="Player HUD" type="Control" unique_id=890844106]
 layout_mode = 3
@@ -12,3 +13,12 @@ grow_vertical = 2
 
 [node name="Dialogue Box Container" parent="." unique_id=973154834 instance=ExtResource("1_vkk4g")]
 layout_mode = 1
+
+[node name="Minimap" parent="." unique_id=651073446 instance=ExtResource("2_y31ga")]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -96.0
+offset_right = 0.0
+grow_horizontal = 0

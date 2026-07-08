@@ -5,4 +5,5 @@ func _enter() -> void:
 
 func _tick(delta: float) -> Status:
 	await agent.get_tree().create_timer(agent.stunDuration).timeout
+	blackboard.set_var("state","idle")
 	return Status.SUCCESS

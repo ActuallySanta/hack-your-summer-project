@@ -48,7 +48,7 @@ tile_set = ExtResource("4_a4k3g")
 [node name="Placeholder NPC" parent="." unique_id=1942218757 instance=ExtResource("5_npy7o")]
 position = Vector2(-307, -339)
 
-[node name="Player" parent="." unique_id=862395343 instance=ExtResource("5_u6rxl")]
+[node name="Player" parent="." unique_id=862395343 groups=["player"] instance=ExtResource("5_u6rxl")]
 position = Vector2(-275, -52)
 
 [node name="PlayerHealth" parent="." unique_id=1360041974 instance=ExtResource("6_u6rxl")]

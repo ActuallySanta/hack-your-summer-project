@@ -1,192 +1,98 @@
-[1,-3,0]
--1,-1,0,0|616599,,,,||
-[2,-3,0]
--1,-1,-1,0|616599,,,,||
-[3,-3,0]
--1,-1,-1,0|616599,,,,||
-[4,-3,0]
--1,-1,-1,0|616599,,,,||
-[5,-3,0]
--1,-1,-1,0|616599,,,,||
-[1,-2,0]
--1,-1,0,-1|616599,,,,||
-[2,-2,0]
--1,-1,-1,-1|616599,,,,||
-[3,-2,0]
--1,-1,-1,-1|616599,,,,||
-[4,-2,0]
--1,-1,-1,-1|616599,,,,||
-[5,-2,0]
--1,-1,-1,-1|616599,,,,||
-[1,-1,0]
--1,-1,0,-1|616599,,,,||
-[2,-1,0]
--1,-1,-1,-1|616599,,,,||
-[3,-1,0]
--1,-1,-1,-1|616599,,,,||
-[4,-1,0]
--1,-1,-1,-1|616599,,,,||
-[5,-1,0]
--1,-1,-1,-1|616599,,,,||
-[1,0,0]
--1,-1,0,-1|616599,,,,||
-[2,0,0]
--1,0,-1,-1|616599,,,,||
-[3,0,0]
--1,0,-1,-1|616599,,,,||
-[4,0,0]
--1,0,-1,-1|616599,,,,||
-[5,0,0]
--1,-1,-1,-1|616599,,,,||
-[1,1,0]
-0,-1,0,-1|616599,,,,||
-[5,1,0]
--1,-1,0,-1|616599,,,,||
-[1,2,0]
-0,-1,0,-1|616599,,,,||
-[5,2,0]
--1,-1,0,-1|616599,,,,||
-[1,3,0]
-0,-1,0,-1|616599,,,,||
-[5,3,0]
--1,-1,0,-1|616599,,,,||
-[1,4,0]
-0,-1,0,-1|616599,,,,||
-[5,4,0]
--1,-1,0,-1|616599,,,,||
-[1,5,0]
-0,-1,0,-1|616599,,,,||
-[5,5,0]
--1,-1,0,-1|616599,,,,||
-[1,6,0]
-0,-1,0,-1|616599,,,,||
-[5,6,0]
-0,-1,0,-1|616599,,,,||
-[1,7,0]
-0,-1,0,-1|616599,,,,||
-[5,7,0]
-0,-1,0,-1|616599,,,,||
-[1,8,0]
-0,0,1,-1|616599,,,,||
-[5,8,0]
-1,0,1,-1|616599,,,,||
-[2,7,0]
--1,-1,0,0|||
-[3,7,0]
--1,-1,-1,0|||
-[4,7,0]
-0,-1,-1,1|||
-[2,8,0]
--1,0,0,-1|||
-[3,8,0]
--1,0,-1,-1|||
-[4,8,0]
-1,0,-1,-1|||
-[2,6,0]
--1,0,0,0|||
-[3,6,0]
-1,0,-1,0|||
-[4,6,0]
-0,1,1,1|||
-[3,4,0]
--1,-1,0,0|||
-[4,4,0]
-0,-1,-1,0|||
-[3,5,0]
--1,0,1,-1|||
-[4,5,0]
-0,1,-1,-1|||
-[2,2,0]
-1,-1,0,0|||
-[2,3,0]
-1,-1,0,-1|||
-[2,4,0]
-0,-1,0,-1|||
-[2,5,0]
-1,0,0,-1|||
-[3,3,0]
--1,0,1,0|||
+$ln;Ship
+0;Crew Quarters:1,5,0:2,5,0:3,5,0:3,4,0:4,4,0:4,3,0:4,5,0:2,4,0:1,4,0:1,3,0:1,2,0:2,2,0:3,2,0:3,3,0:2,3,0
+1;Research Sector:-1,5,0:-1,4,0:-1,3,0:1,6,0:2,6,0:3,6,0:3,7,0:2,7,0:1,7,0:1,8,0:0,8,0:2,8,0:3,8,0:2,9,0:1,9,0
+2;Ship Internals:0,7,0:0,6,0:0,5,0:0,4,0:0,3,0:0,2,0:0,1,0:1,1,0
+3;Biological Research Sector:3,1,0:3,0,0:2,0,0:1,0,0:1,-1,0:2,-1,0:2,1,0:0,0,0
+3,8,0//1x1/Jetpack Room
 [4,3,0]
-0,0,-1,0|||
+0,-1,1,0|0023ff,,,,||Scenes/Rooms/Crew Quaters/stairway_cq.tscn
+[4,4,0]
+0,-1,1,-1|0023ff,,,,||Scenes/Rooms/Crew Quaters/stairway_cq.tscn
+[4,5,0]
+0,0,1,-1|0023ff,,,,||Scenes/Rooms/Crew Quaters/stairway_cq.tscn
+[2,2,0]
+-1,-1,1,0|0023ff,,,,||Scenes/Rooms/Crew Quaters/cafeteria.tscn
 [3,2,0]
-1,0,1,0|||
-[2,1,0]
--1,0,0,0|||
+0,-1,-1,0|0023ff,,,,||Scenes/Rooms/Crew Quaters/cafeteria.tscn
+[2,3,0]
+-1,0,1,-1|0023ff,,,,||Scenes/Rooms/Crew Quaters/cafeteria.tscn
+[3,3,0]
+1,0,-1,-1|0023ff,,,,||Scenes/Rooms/Crew Quaters/cafeteria.tscn
+[1,4,0]
+-1,0,0,0|0023ff,,,,|0|Scenes/Rooms/Crew Quaters/cryo_room.tscn
+[2,4,0]
+-1,0,-1,0|0023ff,,,,|5|Scenes/Rooms/Crew Quaters/cryo_room.tscn
+[3,4,0]
+1,0,-1,0|0023ff,,,,||Scenes/Rooms/Crew Quaters/cryo_room.tscn
+[1,3,0]
+1,0,1,0|0023ff,,,,||Scenes/Rooms/Crew Quaters/kitchen_cq.tscn
+[1,2,0]
+1,0,0,0|0023ff,,,,|0|Scenes/Rooms/Crew Quaters/theater_cq.tscn
+[3,0,0]
+0,-1,-1,0|ff0000,,,,||Scenes/Rooms/Biological Research Sector/genetic_modification_brs.tscn
 [3,1,0]
--1,0,-1,0|||
-[4,1,0]
-0,1,-1,0|||
-[4,2,0]
-0,0,1,1|||
-[6,-2,0]
--1,-1,-1,-1|616599,,,,||
-[7,-2,0]
--1,-1,-1,-1|616599,,,,||
-[8,-2,0]
-0,-1,-1,-1|616599,,,,||
-[6,-1,0]
--1,-1,-1,-1|616599,,,,||
-[7,-1,0]
--1,-1,-1,-1|616599,,,,||
-[8,-1,0]
-0,-1,-1,-1|616599,,,,||
-[6,0,0]
--1,-1,-1,-1|616599,,,,||
-[7,0,0]
--1,-1,-1,-1|616599,,,,||
-[8,0,0]
-0,-1,-1,-1|616599,,,,||
-[6,1,0]
--1,-1,-1,-1|616599,,,,||
-[7,1,0]
--1,-1,-1,-1|616599,,,,||
-[8,1,0]
-0,-1,-1,-1|616599,,,,||
-[6,2,0]
--1,-1,-1,-1|616599,,,,||
-[7,2,0]
--1,-1,-1,-1|616599,,,,||
-[8,2,0]
-0,-1,-1,-1|616599,,,,||
-[6,3,0]
--1,-1,-1,-1|616599,,,,||
-[7,3,0]
--1,-1,-1,-1|616599,,,,||
-[8,3,0]
-0,-1,-1,-1|616599,,,,||
-[6,4,0]
--1,-1,-1,-1|616599,,,,||
-[7,4,0]
--1,-1,-1,-1|616599,,,,||
-[8,4,0]
-0,-1,-1,-1|616599,,,,||
-[6,5,0]
--1,0,-1,-1|616599,,,,||
-[7,5,0]
--1,0,-1,-1|616599,,,,||
-[8,5,0]
-0,-1,-1,-1|616599,,,,||
-[8,6,0]
-0,-1,0,-1|616599,,,,||
-[8,7,0]
-0,-1,0,-1|616599,,,,||
-[8,8,0]
-0,0,0,-1|616599,,,,||
-[6,-3,0]
--1,-1,-1,0|616599,,,,||
-[7,-3,0]
--1,-1,-1,0|616599,,,,||
-[8,-3,0]
-0,-1,-1,0|616599,,,,||
-[6,7,0]
--1,-1,0,1|||
-[7,7,0]
-0,-1,-1,0|||
-[6,8,0]
--1,0,1,-1|||
-[7,8,0]
-0,0,-1,-1|||
-[7,6,0]
-0,0,1,0|||
-[6,6,0]
-1,1,0,0|||
+0,0,1,-1|ff0000,,,,||Scenes/Rooms/Biological Research Sector/genetic_modification_brs.tscn
+[3,5,0]
+1,0,0,0|0023ff,,,,|4|Scenes/Rooms/Crew Quaters/crew_quarters_map.tscn
+[2,0,0]
+-1,0,1,0|ff0000,,,,||Scenes/Rooms/Biological Research Sector/genetic_modification_brs.tscn
+[0,1,0]
+-1,-1,0,0|f200ff,,,,||Scenes/Rooms/Ship Internals/ship_internals.tscn
+[1,1,0]
+1,0,-1,0|f200ff,,,,||Scenes/Rooms/Ship Internals/ship_internals.tscn
+[0,2,0]
+0,-1,0,-1|f200ff,,,,||Scenes/Rooms/Ship Internals/ship_internals.tscn
+[0,3,0]
+1,-1,0,-1|f200ff,,,,||Scenes/Rooms/Ship Internals/ship_internals.tscn
+[0,4,0]
+0,-1,0,-1|f200ff,,,,||Scenes/Rooms/Ship Internals/ship_internals.tscn
+[0,5,0]
+1,-1,1,-1|f200ff,,,,||Scenes/Rooms/Ship Internals/ship_internals.tscn
+[1,5,0]
+-1,0,1,0|0023ff,,,,||Scenes/Rooms/Crew Quaters/storage_cq.tscn
+[2,5,0]
+0,0,-1,0|0023ff,,,,|0|Scenes/Rooms/Crew Quaters/storage_cq.tscn
+[-1,5,0]
+1,0,0,-1|00ff91,,,,||Scenes/Rooms/Research Sector/jetpack_exercise_course_rs.tscn
+[1,0,0]
+1,0,1,1|ff0000,,,,||Scenes/Rooms/Biological Research Sector/analysis_room_brs.tscn
+[-1,3,0]
+0,-1,0,0|00ff91,,,,|0|Scenes/Rooms/Research Sector/jetpack_exercise_course_rs.tscn
+[-1,4,0]
+0,-1,0,-1|00ff91,,,,||Scenes/Rooms/Research Sector/jetpack_exercise_course_rs.tscn
+[0,8,0]
+-1,0,0,1|00ff91,,,,||Scenes/Rooms/Research Sector/labs_rs.tscn
+[1,8,0]
+-1,1,-1,0|00ff91,,,,||Scenes/Rooms/Research Sector/labs_rs.tscn
+[2,8,0]
+1,0,-1,1|00ff91,,,,||Scenes/Rooms/Research Sector/labs_rs.tscn
+[0,6,0]
+0,-1,0,-1|f200ff,,,,||Scenes/Rooms/Ship Internals/ship_internals.tscn
+[0,7,0]
+1,1,0,-1|f200ff,,,,||Scenes/Rooms/Ship Internals/ship_internals.tscn
+[2,7,0]
+-1,1,0,0|00ff91,,,,||Scenes/Rooms/Research Sector/operations_rs.tscn
+[3,7,0]
+0,0,-1,-1|00ff91,,,,||Scenes/Rooms/Research Sector/operations_rs.tscn
+[1,9,0]
+-1,0,0,1|00ff91,,,,||Scenes/Rooms/Research Sector/save_room_rs.tscn
+[2,9,0]
+0,0,-1,0|00ff91,,,,|2|Scenes/Rooms/Research Sector/save_room_rs.tscn
+[3,8,0]
+0,0,1,0|00ff91,ffffff,ffffff,,|0|Scenes/Rooms/Research Sector/jetpack_development_rs.tscn
+[3,6,0]
+0,-1,-1,0|00ff91,,,,||Scenes/Rooms/Research Sector/operations_rs.tscn
+[2,6,0]
+-1,0,-1,0|00ff91,,,,||Scenes/Rooms/Research Sector/operations_rs.tscn
+[1,6,0]
+-1,-1,0,0|00ff91,,,,||Scenes/Rooms/Research Sector/operations_rs.tscn
+[1,7,0]
+0,0,1,-1|00ff91,,,,||Scenes/Rooms/Research Sector/operations_rs.tscn
+[1,-1,0]
+-1,1,0,0|ff0000,,,,|6|Scenes/Rooms/Biological Research Sector/containment_room.tscn
+[2,-1,0]
+0,0,-1,0|ff0000,,,,||Scenes/Rooms/Biological Research Sector/containment_room.tscn
+[2,1,0]
+1,0,1,0|ff0000,,,,|4|Scenes/Rooms/Biological Research Sector/map_room_brs.tscn
+[0,0,0]
+1,0,0,0|ff0000,,,,|2|Scenes/Rooms/Biological Research Sector/save_room_brs.tscn
