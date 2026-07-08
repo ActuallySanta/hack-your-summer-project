@@ -320,3 +320,7 @@ func _on_hit(_hurtBox: Hurtbox, hit_info: HitInfo, _source: Hitbox) -> void:
 	anim_hurt = true
 	if _currentHealth <= 0:
 		die()
+
+func collect(pickup: Pickup) -> bool:
+	print("Collect pickup " + Pickup.PickupType.find_key(pickup.type))
+	return true

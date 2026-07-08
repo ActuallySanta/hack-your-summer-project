@@ -7,6 +7,6 @@
 script = ExtResource("1_ebmjs")
 
 [node name="Player" parent="." unique_id=862395343 instance=ExtResource("2_qxrlw")]
-position = Vector2(223, 218)
+position = Vector2(2493, 218)
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1429657112]
