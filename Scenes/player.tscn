@@ -1267,5 +1267,6 @@ libraries/ = SubResource("AnimationLibrary_gymyn")
 shape = SubResource("CapsuleShape2D_5fk43")
 
 [node name="JetpackAsset" parent="." unique_id=261087070 instance=ExtResource("10_tx1dd")]
+max_speed = 30.0
 
 [connection signal="hit" from="Hurtbox" to="." method="_on_hit"]

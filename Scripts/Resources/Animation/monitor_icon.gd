@@ -37,4 +37,3 @@ func switch_to_activated() -> void:
 	_icons[0].visible = false
 	_icons[1].visible = true
 	_current_icon = _icons[1]
-	
