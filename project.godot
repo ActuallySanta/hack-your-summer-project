@@ -25,6 +25,10 @@ GlobalSignals="*uid://bac60hesolscg"
 SceneLoader="*uid://bdtr22633bwcl"
 ItemCollectionTooling="*uid://dufcsaf2fngyk"
 
+[display]
+
+window/size/viewport_height=672
+
 [dotnet]
 
 project/assembly_name="Hack Your Summer Project"
