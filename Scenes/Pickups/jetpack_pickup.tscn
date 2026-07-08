@@ -10,7 +10,8 @@ size = Vector2(32, 32)
 collision_layer = 16
 script = ExtResource("1_2s1fn")
 type = 3
-is_unique = true
+use_custom_id = true
+custom_id = &"Jetpack"
 metadata/_custom_type_script = "uid://cnrub5aht5y2k"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1617475129]

@@ -6,16 +6,16 @@ enum PickupType { Coin, Health, Gun, Jetpack }
 @export var type : PickupType
 ## Does the pickup respawn when the player leaves and reenters the room?
 @export var respawn_on_load := false
-## If true, the object will be stored in MetSys using the pickup type only.<br>
-## If false, the object will be stored in MetSys using the parent scene and node name.
-## Essentially, set this to false if there's only one in the map and you want it
-## to be easier to track in code.
-@export var is_unique := false
+## MetSys automatically assigns an id to all tracked objects based on their
+## parent scene + name.<br>
+## Set this to true to override that id.
+@export var use_custom_id := false
+@export var custom_id : StringName
 
 func _ready() -> void:
 	body_entered.connect(_on_body_entered)
-	if is_unique:
-		set_meta(&"object_id", PickupType.find_key(type))
+	if use_custom_id:
+		set_meta(&"object_id", custom_id)
 	if not respawn_on_load:
 		var already_collected = MetSys.register_storable_object(self)
 		# MetSys automatically despawns the object if it was already collected
@@ -33,5 +33,6 @@ func _on_body_entered(body: Node2D) -> void:
 		return
 		
 	if not respawn_on_load:
+		print("Storing pickup " + MetSys.get_object_id(self))
 		MetSys.store_object(self)
 	queue_free()
