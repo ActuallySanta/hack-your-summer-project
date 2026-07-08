@@ -1,0 +1,41 @@
+[gd_scene format=4 uid="uid://b1ujnmnbsxx87"]
+
+[ext_resource type="Texture2D" uid="uid://cofo5m2j45mcn" path="res://Textures/PropsAndBackgrounds/ButtonFull.png" id="1_281k4"]
+[ext_resource type="Script" uid="uid://b212kfagvpphx" path="res://Scripts/Resources/Animation/monitor_animator.gd" id="2_h6cfl"]
+[ext_resource type="TileSet" uid="uid://b17mvgg6tmbxx" path="res://Tileset/button_tile_set.tres" id="2_vw5uu"]
+[ext_resource type="Script" uid="uid://bvs7sv0thb0gv" path="res://Scripts/Resources/Animation/monitor_icon.gd" id="4_vn5wo"]
+
+[node name="AccessButton" type="Node2D" unique_id=775097331]
+scale = Vector2(1.5, 1.5)
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=659181295]
+texture = ExtResource("1_281k4")
+
+[node name="Monitor" type="Node2D" parent="." unique_id=905626094]
+script = ExtResource("2_h6cfl")
+frame_count = 2
+
+[node name="Monitor1" type="TileMapLayer" parent="Monitor" unique_id=29509137]
+tile_map_data = PackedByteArray("AAAHAPz/AAAAAAAAAAAHAP3/AAAAAAEAAAAHAP7/AAAAAAIAAAAHAP//AAAAAAMAAAAIAPz/AAABAAAAAAAIAP3/AAABAAEAAAAIAP7/AAABAAIAAAAIAP//AAABAAMAAAAJAPz/AAACAAAAAAAJAP3/AAACAAEAAAAJAP7/AAACAAIAAAAJAP//AAACAAMAAAAKAPz/AAADAAAAAAAKAP3/AAADAAEAAAAKAP7/AAADAAIAAAAKAP//AAADAAMAAAA=")
+tile_set = ExtResource("2_vw5uu")
+
+[node name="Monitor2" type="TileMapLayer" parent="Monitor" unique_id=948450919]
+tile_map_data = PackedByteArray("AAAHAPz/AAAAAAQAAAAHAP3/AAAAAAUAAAAHAP7/AAAAAAYAAAAHAP//AAAAAAcAAAAIAPz/AAABAAQAAAAIAP3/AAABAAUAAAAIAP7/AAABAAYAAAAIAP//AAABAAcAAAAJAPz/AAACAAQAAAAJAP3/AAACAAUAAAAJAP7/AAACAAYAAAAJAP//AAACAAcAAAAKAPz/AAADAAQAAAAKAP3/AAADAAUAAAAKAP7/AAADAAYAAAAKAP//AAADAAcAAAA=")
+tile_set = ExtResource("2_vw5uu")
+
+[node name="Monitor3" type="TileMapLayer" parent="Monitor" unique_id=725992603]
+tile_map_data = PackedByteArray("AAAHAPz/AAAAAAgAAAAHAP3/AAAAAAkAAAAHAP7/AAAAAAoAAAAHAP//AAAAAAsAAAAIAPz/AAABAAgAAAAIAP3/AAABAAkAAAAIAP7/AAABAAoAAAAIAP//AAABAAsAAAAJAPz/AAACAAgAAAAJAP3/AAACAAkAAAAJAP7/AAACAAoAAAAJAP//AAACAAsAAAAKAPz/AAADAAgAAAAKAP3/AAADAAkAAAAKAP7/AAADAAoAAAAKAP//AAADAAsAAAA=")
+tile_set = ExtResource("2_vw5uu")
+
+[node name="MonitorIconManager" type="Node2D" parent="." unique_id=515888462]
+script = ExtResource("4_vn5wo")
+
+[node name="Cross" type="TileMapLayer" parent="MonitorIconManager" unique_id=1536098460]
+visible = false
+tile_map_data = PackedByteArray("AAAHAPz/AAAEAAAAAAAHAP3/AAAEAAEAAAAHAP7/AAAEAAIAAAAHAP//AAAEAAMAAAAIAPz/AAAFAAAAAAAIAP3/AAAFAAEAAAAIAP7/AAAFAAIAAAAIAP//AAAFAAMAAAAJAPz/AAAGAAAAAAAJAP3/AAAGAAEAAAAJAP7/AAAGAAIAAAAJAP//AAAGAAMAAAAKAPz/AAAHAAAAAAAKAP3/AAAHAAEAAAAKAP7/AAAHAAIAAAAKAP//AAAHAAMAAAA=")
+tile_set = ExtResource("2_vw5uu")
+
+[node name="Check" type="TileMapLayer" parent="MonitorIconManager" unique_id=2015790336]
+visible = false
+tile_map_data = PackedByteArray("AAAHAP7/AAAEAAYAAAAIAP3/AAAFAAUAAAAIAP7/AAAFAAYAAAAIAP//AAAFAAcAAAAJAPz/AAAGAAQAAAAJAP3/AAAGAAUAAAAJAP7/AAAGAAYAAAAJAP//AAAGAAcAAAAKAPz/AAAHAAQAAAAKAP3/AAAHAAUAAAA=")
+tile_set = ExtResource("2_vw5uu")
