@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://5uhi1nn3ykxt"]
+
+[ext_resource type="Script" uid="uid://bo6qgt11s8q53" path="res://Scripts/game.gd" id="1_ebmjs"]
+[ext_resource type="PackedScene" uid="uid://dohmyoeiilp0v" path="res://Scenes/player.tscn" id="2_qxrlw"]
+
+[node name="Game" type="Node" unique_id=651801150]
+script = ExtResource("1_ebmjs")
+
+[node name="Player" parent="." unique_id=862395343 instance=ExtResource("2_qxrlw")]
+position = Vector2(223, 218)
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1429657112]
