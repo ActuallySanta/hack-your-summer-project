@@ -304,6 +304,7 @@ func die() -> void:
 
 func respawn() -> void:
 	_currentHealth = baseHealth
+	GlobalSignals.health_changed.emit(_currentHealth, baseHealth)
 	_deathRespawnTimer = 0
 	anim_death = false
 	CheckpointEventBus.player_needs_to_use_checkpoint.emit()
@@ -313,6 +314,7 @@ func _on_hit(_hurtBox: Hurtbox, hit_info: HitInfo, _source: Hitbox) -> void:
 		return
 	print("Player took damage!")
 	_currentHealth -= hit_info.damage
+	GlobalSignals.health_changed.emit(_currentHealth, baseHealth)
 	_knockbackTimer = hit_info.knockback_duration
 	_knockbackForce = hit_info.knockback_strength / _knockbackTimer
 	_invulnTimer = hitInvulnTime
