@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://ne13j5tl7gbr" path="res://Scenes/UI/player_hud.tscn" id="8_od3ui"]
 [ext_resource type="Texture2D" uid="uid://c8km3q4omapxt" path="res://Sprites/Main Character Crawl.png" id="8_tx1dd"]
 [ext_resource type="Texture2D" uid="uid://btpjpn1y6y23a" path="res://Sprites/character_swing.png" id="9_tx1dd"]
+[ext_resource type="PackedScene" uid="uid://cfpoti64f7omn" path="res://Scenes/Entities/jetpack_asset.tscn" id="10_tx1dd"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_f1ek2"]
 radius = 24.0
@@ -1264,5 +1265,7 @@ libraries/ = SubResource("AnimationLibrary_gymyn")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=973966651]
 shape = SubResource("CapsuleShape2D_5fk43")
+
+[node name="JetpackAsset" parent="." unique_id=261087070 instance=ExtResource("10_tx1dd")]
 
 [connection signal="hit" from="Hurtbox" to="." method="_on_hit"]

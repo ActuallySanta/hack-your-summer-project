@@ -12,15 +12,14 @@ var _start_position := Vector2.ZERO
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	if ItemCollectionTooling.item_aquired[item]:
+	if MetSys.register_storable_object_with_marker(self): 
 		queue_free()
 		return
 	
 	sprite.texture = texture
 	_start_position = global_position
-	_occilation_amount = 2 * PI / hover_cycle_seconds
+	_occilation_amount = TAU / hover_cycle_seconds
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	_game_time += delta
 	var eval = height * sin(_game_time * _occilation_amount)
@@ -29,4 +28,5 @@ func _process(delta: float) -> void:
 func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
 		ItemCollectionTooling.collect_item(item)
+		MetSys.store_object(self)
 		queue_free()
