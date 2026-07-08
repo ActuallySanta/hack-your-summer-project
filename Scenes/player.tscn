@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://c214glttpaw83" path="res://Scenes/UI/player_health.tscn" id="9_f1ek2"]
 [ext_resource type="Texture2D" uid="uid://c8km3q4omapxt" path="res://Sprites/Main Character Crawl.png" id="8_tx1dd"]
 [ext_resource type="Texture2D" uid="uid://btpjpn1y6y23a" path="res://Sprites/character_swing.png" id="9_tx1dd"]
+[ext_resource type="PackedScene" uid="uid://cfpoti64f7omn" path="res://Scenes/Entities/jetpack_asset.tscn" id="10_tx1dd"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_f1ek2"]
 radius = 24.0
@@ -1269,4 +1270,8 @@ shape = SubResource("CapsuleShape2D_5fk43")
 [node name="PlayerHealth" parent="." unique_id=1360041974 instance=ExtResource("9_f1ek2")]
 position = Vector2(-13, 16)
 scale = Vector2(0.01, 0.01)
+
+[node name="JetpackAsset" parent="." unique_id=261087070 instance=ExtResource("10_tx1dd")]
+max_speed = 30.0
+
 [connection signal="hit" from="Hurtbox" to="." method="_on_hit"]

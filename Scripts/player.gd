@@ -66,20 +66,28 @@ var anim_death : bool
 var anim_swing : bool
 var anim_fire : bool
 
+@onready var jetpack: Sprite2D = $JetpackAsset
 @onready var sprite : Sprite2D = $Character
+
 func _ready() -> void:
 	PlayerManager.player = self
 	_facingRight = true
 	_currentHealth = baseHealth
 	CheckpointEventBus.move_player_position.connect(_move_player_pos)
+	ItemCollectionTooling.item_collected.connect(handle_item_aquisition)
+	jetpack.jetpack_updated.connect(do_jetpack_logic)
+	disable_item(jetpack)
+
 
 func _move_player_pos(pos: Vector2) -> void:
 	position = pos
+
 
 func jump() -> void:
 	velocity.y = -jumpForce
 	_jumpBufferTimer = 0
 	_coyoteTimer = 0
+
 
 func attack() -> void:
 	print("Attack!")
@@ -94,6 +102,7 @@ func attack() -> void:
 	_shootCooldownTimer = attackCooldown
 	_attackBufferTimer = 0
 	anim_swing = true
+
 
 func shoot() -> void:
 	print("Fire!")
@@ -110,6 +119,7 @@ func shoot() -> void:
 	_shootBufferTimer = 0
 	anim_fire = true
 
+
 func handle_jump_and_gravity(delta: float) -> void:
 	# Add the gravity.
 	if not is_on_floor():
@@ -118,13 +128,14 @@ func handle_jump_and_gravity(delta: float) -> void:
 		_coyoteTimer -= delta
 	else:
 		_coyoteTimer = coyoteTime
-		
+	
 	# Handle jump.
 	if _jumpBufferTimer > 0:
 		if (is_on_floor() or _coyoteTimer > 0) and playerMoveState != MoveState.Climbing:
 			jump()
 		else:
 			_jumpBufferTimer -= delta
+
 
 func handle_standard_movement(_delta: float) -> void:
 	# Get the input direction and handle the movement/deceleration.
@@ -137,10 +148,12 @@ func handle_standard_movement(_delta: float) -> void:
 		velocity.x = move_toward(velocity.x, 0, moveSpeed)
 	set_anim_move_state(playerMoveState, _moveInput != 0)
 
+
 func handle_climbing_movement(_delta: float) -> void:
 	velocity.x = 0
 	velocity.y = _vertMoveInput * climbingSpeed
 	set_anim_move_state(MoveState.Climbing, _vertMoveInput != 0)
+
 
 func handle_knockback_movement(delta: float) -> void:
 	velocity.x = _knockbackForce
@@ -148,6 +161,7 @@ func handle_knockback_movement(delta: float) -> void:
 		velocity.x += _moveInput * knockbackDI
 	_knockbackTimer -= delta
 	set_anim_move_state(MoveState.Knockback, false)
+
 
 func determine_move_state() -> MoveState:
 	if _knockbackTimer > 0:
@@ -163,7 +177,7 @@ func determine_move_state() -> MoveState:
 		return MoveState.Crouching
 	
 	return MoveState.Standing
-		
+
 
 func set_anim_move_state(moveState: MoveState, moving: bool) -> void:
 	match moveState:
@@ -195,6 +209,7 @@ func set_anim_move_state(moveState: MoveState, moving: bool) -> void:
 			anim_hurt = false
 		MoveState.Knockback:
 			anim_hurt = true
+
 
 func _physics_process(delta: float) -> void:
 	playerMoveState = determine_move_state()
@@ -320,3 +335,25 @@ func _on_hit(_hurtBox: Hurtbox, hit_info: HitInfo, _source: Hitbox) -> void:
 	anim_hurt = true
 	if _currentHealth <= 0:
 		die()
+
+
+func do_jetpack_logic(speed: float):
+	velocity.y -= speed;
+
+
+func disable_item(item_node: Node):
+	item_node.process_mode = Node.PROCESS_MODE_DISABLED
+	if item_node is CanvasItem:
+		item_node.hide()
+
+
+func enable_item(item_node: Node):
+	item_node.process_mode = Node.PROCESS_MODE_INHERIT
+	if item_node is CanvasItem:
+		item_node.show()
+
+
+func handle_item_aquisition(item_name: String):
+	var item = jetpack if item_name == "Jetpack" else null
+	enable_item(item)
+	pass
