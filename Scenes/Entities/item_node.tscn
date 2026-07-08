@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://x27jj0bgasse"]
+
+[ext_resource type="Script" uid="uid://c7chwo6ql6udc" path="res://Scripts/item_node.gd" id="1_1ma7y"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_lg80l"]
+
+[node name="ItemNode" type="Area2D" unique_id=1048250405]
+script = ExtResource("1_1ma7y")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1583626948]
+shape = SubResource("CircleShape2D_lg80l")
+
+[node name="Icon" type="Sprite2D" parent="." unique_id=1790653437]
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://cfpoti64f7omn"]
+
+[ext_resource type="Script" uid="uid://ykg6ymkitdn3" path="res://Scripts/Player/jetpackControl.gd" id="1_uv1or"]
+
+[node name="JetpackAsset" type="Sprite2D" unique_id=261087070]
+script = ExtResource("1_uv1or")
+acceleration = 15.0
+max_speed = 20.0
