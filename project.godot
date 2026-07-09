@@ -11,8 +11,8 @@ config_version=5
 [application]
 
 config/name="Hack Your Summer Project"
-run/main_scene="uid://esk4fom87pxl"
-config/features=PackedStringArray("4.7", "GL Compatibility")
+run/main_scene="uid://5uhi1nn3ykxt"
+config/features=PackedStringArray("4.6", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [autoload]
@@ -24,6 +24,11 @@ CheckpointEventBus="*uid://dhboilckmjc7f"
 GlobalSignals="*uid://bac60hesolscg"
 LimboConsole="*uid://dyxornv8vwibg"
 SceneLoader="*uid://bdtr22633bwcl"
+ItemCollectionTooling="*uid://dufcsaf2fngyk"
+
+[display]
+
+window/size/viewport_height=672
 
 [dotnet]
 
@@ -126,6 +131,7 @@ limbo_console_search_history={
 [physics]
 
 3d/physics_engine="Jolt Physics"
+2d/default_gravity=2500.0
 
 [rendering]
 

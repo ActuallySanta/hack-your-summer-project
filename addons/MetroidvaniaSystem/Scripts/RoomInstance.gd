@@ -160,6 +160,7 @@ func get_neighbor_rooms() -> Array[String]:
 func _draw() -> void:
 	if not Engine.is_editor_hint() or cells.is_empty():
 		return
+		
 	
 	for p in cells:
 		var coords := Vector2(p.x - min_cell.x, p.y - min_cell.y)

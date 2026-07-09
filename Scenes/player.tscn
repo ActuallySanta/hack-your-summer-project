@@ -3,7 +3,6 @@
 [ext_resource type="Script" uid="uid://bs0loqfendiak" path="res://Scripts/player.gd" id="1_00tjw"]
 [ext_resource type="Texture2D" uid="uid://d1irxkv8rmbly" path="res://Sprites/SpaceStation_Character_Sheet.png" id="1_pv8u5"]
 [ext_resource type="PackedScene" uid="uid://ch0cbeo8ehblm" path="res://Scenes/player_melee_swing.tscn" id="2_vtle1"]
-[ext_resource type="Texture2D" uid="uid://cc2bpmkui6luy" path="res://Sprites/SpaceStation_Projectiles_Sheet.png" id="2_yb4o1"]
 [ext_resource type="PackedScene" uid="uid://jammv02ygc7v" path="res://Scenes/player_bullet.tscn" id="3_od3ui"]
 [ext_resource type="PackedScene" uid="uid://djmeyycufny61" path="res://Scenes/Components/Hurtbox.tscn" id="4_00tjw"]
 [ext_resource type="Texture2D" uid="uid://bqj73yi85o2dx" path="res://Sprites/Main Character Climb.png" id="7_f1ek2"]
@@ -11,9 +10,11 @@
 [ext_resource type="PackedScene" uid="uid://c214glttpaw83" path="res://Scenes/UI/player_health.tscn" id="9_f1ek2"]
 [ext_resource type="Texture2D" uid="uid://c8km3q4omapxt" path="res://Sprites/Main Character Crawl.png" id="8_tx1dd"]
 [ext_resource type="Texture2D" uid="uid://btpjpn1y6y23a" path="res://Sprites/character_swing.png" id="9_tx1dd"]
+[ext_resource type="PackedScene" uid="uid://cfpoti64f7omn" path="res://Scenes/Entities/jetpack_asset.tscn" id="10_tx1dd"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_f1ek2"]
-radius = 8.0
+radius = 24.0
+height = 90.0
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_l6n3p"]
 animation = &"swing_standing"
@@ -336,7 +337,7 @@ tracks/8/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [30.0]
+"values": [90.0]
 }
 tracks/9/type = "value"
 tracks/9/imported = false
@@ -348,7 +349,7 @@ tracks/9/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [30.0]
+"values": [90.0]
 }
 
 [sub_resource type="Animation" id="Animation_5fcxh"]
@@ -494,7 +495,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, 7)]
+"values": [Vector2(0, 21)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
@@ -506,7 +507,7 @@ tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, 7)]
+"values": [Vector2(0, 21)]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
@@ -566,7 +567,7 @@ tracks/8/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [24.0]
+"values": [72.0]
 }
 tracks/9/type = "value"
 tracks/9/imported = false
@@ -578,7 +579,7 @@ tracks/9/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [24.0]
+"values": [72.0]
 }
 
 [sub_resource type="Animation" id="Animation_apopc"]
@@ -594,7 +595,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [20.0]
+"values": [60.0]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -606,7 +607,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, 7)]
+"values": [Vector2(0, 21)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -642,7 +643,7 @@ tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, 7)]
+"values": [Vector2(0, 21)]
 }
 tracks/5/type = "value"
 tracks/5/imported = false
@@ -654,7 +655,7 @@ tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [20.0]
+"values": [60.0]
 }
 tracks/6/type = "value"
 tracks/6/imported = false
@@ -730,7 +731,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, 7)]
+"values": [Vector2(0, 21)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -754,7 +755,7 @@ tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [20.0]
+"values": [60.0]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
@@ -766,7 +767,7 @@ tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [20.0]
+"values": [60.0]
 }
 tracks/5/type = "value"
 tracks/5/imported = false
@@ -778,7 +779,7 @@ tracks/5/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, 7)]
+"values": [Vector2(0, 21)]
 }
 tracks/6/type = "value"
 tracks/6/imported = false
@@ -1214,18 +1215,20 @@ _data = {
 }
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_5fk43"]
-radius = 8.0
+radius = 24.0
+height = 90.0
 
 [node name="Player" type="CharacterBody2D" unique_id=862395343 groups=["player"]]
+z_index = 5
 script = ExtResource("1_00tjw")
-moveSpeed = 200.0
+moveSpeed = 400.0
 crouchSpeedMult = 0.35
-jumpForce = 450.0
-swingOffset = 20.0
+climbingSpeed = 250
+jumpForce = 950.0
+swingOffset = 80.0
 swingScene = ExtResource("2_vtle1")
-bulletOffset = 25.0
 bulletScene = ExtResource("3_od3ui")
-knockbackDI = 100.0
+knockbackDI = 400.0
 
 [node name="Hurtbox" parent="." unique_id=470143312 instance=ExtResource("4_00tjw")]
 collision_layer = 2
@@ -1249,28 +1252,13 @@ parameters/StandardMovement/Move/MoveState/current_index = -1
 
 [node name="Character" type="Sprite2D" parent="." unique_id=295087923]
 position = Vector2(0, -1)
+scale = Vector2(3, 3)
 texture = ExtResource("1_pv8u5")
 hframes = 8
 vframes = 9
 
-[node name="Attacks" type="Sprite2D" parent="Character" unique_id=1184458465]
-visible = false
-texture = ExtResource("2_yb4o1")
-offset = Vector2(-18, 25)
-hframes = 8
-vframes = 3
-frame = 19
-
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=480447104]
 libraries/ = SubResource("AnimationLibrary_gymyn")
-
-[node name="StateMachine" type="Node" parent="." unique_id=95289598]
-
-[node name="Idle" type="Node" parent="StateMachine" unique_id=582333302]
-
-[node name="Walk" type="Node" parent="StateMachine" unique_id=934769681]
-
-[node name="Attack" type="Node" parent="StateMachine" unique_id=768465736]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1087993730]
 
@@ -1282,4 +1270,8 @@ shape = SubResource("CapsuleShape2D_5fk43")
 [node name="PlayerHealth" parent="." unique_id=1360041974 instance=ExtResource("9_f1ek2")]
 position = Vector2(-13, 16)
 scale = Vector2(0.01, 0.01)
+
+[node name="JetpackAsset" parent="." unique_id=261087070 instance=ExtResource("10_tx1dd")]
+max_speed = 30.0
+
 [connection signal="hit" from="Hurtbox" to="." method="_on_hit"]
