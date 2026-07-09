@@ -1220,7 +1220,7 @@ height = 90.0
 [node name="Player" type="CharacterBody2D" unique_id=862395343 groups=["player"]]
 z_index = 5
 script = ExtResource("1_00tjw")
-moveSpeed = 400.0
+moveSpeed = 1200.0
 crouchSpeedMult = 0.35
 climbingSpeed = 250
 jumpForce = 950.0

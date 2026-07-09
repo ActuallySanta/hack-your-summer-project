@@ -19,6 +19,7 @@ tile_set = ExtResource("3_dvpyl")
 
 [node name="AccessButton" parent="TileMapForRooms" unique_id=775097331 instance=ExtResource("4_erku7")]
 position = Vector2(648, 192)
+button_name = "Theater"
 
 [node name="Foreground2" type="TileMapLayer" parent="TileMapForRooms" unique_id=1481232645]
 scale = Vector2(3, 3)

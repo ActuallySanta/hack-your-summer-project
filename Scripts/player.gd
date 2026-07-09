@@ -299,6 +299,7 @@ func handle_invuln_blinking(delta: float) -> void:
 func _process( _delta: float) -> void:
 	handle_inputs()
 	handle_invuln_blinking(_delta)
+	handle_vertical_speed()
 	
 	if _deathRespawnTimer > 0:
 		_deathRespawnTimer -= _delta
@@ -307,6 +308,12 @@ func _process( _delta: float) -> void:
 	if animPlayback.get_current_node() == "RangedFire" or animPlayback.get_current_node() == "MeleeSwing":
 		anim_fire = false
 		anim_swing = false
+
+func handle_vertical_speed() -> void:
+	if velocity.y < -1000:
+		velocity.y = -1000
+	elif velocity.y > 2000:
+		velocity.y = 2000
 
 func die() -> void:
 	_invulnTimer = 0
@@ -336,22 +343,18 @@ func _on_hit(_hurtBox: Hurtbox, hit_info: HitInfo, _source: Hitbox) -> void:
 	if _currentHealth <= 0:
 		die()
 
-
 func do_jetpack_logic(speed: float):
-	velocity.y -= speed;
-
+	velocity.y -= speed
 
 func disable_item(item_node: Node):
 	item_node.process_mode = Node.PROCESS_MODE_DISABLED
 	if item_node is CanvasItem:
 		item_node.hide()
 
-
 func enable_item(item_node: Node):
 	item_node.process_mode = Node.PROCESS_MODE_INHERIT
 	if item_node is CanvasItem:
 		item_node.show()
-
 
 func handle_item_aquisition(item_name: String):
 	var item = jetpack if item_name == "Jetpack" else null

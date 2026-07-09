@@ -1,0 +1,82 @@
+[gd_scene format=3 uid="uid://ci0kv7wdsqpnc"]
+
+[ext_resource type="SpriteFrames" uid="uid://2nvt5lepiug" path="res://Sprites/DoorFrames.tres" id="1_ps4hy"]
+[ext_resource type="Script" uid="uid://5nholjdkmxej" path="res://access_door_mananger.gd" id="2_uvl7b"]
+[ext_resource type="SpriteFrames" uid="uid://dvifw4didt7kf" path="res://Sprites/DoorAlarmFrames.tres" id="3_uvl7b"]
+[ext_resource type="Script" uid="uid://bwkf62h6aduu7" path="res://Scripts/super_door_collider_manager.gd" id="4_k0pvs"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uvl7b"]
+size = Vector2(24, 192)
+
+[node name="LockedAccessDoor" type="Node2D" unique_id=1490899284]
+script = ExtResource("2_uvl7b")
+
+[node name="TopDoor3" type="AnimatedSprite2D" parent="." unique_id=650335711]
+position = Vector2(32, -48)
+sprite_frames = ExtResource("1_ps4hy")
+animation = &"Idle"
+
+[node name="BottomDoor3" type="AnimatedSprite2D" parent="." unique_id=1825458145]
+position = Vector2(32, 48)
+sprite_frames = ExtResource("1_ps4hy")
+animation = &"Idle"
+flip_v = true
+
+[node name="TopDoor2" type="AnimatedSprite2D" parent="." unique_id=134005850]
+position = Vector2(0, -48)
+sprite_frames = ExtResource("1_ps4hy")
+animation = &"Idle"
+
+[node name="BottomDoor2" type="AnimatedSprite2D" parent="." unique_id=2056687164]
+position = Vector2(0, 48)
+sprite_frames = ExtResource("1_ps4hy")
+animation = &"Idle"
+flip_v = true
+
+[node name="TopDoor1" type="AnimatedSprite2D" parent="." unique_id=755507661]
+position = Vector2(-32, -48)
+sprite_frames = ExtResource("1_ps4hy")
+animation = &"Idle"
+
+[node name="BottomDoor1" type="AnimatedSprite2D" parent="." unique_id=1892755681]
+position = Vector2(-32, 48)
+sprite_frames = ExtResource("1_ps4hy")
+animation = &"Idle"
+flip_v = true
+
+[node name="AlarmBR" type="AnimatedSprite2D" parent="." unique_id=802007679]
+position = Vector2(64, 48)
+sprite_frames = ExtResource("3_uvl7b")
+animation = &"SoundingRight"
+autoplay = "SoundingRight"
+flip_v = true
+
+[node name="AlarmBL" type="AnimatedSprite2D" parent="." unique_id=1027280027]
+position = Vector2(-64, 48)
+sprite_frames = ExtResource("3_uvl7b")
+animation = &"Sounding"
+autoplay = "Sounding"
+frame = 1
+flip_v = true
+
+[node name="AlarmTR" type="AnimatedSprite2D" parent="." unique_id=1300721151]
+position = Vector2(64, -48)
+sprite_frames = ExtResource("3_uvl7b")
+animation = &"SoundingRight"
+autoplay = "SoundingRight"
+frame = 1
+frame_progress = 0.28608134
+
+[node name="AlarmTL" type="AnimatedSprite2D" parent="." unique_id=713336594]
+position = Vector2(-64, -48)
+sprite_frames = ExtResource("3_uvl7b")
+animation = &"Sounding"
+autoplay = "Sounding"
+frame_progress = 0.7991752
+
+[node name="DoorCollider" type="StaticBody2D" parent="." unique_id=992178367]
+script = ExtResource("4_k0pvs")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DoorCollider" unique_id=1017521895]
+position = Vector2(-32, 0)
+shape = SubResource("RectangleShape2D_uvl7b")

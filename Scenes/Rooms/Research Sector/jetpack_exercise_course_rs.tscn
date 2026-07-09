@@ -20,6 +20,7 @@ collision_enabled = false
 
 [node name="AccessButton" parent="TileMapForRooms" unique_id=775097331 instance=ExtResource("4_a7upy")]
 position = Vector2(744, 240)
+button_name = "Exercise"
 
 [node name="Foreground2" type="TileMapLayer" parent="TileMapForRooms" unique_id=1638297972]
 scale = Vector2(3, 3)

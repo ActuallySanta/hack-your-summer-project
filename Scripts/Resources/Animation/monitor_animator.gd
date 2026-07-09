@@ -18,5 +18,5 @@ func _ready() -> void:
 	_frames = get_children()
 
 func _process(delta: float) -> void:
-	activeframe = _frames[(_current_frame / frame_count) % _frames.size()]
+	activeframe = _frames[ (_current_frame / frame_count) % _frames.size() ]
 	_current_frame += 1
