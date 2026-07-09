@@ -1213,7 +1213,10 @@ _data = {
 &"swing_standing": SubResource("Animation_gymyn")
 }
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_5fk43"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_tx1dd"]
+radius = 32.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tx1dd"]
 radius = 24.0
 height = 90.0
 
@@ -1250,7 +1253,7 @@ parameters/StandardMovement/Move/MoveState/transition_request = "Stand"
 parameters/StandardMovement/Move/MoveState/current_index = -1
 
 [node name="Character" type="Sprite2D" parent="." unique_id=295087923]
-position = Vector2(0, -1)
+position = Vector2(0, -3)
 scale = Vector2(3, 3)
 texture = ExtResource("1_pv8u5")
 hframes = 8
@@ -1263,8 +1266,12 @@ libraries/ = SubResource("AnimationLibrary_gymyn")
 
 [node name="Player HUD" parent="CanvasLayer" unique_id=890844106 instance=ExtResource("8_od3ui")]
 
+[node name="JumpCollision" type="CollisionShape2D" parent="." unique_id=931990881]
+shape = SubResource("CircleShape2D_tx1dd")
+disabled = true
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=973966651]
-shape = SubResource("CapsuleShape2D_5fk43")
+shape = SubResource("CapsuleShape2D_tx1dd")
 
 [node name="JetpackAsset" parent="." unique_id=261087070 instance=ExtResource("10_tx1dd")]
 max_speed = 30.0

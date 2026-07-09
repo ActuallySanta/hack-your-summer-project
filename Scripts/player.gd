@@ -78,16 +78,13 @@ func _ready() -> void:
 	jetpack.jetpack_updated.connect(do_jetpack_logic)
 	disable_item(jetpack)
 
-
 func _move_player_pos(pos: Vector2) -> void:
 	position = pos
-
 
 func jump() -> void:
 	velocity.y = -jumpForce
 	_jumpBufferTimer = 0
 	_coyoteTimer = 0
-
 
 func attack() -> void:
 	print("Attack!")
@@ -103,7 +100,6 @@ func attack() -> void:
 	_attackBufferTimer = 0
 	anim_swing = true
 
-
 func shoot() -> void:
 	print("Fire!")
 	var newBullet := bulletScene.instantiate() as PlayerBullet
@@ -118,7 +114,6 @@ func shoot() -> void:
 	_attackCooldownTimer = shootCooldown
 	_shootBufferTimer = 0
 	anim_fire = true
-
 
 func handle_jump_and_gravity(delta: float) -> void:
 	# Add the gravity.
@@ -136,7 +131,6 @@ func handle_jump_and_gravity(delta: float) -> void:
 		else:
 			_jumpBufferTimer -= delta
 
-
 func handle_standard_movement(_delta: float) -> void:
 	# Get the input direction and handle the movement/deceleration.
 	if _moveInput:
@@ -148,12 +142,10 @@ func handle_standard_movement(_delta: float) -> void:
 		velocity.x = move_toward(velocity.x, 0, moveSpeed)
 	set_anim_move_state(playerMoveState, _moveInput != 0)
 
-
 func handle_climbing_movement(_delta: float) -> void:
 	velocity.x = 0
 	velocity.y = _vertMoveInput * climbingSpeed
 	set_anim_move_state(MoveState.Climbing, _vertMoveInput != 0)
-
 
 func handle_knockback_movement(delta: float) -> void:
 	velocity.x = _knockbackForce
@@ -161,7 +153,6 @@ func handle_knockback_movement(delta: float) -> void:
 		velocity.x += _moveInput * knockbackDI
 	_knockbackTimer -= delta
 	set_anim_move_state(MoveState.Knockback, false)
-
 
 func determine_move_state() -> MoveState:
 	if _knockbackTimer > 0:
@@ -177,7 +168,6 @@ func determine_move_state() -> MoveState:
 		return MoveState.Crouching
 	
 	return MoveState.Standing
-
 
 func set_anim_move_state(moveState: MoveState, moving: bool) -> void:
 	match moveState:
@@ -209,7 +199,6 @@ func set_anim_move_state(moveState: MoveState, moving: bool) -> void:
 			anim_hurt = false
 		MoveState.Knockback:
 			anim_hurt = true
-
 
 func _physics_process(delta: float) -> void:
 	playerMoveState = determine_move_state()
