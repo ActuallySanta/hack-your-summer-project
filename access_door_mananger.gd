@@ -8,6 +8,8 @@ extends Node2D
 	[ $TopDoor2, $BottomDoor2 ],
 	[ $TopDoor3, $BottomDoor3 ]
 ]
+
+@onready var sound_players = [ $DoorSFX, $DoorSFX2, $DoorSFX3 ]
 	
 func try_open_door() -> void:
 	dramatic_door_open_very_cool( get_open_door_count() )
@@ -35,6 +37,7 @@ func play_animation(name: String, door_index: int = 0) -> void:
 	
 	door_controls[door_index][0].play(name)
 	door_controls[door_index][1].play(name)
+	sound_players[door_index].play()
 	
 func play_anim_all(name: String) -> void:
 	for i in door_controls.size():
