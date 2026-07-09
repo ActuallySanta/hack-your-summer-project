@@ -5,6 +5,7 @@
 [ext_resource type="TileSet" uid="uid://hkvfy5by8aqr" path="res://Tileset/Main_Level.tres" id="3_iy0ho"]
 [ext_resource type="PackedScene" uid="uid://ci0kv7wdsqpnc" path="res://Scenes/Rooms/CommonRoomComponents/locked_access_door.tscn" id="4_iy0ho"]
 [ext_resource type="Script" uid="uid://bwg3jvu3db8xy" path="res://Scripts/door_trigger.gd" id="5_ahjjv"]
+[ext_resource type="PackedScene" uid="uid://scnrv60doh5o" path="res://Scenes/Components/down_vertical_room_transistion_tool.tscn" id="6_dhtb3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dhtb3"]
 size = Vector2(136.66675, 255.33334)
@@ -46,5 +47,8 @@ function_to_call = "try_open_door"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LockedAccessDoor/Area2D" unique_id=101222264]
 position = Vector2(-245.66675, -32.33333)
 shape = SubResource("RectangleShape2D_dhtb3")
+
+[node name="DownVerticalRoomTransistionTool" parent="." unique_id=1458139970 instance=ExtResource("6_dhtb3")]
+position = Vector2(576, 4632)
 
 [connection signal="body_entered" from="LockedAccessDoor/Area2D" to="LockedAccessDoor/Area2D" method="_on_body_entered"]

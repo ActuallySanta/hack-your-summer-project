@@ -10,4 +10,7 @@ func move_to_next_door() -> void:
 		$CollisionShape2D.position.x = x_positions[ _curr_door ]
 		return
 	
+	clear_colliders()
+
+func clear_colliders() -> void:
 	$CollisionShape2D.queue_free()

@@ -1,0 +1,155 @@
+[gd_scene format=3 uid="uid://scnrv60doh5o"]
+
+[ext_resource type="Script" uid="uid://b18y8t76v22lu" path="res://Scripts/BehaviorAdjustments/down_vertical_room_transistion_tool.gd" id="1_xeawc"]
+[ext_resource type="Texture2D" uid="uid://bojnpiiamxek3" path="res://Textures/PropsAndBackgrounds/VertDoor.png" id="2_rss4r"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pj83k"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rss4r"]
+atlas = ExtResource("2_rss4r")
+region = Rect2(0, 0, 16, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_up3f7"]
+atlas = ExtResource("2_rss4r")
+region = Rect2(16, 0, 16, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5s05l"]
+atlas = ExtResource("2_rss4r")
+region = Rect2(32, 0, 16, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qkxln"]
+atlas = ExtResource("2_rss4r")
+region = Rect2(48, 0, 16, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j0ihy"]
+atlas = ExtResource("2_rss4r")
+region = Rect2(64, 0, 16, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_30s0l"]
+atlas = ExtResource("2_rss4r")
+region = Rect2(80, 0, 16, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gqsl5"]
+atlas = ExtResource("2_rss4r")
+region = Rect2(80, 0, 16, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cvesi"]
+atlas = ExtResource("2_rss4r")
+region = Rect2(64, 0, 16, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_acknq"]
+atlas = ExtResource("2_rss4r")
+region = Rect2(48, 0, 16, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yw24l"]
+atlas = ExtResource("2_rss4r")
+region = Rect2(32, 0, 16, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g05nl"]
+atlas = ExtResource("2_rss4r")
+region = Rect2(16, 0, 16, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1gugy"]
+atlas = ExtResource("2_rss4r")
+region = Rect2(0, 0, 16, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iwfew"]
+atlas = ExtResource("2_rss4r")
+region = Rect2(80, 0, 16, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_5s05l"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rss4r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_up3f7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5s05l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qkxln")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j0ihy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_30s0l")
+}],
+"loop": false,
+"name": &"DoorClose",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gqsl5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cvesi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_acknq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yw24l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g05nl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1gugy")
+}],
+"loop": false,
+"name": &"DoorOpen",
+"speed": 40.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iwfew")
+}],
+"loop": false,
+"name": &"Idle",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rss4r"]
+size = Vector2(192, 20)
+
+[node name="DownVerticalRoomTransistionTool" type="Node2D" unique_id=847027462]
+script = ExtResource("1_xeawc")
+
+[node name="InitialQuadrant" type="Area2D" parent="." unique_id=1967869062]
+scale = Vector2(9.6, 7.2)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InitialQuadrant" unique_id=1384471098]
+shape = SubResource("RectangleShape2D_pj83k")
+
+[node name="BalanceQuadrant" type="Area2D" parent="." unique_id=332717460]
+position = Vector2(0, -82)
+scale = Vector2(9.6, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BalanceQuadrant" unique_id=983930812]
+position = Vector2(0, 24.000002)
+scale = Vector2(1, 13)
+shape = SubResource("RectangleShape2D_pj83k")
+
+[node name="Door" type="AnimatedSprite2D" parent="." unique_id=2022558742]
+position = Vector2(0, -51)
+rotation = 1.5707964
+scale = Vector2(3, 3)
+sprite_frames = SubResource("SpriteFrames_5s05l")
+animation = &"DoorClose"
+autoplay = "Idle"
+flip_v = true
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=906614097]
+
+[node name="LockedDoorCollider" type="CollisionShape2D" parent="StaticBody2D" unique_id=1584276826]
+position = Vector2(0, -62)
+shape = SubResource("RectangleShape2D_rss4r")
+
+[connection signal="body_entered" from="InitialQuadrant" to="." method="_on_initial_quadrant_body_entered"]
+[connection signal="body_exited" from="InitialQuadrant" to="." method="_on_initial_quadrant_body_exited"]
+[connection signal="body_exited" from="BalanceQuadrant" to="." method="_on_balance_quadrant_body_exited"]

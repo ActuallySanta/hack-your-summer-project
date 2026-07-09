@@ -4,7 +4,6 @@
 [ext_resource type="PackedScene" uid="uid://cdsjsvuyovomn" path="res://Scenes/tile_map_for_rooms.tscn" id="2_pmwsv"]
 [ext_resource type="TileSet" uid="uid://hkvfy5by8aqr" path="res://Tileset/Main_Level.tres" id="3_xu5t0"]
 [ext_resource type="PackedScene" uid="uid://c57qdtweo2yu6" path="res://Scenes/Components/up_vertical_room_transition_tool.tscn" id="4_xu5t0"]
-[ext_resource type="PackedScene" uid="uid://scnrv60doh5o" path="res://Scenes/Components/down_vertical_room_transistion_tool.tscn" id="5_6t7fc"]
 
 [node name="LabsRS" type="Node2D" unique_id=1113987352]
 
@@ -32,9 +31,3 @@ tile_set = ExtResource("3_xu5t0")
 
 [node name="UpVerticalRoomTransitionTool" parent="." unique_id=1520149205 instance=ExtResource("4_xu5t0")]
 position = Vector2(576, 72)
-
-[node name="UpVerticalRoomTransitionTool2" parent="." unique_id=1347926013 instance=ExtResource("4_xu5t0")]
-position = Vector2(2880, 72)
-
-[node name="DownVerticalRoomTransistionTool" parent="." unique_id=847027462 instance=ExtResource("5_6t7fc")]
-position = Vector2(1728, 600)
