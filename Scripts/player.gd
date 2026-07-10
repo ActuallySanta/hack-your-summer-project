@@ -58,6 +58,7 @@ enum MoveState{
 }
 
 var playerMoveState: MoveState
+var previousMoveState: MoveState
 
 var anim_moving : bool
 var anim_jumping : bool
@@ -68,6 +69,7 @@ var anim_fire : bool
 
 @onready var jetpack: Sprite2D = $JetpackAsset
 @onready var sprite : Sprite2D = $Character
+@onready var collisionManager: Node = $CollisionManager
 
 func _ready() -> void:
 	PlayerManager.player = self
@@ -77,6 +79,7 @@ func _ready() -> void:
 	ItemCollectionTooling.item_collected.connect(handle_item_aquisition)
 	jetpack.jetpack_updated.connect(do_jetpack_logic)
 	disable_item(jetpack)
+	playerMoveState = MoveState.Standing
 
 func _move_player_pos(pos: Vector2) -> void:
 	position = pos
@@ -200,8 +203,22 @@ func set_anim_move_state(moveState: MoveState, moving: bool) -> void:
 		MoveState.Knockback:
 			anim_hurt = true
 
+func translate_state() -> CollisionManager.State:
+	if playerMoveState == MoveState.Standing or playerMoveState == MoveState.Climbing or playerMoveState == MoveState.Knockback:
+		return CollisionManager.State.WALK
+	elif playerMoveState == MoveState.Jumping:
+		return CollisionManager.State.AIR
+	elif playerMoveState == MoveState.Crouching:
+		return CollisionManager.State.CROUCH
+	
+	return CollisionManager.State.WALK
+
 func _physics_process(delta: float) -> void:
+	previousMoveState = playerMoveState
 	playerMoveState = determine_move_state()
+	
+	if previousMoveState != playerMoveState:
+		collisionManager.swap_active_collision( translate_state() )
 	
 	handle_jump_and_gravity(delta)
 	

@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://ne13j5tl7gbr" path="res://Scenes/UI/player_hud.tscn" id="8_od3ui"]
 [ext_resource type="Texture2D" uid="uid://c8km3q4omapxt" path="res://Sprites/Main Character Crawl.png" id="8_tx1dd"]
 [ext_resource type="Texture2D" uid="uid://btpjpn1y6y23a" path="res://Sprites/character_swing.png" id="9_tx1dd"]
+[ext_resource type="Script" uid="uid://crhoj1q6iw1an" path="res://Scripts/Player/player_collision_manager.gd" id="10_gymyn"]
 [ext_resource type="PackedScene" uid="uid://cfpoti64f7omn" path="res://Scenes/Entities/jetpack_asset.tscn" id="10_tx1dd"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_f1ek2"]
@@ -257,7 +258,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("CollisionShape2D:rotation")
+tracks/2/path = NodePath("WalkingCollision:rotation")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -269,7 +270,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("CollisionShape2D:position")
+tracks/3/path = NodePath("WalkingCollision:position")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -341,7 +342,7 @@ tracks/8/keys = {
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("CollisionShape2D:shape:height")
+tracks/9/path = NodePath("WalkingCollision:shape:height")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
@@ -475,7 +476,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("CollisionShape2D:rotation")
+tracks/1/path = NodePath("WalkingCollision:rotation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -487,7 +488,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("CollisionShape2D:position")
+tracks/2/path = NodePath("WalkingCollision:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -571,7 +572,7 @@ tracks/8/keys = {
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("CollisionShape2D:shape:height")
+tracks/9/path = NodePath("WalkingCollision:shape:height")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
@@ -623,7 +624,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("CollisionShape2D:rotation")
+tracks/3/path = NodePath("WalkingCollision:rotation")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -635,7 +636,7 @@ tracks/3/keys = {
 tracks/4/type = "value"
 tracks/4/imported = false
 tracks/4/enabled = true
-tracks/4/path = NodePath("CollisionShape2D:position")
+tracks/4/path = NodePath("WalkingCollision:position")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
@@ -647,7 +648,7 @@ tracks/4/keys = {
 tracks/5/type = "value"
 tracks/5/imported = false
 tracks/5/enabled = true
-tracks/5/path = NodePath("CollisionShape2D:shape:height")
+tracks/5/path = NodePath("WalkingCollision:shape:height")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
@@ -723,7 +724,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("CollisionShape2D:position")
+tracks/1/path = NodePath("WalkingCollision:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -735,7 +736,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("CollisionShape2D:rotation")
+tracks/2/path = NodePath("WalkingCollision:rotation")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -747,7 +748,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("CollisionShape2D:shape:height")
+tracks/3/path = NodePath("WalkingCollision:shape:height")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -1213,12 +1214,15 @@ _data = {
 &"swing_standing": SubResource("Animation_gymyn")
 }
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_tx1dd"]
-radius = 32.0
-
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tx1dd"]
 radius = 24.0
 height = 90.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gymyn"]
+size = Vector2(51, 20)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_tx1dd"]
+radius = 32.0
 
 [node name="Player" type="CharacterBody2D" unique_id=862395343 groups=["player"]]
 z_index = 5
@@ -1266,12 +1270,20 @@ libraries/ = SubResource("AnimationLibrary_gymyn")
 
 [node name="Player HUD" parent="CanvasLayer" unique_id=890844106 instance=ExtResource("8_od3ui")]
 
+[node name="CollisionManager" type="Node" parent="." unique_id=1753210868]
+script = ExtResource("10_gymyn")
+
+[node name="WalkingCollision" type="CollisionShape2D" parent="." unique_id=973966651]
+shape = SubResource("CapsuleShape2D_tx1dd")
+
+[node name="CrouchCollision" type="CollisionShape2D" parent="." unique_id=684077052]
+position = Vector2(-1.5, 35)
+shape = SubResource("RectangleShape2D_gymyn")
+disabled = true
+
 [node name="JumpCollision" type="CollisionShape2D" parent="." unique_id=931990881]
 shape = SubResource("CircleShape2D_tx1dd")
 disabled = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=973966651]
-shape = SubResource("CapsuleShape2D_tx1dd")
 
 [node name="JetpackAsset" parent="." unique_id=261087070 instance=ExtResource("10_tx1dd")]
 max_speed = 30.0
