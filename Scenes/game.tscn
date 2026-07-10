@@ -2,11 +2,15 @@
 
 [ext_resource type="Script" uid="uid://bo6qgt11s8q53" path="res://Scripts/game.gd" id="1_ebmjs"]
 [ext_resource type="PackedScene" uid="uid://dohmyoeiilp0v" path="res://Scenes/player.tscn" id="2_qxrlw"]
+[ext_resource type="PackedScene" uid="uid://c4thct0jgtock" path="res://Scenes/game_hud.tscn" id="3_wrm1d"]
 
 [node name="Game" type="Node" unique_id=651801150]
 script = ExtResource("1_ebmjs")
+artificial_load_time = 1.0
 
 [node name="Player" parent="." unique_id=862395343 instance=ExtResource("2_qxrlw")]
 position = Vector2(2493, 399)
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1429657112]
+
+[node name="HUD" parent="." unique_id=98304293 instance=ExtResource("3_wrm1d")]

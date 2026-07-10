@@ -1252,7 +1252,7 @@ parameters/StandardMovement/Move/MoveState/transition_request = "Stand"
 parameters/StandardMovement/Move/MoveState/current_index = -1
 
 [node name="Character" type="Sprite2D" parent="." unique_id=295087923]
-position = Vector2(0, -1)
+position = Vector2(0, -3)
 scale = Vector2(3, 3)
 texture = ExtResource("1_pv8u5")
 hframes = 8
@@ -1273,6 +1273,7 @@ position = Vector2(-13, 16)
 scale = Vector2(0.01, 0.01)
 
 [node name="JetpackAsset" parent="." unique_id=261087070 instance=ExtResource("10_tx1dd")]
+visible = false
 max_speed = 30.0
 
 [connection signal="hit" from="Hurtbox" to="." method="_on_hit"]

@@ -268,6 +268,15 @@ func set_shoot_input() -> void:
 func unset_shoot_input() -> void:
 	_shootBufferTimer = 0
 
+func reset_all_inputs() -> void:
+	_moveInput = 0
+	_vertMoveInput = 0
+	_crouchInput = 0
+	_climbInput = 0
+	unset_jump_input()
+	unset_attack_input()
+	unset_shoot_input()
+
 func handle_inputs() -> void:
 	if(!PlayerManager.canMove or _currentHealth <= 0): return
 	
@@ -313,9 +322,7 @@ func die() -> void:
 	_invulnTimer = 0
 	anim_death = true
 	_deathRespawnTimer = deathRespawnDelay
-	unset_attack_input()
-	unset_jump_input()
-	unset_shoot_input()
+	reset_all_inputs()
 	_moveInput = 0
 
 func respawn() -> void:
