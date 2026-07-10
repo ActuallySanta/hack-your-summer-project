@@ -1,5 +1,6 @@
 [gd_resource type="Resource" format=3 uid="uid://cxatpkw85751l"]
 
+[ext_resource type="Script" uid="uid://3tfxltpsrr1c" path="res://addons/MetroidvaniaSystem/Scripts/CustomElementManager.gd" id="1_3kt0x"]
 [ext_resource type="Script" uid="uid://orxlanqpgccv" path="res://addons/MetroidvaniaSystem/Scripts/Settings.gd" id="1_ui0vk"]
 [ext_resource type="Resource" uid="uid://cua5dfmrbmlho" path="res://addons/MetroidvaniaSystem/Themes/MF/Theme.tres" id="2_ui0vk"]
 
@@ -7,3 +8,4 @@
 script = ExtResource("1_ui0vk")
 theme = ExtResource("2_ui0vk")
 in_game_cell_size = Vector2(1152, 672)
+custom_element_script = ExtResource("1_3kt0x")

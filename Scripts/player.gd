@@ -2,6 +2,7 @@ class_name Player
 extends CharacterBody2D
 
 signal pickup_collected(pickup : Pickup)
+signal save_station_used()
 
 ## Get animationtree ##
 @onready var animator: AnimationTree = $AnimationTree

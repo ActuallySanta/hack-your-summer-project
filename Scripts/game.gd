@@ -11,6 +11,7 @@ const SaveManager = preload("res://addons/MetroidvaniaSystem/Template/Scripts/Sa
 
 @export var cameraDeadzone := Vector2(0, 0)
 @export var artificial_load_time := 2.0
+@export var allow_save_anywhere := false
 @export var use_custom_save := false
 @export_file var save_room := START_ROOM_UID
 @export var save_pos := Vector2(3000, 483)
@@ -31,6 +32,7 @@ func _init_metsys_and_objects() -> void:
 	add_module("RoomTransitions.gd")
 	MetSys.room_changed.connect(_on_room_changed)
 	_player.pickup_collected.connect(_on_pickup_collected)
+	_player.save_station_used.connect(save_game.bind(0))
 	#prevent player from acting while game is loading
 	_player.process_mode = Node.PROCESS_MODE_DISABLED
 	_player.reset_all_inputs()
@@ -91,7 +93,7 @@ func _process(_delta: float) -> void:
 		camPos.y = playerPos.y + (cameraDeadzone.y * sign(posDiff.y))
 	_camera.position = camPos
 	
-	if Input.is_action_just_pressed(&"debug_save"):
+	if allow_save_anywhere and Input.is_action_just_pressed(&"debug_save"):
 		save_game(0)
 
 #Add any other variables you need as you save them, they will be saved as a dictionary
