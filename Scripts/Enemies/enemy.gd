@@ -15,6 +15,7 @@ const SPEED:float = 50
 @onready var target_location_check: RayCast2D = $"Target Location Check"
 @onready var bt_player: BTPlayer = $BTPlayer
 @onready var hurtbox: Hurtbox = $Hurtbox
+@onready var ground_check: ShapeCast2D = $GroundCheck
 
 var isFlipped : bool
 
@@ -41,7 +42,14 @@ func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 	
+
+	
 	if(bt_player.blackboard.get_var("state") != "hurt"):
+		if(ground_check.get_collision_count() == 0):
+			update_flip(scale.x*-1) #flip the enemy
+			bt_player.blackboard.set_var("state","idle")
+			bt_player.restart()
+			
 		if(player_detection_check.collision_result.find(playerReference)):
 			if(player_obstruction_check.is_colliding() && player_obstruction_check.get_collider() == playerReference):
 				bt_player.blackboard.set_var("state","attacking")
