@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://cdsjsvuyovomn" path="res://Scenes/tile_map_for_rooms.tscn" id="2_0y821"]
 [ext_resource type="TileSet" uid="uid://hkvfy5by8aqr" path="res://Tileset/Main_Level.tres" id="3_dvpyl"]
 [ext_resource type="PackedScene" uid="uid://b1ujnmnbsxx87" path="res://Scenes/Rooms/CommonRoomComponents/access_button.tscn" id="4_erku7"]
+[ext_resource type="PackedScene" uid="uid://b2ibnxde1hrva" path="res://Scenes/Enemies/ranged_enemy.tscn" id="5_fbigq"]
 
 [node name="TheaterCQ" type="Node2D" unique_id=552063030]
 
@@ -37,3 +38,6 @@ z_index = 10
 scale = Vector2(1.5, 1.5)
 tile_map_data = PackedByteArray("AAAsABAABAAIAAAAAAAsABEABAAIAAEAAAAsABIABAAIAAIAAAAsABMABAAIAAMAAAAsABQABAAIAAQAAAAsABUABAAIAAUAAAAtABAABAAJAAAAAAAtABEABAAJAAEAAAAtABIABAAJAAIAAAAtABMABAAJAAMAAAAtABQABAAJAAQAAAAtABUABAAJAAUAAAAuABAABAAKAAAAAAAuABEABAAKAAEAAAAuABIABAAKAAIAAAAuABMABAAKAAMAAAAuABQABAAKAAQAAAAuABUABAAKAAUAAAAvABAABAALAAAAAAAvABEABAALAAEAAAAvABIABAALAAIAAAAvABMABAALAAMAAAAvABQABAALAAQAAAAvABUABAALAAUAAAA=")
 tile_set = ExtResource("3_dvpyl")
+
+[node name="Ranged Enemy" parent="." unique_id=1835408748 instance=ExtResource("5_fbigq")]
+position = Vector2(390, 465)

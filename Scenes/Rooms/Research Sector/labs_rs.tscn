@@ -5,6 +5,8 @@
 [ext_resource type="TileSet" uid="uid://hkvfy5by8aqr" path="res://Tileset/Main_Level.tres" id="3_xu5t0"]
 [ext_resource type="PackedScene" uid="uid://c57qdtweo2yu6" path="res://Scenes/Components/up_vertical_room_transition_tool.tscn" id="4_xu5t0"]
 [ext_resource type="PackedScene" uid="uid://scnrv60doh5o" path="res://Scenes/Components/down_vertical_room_transistion_tool.tscn" id="5_6t7fc"]
+[ext_resource type="PackedScene" uid="uid://41tgjv6lxsko" path="res://Scenes/Enemies/melee_enemy.tscn" id="6_vowvw"]
+[ext_resource type="PackedScene" uid="uid://b2ibnxde1hrva" path="res://Scenes/Enemies/ranged_enemy.tscn" id="7_al8kp"]
 
 [node name="LabsRS" type="Node2D" unique_id=1113987352]
 
@@ -38,3 +40,12 @@ position = Vector2(2880, 72)
 
 [node name="DownVerticalRoomTransistionTool" parent="." unique_id=847027462 instance=ExtResource("5_6t7fc")]
 position = Vector2(1728, 600)
+
+[node name="Ranged Enemy" parent="." unique_id=274296091 instance=ExtResource("7_al8kp")]
+position = Vector2(869, 187)
+
+[node name="Ranged Enemy2" parent="." unique_id=1835408748 instance=ExtResource("7_al8kp")]
+position = Vector2(2411, 220)
+
+[node name="Melee Enemy" parent="." unique_id=2102280279 instance=ExtResource("6_vowvw")]
+position = Vector2(227, 469)

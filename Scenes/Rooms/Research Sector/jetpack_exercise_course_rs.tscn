@@ -4,6 +4,8 @@
 [ext_resource type="PackedScene" uid="uid://cdsjsvuyovomn" path="res://Scenes/tile_map_for_rooms.tscn" id="2_us7qg"]
 [ext_resource type="TileSet" uid="uid://hkvfy5by8aqr" path="res://Tileset/Main_Level.tres" id="3_a7upy"]
 [ext_resource type="PackedScene" uid="uid://b1ujnmnbsxx87" path="res://Scenes/Rooms/CommonRoomComponents/access_button.tscn" id="4_a7upy"]
+[ext_resource type="PackedScene" uid="uid://41tgjv6lxsko" path="res://Scenes/Enemies/melee_enemy.tscn" id="5_fcrum"]
+[ext_resource type="PackedScene" uid="uid://b2ibnxde1hrva" path="res://Scenes/Enemies/ranged_enemy.tscn" id="6_bdjya"]
 
 [node name="JetpackExerciseCourseRS" type="Node2D" unique_id=374256645]
 
@@ -32,3 +34,27 @@ z_index = 10
 scale = Vector2(1.5, 1.5)
 tile_map_data = PackedByteArray("AAAsAEgABAAMAAAAAAAsAEkABAAMAAEAAAAsAEoABAAMAAIAAAAsAEsABAAMAAMAAAAsAEwABAAMAAQAAAAsAE0ABAAMAAUAAAAtAEgABAANAAAAAAAtAEkABAANAAEAAAAtAEoABAANAAIAAAAtAEsABAANAAMAAAAtAEwABAANAAQAAAAtAE0ABAANAAUAAAAuAEgABAAOAAAAAAAuAEkABAAOAAEAAAAuAEoABAAOAAIAAAAuAEsABAAOAAMAAAAuAEwABAAOAAQAAAAuAE0ABAAOAAUAAAAvAEgABAAPAAAAAAAvAEkABAAPAAEAAAAvAEoABAAPAAIAAAAvAEsABAAPAAMAAAAvAEwABAAPAAQAAAAvAE0ABAAPAAUAAAA=")
 tile_set = ExtResource("3_a7upy")
+
+[node name="Melee Enemy" parent="." unique_id=1835408748 instance=ExtResource("5_fcrum")]
+position = Vector2(316, 1103)
+
+[node name="Melee Enemy2" parent="." unique_id=1961732465 instance=ExtResource("5_fcrum")]
+position = Vector2(847, 1100)
+
+[node name="Melee Enemy3" parent="." unique_id=492781452 instance=ExtResource("5_fcrum")]
+position = Vector2(316, 1582)
+
+[node name="Melee Enemy4" parent="." unique_id=1086541811 instance=ExtResource("5_fcrum")]
+position = Vector2(842, 1580)
+
+[node name="Melee Enemy5" parent="." unique_id=1229887832 instance=ExtResource("5_fcrum")]
+position = Vector2(313, 620)
+
+[node name="Melee Enemy6" parent="." unique_id=455976378 instance=ExtResource("5_fcrum")]
+position = Vector2(841, 620)
+
+[node name="Ranged Enemy" parent="." unique_id=1032063645 instance=ExtResource("6_bdjya")]
+position = Vector2(580, 1287)
+
+[node name="Ranged Enemy2" parent="." unique_id=2140156156 instance=ExtResource("6_bdjya")]
+position = Vector2(578, 814)
