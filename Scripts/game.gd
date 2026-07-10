@@ -2,7 +2,7 @@ class_name GameManager
 extends "res://addons/MetroidvaniaSystem/Template/Scripts/MetSysGame.gd"
 
 const START_ROOM_UID = "uid://esk4fom87pxl" #Cryo Room
-const START_POS = Vector2(3000, 483)
+const START_POS = Vector2(1000, 483)
 const SaveManager = preload("res://addons/MetroidvaniaSystem/Template/Scripts/SaveManager.gd")
 
 @onready var _camera : Camera2D = $Camera2D
@@ -11,16 +11,21 @@ const SaveManager = preload("res://addons/MetroidvaniaSystem/Template/Scripts/Sa
 
 @export var cameraDeadzone := Vector2(0, 0)
 @export var artificial_load_time := 2.0
+@export var use_custom_save := false
+@export_file var save_room := START_ROOM_UID
+@export var save_pos := Vector2(3000, 483)
+@export var save_has_jetpack : bool
 
 var save
 
 func _ready() -> void:
+	_hud.show_load_screen()
 	_init_metsys_and_objects()
 	await _load_game()
+	_hud.hide_load_screen()
 
 #initialize metsys and its modules
 func _init_metsys_and_objects() -> void:
-	_hud.show_load_screen()
 	MetSys.reset_state()
 	set_player(_player)
 	add_module("RoomTransitions.gd")
@@ -36,8 +41,12 @@ func _load_game() -> void:
 	# but if there's no save data (i.e. it's a fresh save), that won't happen
 	# so set empty save data first to make sure there's at least something
 	MetSys.set_save_data()
-	save = SaveManager.new()
-	save.load_from_text(get_save_path(0))
+	if use_custom_save:
+		_load_custom_save()
+	else:
+		save = SaveManager.new()
+		save.load_from_text(get_save_path(0))
+		
 	if save.get_value("jetpack_collected", false):
 		_player.enable_jetpack()
 	else:
@@ -48,7 +57,13 @@ func _load_game() -> void:
 	_player.process_mode = Node.PROCESS_MODE_INHERIT
 	print("Finish load")
 	await get_tree().create_timer(artificial_load_time).timeout
-	_hud.hide_load_screen()
+
+func _load_custom_save() -> void:
+	save = SaveManager.new()
+	if save_room:
+		save.set_value("current_room", save_room)
+	save.set_value("player_pos", save_pos)
+	save.set_value("jetpack_collected", save_has_jetpack)
 
 func get_save_path(save_index: int) -> StringName:
 	return "user://save" + str(save_index) +".sav"
