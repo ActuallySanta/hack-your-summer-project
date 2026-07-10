@@ -7,8 +7,8 @@
 [ext_resource type="PackedScene" uid="uid://djmeyycufny61" path="res://Scenes/Components/Hurtbox.tscn" id="4_00tjw"]
 [ext_resource type="Texture2D" uid="uid://bqj73yi85o2dx" path="res://Sprites/Main Character Climb.png" id="7_f1ek2"]
 [ext_resource type="PackedScene" uid="uid://ne13j5tl7gbr" path="res://Scenes/UI/player_hud.tscn" id="8_od3ui"]
-[ext_resource type="PackedScene" uid="uid://c214glttpaw83" path="res://Scenes/UI/player_health.tscn" id="9_f1ek2"]
 [ext_resource type="Texture2D" uid="uid://c8km3q4omapxt" path="res://Sprites/Main Character Crawl.png" id="8_tx1dd"]
+[ext_resource type="PackedScene" uid="uid://c214glttpaw83" path="res://Scenes/UI/player_health.tscn" id="9_f1ek2"]
 [ext_resource type="Texture2D" uid="uid://btpjpn1y6y23a" path="res://Sprites/character_swing.png" id="9_tx1dd"]
 [ext_resource type="PackedScene" uid="uid://cfpoti64f7omn" path="res://Scenes/Entities/jetpack_asset.tscn" id="10_tx1dd"]
 
@@ -1226,21 +1226,10 @@ moveSpeed = 400.0
 crouchSpeedMult = 0.35
 climbingSpeed = 250
 jumpForce = 950.0
-jumpBufferTime = null
-coyoteTime = null
-baseHealth = null
-attackCooldown = null
-attackBufferTime = null
 swingOffset = 80.0
 swingScene = ExtResource("2_vtle1")
-shootCooldown = null
-shootBufferTime = null
-bulletOffset = null
 bulletScene = ExtResource("3_od3ui")
-hitInvulnTime = null
-invulnBlinkInterval = null
 knockbackDI = 400.0
-deathRespawnDelay = null
 
 [node name="Hurtbox" parent="." unique_id=470143312 instance=ExtResource("4_00tjw")]
 collision_layer = 2

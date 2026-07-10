@@ -36,3 +36,6 @@ func _on_body_entered(body: Node2D) -> void:
 		print("Storing pickup " + MetSys.get_object_id(self))
 		MetSys.store_object(self)
 	queue_free()
+
+func get_type_as_str() -> StringName:
+	return PickupType.find_key(type)
