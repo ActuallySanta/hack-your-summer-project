@@ -25,6 +25,7 @@ GlobalSignals="*uid://bac60hesolscg"
 SceneLoader="*uid://bdtr22633bwcl"
 ItemCollectionTooling="*uid://dufcsaf2fngyk"
 LimboConsole="*uid://dyxornv8vwibg"
+MusicManager="*uid://d0sejejpytdhi"
 
 [display]
 

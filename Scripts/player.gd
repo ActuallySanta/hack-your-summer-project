@@ -71,6 +71,8 @@ var anim_death : bool
 var anim_swing : bool
 var anim_fire : bool
 
+var previous_cell_Group := "None"
+
 @onready var jetpack: Sprite2D = $JetpackAsset
 @onready var sprite : Sprite2D = $Character
 @onready var collisionManager: Node = $CollisionManager
@@ -216,6 +218,9 @@ func translate_state() -> CollisionManager.State:
 	
 	return CollisionManager.State.WALK
 
+func on_cell_group_change(new_group: String) -> void:
+	MusicManager.set_background_track(new_group)
+
 func _physics_process(delta: float) -> void:
 	previousMoveState = playerMoveState
 	playerMoveState = determine_move_state()
@@ -257,6 +262,15 @@ func _physics_process(delta: float) -> void:
 		$Character.flip_h = false  # Facing Right
 	elif _moveInput < 0:
 		$Character.flip_h = true   # Facing Left
+
+	var groups = MetSys.get_cell_groups( MetSys.get_current_coords() )
+	if groups.size() == 0:
+		return
+	var group_id = groups[0]
+	var group = MetSys.get_group_name( group_id )
+	if group  != previous_cell_Group:
+		on_cell_group_change(group)
+		previous_cell_Group = group
 
 func set_jump_input() -> void:
 	_jumpBufferTimer = jumpBufferTime
