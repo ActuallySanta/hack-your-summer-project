@@ -167,7 +167,7 @@ func determine_move_state() -> MoveState:
 	if is_on_wall() and _climbInput:
 		return MoveState.Climbing
 	
-	if !is_on_floor():
+	if !is_on_floor() and _coyoteTimer <= 0:
 		return MoveState.Jumping
 	
 	if _crouchInput:
