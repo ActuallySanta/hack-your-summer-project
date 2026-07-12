@@ -6,7 +6,6 @@
 [ext_resource type="PackedScene" uid="uid://jammv02ygc7v" path="res://Scenes/player_bullet.tscn" id="3_od3ui"]
 [ext_resource type="PackedScene" uid="uid://djmeyycufny61" path="res://Scenes/Components/Hurtbox.tscn" id="4_00tjw"]
 [ext_resource type="Texture2D" uid="uid://bqj73yi85o2dx" path="res://Sprites/Main Character Climb.png" id="7_f1ek2"]
-[ext_resource type="PackedScene" uid="uid://ne13j5tl7gbr" path="res://Scenes/UI/player_hud.tscn" id="8_od3ui"]
 [ext_resource type="Texture2D" uid="uid://c8km3q4omapxt" path="res://Sprites/Main Character Crawl.png" id="8_tx1dd"]
 [ext_resource type="PackedScene" uid="uid://c214glttpaw83" path="res://Scenes/UI/player_health.tscn" id="9_f1ek2"]
 [ext_resource type="Texture2D" uid="uid://btpjpn1y6y23a" path="res://Sprites/character_swing.png" id="9_tx1dd"]
@@ -1267,10 +1266,6 @@ vframes = 9
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=480447104]
 libraries/ = SubResource("AnimationLibrary_gymyn")
-
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1087993730]
-
-[node name="Player HUD" parent="CanvasLayer" unique_id=890844106 instance=ExtResource("8_od3ui")]
 
 [node name="CollisionManager" type="Node" parent="." unique_id=1753210868]
 script = ExtResource("10_gymyn")
