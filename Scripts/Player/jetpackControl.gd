@@ -20,7 +20,7 @@ func _process(delta: float) -> void:
 	
 	texture = ACTIVE if is_on else IDLE
 	_was_on = is_on
-	
+		
 	if is_on:
 		turn_jetpack_on()
 	else:
