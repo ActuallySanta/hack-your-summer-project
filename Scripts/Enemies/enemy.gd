@@ -6,7 +6,6 @@ const SPEED:float = 50
 @export var attackCooldown: float = 1.5
 @export var wanderDistance : float = 50.0
 @export var stunDuration : float = 2.5
-
 @onready var mainScene : Node = get_tree().current_scene
 @onready var visual: Sprite2D = $Visual
 @onready var player_detection_check: ShapeCast2D = $"Player Detection Check"
@@ -15,6 +14,9 @@ const SPEED:float = 50
 @onready var target_location_check: RayCast2D = $"Target Location Check"
 @onready var bt_player: BTPlayer = $BTPlayer
 @onready var hurtbox: Hurtbox = $Hurtbox
+@onready var ground_check: ShapeCast2D = $GroundCheck
+@onready var physics_body: CollisionShape2D = $"Physics Body"
+@onready var target_range_check: ShapeCast2D = $"Target Range Check"
 
 var isFlipped : bool
 
@@ -41,10 +43,22 @@ func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 	
+
+	
 	if(bt_player.blackboard.get_var("state") != "hurt"):
+		if(ground_check.get_collision_count() == 0):
+			update_flip(scale.x*-1) #flip the enemy
+			bt_player.blackboard.set_var("state","idle")
+			bt_player.restart()
+			
+		#If the player can see the enemy
 		if(player_detection_check.collision_result.find(playerReference)):
+			#And the player is not obstructed
 			if(player_obstruction_check.is_colliding() && player_obstruction_check.get_collider() == playerReference):
-				bt_player.blackboard.set_var("state","attacking")
+				if(target_range_check.collision_result.find(playerReference)):
+					bt_player.blackboard.set_var("state","attacking")
+				else:
+					bt_player.blackboard.set_var("state","chasing")
 				bt_player.restart()
 			else:
 				bt_player.blackboard.set_var("state","patrolling")
@@ -57,9 +71,9 @@ func getValidPos() -> Vector2:
 	target_location_check.target_position.x = currWanderDistance
 	
 	var collisionPoint:Vector2 = target_location_check.get_collision_point()
-	
+	var collisionWidth = (physics_body.shape as CapsuleShape2D).radius
 	if(target_location_check.is_colliding()):
-		return  collisionPoint + collisionPoint.direction_to(position)
+		return  collisionPoint + (collisionPoint.direction_to(position)* collisionWidth/2)
 	else:
 		return Vector2(position.x + currWanderDistance,position.y)
 	

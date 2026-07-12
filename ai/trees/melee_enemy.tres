@@ -1,6 +1,7 @@
 [gd_resource type="BehaviorTree" format=3 uid="uid://d1xmalrj37niq"]
 
 [ext_resource type="Script" uid="uid://q3siycoeq6oo" path="res://ai/tasks/get_hurt.gd" id="1_qcf87"]
+[ext_resource type="Script" uid="uid://mskj25u3nnh8" path="res://ai/tasks/get_target_pos.gd" id="2_mlqlw"]
 [ext_resource type="Script" uid="uid://be1l2we8eqoly" path="res://ai/tasks/get_rand_pos.gd" id="2_uji1f"]
 [ext_resource type="Script" uid="uid://bynkqarx8hbgc" path="res://ai/tasks/move_to_pos.gd" id="3_mlqlw"]
 
@@ -78,6 +79,33 @@ animation_name = &"attack"
 custom_name = "Attack Player"
 children = [SubResource("BTCheckVar_153fj"), SubResource("BTCheckVar_bu68p"), SubResource("BTPlayAnimation_fxqlo"), SubResource("BTAwaitAnimation_bu68p")]
 
+[sub_resource type="BBVariant" id="BBVariant_qcf87"]
+type = 4
+saved_value = "chasing"
+resource_name = "chasing"
+
+[sub_resource type="BTCheckVar" id="BTCheckVar_uji1f"]
+variable = &"state"
+value = SubResource("BBVariant_qcf87")
+
+[sub_resource type="BTAction" id="BTAction_pitpp"]
+script = ExtResource("2_mlqlw")
+
+[sub_resource type="BBNode" id="BBNode_qcf87"]
+saved_value = NodePath("AnimationPlayer")
+resource_name = "AnimationPlayer"
+
+[sub_resource type="BTPlayAnimation" id="BTPlayAnimation_uji1f"]
+animation_player = SubResource("BBNode_qcf87")
+animation_name = &"run"
+
+[sub_resource type="BTAction" id="BTAction_plt0x"]
+script = ExtResource("3_mlqlw")
+
+[sub_resource type="BTSequence" id="BTSequence_qcf87"]
+custom_name = "Chase"
+children = [SubResource("BTCheckVar_uji1f"), SubResource("BTAction_pitpp"), SubResource("BTPlayAnimation_uji1f"), SubResource("BTAction_plt0x")]
+
 [sub_resource type="BBNode" id="BBNode_42kop"]
 saved_value = NodePath("AnimationPlayer")
 resource_name = "AnimationPlayer"
@@ -136,7 +164,7 @@ custom_name = "Idle"
 children = [SubResource("BTSequence_153fj")]
 
 [sub_resource type="BTSelector" id="BTSelector_42kop"]
-children = [SubResource("BTSequence_o5b5o"), SubResource("BTSequence_42kop"), SubResource("BTSequence_0enjg"), SubResource("BTSequence_tfyug")]
+children = [SubResource("BTSequence_o5b5o"), SubResource("BTSequence_42kop"), SubResource("BTSequence_qcf87"), SubResource("BTSequence_0enjg"), SubResource("BTSequence_tfyug")]
 
 [resource]
 blackboard_plan = SubResource("BlackboardPlan_0enjg")

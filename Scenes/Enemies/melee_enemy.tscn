@@ -143,6 +143,12 @@ radius = 450.0
 radius = 39.0
 height = 144.0
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_xxn7r"]
+radius = 20.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_0u8ws"]
+radius = 20.0
+
 [node name="Melee Enemy" type="CharacterBody2D" unique_id=1835408748]
 collision_layer = 4
 script = ExtResource("1_vrdla")
@@ -166,18 +172,15 @@ position = Vector2(-2, -1)
 shape = SubResource("CapsuleShape2D_mgs6e")
 
 [node name="Player Detection Check" type="ShapeCast2D" parent="." unique_id=1092179563]
-visible = false
 shape = SubResource("CircleShape2D_aajnb")
 target_position = Vector2(0, 0)
 collision_mask = 2
 
 [node name="Player Obstruction Check" type="RayCast2D" parent="." unique_id=1481630674]
-visible = false
 target_position = Vector2(450, 0)
 collision_mask = 3
 
 [node name="Target Location Check" type="RayCast2D" parent="." unique_id=240777974]
-visible = false
 target_position = Vector2(150, 0)
 
 [node name="Hurtbox" parent="." unique_id=470143312 instance=ExtResource("19_jgjap")]
@@ -200,5 +203,17 @@ knockback_duration = 0.1
 position = Vector2(93, -27)
 rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_eyhix")
+
+[node name="GroundCheck" type="ShapeCast2D" parent="." unique_id=1523792078]
+position = Vector2(48, 0)
+shape = SubResource("CircleShape2D_xxn7r")
+collide_with_areas = true
+
+[node name="Target Range Check" type="ShapeCast2D" parent="." unique_id=1434664269]
+position = Vector2(48, 22)
+shape = SubResource("CircleShape2D_0u8ws")
+target_position = Vector2(250, 0)
+collision_mask = 2
+collide_with_areas = true
 
 [connection signal="on_hit" from="Melee Hitbox" to="." method="_on_melee_hitbox_on_hit"]

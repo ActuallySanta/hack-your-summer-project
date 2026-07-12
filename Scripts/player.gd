@@ -1,5 +1,9 @@
 class_name Player
 extends CharacterBody2D
+
+signal pickup_collected(pickup : Pickup)
+signal save_station_used()
+
 ## Get animationtree ##
 @onready var animator: AnimationTree = $AnimationTree
 @onready var animPlayback: AnimationNodeStateMachinePlayback = animator.get("parameters/playback")
@@ -76,9 +80,8 @@ func _ready() -> void:
 	_facingRight = true
 	_currentHealth = baseHealth
 	CheckpointEventBus.move_player_position.connect(_move_player_pos)
-	ItemCollectionTooling.item_collected.connect(handle_item_aquisition)
 	jetpack.jetpack_updated.connect(do_jetpack_logic)
-	disable_item(jetpack)
+	disable_jetpack()
 	playerMoveState = MoveState.Standing
 
 func _move_player_pos(pos: Vector2) -> void:
@@ -273,6 +276,15 @@ func set_shoot_input() -> void:
 func unset_shoot_input() -> void:
 	_shootBufferTimer = 0
 
+func reset_all_inputs() -> void:
+	_moveInput = 0
+	_vertMoveInput = 0
+	_crouchInput = 0
+	_climbInput = 0
+	unset_jump_input()
+	unset_attack_input()
+	unset_shoot_input()
+
 func handle_inputs() -> void:
 	if(!PlayerManager.canMove or _currentHealth <= 0): return
 	
@@ -325,13 +337,12 @@ func die() -> void:
 	_invulnTimer = 0
 	anim_death = true
 	_deathRespawnTimer = deathRespawnDelay
-	unset_attack_input()
-	unset_jump_input()
-	unset_shoot_input()
+	reset_all_inputs()
 	_moveInput = 0
 
 func respawn() -> void:
 	_currentHealth = baseHealth
+	GlobalSignals.health_changed.emit(_currentHealth, baseHealth)
 	_deathRespawnTimer = 0
 	anim_death = false
 	CheckpointEventBus.player_needs_to_use_checkpoint.emit()
@@ -341,6 +352,7 @@ func _on_hit(_hurtBox: Hurtbox, hit_info: HitInfo, _source: Hitbox) -> void:
 		return
 	print("Player took damage!")
 	_currentHealth -= hit_info.damage
+	GlobalSignals.health_changed.emit(_currentHealth, baseHealth)
 	_knockbackTimer = hit_info.knockback_duration
 	_knockbackForce = hit_info.knockback_strength / _knockbackTimer
 	_invulnTimer = hitInvulnTime
@@ -349,20 +361,16 @@ func _on_hit(_hurtBox: Hurtbox, hit_info: HitInfo, _source: Hitbox) -> void:
 	if _currentHealth <= 0:
 		die()
 
+func collect(pickup: Pickup) -> bool:
+	print("Collect pickup " + pickup.get_type_as_str())
+	pickup_collected.emit(pickup)
+	return true
+
 func do_jetpack_logic(speed: float):
-	velocity.y -= speed
+	velocity.y -= speed;
 
-func disable_item(item_node: Node):
-	item_node.process_mode = Node.PROCESS_MODE_DISABLED
-	if item_node is CanvasItem:
-		item_node.hide()
+func disable_jetpack() -> void:
+	jetpack.process_mode = Node.PROCESS_MODE_DISABLED
 
-func enable_item(item_node: Node):
-	item_node.process_mode = Node.PROCESS_MODE_INHERIT
-	if item_node is CanvasItem:
-		item_node.show()
-
-func handle_item_aquisition(item_name: String):
-	var item = jetpack if item_name == "Jetpack" else null
-	enable_item(item)
-	pass
+func enable_jetpack() -> void:
+	jetpack.process_mode = Node.PROCESS_MODE_INHERIT
