@@ -119,7 +119,8 @@ input_2/break_loop_at_end = false
 input_2/reset = true
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_gymyn"]
-graph_offset = Vector2(-469.33334, 56)
+graph_offset = Vector2(-546.9342, 116.52814)
+nodes/output/position = Vector2(304, 144)
 nodes/MoveState/node = SubResource("AnimationNodeTransition_qqcod")
 nodes/MoveState/position = Vector2(133.33333, 133.33333)
 nodes/Animation/node = SubResource("AnimationNodeAnimation_fd4e3")
@@ -164,11 +165,11 @@ advance_mode = 2
 states/Idle/node = SubResource("AnimationNodeBlendTree_tx1dd")
 states/Idle/position = Vector2(365.33334, 78.666664)
 states/Move/node = SubResource("AnimationNodeBlendTree_gymyn")
-states/Move/position = Vector2(598, 78)
+states/Move/position = Vector2(598, 78.53333)
 states/jump/node = SubResource("AnimationNodeAnimation_ukyrk")
 states/jump/position = Vector2(462.66666, 204)
 transitions = ["Idle", "Move", SubResource("AnimationNodeStateMachineTransition_7dp3o"), "Move", "Idle", SubResource("AnimationNodeStateMachineTransition_h4iuc"), "Idle", "jump", SubResource("AnimationNodeStateMachineTransition_fd4e3"), "jump", "Idle", SubResource("AnimationNodeStateMachineTransition_qqcod"), "jump", "Move", SubResource("AnimationNodeStateMachineTransition_igrcy"), "Move", "jump", SubResource("AnimationNodeStateMachineTransition_fs7ks"), "Start", "Idle", SubResource("AnimationNodeStateMachineTransition_l6n3p")]
-graph_offset = Vector2(-9, 11)
+graph_offset = Vector2(14, -38)
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_pu2lt"]
 animation = &"death"
@@ -226,7 +227,7 @@ states/death/position = Vector2(665.6666, 99.51996)
 states/knockback/node = SubResource("AnimationNodeAnimation_gymyn")
 states/knockback/position = Vector2(569.3334, 187.82626)
 transitions = ["knockback", "death", SubResource("AnimationNodeStateMachineTransition_vfarp"), "Start", "StandardMovement", SubResource("AnimationNodeStateMachineTransition_wpjfl"), "StandardMovement", "RangedFire", SubResource("AnimationNodeStateMachineTransition_bi64h"), "StandardMovement", "MeleeSwing", SubResource("AnimationNodeStateMachineTransition_2ijsl"), "StandardMovement", "knockback", SubResource("AnimationNodeStateMachineTransition_p1odr"), "knockback", "StandardMovement", SubResource("AnimationNodeStateMachineTransition_0gysh"), "MeleeSwing", "StandardMovement", SubResource("AnimationNodeStateMachineTransition_83xs0"), "RangedFire", "StandardMovement", SubResource("AnimationNodeStateMachineTransition_ypfnu"), "death", "StandardMovement", SubResource("AnimationNodeStateMachineTransition_f1ek2")]
-graph_offset = Vector2(-144, -27.889816)
+graph_offset = Vector2(52, -28.889816)
 
 [sub_resource type="Animation" id="Animation_btcbx"]
 length = 0.001
@@ -1248,15 +1249,15 @@ shape = SubResource("CapsuleShape2D_f1ek2")
 tree_root = SubResource("AnimationNodeStateMachine_gpjlu")
 advance_expression_base_node = NodePath("..")
 anim_player = NodePath("../AnimationPlayer")
-parameters/RangedFire/MoveState/current_state = ""
-parameters/RangedFire/MoveState/transition_request = "Stand"
-parameters/RangedFire/MoveState/current_index = -1
+parameters/RangedFire/MoveState/current_state = "Stand"
+parameters/RangedFire/MoveState/transition_request = ""
+parameters/RangedFire/MoveState/current_index = 0
 parameters/StandardMovement/Idle/MoveState/current_state = "Stand"
 parameters/StandardMovement/Idle/MoveState/transition_request = ""
 parameters/StandardMovement/Idle/MoveState/current_index = 0
-parameters/StandardMovement/Move/MoveState/current_state = ""
+parameters/StandardMovement/Move/MoveState/current_state = "Stand"
 parameters/StandardMovement/Move/MoveState/transition_request = "Stand"
-parameters/StandardMovement/Move/MoveState/current_index = -1
+parameters/StandardMovement/Move/MoveState/current_index = 0
 
 [node name="Character" type="Sprite2D" parent="." unique_id=295087923]
 position = Vector2(0, -3)
