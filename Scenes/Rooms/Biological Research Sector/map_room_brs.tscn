@@ -5,6 +5,10 @@
 [ext_resource type="TileSet" uid="uid://hkvfy5by8aqr" path="res://Tileset/Main_Level.tres" id="3_syxls"]
 [ext_resource type="PackedScene" uid="uid://dq3kndnduo1f2" path="res://Scenes/Rooms/CommonRoomComponents/map_station.tscn" id="4_d6p85"]
 [ext_resource type="Script" uid="uid://whdtoijov1so" path="res://Scripts/occilator.gd" id="4_syxls"]
+[ext_resource type="Script" uid="uid://dfjoccyhw0wuh" path="res://Scripts/demo_win_trigger.gd" id="6_0ohsf"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_d6p85"]
+size = Vector2(264, 552)
 
 [node name="MapRoomBRS" type="Node2D" unique_id=2047518647]
 
@@ -21,7 +25,6 @@ collision_enabled = false
 
 [node name="MapStation" parent="TileMapForRooms" unique_id=1432104097 instance=ExtResource("4_d6p85")]
 position = Vector2(432.00003, 192)
-region = 1
 
 [node name="Foreground2" type="TileMapLayer" parent="TileMapForRooms" unique_id=1050999518]
 scale = Vector2(3, 3)
@@ -43,3 +46,13 @@ z_index = 10
 scale = Vector2(1.5, 1.5)
 tile_map_data = PackedByteArray("AAADABAABAAUAAAAABACABAABAAVAAAAABABABAABAAWAAAAABAAABAABAAXAAAAABADABEABAAUAAEAABACABEABAAVAAEAABABABEABAAWAAEAABAAABEABAAXAAEAABADABIABAAUAAIAABACABIABAAVAAIAABABABIABAAWAAIAABAAABIABAAXAAIAABADABMABAAUAAMAABACABMABAAVAAMAABABABMABAAWAAMAABAAABMABAAXAAMAABADABQABAAUAAQAABACABQABAAVAAQAABABABQABAAWAAQAABAAABQABAAXAAQAABADABUABAAUAAUAABACABUABAAVAAUAABABABUABAAWAAUAABAAABUABAAXAAUAABAsABAABAAUAAAAAAAsABEABAAUAAEAAAAsABIABAAUAAIAAAAsABMABAAUAAMAAAAsABQABAAUAAQAAAAsABUABAAUAAUAAAAtABAABAAVAAAAAAAtABEABAAVAAEAAAAtABIABAAVAAIAAAAtABMABAAVAAMAAAAtABQABAAVAAQAAAAtABUABAAVAAUAAAAuABAABAAWAAAAAAAuABEABAAWAAEAAAAuABIABAAWAAIAAAAuABMABAAWAAMAAAAuABQABAAWAAQAAAAuABUABAAWAAUAAAAvABAABAAXAAAAAAAvABEABAAXAAEAAAAvABIABAAXAAIAAAAvABMABAAXAAMAAAAvABQABAAXAAQAAAAvABUABAAXAAUAAAA=")
 tile_set = ExtResource("3_syxls")
+
+[node name="Demo Win Trigger" type="Area2D" parent="." unique_id=1513873527]
+collision_layer = 2
+script = ExtResource("6_0ohsf")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Demo Win Trigger" unique_id=523498344]
+position = Vector2(122, 266)
+shape = SubResource("RectangleShape2D_d6p85")
+
+[connection signal="body_entered" from="Demo Win Trigger" to="Demo Win Trigger" method="_on_body_entered"]

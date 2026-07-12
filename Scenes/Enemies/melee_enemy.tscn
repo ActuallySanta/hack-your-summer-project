@@ -133,8 +133,8 @@ _data = {
 }
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_mgs6e"]
-radius = 30.0
-height = 120.0
+radius = 32.0
+height = 100.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_aajnb"]
 radius = 450.0
@@ -168,26 +168,29 @@ vframes = 4
 frame = 8
 
 [node name="Physics Body" type="CollisionShape2D" parent="." unique_id=2103185324]
-position = Vector2(-2, -1)
+position = Vector2(-2, -2)
 shape = SubResource("CapsuleShape2D_mgs6e")
 
 [node name="Player Detection Check" type="ShapeCast2D" parent="." unique_id=1092179563]
+visible = false
 shape = SubResource("CircleShape2D_aajnb")
 target_position = Vector2(0, 0)
 collision_mask = 2
 
 [node name="Player Obstruction Check" type="RayCast2D" parent="." unique_id=1481630674]
+visible = false
 target_position = Vector2(450, 0)
 collision_mask = 3
 
 [node name="Target Location Check" type="RayCast2D" parent="." unique_id=240777974]
+visible = false
 target_position = Vector2(150, 0)
 
 [node name="Hurtbox" parent="." unique_id=470143312 instance=ExtResource("19_jgjap")]
 collision_layer = 4
 
 [node name="Shape" type="CollisionShape2D" parent="Hurtbox" unique_id=326280550]
-position = Vector2(-2, -1)
+position = Vector2(-2, -2)
 shape = SubResource("CapsuleShape2D_mgs6e")
 
 [node name="Attack Duration" type="Timer" parent="." unique_id=1202308613]
