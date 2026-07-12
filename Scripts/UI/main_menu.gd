@@ -11,6 +11,7 @@ func _process(delta: float) -> void:
 	pass
 
 func _start_game() -> void:
+	SceneLoader.LoadScene("uid://5uhi1nn3ykxt")
 	pass
 
 func _load_game() -> void:
