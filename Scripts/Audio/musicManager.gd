@@ -1,9 +1,10 @@
 extends AudioStreamPlayer2D
 
-const CREW_QUARTERS_OST = preload("res://Sounds/DebugAndTemp/ChargeFire.wav")
+const CREW_QUARTERS_OST = preload("res://Sounds/Music/A surprise infusion.ogg")
 const INTERNALS_OST = preload("res://Sounds/DebugAndTemp/ChargeFire.wav")
 const LABS_OST = preload("res://Sounds/Music/Jetpack Joyride DEMO.ogg")
-const BIOLOGICAL_RESEARCH_LABS_OST = preload("res://Sounds/DebugAndTemp/ChargeFire.wav")
+const BIOLOGICAL_RESEARCH_LABS_OST = preload("res://Sounds/Music/BRS.ogg")
+
 const MAIN_MENU_OST = preload("res://Sounds/DebugAndTemp/ChargeFire.wav")
 const BOSS_OST = preload("res://Sounds/DebugAndTemp/ChargeFire.wav")
 
