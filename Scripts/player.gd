@@ -62,6 +62,7 @@ enum MoveState{
 }
 
 var playerMoveState: MoveState
+var previousMoveState: MoveState
 
 var anim_moving : bool
 var anim_jumping : bool
@@ -72,6 +73,7 @@ var anim_fire : bool
 
 @onready var jetpack: Sprite2D = $JetpackAsset
 @onready var sprite : Sprite2D = $Character
+@onready var collisionManager: Node = $CollisionManager
 
 func _ready() -> void:
 	PlayerManager.player = self
@@ -80,16 +82,15 @@ func _ready() -> void:
 	CheckpointEventBus.move_player_position.connect(_move_player_pos)
 	jetpack.jetpack_updated.connect(do_jetpack_logic)
 	disable_jetpack()
+	playerMoveState = MoveState.Standing
 
 func _move_player_pos(pos: Vector2) -> void:
 	position = pos
-
 
 func jump() -> void:
 	velocity.y = -jumpForce
 	_jumpBufferTimer = 0
 	_coyoteTimer = 0
-
 
 func attack() -> void:
 	print("Attack!")
@@ -105,7 +106,6 @@ func attack() -> void:
 	_attackBufferTimer = 0
 	anim_swing = true
 
-
 func shoot() -> void:
 	print("Fire!")
 	var newBullet := bulletScene.instantiate() as PlayerBullet
@@ -120,7 +120,6 @@ func shoot() -> void:
 	_attackCooldownTimer = shootCooldown
 	_shootBufferTimer = 0
 	anim_fire = true
-
 
 func handle_jump_and_gravity(delta: float) -> void:
 	# Add the gravity.
@@ -138,7 +137,6 @@ func handle_jump_and_gravity(delta: float) -> void:
 		else:
 			_jumpBufferTimer -= delta
 
-
 func handle_standard_movement(_delta: float) -> void:
 	# Get the input direction and handle the movement/deceleration.
 	if _moveInput:
@@ -150,12 +148,10 @@ func handle_standard_movement(_delta: float) -> void:
 		velocity.x = move_toward(velocity.x, 0, moveSpeed)
 	set_anim_move_state(playerMoveState, _moveInput != 0)
 
-
 func handle_climbing_movement(_delta: float) -> void:
 	velocity.x = 0
 	velocity.y = _vertMoveInput * climbingSpeed
 	set_anim_move_state(MoveState.Climbing, _vertMoveInput != 0)
-
 
 func handle_knockback_movement(delta: float) -> void:
 	velocity.x = _knockbackForce
@@ -163,7 +159,6 @@ func handle_knockback_movement(delta: float) -> void:
 		velocity.x += _moveInput * knockbackDI
 	_knockbackTimer -= delta
 	set_anim_move_state(MoveState.Knockback, false)
-
 
 func determine_move_state() -> MoveState:
 	if _knockbackTimer > 0:
@@ -179,7 +174,6 @@ func determine_move_state() -> MoveState:
 		return MoveState.Crouching
 	
 	return MoveState.Standing
-
 
 func set_anim_move_state(moveState: MoveState, moving: bool) -> void:
 	match moveState:
@@ -212,9 +206,22 @@ func set_anim_move_state(moveState: MoveState, moving: bool) -> void:
 		MoveState.Knockback:
 			anim_hurt = true
 
+func translate_state() -> CollisionManager.State:
+	if playerMoveState == MoveState.Standing or playerMoveState == MoveState.Climbing or playerMoveState == MoveState.Knockback:
+		return CollisionManager.State.WALK
+	elif playerMoveState == MoveState.Jumping:
+		return CollisionManager.State.AIR
+	elif playerMoveState == MoveState.Crouching:
+		return CollisionManager.State.CROUCH
+	
+	return CollisionManager.State.WALK
 
 func _physics_process(delta: float) -> void:
+	previousMoveState = playerMoveState
 	playerMoveState = determine_move_state()
+	
+	if previousMoveState != playerMoveState:
+		collisionManager.swap_active_collision( translate_state() )
 	
 	handle_jump_and_gravity(delta)
 	
@@ -310,6 +317,7 @@ func handle_invuln_blinking(delta: float) -> void:
 func _process( _delta: float) -> void:
 	handle_inputs()
 	handle_invuln_blinking(_delta)
+	handle_vertical_speed()
 	
 	if _deathRespawnTimer > 0:
 		_deathRespawnTimer -= _delta
@@ -318,6 +326,12 @@ func _process( _delta: float) -> void:
 	if animPlayback.get_current_node() == "RangedFire" or animPlayback.get_current_node() == "MeleeSwing":
 		anim_fire = false
 		anim_swing = false
+
+func handle_vertical_speed() -> void:
+	if velocity.y < -1000:
+		velocity.y = -1000
+	elif velocity.y > 2000:
+		velocity.y = 2000
 
 func die() -> void:
 	_invulnTimer = 0

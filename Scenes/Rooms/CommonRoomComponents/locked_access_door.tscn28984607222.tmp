@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://ci0kv7wdsqpnc"]
+
+[ext_resource type="SpriteFrames" uid="uid://2nvt5lepiug" path="res://Sprites/DoorFrames.tres" id="1_ps4hy"]
+[ext_resource type="Script" uid="uid://5nholjdkmxej" path="res://access_door_mananger.gd" id="2_uvl7b"]
+
+[node name="LockedAccessDoor" type="Node2D" unique_id=1490899284]
+script = ExtResource("2_uvl7b")
+
+[node name="TopDoor" type="AnimatedSprite2D" parent="." unique_id=755507661]
+position = Vector2(0, -48)
+sprite_frames = ExtResource("1_ps4hy")
+animation = &"Idle"
+
+[node name="BottomDoor" type="AnimatedSprite2D" parent="." unique_id=1892755681]
+position = Vector2(0, 48)
+sprite_frames = ExtResource("1_ps4hy")
+animation = &"Idle"
+flip_v = true

@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://scnrv60doh5o"]
+
+[ext_resource type="Script" uid="uid://b18y8t76v22lu" path="res://Scripts/BehaviorAdjustments/down_vertical_room_transistion_tool.gd" id="1_xeawc"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xeawc"]
+size = Vector2(20, 25)
+
+[node name="DownVerticalRoomTransistionTool" type="Area2D" unique_id=1458139970]
+scale = Vector2(9.6, 7.2)
+script = ExtResource("1_xeawc")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=861952503]
+position = Vector2(0, -2.5000007)
+shape = SubResource("RectangleShape2D_xeawc")
