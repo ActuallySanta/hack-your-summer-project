@@ -21,8 +21,8 @@ signal environment_hit(target: Node2D)
 var previous_hits : Array[Hurtbox]
 
 func _ready() -> void:
-	area_entered.connect(_on_area_entered)
-	body_entered.connect(_on_body_entered)
+	self.area_entered.connect(_on_area_entered)
+	self.body_entered.connect(_on_body_entered)
 	previous_hits = []
 
 func reset() -> void:

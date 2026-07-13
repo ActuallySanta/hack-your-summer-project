@@ -54,9 +54,9 @@ func _load_game() -> void:
 		PlayerManager.player.disable_jetpack()
 	var room_id = save.get_value("current_room", START_ROOM_UID)
 	await load_room(room_id)
-	_player.global_position = save.get_value("player_pos", START_POS)
-	LevelManager.set_checkpoint(room_id, _player.position, false)
-	_player.process_mode = Node.PROCESS_MODE_INHERIT
+	PlayerManager.player.global_position = save.get_value("player_pos", START_POS)
+	LevelManager.set_checkpoint(room_id, PlayerManager.player.position, false)
+	PlayerManager.player.process_mode = Node.PROCESS_MODE_INHERIT
 	PlayerManager.player.position = save.get_value("player_pos", START_POS)
 	PlayerManager.player.process_mode = Node.PROCESS_MODE_INHERIT
 	print("Finish load")
@@ -91,7 +91,7 @@ func _on_pickup_collected(pickup: Pickup) -> void:
 	match pickup.type:
 		Pickup.PickupType.Jetpack:
 			save.set_value("jetpack_collected", true)
-			_player.enable_jetpack()
+			PlayerManager.player.enable_jetpack()
 			var checkpoint := get_tree().get_first_node_in_group(&"jetpack_checkpoint") as Node2D
 			if checkpoint:
 				LevelManager.set_checkpoint(MetSys.get_current_room_name(), checkpoint.global_position, true)
@@ -118,7 +118,7 @@ func _process(_delta: float) -> void:
 #Add any other variables you need as you save them, they will be saved as a dictionary
 func save_game(save_index: int, set_checkpoint := true) -> void:
 	print("Saving")
-	save.set_value("player_pos", _player.global_position)
+	save.set_value("player_pos", PlayerManager.player.global_position)
 	save.save_as_text("user://save" + str(save_index) +".sav")
 	if not set_checkpoint:
 		return
@@ -131,9 +131,9 @@ func save_game(save_index: int, set_checkpoint := true) -> void:
 
 func respawn_player_at_checkpoint() -> void:
 	await load_room(LevelManager.checkpoint_room)
-	_player.global_position = LevelManager.checkpoint_pos
-	_player._facingRight = !LevelManager.checkpoint_facing_left
-	_player.respawn()
+	PlayerManager.player.global_position = LevelManager.checkpoint_pos
+	PlayerManager.player._facingRight = !LevelManager.checkpoint_facing_left
+	PlayerManager.player.respawn()
 
 func _on_player_death(_anim_duration: float) -> void:
 	await get_tree().create_timer(death_respawn_delay).timeout
