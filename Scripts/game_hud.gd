@@ -13,6 +13,8 @@ var load_fade_timer: SceneTreeTimer
 var death_fade_timer: SceneTreeTimer
 var death_fade_in: bool
 
+@export var _menus : Dictionary[String,Control]
+
 func _ready() -> void:
 	death_screen.modulate.a = 0
 
@@ -50,3 +52,10 @@ func fade_out_death_screen() -> void:
 	death_fade_timer.timeout.connect(func ():
 		death_screen.modulate.a = 0
 		death_screen_fade_complete.emit(false))
+
+func load_menu(menu_UID: String):
+	for items in _menus.values():
+		items.visible = false
+		
+	_menus.get(menu_UID).process_mode = Node.PROCESS_MODE_INHERIT
+	_menus.get(menu_UID).visible = true

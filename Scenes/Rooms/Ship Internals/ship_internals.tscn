@@ -41,6 +41,7 @@ scale = Vector2(1.5, 1.5)
 button_names = Array[String](["Theater", "Exercise", "Storage"])
 
 [node name="Area2D" type="Area2D" parent="LockedAccessDoor" unique_id=1473078]
+collision_mask = 2
 script = ExtResource("5_ahjjv")
 function_to_call = "try_open_door"
 

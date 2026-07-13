@@ -10,7 +10,7 @@ const SaveManager = preload("res://addons/MetroidvaniaSystem/Template/Scripts/Sa
 
 @export var cameraDeadzone := Vector2(0, 0)
 @export var death_respawn_delay := 2.0
-@export var artificial_load_time := 2.0
+@export var artificial_load_time := 0.0
 @export var allow_save_anywhere := false
 @export var use_custom_save := false
 @export_file var save_room := START_ROOM_UID
@@ -142,3 +142,9 @@ func _on_player_death(_anim_duration: float) -> void:
 	await respawn_player_at_checkpoint()
 	_hud.fade_out_death_screen()
 	
+
+func end_game():
+	PlayerManager.player.process_mode = Node.PROCESS_MODE_DISABLED
+	_hud.show_load_screen()
+	_hud.load_menu("uid://ba6llpnlufq83")
+	_hud.hide_load_screen()

@@ -10,9 +10,14 @@ position = Vector2(2493, 399)
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1429657112 groups=["Cameras"]]
 
-[node name="HUD" parent="." unique_id=98304293 instance=ExtResource("3_wrm1d")]
+[node name="HUD" parent="." unique_id=98304293 node_paths=PackedStringArray("_menus") instance=ExtResource("3_wrm1d")]
+_menus = {
+"uid://ba6llpnlufq83": NodePath("Game Complete Menu"),
+"uid://c8sg7punnpidp": NodePath("Game Over Menu"),
+"uid://dbr2sfm8y3rni": NodePath("Main Menu")
+}
 
-[node name="Main Menu" parent="HUD" index="2" unique_id=766264186 node_paths=PackedStringArray("mainGameObjects")]
+[node name="Main Menu" parent="HUD" index="3" unique_id=766264186 node_paths=PackedStringArray("mainGameObjects")]
 mainGameObjects = [NodePath("../../Player"), NodePath("../../Camera2D"), NodePath("../Player HUD")]
 
 [editable path="HUD"]

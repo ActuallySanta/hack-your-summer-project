@@ -3,6 +3,9 @@
 [ext_resource type="Script" uid="uid://dll1tjcvn5mn3" path="res://Scripts/UI/game_over_menu.gd" id="1_1d3b0"]
 [ext_resource type="PackedScene" uid="uid://c8jdrquxbl6nn" path="res://Scenes/UI/main_menu_button.tscn" id="2_fiqdn"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1d3b0"]
+bg_color = Color(0.18039216, 0.18039216, 0.18039216, 1)
+
 [sub_resource type="LabelSettings" id="LabelSettings_xqyep"]
 font_size = 64
 
@@ -25,6 +28,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_1d3b0")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Background" unique_id=1862725118]
 layout_mode = 1

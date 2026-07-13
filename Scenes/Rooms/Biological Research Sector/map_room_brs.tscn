@@ -48,7 +48,7 @@ tile_map_data = PackedByteArray("AAADABAABAAUAAAAABACABAABAAVAAAAABABABAABAAWAAA
 tile_set = ExtResource("3_syxls")
 
 [node name="Demo Win Trigger" type="Area2D" parent="." unique_id=1513873527]
-collision_layer = 2
+collision_mask = 2
 script = ExtResource("6_0ohsf")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Demo Win Trigger" unique_id=523498344]

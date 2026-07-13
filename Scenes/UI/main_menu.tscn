@@ -5,6 +5,9 @@
 [ext_resource type="PackedScene" uid="uid://c8jdrquxbl6nn" path="res://Scenes/UI/main_menu_button.tscn" id="3_mrfpk"]
 [ext_resource type="Script" uid="uid://plxmmpvyj10i" path="res://Scripts/UI/switch_menu_on_click.gd" id="4_u7lva"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u7lva"]
+bg_color = Color(0.18039216, 0.18039216, 0.18039216, 1)
+
 [node name="Main Menu" type="Control" unique_id=766264186]
 layout_mode = 3
 anchors_preset = 15
@@ -21,6 +24,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_u7lva")
 
 [node name="Main Menu" type="Control" parent="." unique_id=1941217421]
 layout_mode = 1

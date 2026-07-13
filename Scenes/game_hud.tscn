@@ -9,8 +9,13 @@
 [sub_resource type="LabelSettings" id="LabelSettings_qvcsg"]
 font_size = 48
 
-[node name="HUD" type="CanvasLayer" unique_id=242806123 groups=["HUD"]]
+[node name="HUD" type="CanvasLayer" unique_id=242806123 node_paths=PackedStringArray("_menus") groups=["HUD"]]
 script = ExtResource("1_qmln0")
+_menus = {
+"uid://ba6llpnlufq83": NodePath("Game Complete Menu"),
+"uid://c8sg7punnpidp": NodePath("Game Over Menu"),
+"uid://dbr2sfm8y3rni": NodePath("Main Menu")
+}
 
 [node name="Player HUD" parent="." unique_id=890844106 instance=ExtResource("2_qecdm")]
 
@@ -48,11 +53,13 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
+
 [node name="Main Menu" parent="." unique_id=766264186 node_paths=PackedStringArray("loadingScreen") instance=ExtResource("3_pef4c")]
 loadingScreen = NodePath("../LoadingScreen")
 
 [node name="Game Over Menu" parent="." unique_id=2070875949 instance=ExtResource("4_4wiq2")]
 visible = false
 
-[node name="Game Complete Menu" parent="." unique_id=460475020 instance=ExtResource("5_6tc0p")]
+[node name="Game Complete Menu" parent="." unique_id=460475020 node_paths=PackedStringArray("mainMenu") instance=ExtResource("5_6tc0p")]
 visible = false
+mainMenu = NodePath("../Main Menu")
