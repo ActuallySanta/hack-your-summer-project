@@ -32,3 +32,4 @@ tile_set = ExtResource("3_jk4sq")
 
 [node name="MapStation" parent="." unique_id=1432104097 instance=ExtResource("4_c5ari")]
 position = Vector2(432, 192)
+region = 0

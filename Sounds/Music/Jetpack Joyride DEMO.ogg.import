@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://p6jedpotgn5q"
+path="res://.godot/imported/Jetpack Joyride DEMO.ogg-67fe705fb25fba9f3d0c15bef9439fac.oggvorbisstr"
+
+[deps]
+
+source_file="res://Sounds/Music/Jetpack Joyride DEMO.ogg"
+dest_files=["res://.godot/imported/Jetpack Joyride DEMO.ogg-67fe705fb25fba9f3d0c15bef9439fac.oggvorbisstr"]
+
+[params]
+
+loop=true
+loop_offset=0.0
+bpm=147.0
+beat_count=0
+bar_beats=5
