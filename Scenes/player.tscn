@@ -7,7 +7,6 @@
 [ext_resource type="PackedScene" uid="uid://djmeyycufny61" path="res://Scenes/Components/Hurtbox.tscn" id="4_00tjw"]
 [ext_resource type="Texture2D" uid="uid://bqj73yi85o2dx" path="res://Sprites/Main Character Climb.png" id="7_f1ek2"]
 [ext_resource type="Texture2D" uid="uid://c8km3q4omapxt" path="res://Sprites/Main Character Crawl.png" id="8_tx1dd"]
-[ext_resource type="PackedScene" uid="uid://c214glttpaw83" path="res://Scenes/UI/player_health.tscn" id="9_f1ek2"]
 [ext_resource type="Texture2D" uid="uid://btpjpn1y6y23a" path="res://Sprites/character_swing.png" id="9_tx1dd"]
 [ext_resource type="Script" uid="uid://crhoj1q6iw1an" path="res://Scripts/Player/player_collision_manager.gd" id="10_gymyn"]
 [ext_resource type="PackedScene" uid="uid://cfpoti64f7omn" path="res://Scenes/Entities/jetpack_asset.tscn" id="10_tx1dd"]
@@ -1285,10 +1284,6 @@ disabled = true
 [node name="JumpCollision" type="CollisionShape2D" parent="." unique_id=931990881]
 shape = SubResource("CircleShape2D_tx1dd")
 disabled = true
-
-[node name="PlayerHealth" parent="." unique_id=1360041974 instance=ExtResource("9_f1ek2")]
-position = Vector2(-13, 16)
-scale = Vector2(0.01, 0.01)
 
 [node name="JetpackAsset" parent="." unique_id=261087070 instance=ExtResource("10_tx1dd")]
 visible = false
