@@ -21,7 +21,6 @@ func _start_game() -> void:
 	pass
 
 func _load_game() -> void:
-	Game.use_custom_save = true
 	_transfer_to_game(false)
 	pass
 

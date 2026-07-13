@@ -71,6 +71,9 @@ var anim_death : bool
 var anim_swing : bool
 var anim_fire : bool
 
+
+@export var canClimb : bool = false
+
 var previous_cell_Group := "None"
 
 @onready var jetpack: Sprite2D = $JetpackAsset
@@ -166,7 +169,7 @@ func determine_move_state() -> MoveState:
 	if _knockbackTimer > 0:
 		return MoveState.Knockback
 	
-	if is_on_wall() and _climbInput:
+	if is_on_wall() and _climbInput and canClimb:
 		return MoveState.Climbing
 	
 	if !is_on_floor() and _coyoteTimer <= 0:
