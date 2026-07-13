@@ -1,6 +1,6 @@
 extends Enemy
 
-@onready var bulletScene = preload("res://Scenes/ranged_enemy_bullet.tscn")
+@onready var bulletScene = preload("uid://dmxbgtwmp5c0q")
 
 
 
