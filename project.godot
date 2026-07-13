@@ -26,6 +26,7 @@ SceneLoader="*uid://bdtr22633bwcl"
 ItemCollectionTooling="*uid://dufcsaf2fngyk"
 LimboConsole="*uid://dyxornv8vwibg"
 MusicManager="*uid://d0sejejpytdhi"
+Game="*uid://bo6qgt11s8q53"
 
 [display]
 
@@ -42,6 +43,8 @@ enabled=PackedStringArray("res://addons/MetroidvaniaSystem/EditorExtension/plugi
 [global_group]
 
 player=""
+Cameras="The cameras in the game"
+HUD=""
 
 [input]
 

@@ -2,16 +2,20 @@
 
 [ext_resource type="Script" uid="uid://bnowhmyinvacv" path="res://Scripts/game_hud.gd" id="1_qmln0"]
 [ext_resource type="PackedScene" uid="uid://ne13j5tl7gbr" path="res://Scenes/UI/player_hud.tscn" id="2_qecdm"]
+[ext_resource type="PackedScene" uid="uid://dbr2sfm8y3rni" path="res://Scenes/UI/main_menu.tscn" id="3_pef4c"]
+[ext_resource type="PackedScene" uid="uid://c8sg7punnpidp" path="res://Scenes/UI/game_over_menu.tscn" id="4_4wiq2"]
+[ext_resource type="PackedScene" uid="uid://ba6llpnlufq83" path="res://Scenes/UI/game_complete_menu.tscn" id="5_6tc0p"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_qvcsg"]
 font_size = 48
 
-[node name="HUD" type="CanvasLayer" unique_id=242806123]
+[node name="HUD" type="CanvasLayer" unique_id=242806123 groups=["HUD"]]
 script = ExtResource("1_qmln0")
 
 [node name="Player HUD" parent="." unique_id=890844106 instance=ExtResource("2_qecdm")]
 
 [node name="LoadingScreen" type="ColorRect" parent="." unique_id=647268922]
+visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -36,3 +40,12 @@ text = "LOADING..."
 label_settings = SubResource("LabelSettings_qvcsg")
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Main Menu" parent="." unique_id=766264186 node_paths=PackedStringArray("loadingScreen") instance=ExtResource("3_pef4c")]
+loadingScreen = NodePath("../LoadingScreen")
+
+[node name="Game Over Menu" parent="." unique_id=2070875949 instance=ExtResource("4_4wiq2")]
+visible = false
+
+[node name="Game Complete Menu" parent="." unique_id=460475020 instance=ExtResource("5_6tc0p")]
+visible = false

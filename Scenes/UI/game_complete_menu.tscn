@@ -9,7 +9,7 @@ font_size = 64
 [sub_resource type="LabelSettings" id="LabelSettings_1d3b0"]
 font_size = 24
 
-[node name="Game Over Menu" type="Control" unique_id=2070875949]
+[node name="Game Complete Menu" type="Control" unique_id=2070875949]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
