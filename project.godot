@@ -41,6 +41,8 @@ enabled=PackedStringArray("res://addons/MetroidvaniaSystem/EditorExtension/plugi
 [global_group]
 
 player=""
+jetpack_checkpoint=""
+save_checkpoint=""
 
 [input]
 
@@ -137,7 +139,7 @@ debug_save={
 [physics]
 
 3d/physics_engine="Jolt Physics"
-2d/default_gravity=2500.0
+2d/default_gravity=2000.0
 
 [rendering]
 

@@ -42,3 +42,6 @@ tile_set = ExtResource("3_xfm0o")
 
 [node name="SaveStation" parent="." unique_id=2035218102 instance=ExtResource("5_7b1vl")]
 position = Vector2(432, 192)
+
+[node name="Marker2D" type="Marker2D" parent="." unique_id=1197865959 groups=["save_checkpoint"]]
+position = Vector2(789, 447)

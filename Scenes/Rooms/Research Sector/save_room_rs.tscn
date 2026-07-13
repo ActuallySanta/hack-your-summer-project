@@ -35,4 +35,6 @@ tile_set = ExtResource("3_lrafw")
 
 [node name="UpVerticalRoomTransitionTool" parent="." unique_id=1520149205 instance=ExtResource("5_nptym")]
 position = Vector2(576, 72)
-scale = Vector2(9.6, 7.2)
+
+[node name="CheckpointPosition" type="Marker2D" parent="." unique_id=603478914 groups=["save_checkpoint"]]
+position = Vector2(1369, 389)

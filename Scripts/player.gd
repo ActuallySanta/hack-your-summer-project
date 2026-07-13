@@ -3,6 +3,8 @@ extends CharacterBody2D
 
 signal pickup_collected(pickup : Pickup)
 signal save_station_used()
+signal death_start(anim_duration: float)
+signal death_end()
 
 ## Get animationtree ##
 @onready var animator: AnimationTree = $AnimationTree
@@ -33,7 +35,6 @@ const FIRESTATEPARAM := "parameters/RangedFire/MoveState/transition_request"
 @export var hitInvulnTime := 1.0
 @export var invulnBlinkInterval := 0.15
 @export var knockbackDI := 300.0
-@export var deathRespawnDelay := 2.0
 
 var _moveInput : float
 var _vertMoveInput :float
@@ -79,7 +80,6 @@ func _ready() -> void:
 	PlayerManager.player = self
 	_facingRight = true
 	_currentHealth = baseHealth
-	CheckpointEventBus.move_player_position.connect(_move_player_pos)
 	jetpack.jetpack_updated.connect(do_jetpack_logic)
 	disable_jetpack()
 	playerMoveState = MoveState.Standing
@@ -253,9 +253,9 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 	# 3. Flip the sprite visually based on which way we are running
-	if _moveInput > 0:
+	if _facingRight:
 		$Character.flip_h = false  # Facing Right
-	elif _moveInput < 0:
+	else:
 		$Character.flip_h = true   # Facing Left
 
 func set_jump_input() -> void:
@@ -319,10 +319,6 @@ func _process( _delta: float) -> void:
 	handle_invuln_blinking(_delta)
 	handle_vertical_speed()
 	
-	if _deathRespawnTimer > 0:
-		_deathRespawnTimer -= _delta
-		if _deathRespawnTimer <= 0:
-			respawn()
 	if animPlayback.get_current_node() == "RangedFire" or animPlayback.get_current_node() == "MeleeSwing":
 		anim_fire = false
 		anim_swing = false
@@ -330,25 +326,25 @@ func _process( _delta: float) -> void:
 func handle_vertical_speed() -> void:
 	if velocity.y < -1000:
 		velocity.y = -1000
-	elif velocity.y > 2000:
-		velocity.y = 2000
+	elif velocity.y > 1500:
+		velocity.y = 1500
 
 func die() -> void:
 	_invulnTimer = 0
 	anim_death = true
-	_deathRespawnTimer = deathRespawnDelay
 	reset_all_inputs()
 	_moveInput = 0
+	$Hurtbox.process_mode = Node.PROCESS_MODE_DISABLED
+	death_start.emit($AnimationPlayer.get_animation(&"death").length)
 
 func respawn() -> void:
+	$Hurtbox.process_mode = Node.PROCESS_MODE_INHERIT
 	_currentHealth = baseHealth
 	GlobalSignals.health_changed.emit(_currentHealth, baseHealth)
-	_deathRespawnTimer = 0
 	anim_death = false
-	CheckpointEventBus.player_needs_to_use_checkpoint.emit()
 
 func _on_hit(_hurtBox: Hurtbox, hit_info: HitInfo, _source: Hitbox) -> void:
-	if _invulnTimer > 0:
+	if _invulnTimer > 0 or _currentHealth <= 0:
 		return
 	print("Player took damage!")
 	_currentHealth -= hit_info.damage
@@ -366,8 +362,10 @@ func collect(pickup: Pickup) -> bool:
 	pickup_collected.emit(pickup)
 	return true
 
-func do_jetpack_logic(speed: float):
-	velocity.y -= speed;
+func do_jetpack_logic(net_accel: float, max_speed: float, delta: float):
+	var drag_coef := -velocity.y/max_speed
+	var total_accel := get_gravity().y + (net_accel * (1-drag_coef))
+	velocity.y -= total_accel * delta
 
 func disable_jetpack() -> void:
 	jetpack.process_mode = Node.PROCESS_MODE_DISABLED
