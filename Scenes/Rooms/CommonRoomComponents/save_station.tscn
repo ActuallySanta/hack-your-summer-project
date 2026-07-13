@@ -8,6 +8,8 @@ size = Vector2(96, 64)
 
 [node name="SaveStation" type="Area2D" unique_id=250103184]
 scale = Vector2(1.5, 1.5)
+collision_layer = 0
+collision_mask = 2
 script = ExtResource("1_pl0y5")
 
 [node name="idleTexture" type="TileMapLayer" parent="." unique_id=943091293]

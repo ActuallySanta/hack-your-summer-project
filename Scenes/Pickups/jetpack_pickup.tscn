@@ -9,6 +9,7 @@ size = Vector2(32, 32)
 
 [node name="JetpackPickup" type="Area2D" unique_id=1708906721]
 collision_layer = 16
+collision_mask = 2
 script = ExtResource("1_2s1fn")
 type = 3
 use_custom_id = true

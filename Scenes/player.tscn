@@ -1227,13 +1227,15 @@ radius = 32.0
 
 [node name="Player" type="CharacterBody2D" unique_id=862395343 groups=["player"]]
 z_index = 5
+collision_layer = 2
 collision_mask = 17
 script = ExtResource("1_00tjw")
-moveSpeed = 400.0
+moveSpeed = 450.0
 crouchSpeedMult = 0.35
 climbingSpeed = 250
-jumpForce = 950.0
+jumpForce = 800.0
 coyoteTime = 0.1
+baseHealth = 3
 swingOffset = 80.0
 swingScene = ExtResource("2_vtle1")
 bulletScene = ExtResource("3_od3ui")
@@ -1290,6 +1292,7 @@ scale = Vector2(0.01, 0.01)
 
 [node name="JetpackAsset" parent="." unique_id=261087070 instance=ExtResource("10_tx1dd")]
 visible = false
-max_speed = 30.0
+net_acceleration = 1800.0
+max_speed = 800.0
 
 [connection signal="hit" from="Hurtbox" to="." method="_on_hit"]

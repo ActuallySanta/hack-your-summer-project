@@ -5,6 +5,7 @@
 [ext_resource type="TileSet" uid="uid://hkvfy5by8aqr" path="res://Tileset/Main_Level.tres" id="3_q5sts"]
 [ext_resource type="PackedScene" uid="uid://scnrv60doh5o" path="res://Scenes/Components/down_vertical_room_transistion_tool.tscn" id="4_q5sts"]
 [ext_resource type="PackedScene" uid="uid://b2ibnxde1hrva" path="res://Scenes/Enemies/ranged_enemy.tscn" id="5_jje8i"]
+[ext_resource type="PackedScene" uid="uid://cyeulfk6accth" path="res://Scenes/damage_area.tscn" id="6_14f8x"]
 
 [node name="OperationsRS" type="Node2D" unique_id=525828636]
 
@@ -34,3 +35,27 @@ position = Vector2(1728, 1272)
 
 [node name="Ranged Enemy" parent="." unique_id=1835408748 instance=ExtResource("5_jje8i")]
 position = Vector2(1750, 419)
+
+[node name="DamageArea" parent="." unique_id=1056389998 instance=ExtResource("6_14f8x")]
+position = Vector2(2516, 792)
+rotation = 1.5707964
+
+[node name="DamageArea2" parent="." unique_id=668279561 instance=ExtResource("6_14f8x")]
+position = Vector2(2516, 744)
+rotation = 1.5707964
+
+[node name="DamageArea3" parent="." unique_id=233294089 instance=ExtResource("6_14f8x")]
+position = Vector2(2516, 696)
+rotation = 1.5707964
+
+[node name="DamageArea4" parent="." unique_id=1912865427 instance=ExtResource("6_14f8x")]
+position = Vector2(2516, 648)
+rotation = 1.5707964
+
+[node name="DamageArea5" parent="." unique_id=1588486951 instance=ExtResource("6_14f8x")]
+position = Vector2(2516, 600)
+rotation = 1.5707964
+
+[node name="DamageArea6" parent="." unique_id=1617168207 instance=ExtResource("6_14f8x")]
+position = Vector2(2516, 552)
+rotation = 1.5707964

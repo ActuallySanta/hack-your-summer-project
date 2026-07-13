@@ -9,6 +9,7 @@ const SaveManager = preload("res://addons/MetroidvaniaSystem/Template/Scripts/Sa
 @onready var _hud : GameHUD
 
 @export var cameraDeadzone := Vector2(0, 0)
+@export var death_respawn_delay := 2.0
 @export var artificial_load_time := 2.0
 @export var allow_save_anywhere := false
 @export var use_custom_save := false
@@ -53,6 +54,9 @@ func _load_game() -> void:
 		PlayerManager.player.disable_jetpack()
 	var room_id = save.get_value("current_room", START_ROOM_UID)
 	await load_room(room_id)
+	_player.global_position = save.get_value("player_pos", START_POS)
+	LevelManager.set_checkpoint(room_id, _player.position, false)
+	_player.process_mode = Node.PROCESS_MODE_INHERIT
 	PlayerManager.player.position = save.get_value("player_pos", START_POS)
 	PlayerManager.player.process_mode = Node.PROCESS_MODE_INHERIT
 	print("Finish load")
@@ -87,7 +91,10 @@ func _on_pickup_collected(pickup: Pickup) -> void:
 	match pickup.type:
 		Pickup.PickupType.Jetpack:
 			save.set_value("jetpack_collected", true)
-			PlayerManager.player.enable_jetpack()
+			_player.enable_jetpack()
+			var checkpoint := get_tree().get_first_node_in_group(&"jetpack_checkpoint") as Node2D
+			if checkpoint:
+				LevelManager.set_checkpoint(MetSys.get_current_room_name(), checkpoint.global_position, true)
 		_:
 			print("No action defined for pickup " + pickup.get_type_as_str())
 
@@ -109,10 +116,29 @@ func _process(_delta: float) -> void:
 		save_game(0)
 
 #Add any other variables you need as you save them, they will be saved as a dictionary
-func save_game(saveIndex: int) -> void:
+func save_game(save_index: int, set_checkpoint := true) -> void:
 	print("Saving")
-	save.set_value("player_pos", PlayerManager.player.position)
-	save.save_as_text("user://save" + str(saveIndex) +".sav")
+	save.set_value("player_pos", _player.global_position)
+	save.save_as_text("user://save" + str(save_index) +".sav")
+	if not set_checkpoint:
+		return
+		
+	var checkpoint := get_tree().get_first_node_in_group(&"save_checkpoint") as Node2D
+	if not checkpoint:
+		printerr("Checkpoint not found in save room. Player will not return here on death.")
+		return
+	LevelManager.set_checkpoint(MetSys.get_current_room_name(), checkpoint.global_position, false)
 
-func EndGame() -> void:
-	pass
+func respawn_player_at_checkpoint() -> void:
+	await load_room(LevelManager.checkpoint_room)
+	_player.global_position = LevelManager.checkpoint_pos
+	_player._facingRight = !LevelManager.checkpoint_facing_left
+	_player.respawn()
+
+func _on_player_death(_anim_duration: float) -> void:
+	await get_tree().create_timer(death_respawn_delay).timeout
+	_hud.fade_in_death_screen()
+	await _hud.death_screen_fade_complete
+	await respawn_player_at_checkpoint()
+	_hud.fade_out_death_screen()
+	

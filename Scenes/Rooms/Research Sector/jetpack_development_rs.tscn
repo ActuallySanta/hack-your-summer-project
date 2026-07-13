@@ -31,3 +31,6 @@ tile_set = ExtResource("3_qsgqy")
 
 [node name="JetpackPickup" parent="." unique_id=1708906721 instance=ExtResource("4_qsgqy")]
 position = Vector2(838, 351)
+
+[node name="JetpackCheckpoint" type="Marker2D" parent="." unique_id=1425615448 groups=["jetpack_checkpoint"]]
+position = Vector2(412, 505)
