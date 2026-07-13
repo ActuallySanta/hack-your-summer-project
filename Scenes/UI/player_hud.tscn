@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://bnwse5pqyludv" path="res://Scenes/UI/dialogue_box.tscn" id="1_vkk4g"]
 [ext_resource type="PackedScene" uid="uid://dch8dyylb7526" path="res://addons/MetroidvaniaSystem/Template/Nodes/Minimap.tscn" id="2_y31ga"]
+[ext_resource type="PackedScene" uid="uid://c214glttpaw83" path="res://Scenes/UI/player_health.tscn" id="3_jh2mb"]
 
 [node name="Player HUD" type="Control" unique_id=890844106]
 layout_mode = 3
@@ -22,3 +23,6 @@ anchor_right = 1.0
 offset_left = -96.0
 offset_right = 0.0
 grow_horizontal = 0
+
+[node name="PlayerHealth" parent="." unique_id=1360041974 instance=ExtResource("3_jh2mb")]
+scale = Vector2(0.15, 0.15)

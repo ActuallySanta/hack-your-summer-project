@@ -9,6 +9,7 @@ var duration_timer : float
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	super._ready()
 	duration_timer = lifetime
 
 func _physics_process(delta: float) -> void:

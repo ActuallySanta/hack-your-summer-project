@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://d0sejejpytdhi"]
+
+[ext_resource type="Script" uid="uid://cpojq3rbx4ttd" path="res://Scripts/Audio/musicManager.gd" id="1_4ggqb"]
+
+[node name="MusicManager" type="AudioStreamPlayer2D" unique_id=1474149195]
+autoplay = true
+max_distance = 10000.0
+attenuation = 1e-05
+panning_strength = 0.0
+script = ExtResource("1_4ggqb")
+starting_area = null

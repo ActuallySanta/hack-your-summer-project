@@ -1,5 +1,11 @@
 class_name Player
 extends CharacterBody2D
+
+signal pickup_collected(pickup : Pickup)
+signal save_station_used()
+signal death_start(anim_duration: float)
+signal death_end()
+
 ## Get animationtree ##
 @onready var animator: AnimationTree = $AnimationTree
 @onready var animPlayback: AnimationNodeStateMachinePlayback = animator.get("parameters/playback")
@@ -29,7 +35,6 @@ const FIRESTATEPARAM := "parameters/RangedFire/MoveState/transition_request"
 @export var hitInvulnTime := 1.0
 @export var invulnBlinkInterval := 0.15
 @export var knockbackDI := 300.0
-@export var deathRespawnDelay := 2.0
 
 var _moveInput : float
 var _vertMoveInput :float
@@ -58,6 +63,7 @@ enum MoveState{
 }
 
 var playerMoveState: MoveState
+var previousMoveState: MoveState
 
 var anim_moving : bool
 var anim_jumping : bool
@@ -66,12 +72,22 @@ var anim_death : bool
 var anim_swing : bool
 var anim_fire : bool
 
+
+@export var canClimb : bool = false
+
+var previous_cell_Group := "None"
+
+@onready var jetpack: Sprite2D = $JetpackAsset
 @onready var sprite : Sprite2D = $Character
+@onready var collisionManager: Node = $CollisionManager
+
 func _ready() -> void:
 	PlayerManager.player = self
 	_facingRight = true
 	_currentHealth = baseHealth
-	CheckpointEventBus.move_player_position.connect(_move_player_pos)
+	jetpack.jetpack_updated.connect(do_jetpack_logic)
+	disable_jetpack()
+	playerMoveState = MoveState.Standing
 
 func _move_player_pos(pos: Vector2) -> void:
 	position = pos
@@ -118,7 +134,7 @@ func handle_jump_and_gravity(delta: float) -> void:
 		_coyoteTimer -= delta
 	else:
 		_coyoteTimer = coyoteTime
-		
+	
 	# Handle jump.
 	if _jumpBufferTimer > 0:
 		if (is_on_floor() or _coyoteTimer > 0) and playerMoveState != MoveState.Climbing:
@@ -153,17 +169,16 @@ func determine_move_state() -> MoveState:
 	if _knockbackTimer > 0:
 		return MoveState.Knockback
 	
-	if is_on_wall() and _climbInput:
+	if is_on_wall() and _climbInput and canClimb:
 		return MoveState.Climbing
 	
-	if !is_on_floor():
+	if !is_on_floor() and _coyoteTimer <= 0:
 		return MoveState.Jumping
 	
 	if _crouchInput:
 		return MoveState.Crouching
 	
 	return MoveState.Standing
-		
 
 func set_anim_move_state(moveState: MoveState, moving: bool) -> void:
 	match moveState:
@@ -196,8 +211,25 @@ func set_anim_move_state(moveState: MoveState, moving: bool) -> void:
 		MoveState.Knockback:
 			anim_hurt = true
 
+func translate_state() -> CollisionManager.State:
+	if playerMoveState == MoveState.Standing or playerMoveState == MoveState.Climbing or playerMoveState == MoveState.Knockback:
+		return CollisionManager.State.WALK
+	elif playerMoveState == MoveState.Jumping:
+		return CollisionManager.State.AIR
+	elif playerMoveState == MoveState.Crouching:
+		return CollisionManager.State.CROUCH
+	
+	return CollisionManager.State.WALK
+
+func on_cell_group_change(new_group: String) -> void:
+	MusicManager.set_background_track(new_group)
+
 func _physics_process(delta: float) -> void:
+	previousMoveState = playerMoveState
 	playerMoveState = determine_move_state()
+	
+	if previousMoveState != playerMoveState:
+		collisionManager.swap_active_collision( translate_state() )
 	
 	handle_jump_and_gravity(delta)
 	
@@ -229,10 +261,19 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 	# 3. Flip the sprite visually based on which way we are running
-	if _moveInput > 0:
+	if _facingRight:
 		$Character.flip_h = false  # Facing Right
-	elif _moveInput < 0:
+	else:
 		$Character.flip_h = true   # Facing Left
+
+	var groups = MetSys.get_cell_groups( MetSys.get_current_coords() )
+	if groups.size() == 0:
+		return
+	var group_id = groups[0]
+	var group = MetSys.get_group_name( group_id )
+	if group  != previous_cell_Group:
+		on_cell_group_change(group)
+		previous_cell_Group = group
 
 func set_jump_input() -> void:
 	_jumpBufferTimer = jumpBufferTime
@@ -251,6 +292,15 @@ func set_shoot_input() -> void:
 	
 func unset_shoot_input() -> void:
 	_shootBufferTimer = 0
+
+func reset_all_inputs() -> void:
+	_moveInput = 0
+	_vertMoveInput = 0
+	_crouchInput = 0
+	_climbInput = 0
+	unset_jump_input()
+	unset_attack_input()
+	unset_shoot_input()
 
 func handle_inputs() -> void:
 	if(!PlayerManager.canMove or _currentHealth <= 0): return
@@ -284,35 +334,38 @@ func handle_invuln_blinking(delta: float) -> void:
 func _process( _delta: float) -> void:
 	handle_inputs()
 	handle_invuln_blinking(_delta)
+	handle_vertical_speed()
 	
-	if _deathRespawnTimer > 0:
-		_deathRespawnTimer -= _delta
-		if _deathRespawnTimer <= 0:
-			respawn()
 	if animPlayback.get_current_node() == "RangedFire" or animPlayback.get_current_node() == "MeleeSwing":
 		anim_fire = false
 		anim_swing = false
 
+func handle_vertical_speed() -> void:
+	if velocity.y < -1000:
+		velocity.y = -1000
+	elif velocity.y > 1500:
+		velocity.y = 1500
+
 func die() -> void:
 	_invulnTimer = 0
 	anim_death = true
-	_deathRespawnTimer = deathRespawnDelay
-	unset_attack_input()
-	unset_jump_input()
-	unset_shoot_input()
+	reset_all_inputs()
 	_moveInput = 0
+	$Hurtbox.process_mode = Node.PROCESS_MODE_DISABLED
+	death_start.emit($AnimationPlayer.get_animation(&"death").length)
 
 func respawn() -> void:
+	$Hurtbox.process_mode = Node.PROCESS_MODE_INHERIT
 	_currentHealth = baseHealth
-	_deathRespawnTimer = 0
+	GlobalSignals.health_changed.emit(_currentHealth, baseHealth)
 	anim_death = false
-	CheckpointEventBus.player_needs_to_use_checkpoint.emit()
 
 func _on_hit(_hurtBox: Hurtbox, hit_info: HitInfo, _source: Hitbox) -> void:
-	if _invulnTimer > 0:
+	if _invulnTimer > 0 or _currentHealth <= 0:
 		return
 	print("Player took damage!")
 	_currentHealth -= hit_info.damage
+	GlobalSignals.health_changed.emit(_currentHealth, baseHealth)
 	_knockbackTimer = hit_info.knockback_duration
 	_knockbackForce = hit_info.knockback_strength / _knockbackTimer
 	_invulnTimer = hitInvulnTime
@@ -320,3 +373,19 @@ func _on_hit(_hurtBox: Hurtbox, hit_info: HitInfo, _source: Hitbox) -> void:
 	anim_hurt = true
 	if _currentHealth <= 0:
 		die()
+
+func collect(pickup: Pickup) -> bool:
+	print("Collect pickup " + pickup.get_type_as_str())
+	pickup_collected.emit(pickup)
+	return true
+
+func do_jetpack_logic(net_accel: float, max_speed: float, delta: float):
+	var drag_coef := -velocity.y/max_speed
+	var total_accel := get_gravity().y + (net_accel * (1-drag_coef))
+	velocity.y -= total_accel * delta
+
+func disable_jetpack() -> void:
+	jetpack.process_mode = Node.PROCESS_MODE_DISABLED
+
+func enable_jetpack() -> void:
+	jetpack.process_mode = Node.PROCESS_MODE_INHERIT

@@ -26,12 +26,12 @@ func override_respawnPoint(body: Node) -> void:
 	var connections = CheckpointEventBus.player_needs_to_use_checkpoint.get_connections()
 	
 	if (connections.size() > 1):
-		print(" !Warning! Too many checkpoints")
+		print_rich(" [color=red][b]!Warning! Too many checkpoints[/b][/color]")
 		for connection in connections:
 			CheckpointEventBus.player_needs_to_use_checkpoint.disconnect(connection.callable)
 	elif (connections.size() == 1):
 		CheckpointEventBus.player_needs_to_use_checkpoint.disconnect(connections[0].callable)
 	else:
-		print(" !Warning! No checkpoint assigned")
+		print_rich(" [color=red][b]!Warning! No checkpoint assigned[/b][/color]")
 	
 	CheckpointEventBus.player_needs_to_use_checkpoint.connect(respawnPlayerHere)

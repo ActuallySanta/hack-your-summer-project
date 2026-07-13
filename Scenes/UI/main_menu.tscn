@@ -30,19 +30,38 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Title Text" type="Label" parent="Main Menu" unique_id=1441537417]
+[node name="VBoxContainer" type="VBoxContainer" parent="Main Menu" unique_id=843163768]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_top = -44.0
-offset_right = 676.0
-offset_bottom = 44.0
+offset_left = 25.0
+offset_top = -70.0
+offset_right = 612.0
+offset_bottom = 70.0
 grow_vertical = 2
-text = "SPACE STATION: OUROBOROS"
+
+[node name="Title Text" type="Label" parent="Main Menu/VBoxContainer" unique_id=1441537417]
+layout_mode = 2
+text = "SPACE STATION: OUROBOROS 
+DEMO VERSION"
 label_settings = ExtResource("2_u7lva")
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="CenterContainer" type="CenterContainer" parent="Main Menu/VBoxContainer" unique_id=869938556]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Main Menu Button" type="LinkButton" parent="Main Menu/VBoxContainer/CenterContainer" unique_id=518139205]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 16
+text = "FEEDBACK FORM"
+underline = 1
+uri = "https://docs.google.com/forms/d/e/1FAIpQLScmOtYmFp_Vxhhe9ylyNEi1FR3lww1bRCD2YETw95PYG1Na9g/viewform?usp=publish-editor"
+
+[node name="Menu Click SFX" type="AudioStreamPlayer" parent="Main Menu/VBoxContainer/CenterContainer/Main Menu Button" unique_id=1725111875]
 
 [node name="Button Container" type="VBoxContainer" parent="Main Menu" unique_id=240547198]
 layout_mode = 1
@@ -140,6 +159,8 @@ Etiam tortor erat, consequat ullamcorper blandit sed, posuere ut tortor. In pell
 Morbi sagittis lectus ut ex sollicitudin, at congue sapien semper. Suspendisse nulla libero, venenatis nec mauris sit amet, scelerisque bibendum nisi. Nunc eu arcu in lorem imperdiet porta. Vivamus sapien purus, euismod ac mattis ut, dignissim vitae orci. Integer eu ex et urna vehicula fermentum. Aliquam fringilla mi ut elit maximus pellentesque at sed nunc. In at augue nec mi dignissim blandit non at libero."
 fit_content = true
 
+[connection signal="pressed" from="Main Menu/Button Container/Main Menu Button" to="." method="_start_game"]
+[connection signal="pressed" from="Main Menu/Button Container/Main Menu Button2" to="." method="_load_game"]
 [connection signal="pressed" from="Main Menu/Button Container/Main Menu Button3" to="Main Menu/Button Container/Main Menu Button3/Switch Menu On Click" method="_on_main_menu_button_pressed"]
 [connection signal="pressed" from="Main Menu/Button Container/Main Menu Button4" to="." method="_quit_game"]
 [connection signal="pressed" from="Credits Menu/Main Menu Button" to="Credits Menu/Main Menu Button/Switch Menu On Click" method="_on_main_menu_button_pressed"]

@@ -21,6 +21,8 @@ signal environment_hit(target: Node2D)
 var previous_hits : Array[Hurtbox]
 
 func _ready() -> void:
+	self.area_entered.connect(_on_area_entered)
+	self.body_entered.connect(_on_body_entered)
 	previous_hits = []
 
 func reset() -> void:
@@ -34,8 +36,8 @@ func _on_area_entered(area: Area2D) -> void:
 		return
 	if previous_hits.has(hurtbox):
 		return
-	on_hit.emit(self, hurtbox)
 	previous_hits.append(hurtbox)
+	on_hit.emit(self, hurtbox)
 	var hit_info := HitInfo.new(damage, knockback_strength, knockback_duration)
 	hurtbox.register_hit(hit_info, self)
 

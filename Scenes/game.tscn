@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://5uhi1nn3ykxt"]
+
+[ext_resource type="PackedScene" uid="uid://dohmyoeiilp0v" path="res://Scenes/player.tscn" id="2_qxrlw"]
+[ext_resource type="PackedScene" uid="uid://c4thct0jgtock" path="res://Scenes/game_hud.tscn" id="3_wrm1d"]
+
+[node name="Game" type="Node" unique_id=651801150]
+
+[node name="Player" parent="." unique_id=862395343 instance=ExtResource("2_qxrlw")]
+position = Vector2(2493, 399)
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1429657112 groups=["Cameras"]]
+
+[node name="HUD" parent="." unique_id=98304293 instance=ExtResource("3_wrm1d")]
+
+[node name="Main Menu" parent="HUD" index="2" unique_id=766264186 node_paths=PackedStringArray("mainGameObjects")]
+mainGameObjects = [NodePath("../../Player"), NodePath("../../Camera2D"), NodePath("../Player HUD")]
+
+[editable path="HUD"]

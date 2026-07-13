@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://cyeulfk6accth"]
+
+[ext_resource type="Script" uid="uid://xsw7bjwjsoj5" path="res://Scripts/damage_area.gd" id="1_cm2ri"]
+[ext_resource type="Texture2D" uid="uid://xheewmukqlws" path="res://Sprites/FUHYAAAAH/Fire_0.png" id="1_utike"]
+[ext_resource type="Texture2D" uid="uid://c5ynuw6vdsh8l" path="res://Sprites/FUHYAAAAH/Fire_1.png" id="2_cm2ri"]
+[ext_resource type="Texture2D" uid="uid://cswiuhfugu452" path="res://Sprites/FUHYAAAAH/Fire_2.png" id="3_nvas7"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_lcx1n"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_utike")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_cm2ri")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_nvas7")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nvas7"]
+size = Vector2(48, 42)
+
+[node name="DamageArea" type="Area2D" unique_id=668279561]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("1_cm2ri")
+knockback_strength = 100.0
+knockback_duration = 0.15
+metadata/_custom_type_script = "uid://ctc17oyja7fup"
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=571564963]
+position = Vector2(0, -3)
+scale = Vector2(3, 3)
+sprite_frames = SubResource("SpriteFrames_lcx1n")
+frame_progress = 0.5150398
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2034432269]
+shape = SubResource("RectangleShape2D_nvas7")

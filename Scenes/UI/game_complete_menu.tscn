@@ -1,0 +1,98 @@
+[gd_scene format=3 uid="uid://ba6llpnlufq83"]
+
+[ext_resource type="Script" uid="uid://dll1tjcvn5mn3" path="res://Scripts/UI/game_over_menu.gd" id="1_1d3b0"]
+[ext_resource type="PackedScene" uid="uid://c8jdrquxbl6nn" path="res://Scenes/UI/main_menu_button.tscn" id="2_fiqdn"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_xqyep"]
+font_size = 64
+
+[sub_resource type="LabelSettings" id="LabelSettings_1d3b0"]
+font_size = 24
+
+[node name="Game Complete Menu" type="Control" unique_id=2070875949]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_1d3b0")
+
+[node name="Background" type="Panel" parent="." unique_id=2120325588]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Background" unique_id=1862725118]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -274.5
+offset_right = 274.5
+offset_bottom = 250.0
+grow_horizontal = 2
+
+[node name="Title Text" type="Label" parent="Background/VBoxContainer" unique_id=1652522527]
+layout_mode = 2
+text = "GAME COMPLETE!"
+label_settings = SubResource("LabelSettings_xqyep")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Subtitle Text" type="Label" parent="Background/VBoxContainer" unique_id=597364801]
+layout_mode = 2
+text = "Thank you for trying our game! 
+Please consider filling out our feedback form,
+we would really appreciate your input"
+label_settings = SubResource("LabelSettings_1d3b0")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CenterContainer" type="CenterContainer" parent="Background/VBoxContainer" unique_id=766013572]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Main Menu Button" type="LinkButton" parent="Background/VBoxContainer/CenterContainer" unique_id=1814485153]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 16
+text = "FEEDBACK FORM"
+underline = 1
+uri = "https://docs.google.com/forms/d/e/1FAIpQLScmOtYmFp_Vxhhe9ylyNEi1FR3lww1bRCD2YETw95PYG1Na9g/viewform?usp=publish-editor"
+
+[node name="Menu Click SFX" type="AudioStreamPlayer" parent="Background/VBoxContainer/CenterContainer/Main Menu Button" unique_id=1602644803]
+
+[node name="Button Container" type="VBoxContainer" parent="Background" unique_id=1644742629]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -230.0
+offset_top = -44.0
+offset_right = 230.0
+offset_bottom = 226.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Main Menu Button2" parent="Background/Button Container" unique_id=1794478307 instance=ExtResource("2_fiqdn")]
+layout_mode = 2
+size_flags_vertical = 3
+text = "RETURN TO MAIN MENU"
+
+[node name="Main Menu Button3" parent="Background/Button Container" unique_id=1017708790 instance=ExtResource("2_fiqdn")]
+layout_mode = 2
+size_flags_vertical = 3
+text = "SETTINGS"
+
+[node name="Main Menu Button4" parent="Background/Button Container" unique_id=1231057756 instance=ExtResource("2_fiqdn")]
+layout_mode = 2
+size_flags_vertical = 3
+text = "QUIT GAME"
+
+[connection signal="pressed" from="Background/Button Container/Main Menu Button2" to="." method="_on_main_menu_button_2_pressed"]

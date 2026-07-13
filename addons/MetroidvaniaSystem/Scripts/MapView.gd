@@ -180,7 +180,7 @@ func move(offset: Vector2i, new_layer := layer):
 		if not element_rect.intersects(rect):
 			continue
 		
-		_make_custom_element_instance(coords, element).update()
+		#_make_custom_element_instance(coords, element).update()
 	
 	_cache = new_cache
 

@@ -1,0 +1,44 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://dvifw4didt7kf"]
+
+[ext_resource type="Texture2D" uid="uid://b25yw5qucrhxe" path="res://Textures/PropsAndBackgrounds/BigassDoorLights.png" id="1_8lyla"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k0pvs"]
+atlas = ExtResource("1_8lyla")
+region = Rect2(0, 0, 32, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mypag"]
+atlas = ExtResource("1_8lyla")
+region = Rect2(64, 0, 32, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uvl7b"]
+atlas = ExtResource("1_8lyla")
+region = Rect2(32, 0, 32, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o8jdw"]
+atlas = ExtResource("1_8lyla")
+region = Rect2(96, 0, 32, 96)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k0pvs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mypag")
+}],
+"loop": true,
+"name": &"Sounding",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uvl7b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o8jdw")
+}],
+"loop": true,
+"name": &"SoundingRight",
+"speed": 5.0
+}]
