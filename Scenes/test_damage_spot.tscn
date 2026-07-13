@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://coa2xk3320f3l"]
 
-[ext_resource type="Script" uid="uid://dvxt5f7v8brpn" path="res://Scripts/damage_spot.gd" id="1_fldyf"]
+[ext_resource type="Script" uid="uid://dvxt5f7v8brpn" path="res://Scripts/Level Elements/damage_spot.gd" id="1_fldyf"]
 [ext_resource type="PackedScene" uid="uid://liprjmtialrh" path="res://Scenes/Components/Hitbox.tscn" id="2_e0iox"]
 [ext_resource type="Texture2D" uid="uid://xheewmukqlws" path="res://Sprites/FUHYAAAAH/Fire_0.png" id="3_crvph"]
 

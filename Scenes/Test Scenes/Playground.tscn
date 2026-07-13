@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://41tgjv6lxsko" path="res://Scenes/Enemies/melee_enemy.tscn" id="3_eqbnc"]
 [ext_resource type="TileSet" uid="uid://hkvfy5by8aqr" path="res://Tileset/Main_Level.tres" id="4_a4k3g"]
 [ext_resource type="PackedScene" uid="uid://n6x2kgtwhbba" path="res://Scenes/Dialogue System/placeholder_npc.tscn" id="5_npy7o"]
-[ext_resource type="PackedScene" uid="uid://dohmyoeiilp0v" path="res://Scenes/player.tscn" id="5_u6rxl"]
+[ext_resource type="PackedScene" uid="uid://dohmyoeiilp0v" path="res://Scenes/Players/player.tscn" id="5_u6rxl"]
 [ext_resource type="PackedScene" uid="uid://c214glttpaw83" path="res://Scenes/UI/player_health.tscn" id="6_u6rxl"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_xtv6o"]

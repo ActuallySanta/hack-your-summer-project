@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://cdsjsvuyovomn" path="res://Scenes/tile_map_for_rooms.tscn" id="2_docjl"]
 [ext_resource type="TileSet" uid="uid://hkvfy5by8aqr" path="res://Tileset/Main_Level.tres" id="3_iy0ho"]
 [ext_resource type="PackedScene" uid="uid://ci0kv7wdsqpnc" path="res://Scenes/Rooms/CommonRoomComponents/locked_access_door.tscn" id="4_iy0ho"]
-[ext_resource type="Script" uid="uid://bwg3jvu3db8xy" path="res://Scripts/door_trigger.gd" id="5_ahjjv"]
+[ext_resource type="Script" uid="uid://bwg3jvu3db8xy" path="res://Scripts/Level Elements/door_trigger.gd" id="5_ahjjv"]
 [ext_resource type="PackedScene" uid="uid://scnrv60doh5o" path="res://Scenes/Components/down_vertical_room_transistion_tool.tscn" id="6_dhtb3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dhtb3"]

@@ -1,7 +1,7 @@
 [gd_scene format=4 uid="uid://b1ujnmnbsxx87"]
 
 [ext_resource type="Texture2D" uid="uid://cofo5m2j45mcn" path="res://Textures/PropsAndBackgrounds/ButtonFull.png" id="1_281k4"]
-[ext_resource type="Script" uid="uid://30ua5d1cfpe3" path="res://Scripts/access_button_manager.gd" id="1_dw6k2"]
+[ext_resource type="Script" uid="uid://30ua5d1cfpe3" path="res://Scripts/Level Elements/access_button_manager.gd" id="1_dw6k2"]
 [ext_resource type="Script" uid="uid://b212kfagvpphx" path="res://Scripts/Resources/Animation/monitor_animator.gd" id="2_h6cfl"]
 [ext_resource type="TileSet" uid="uid://b17mvgg6tmbxx" path="res://Tileset/button_tile_set.tres" id="2_vw5uu"]
 [ext_resource type="Script" uid="uid://bvs7sv0thb0gv" path="res://Scripts/Resources/Animation/monitor_icon.gd" id="4_vn5wo"]

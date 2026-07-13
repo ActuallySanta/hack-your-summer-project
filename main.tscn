@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://dq6ckp1thwc2u" path="res://Textures/paul-lichtblau-qVotvbsuM_c-unsplash.jpg" id="1_0xm2m"]
 [ext_resource type="PackedScene" uid="uid://cdumyovckvgyr" path="res://Textures/Scenes/level-01.tscn" id="3_1bvp3"]
-[ext_resource type="PackedScene" uid="uid://bb8750313ho6d" path="res://Scenes/main_platform.tscn" id="4_1bvp3"]
+[ext_resource type="PackedScene" uid="uid://bb8750313ho6d" path="res://Scenes/Level Elements/main_platform.tscn" id="4_1bvp3"]
 [ext_resource type="Script" uid="uid://dpm1m1a7ewttn" path="res://Scripts/LevelTileMap.gd" id="4_lquwl"]
 
 [node name="Main" type="Node2D" unique_id=217308607]

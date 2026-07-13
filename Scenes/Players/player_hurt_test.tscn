@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://cqgpjvs8t5bxt"]
 
 [ext_resource type="Texture2D" uid="uid://bp1qv2dhalftv" path="res://icon.svg" id="2_qa1gj"]
-[ext_resource type="PackedScene" uid="uid://dtv1i40ltg77i" path="res://Scenes/checkpoint_demo.tscn" id="3_5sjav"]
+[ext_resource type="PackedScene" uid="uid://dtv1i40ltg77i" path="res://Scenes/Test Scenes/checkpoint_demo.tscn" id="3_5sjav"]
 [ext_resource type="PackedScene" uid="uid://coa2xk3320f3l" path="res://Scenes/test_damage_spot.tscn" id="4_h0lox"]
-[ext_resource type="PackedScene" uid="uid://dohmyoeiilp0v" path="res://Scenes/player.tscn" id="5_hp0dg"]
+[ext_resource type="PackedScene" uid="uid://dohmyoeiilp0v" path="res://Scenes/Players/player.tscn" id="5_hp0dg"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wyf0l"]
 size = Vector2(128, 128)

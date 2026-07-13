@@ -1,6 +1,6 @@
 [gd_scene format=4 uid="uid://dd4eyeec4usya"]
 
-[ext_resource type="Script" uid="uid://b52p31sbiko0i" path="res://Scripts/save_station.gd" id="1_pl0y5"]
+[ext_resource type="Script" uid="uid://b52p31sbiko0i" path="res://Scripts/Level Elements/save_station.gd" id="1_pl0y5"]
 [ext_resource type="TileSet" uid="uid://d1o3mxscl6wr5" path="res://Tileset/SaveMapRoom.tres" id="2_85agb"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pl0y5"]

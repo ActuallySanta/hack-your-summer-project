@@ -1,6 +1,6 @@
 [gd_scene format=4 uid="uid://dq3kndnduo1f2"]
 
-[ext_resource type="Script" uid="uid://dd5v7egdna7kc" path="res://Scripts/map_station.gd" id="1_2qwwv"]
+[ext_resource type="Script" uid="uid://dd5v7egdna7kc" path="res://Scripts/Level Elements/map_station.gd" id="1_2qwwv"]
 [ext_resource type="TileSet" uid="uid://d1o3mxscl6wr5" path="res://Tileset/SaveMapRoom.tres" id="1_hhws6"]
 
 [node name="MapStation" type="Node2D" unique_id=1432104097]

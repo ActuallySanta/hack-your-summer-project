@@ -1,15 +1,15 @@
 [gd_scene format=3 uid="uid://dohmyoeiilp0v"]
 
-[ext_resource type="Script" uid="uid://bs0loqfendiak" path="res://Scripts/player.gd" id="1_00tjw"]
-[ext_resource type="Texture2D" uid="uid://d1irxkv8rmbly" path="res://Sprites/SpaceStation_Character_Sheet.png" id="1_pv8u5"]
-[ext_resource type="PackedScene" uid="uid://ch0cbeo8ehblm" path="res://Scenes/player_melee_swing.tscn" id="2_vtle1"]
-[ext_resource type="PackedScene" uid="uid://jammv02ygc7v" path="res://Scenes/player_bullet.tscn" id="3_od3ui"]
-[ext_resource type="PackedScene" uid="uid://djmeyycufny61" path="res://Scenes/Components/Hurtbox.tscn" id="4_00tjw"]
-[ext_resource type="Texture2D" uid="uid://bqj73yi85o2dx" path="res://Sprites/Main Character Climb.png" id="7_f1ek2"]
-[ext_resource type="Texture2D" uid="uid://c8km3q4omapxt" path="res://Sprites/Main Character Crawl.png" id="8_tx1dd"]
-[ext_resource type="Texture2D" uid="uid://btpjpn1y6y23a" path="res://Sprites/character_swing.png" id="9_tx1dd"]
-[ext_resource type="Script" uid="uid://crhoj1q6iw1an" path="res://Scripts/Player/player_collision_manager.gd" id="10_gymyn"]
-[ext_resource type="PackedScene" uid="uid://cfpoti64f7omn" path="res://Scenes/Entities/jetpack_asset.tscn" id="10_tx1dd"]
+[ext_resource type="Script" uid="uid://bs0loqfendiak" path="res://Scripts/player.gd" id="1_gfkdj"]
+[ext_resource type="PackedScene" uid="uid://ch0cbeo8ehblm" path="res://Scenes/Players/player_melee_swing.tscn" id="2_xxqkx"]
+[ext_resource type="PackedScene" uid="uid://jammv02ygc7v" path="res://Scenes/Players/player_bullet.tscn" id="3_j8xm3"]
+[ext_resource type="PackedScene" uid="uid://djmeyycufny61" path="res://Scenes/Components/Hurtbox.tscn" id="4_r5bcf"]
+[ext_resource type="Texture2D" uid="uid://d1irxkv8rmbly" path="res://Sprites/SpaceStation_Character_Sheet.png" id="5_7vh4w"]
+[ext_resource type="Texture2D" uid="uid://bqj73yi85o2dx" path="res://Sprites/Main Character Climb.png" id="6_npdhm"]
+[ext_resource type="Texture2D" uid="uid://c8km3q4omapxt" path="res://Sprites/Main Character Crawl.png" id="7_fuwcu"]
+[ext_resource type="Texture2D" uid="uid://btpjpn1y6y23a" path="res://Sprites/character_swing.png" id="8_m3db5"]
+[ext_resource type="Script" uid="uid://crhoj1q6iw1an" path="res://Scripts/Player/player_collision_manager.gd" id="9_k8qpn"]
+[ext_resource type="PackedScene" uid="uid://cfpoti64f7omn" path="res://Scenes/Entities/jetpack_asset.tscn" id="10_13iwc"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_f1ek2"]
 radius = 24.0
@@ -241,7 +241,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("1_pv8u5")]
+"values": [ExtResource("5_7vh4w")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -366,7 +366,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("7_f1ek2")]
+"values": [ExtResource("6_npdhm")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -430,7 +430,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("1_pv8u5")]
+"values": [ExtResource("5_7vh4w")]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -471,7 +471,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("8_tx1dd")]
+"values": [ExtResource("7_fuwcu")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -667,7 +667,7 @@ tracks/6/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("1_pv8u5")]
+"values": [ExtResource("5_7vh4w")]
 }
 tracks/7/type = "value"
 tracks/7/imported = false
@@ -803,7 +803,7 @@ tracks/7/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("1_pv8u5")]
+"values": [ExtResource("5_7vh4w")]
 }
 tracks/8/type = "value"
 tracks/8/imported = false
@@ -855,7 +855,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("1_pv8u5")]
+"values": [ExtResource("5_7vh4w")]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -908,7 +908,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("1_pv8u5")]
+"values": [ExtResource("5_7vh4w")]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -961,7 +961,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("1_pv8u5")]
+"values": [ExtResource("5_7vh4w")]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -1013,7 +1013,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("1_pv8u5")]
+"values": [ExtResource("5_7vh4w")]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -1065,7 +1065,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("1_pv8u5")]
+"values": [ExtResource("5_7vh4w")]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -1118,7 +1118,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("1_pv8u5")]
+"values": [ExtResource("5_7vh4w")]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -1158,7 +1158,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("9_tx1dd")]
+"values": [ExtResource("8_m3db5")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -1228,7 +1228,7 @@ radius = 32.0
 z_index = 5
 collision_layer = 2
 collision_mask = 17
-script = ExtResource("1_00tjw")
+script = ExtResource("1_gfkdj")
 moveSpeed = 450.0
 crouchSpeedMult = 0.35
 climbingSpeed = 250
@@ -1236,11 +1236,11 @@ jumpForce = 800.0
 coyoteTime = 0.1
 baseHealth = 3
 swingOffset = 80.0
-swingScene = ExtResource("2_vtle1")
-bulletScene = ExtResource("3_od3ui")
+swingScene = ExtResource("2_xxqkx")
+bulletScene = ExtResource("3_j8xm3")
 knockbackDI = 400.0
 
-[node name="Hurtbox" parent="." unique_id=470143312 instance=ExtResource("4_00tjw")]
+[node name="Hurtbox" parent="." unique_id=470143312 instance=ExtResource("4_r5bcf")]
 collision_layer = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=1301816998]
@@ -1263,7 +1263,7 @@ parameters/StandardMovement/Move/MoveState/current_index = 0
 [node name="Character" type="Sprite2D" parent="." unique_id=295087923]
 position = Vector2(0, -3)
 scale = Vector2(3, 3)
-texture = ExtResource("1_pv8u5")
+texture = ExtResource("5_7vh4w")
 hframes = 8
 vframes = 9
 
@@ -1271,7 +1271,7 @@ vframes = 9
 libraries/ = SubResource("AnimationLibrary_gymyn")
 
 [node name="CollisionManager" type="Node" parent="." unique_id=1753210868]
-script = ExtResource("10_gymyn")
+script = ExtResource("9_k8qpn")
 
 [node name="WalkingCollision" type="CollisionShape2D" parent="." unique_id=973966651]
 shape = SubResource("CapsuleShape2D_tx1dd")
@@ -1285,7 +1285,7 @@ disabled = true
 shape = SubResource("CircleShape2D_tx1dd")
 disabled = true
 
-[node name="JetpackAsset" parent="." unique_id=261087070 instance=ExtResource("10_tx1dd")]
+[node name="JetpackAsset" parent="." unique_id=261087070 instance=ExtResource("10_13iwc")]
 visible = false
 net_acceleration = 1800.0
 max_speed = 800.0
