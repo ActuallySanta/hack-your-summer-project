@@ -62,6 +62,9 @@ var _facingRight : bool
 # Jumping and air
 var _jumpBufferTimer : float
 var _coyoteTimer : float
+var _wall_jump_speed_bonus : float
+var _wall_jump_dir : float
+var _wall_jump_buffer : float
 # Health
 var _currentHealth : int
 # Attack
@@ -119,6 +122,24 @@ func jump() -> void:
 	
 	velocity.y = -jumpForce
 
+func wall_jump() -> void:
+	print("==Trying wall jump==")
+	_jumpBufferTimer = 0
+	_coyoteTimer = 0
+	var foreground = get_foreground()
+	var blocks = [
+		#get_map_position(foreground, Vector2i(-_moveInput, -1)),
+		get_map_position(foreground, Vector2i(-_moveInput, 0)),
+		get_map_position(foreground, Vector2i(-_moveInput, 1))
+	]
+	
+	for block in blocks:
+		if not is_tile_air(foreground, block):
+			print(" Success!")
+			_wall_jump_speed_bonus = 600
+			_wall_jump_dir = _moveInput
+			velocity.y = -800
+			return
 func attack() -> void:
 	print("Attack!")
 	var newAttack := swingScene.instantiate() as PlayerMeleeSwing
@@ -165,21 +186,33 @@ func handle_jump_and_gravity(delta: float) -> void:
 		_coyoteTimer = coyoteTime
 	
 	# Handle jump.
-	if _jumpBufferTimer > 0:
-		if (is_on_floor() or _coyoteTimer > 0) and playerMoveState != MoveState.Climbing:
-			jump()
-		else:
-			_jumpBufferTimer -= delta
+	if _wall_jump_speed_bonus > 0:
+		_wall_jump_speed_bonus -= 50
+	
+	if _jumpBufferTimer <= 0:
+		return
+	
+	if not (is_on_floor() or _coyoteTimer > 0) and _wall_jump_buffer > 0:
+		wall_jump()
+	
+	if (is_on_floor() or _coyoteTimer > 0) and playerMoveState != MoveState.Climbing:
+		jump()		
+	else:
+		_wall_jump_buffer = 1.0
+		_jumpBufferTimer -= delta
+		_wall_jump_buffer -= delta
 
 func handle_standard_movement(_delta: float) -> void:
 	# Get the input direction and handle the movement/deceleration.
 	if _moveInput:
 		velocity.x = _moveInput * moveSpeed
+		if _wall_jump_speed_bonus > 0:
+			velocity.x += _wall_jump_speed_bonus * _wall_jump_dir
 		if(playerMoveState == MoveState.Crouching):
 			velocity.x *= crouchSpeedMult
 		_facingRight = _moveInput > 0
 	else:
-		velocity.x = move_toward(velocity.x, 0, moveSpeed)
+		velocity.x = move_toward(velocity.x, 0, moveSpeed * 0.1)
 	set_anim_move_state(playerMoveState, _moveInput != 0)
 
 func handle_climbing_movement(_delta: float) -> void:
@@ -253,6 +286,9 @@ func on_cell_group_change(new_group: String) -> void:
 	MusicManager.set_background_track(new_group)
 
 func _physics_process(delta: float) -> void:
+	if _is_vaulting:
+		return
+	
 	previousMoveState = playerMoveState
 	playerMoveState = determine_move_state()
 	
@@ -267,6 +303,7 @@ func _physics_process(delta: float) -> void:
 		handle_climbing_movement(delta)
 	else:
 		handle_standard_movement(delta)
+	
 	# Handle attack
 	if _attackCooldownTimer > 0:
 		_attackCooldownTimer -= delta
@@ -290,9 +327,9 @@ func _physics_process(delta: float) -> void:
 
 	# 3. Flip the sprite visually based on which way we are running
 	if _facingRight:
-		$Character.flip_h = false  # Facing Right
+		sprite.flip_h = false  # Facing Right
 	else:
-		$Character.flip_h = true   # Facing Left
+		sprite.flip_h = true   # Facing Left
 
 	var groups = MetSys.get_cell_groups( MetSys.get_current_coords() )
 	if groups.size() == 0:
@@ -314,7 +351,7 @@ func _process( _delta: float ) -> void:
 	if animPlayback.get_current_node() == "RangedFire" or animPlayback.get_current_node() == "MeleeSwing":
 		anim_fire = false
 		anim_swing = false
-
+	
 #region Damage and respawn
 func die() -> void:
 	_invulnTimer = 0
@@ -373,11 +410,11 @@ func try_mantle() -> bool:
 	var foreground = get_foreground()
 	var mantle_block = get_map_position( foreground )
 	mantle_block.x += -1 if sprite.flip_h else 1
-	if foreground.get_cell_source_id(mantle_block) == -1:
+	if is_tile_air(foreground, mantle_block):
 		return false
 	
 	var air_check = Vector2i(mantle_block.x, mantle_block.y - 1)
-	if foreground.get_cell_source_id(air_check) != -1:
+	if not is_tile_air(foreground, air_check):
 		return false
 	
 	mantle()
@@ -427,6 +464,9 @@ func reset_camera() -> void:
 #endregion
 
 #region Getters and Setters
+func is_tile_air(foreground: TileMapLayer, pos: Vector2i) -> bool:
+	return foreground.get_cell_source_id(pos) == -1
+
 func get_camera() -> Camera2D:
 	return get_viewport().get_camera_2d()
 
@@ -435,8 +475,8 @@ func get_foreground() -> TileMapLayer:
 	var foreground : TileMapLayer = children.filter(func(child): return child.name.begins_with("Fore"))[0]
 	return foreground
 
-func get_map_position(foreground: TileMapLayer, relative_to_player: Vector2 = Vector2.ZERO) -> Vector2i:
-	var map_pos : Vector2i = foreground.local_to_map(foreground.to_local( global_position + relative_to_player ))
+func get_map_position(foreground: TileMapLayer, relative_to_player: Vector2i = Vector2i.ZERO) -> Vector2i:
+	var map_pos : Vector2i = foreground.local_to_map(foreground.to_local( global_position )) + relative_to_player
 	return map_pos
 
 func set_jump_input() -> void:

@@ -1221,13 +1221,13 @@ _data = {
 }
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xxqkx"]
-size = Vector2(48.015625, 90)
+size = Vector2(42.007813, 90)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gymyn"]
 size = Vector2(51, 20)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_tx1dd"]
-radius = 32.0
+radius = 37.01351
 
 [node name="Player" type="CharacterBody2D" unique_id=862395343 groups=["player"]]
 z_index = 5
