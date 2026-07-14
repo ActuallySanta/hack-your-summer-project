@@ -2,9 +2,8 @@
 
 [ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="1_hbhwq"]
 [ext_resource type="PackedScene" uid="uid://cdsjsvuyovomn" path="res://Scenes/tile_map_for_rooms.tscn" id="2_f7c8u"]
-[ext_resource type="Texture2D" uid="uid://6ooirgr7gm10" path="res://Textures/PropsAndBackgrounds/Illegal_Temp_Image.png" id="3_716aa"]
+[ext_resource type="PackedScene" uid="uid://sjty08w4065m" path="res://Scenes/Rooms/CommonRoomComponents/space_background.tscn" id="3_2hhms"]
 [ext_resource type="TileSet" uid="uid://hkvfy5by8aqr" path="res://Tileset/Main_Level.tres" id="3_ihd0u"]
-[ext_resource type="Script" uid="uid://bcs455frmded7" path="res://Scenes/Rooms/Biological Research Sector/backgroundScroll.gd" id="4_2hhms"]
 [ext_resource type="Script" uid="uid://whdtoijov1so" path="res://Scripts/occilator.gd" id="4_ihd0u"]
 [ext_resource type="PackedScene" uid="uid://scnrv60doh5o" path="res://Scenes/Components/down_vertical_room_transistion_tool.tscn" id="7_31bdf"]
 
@@ -14,15 +13,8 @@
 
 [node name="VisualAssets" parent="." unique_id=1359070375 instance=ExtResource("2_f7c8u")]
 
-[node name="Background" type="Sprite2D" parent="VisualAssets" unique_id=1903448612]
-texture_filter = 1
-texture_repeat = 3
+[node name="Background" parent="VisualAssets" unique_id=1411061257 instance=ExtResource("3_2hhms")]
 position = Vector2(1155, 336)
-texture = ExtResource("3_716aa")
-region_enabled = true
-region_rect = Rect2(0, 0, 2400, 864)
-script = ExtResource("4_2hhms")
-tiles_per_second = Vector2(2, -0.66)
 
 [node name="Background2" type="TileMapLayer" parent="VisualAssets" unique_id=1339228053]
 self_modulate = Color(0.39215687, 0.39215687, 0.39215687, 1)

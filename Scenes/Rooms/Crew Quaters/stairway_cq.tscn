@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="1_f4nlp"]
 [ext_resource type="PackedScene" uid="uid://cdsjsvuyovomn" path="res://Scenes/tile_map_for_rooms.tscn" id="2_36x1u"]
+[ext_resource type="PackedScene" uid="uid://sjty08w4065m" path="res://Scenes/Rooms/CommonRoomComponents/space_background.tscn" id="3_dxhfc"]
 [ext_resource type="TileSet" uid="uid://hkvfy5by8aqr" path="res://Tileset/Main_Level.tres" id="3_l2p6i"]
 
 [node name="StairwayCQ" type="Node2D" unique_id=1891401530]
@@ -9,6 +10,10 @@
 [node name="RoomInstance" parent="." unique_id=1283500558 instance=ExtResource("1_f4nlp")]
 
 [node name="TileMapForRooms" parent="." unique_id=1359070375 instance=ExtResource("2_36x1u")]
+
+[node name="Background" parent="TileMapForRooms" unique_id=1411061257 instance=ExtResource("3_dxhfc")]
+position = Vector2(577, 1008)
+region_rect = Rect2(0, 0, 1152, 2016)
 
 [node name="Foreground2" type="TileMapLayer" parent="TileMapForRooms" unique_id=2055698131]
 position = Vector2(1, 0)

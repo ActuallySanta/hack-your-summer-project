@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="1_wlg0l"]
 [ext_resource type="PackedScene" uid="uid://cdsjsvuyovomn" path="res://Scenes/tile_map_for_rooms.tscn" id="2_s6sbc"]
+[ext_resource type="PackedScene" uid="uid://sjty08w4065m" path="res://Scenes/Rooms/CommonRoomComponents/space_background.tscn" id="3_d45xu"]
 [ext_resource type="TileSet" uid="uid://hkvfy5by8aqr" path="res://Tileset/Main_Level.tres" id="3_snmj4"]
 [ext_resource type="PackedScene" uid="uid://41tgjv6lxsko" path="res://Scenes/Enemies/melee_enemy.tscn" id="4_fvus3"]
 
@@ -10,6 +11,10 @@
 [node name="RoomInstance" parent="." unique_id=1567852006 instance=ExtResource("1_wlg0l")]
 
 [node name="TileMapForRooms" parent="." unique_id=1359070375 instance=ExtResource("2_s6sbc")]
+
+[node name="Background" parent="TileMapForRooms" unique_id=1411061257 instance=ExtResource("3_d45xu")]
+position = Vector2(576, 336)
+region_rect = Rect2(0, 0, 1152, 672)
 
 [node name="Background2" type="TileMapLayer" parent="TileMapForRooms" unique_id=1051829810]
 modulate = Color(0.78431374, 0.78431374, 0.78431374, 1)
