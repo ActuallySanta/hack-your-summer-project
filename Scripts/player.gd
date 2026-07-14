@@ -15,6 +15,7 @@ signal death_end()
 @export var jumpForce := 600.0
 @export var jumpBufferTime := 0.25
 @export var coyoteTime := 0.2
+@export var wallJumpBufferTime := 0.2
 
 @export_group("Combat")
 @export var baseHealth := 5
@@ -123,23 +124,31 @@ func jump() -> void:
 	velocity.y = -jumpForce
 
 func wall_jump() -> void:
-	print("==Trying wall jump==")
 	_jumpBufferTimer = 0
 	_coyoteTimer = 0
+	_wall_jump_buffer = 0
+	
+	_wall_jump_speed_bonus = 600
+	_wall_jump_dir = _moveInput
+	velocity.y = -800
+
+func validate_wall_jump() -> bool:
+	if not is_on_wall_only():
+		return false
+
 	var foreground = get_foreground()
 	var blocks = [
-		#get_map_position(foreground, Vector2i(-_moveInput, -1)),
+		get_map_position(foreground, Vector2i(-_moveInput, -1)),
 		get_map_position(foreground, Vector2i(-_moveInput, 0)),
-		get_map_position(foreground, Vector2i(-_moveInput, 1))
+		#get_map_position(foreground, Vector2i(-_moveInput, 1))
 	]
 	
 	for block in blocks:
 		if not is_tile_air(foreground, block):
-			print(" Success!")
-			_wall_jump_speed_bonus = 600
-			_wall_jump_dir = _moveInput
-			velocity.y = -800
-			return
+			_wall_jump_buffer = wallJumpBufferTime
+			return true
+	return false
+
 func attack() -> void:
 	print("Attack!")
 	var newAttack := swingScene.instantiate() as PlayerMeleeSwing
@@ -189,6 +198,7 @@ func handle_jump_and_gravity(delta: float) -> void:
 	if _wall_jump_speed_bonus > 0:
 		_wall_jump_speed_bonus -= 50
 	
+	
 	if _jumpBufferTimer <= 0:
 		return
 	
@@ -196,11 +206,17 @@ func handle_jump_and_gravity(delta: float) -> void:
 		wall_jump()
 	
 	if (is_on_floor() or _coyoteTimer > 0) and playerMoveState != MoveState.Climbing:
-		jump()		
+		jump()
 	else:
-		_wall_jump_buffer = 1.0
 		_jumpBufferTimer -= delta
+
+func handle_wall_jumping(delta: float) -> void:
+	if validate_wall_jump():
+		print(" == Can prepare wall jump == ")
+	else:
 		_wall_jump_buffer -= delta
+		if _wall_jump_buffer > 0:
+			print("  buffer: ", _wall_jump_buffer)
 
 func handle_standard_movement(_delta: float) -> void:
 	# Get the input direction and handle the movement/deceleration.
@@ -295,6 +311,7 @@ func _physics_process(delta: float) -> void:
 	if previousMoveState != playerMoveState:
 		collisionManager.swap_active_collision( translate_state() )
 	
+	handle_wall_jumping(delta)
 	handle_jump_and_gravity(delta)
 	
 	if playerMoveState == MoveState.Knockback:
