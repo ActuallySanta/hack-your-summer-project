@@ -122,6 +122,8 @@ script = ExtResource("1_xeawc")
 
 [node name="InitialQuadrant" type="Area2D" parent="." unique_id=1967869062]
 scale = Vector2(9.6, 7.2)
+collision_layer = 3
+collision_mask = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InitialQuadrant" unique_id=1384471098]
 shape = SubResource("RectangleShape2D_pj83k")
@@ -129,6 +131,8 @@ shape = SubResource("RectangleShape2D_pj83k")
 [node name="BalanceQuadrant" type="Area2D" parent="." unique_id=332717460]
 position = Vector2(0, -82)
 scale = Vector2(9.6, 1)
+collision_layer = 3
+collision_mask = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BalanceQuadrant" unique_id=983930812]
 position = Vector2(0, 24.000002)
@@ -145,6 +149,8 @@ autoplay = "Idle"
 flip_v = true
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=906614097]
+collision_layer = 3
+collision_mask = 3
 
 [node name="LockedDoorCollider" type="CollisionShape2D" parent="StaticBody2D" unique_id=1584276826]
 position = Vector2(0, -62)
