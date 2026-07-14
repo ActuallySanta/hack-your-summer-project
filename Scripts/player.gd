@@ -54,6 +54,13 @@ var _knockbackForce : float
 var _invulnTimer : float
 var _invulnBlinkTimer : float
 var _deathRespawnTimer : float
+var _is_vaulting : bool
+var _camera_offset : Vector2
+var _need_to_move_camera : bool
+
+var _camera_anim_pos : Vector2
+var _camera_anim_time : float
+var _camera_anim_elapsed_time : float
 
 enum MoveState{
 	Standing,
@@ -343,10 +350,14 @@ func reset_all_inputs() -> void:
 	unset_attack_input()
 	unset_shoot_input()
 
-func _process( _delta: float) -> void:
+func _process( _delta: float ) -> void:
 	handle_inputs()
-	handle_invuln_blinking(_delta)
+	handle_invuln_blinking( _delta )
 	handle_vertical_speed()
+	get_camera().global_position += _camera_offset
+	print( _camera_offset )
+	if _need_to_move_camera:
+		anim_camera_update( _delta )
 	
 	if animPlayback.get_current_node() == "RangedFire" or animPlayback.get_current_node() == "MeleeSwing":
 		anim_fire = false
@@ -389,6 +400,8 @@ func collect(pickup: Pickup) -> bool:
 
 #region Jetpack
 func do_jetpack_logic(net_accel: float, max_speed: float, delta: float):
+	if _is_vaulting:
+		return
 	var drag_coef := -velocity.y/max_speed
 	var total_accel := get_gravity().y + (net_accel * (1-drag_coef))
 	velocity.y -= total_accel * delta
@@ -429,15 +442,46 @@ func get_map_position(foreground: TileMapLayer, relative_to_player: Vector2 = Ve
 
 #TODO Replace both of these functions (As well as the tempClimber) with things in the animtree
 func mantle() -> void:
+	_is_vaulting = true
 	$TempClimberSinceZachIsStupid.flip_h = sprite.flip_h
 	$TempClimberSinceZachIsStupid.position.x = -15 if sprite.flip_h else 15
 	$TempClimberSinceZachIsStupid.visible = true
 	$Character.modulate = Color(1,1,1,0)
 	$TempClimberSinceZachIsStupid.play("Small Climb")
+	var camera_pos = Vector2(-TILE_SIZE,-TILE_SIZE) if sprite.flip_h else Vector2(TILE_SIZE, -TILE_SIZE)
+	anim_camera_start(camera_pos.x, camera_pos.y, 0.25)
 
 func _on_mantle_complete() -> void:
+	_is_vaulting = false
 	set_anim_move_state(MoveState.Crouching, false)
 	$TempClimberSinceZachIsStupid.visible = false
 	$Character.modulate = Color(1,1,1,1)
 	position += Vector2(-TILE_SIZE,-TILE_SIZE) if sprite.flip_h else Vector2(TILE_SIZE, -TILE_SIZE)
+	reset_camera()
+#endregion
+
+#region Camera stuffs
+func get_camera() -> Camera2D:
+	return get_viewport().get_camera_2d()
+
+func move_camera(x: float, y: float) -> void:
+	_camera_offset.x += x
+	_camera_offset.y += y
+
+func anim_camera_start(x: float, y: float, time: float) -> void:
+	_camera_anim_elapsed_time = 0.0
+	_camera_anim_time = time
+	_camera_anim_pos = Vector2(x, y)
+	_need_to_move_camera = true
+
+func anim_camera_update(delta: float) -> void:
+	var time = min(_camera_anim_elapsed_time / _camera_anim_time, 1.0)
+	_camera_offset = _camera_anim_pos * time
+	_camera_anim_elapsed_time += delta
+
+func reset_camera() -> void:
+	_camera_anim_pos = Vector2.ZERO
+	_camera_anim_time = -1.0
+	_need_to_move_camera = false
+	_camera_offset = Vector2.ZERO
 #endregion
