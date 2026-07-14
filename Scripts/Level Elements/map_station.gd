@@ -37,7 +37,7 @@ func _process(delta: float) -> void:
 		activeAnim(delta)
 
 func passiveAnim(delta: float) -> void:
-	if _has_been_interacted_with:
+	if _has_been_interacted_with and not _is_on:
 		return
 	
 	_timer_passive += delta
