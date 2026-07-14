@@ -1,0 +1,32 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://bpguk1hi3u5j6"]
+
+[ext_resource type="Texture2D" uid="uid://cjcywlroqfgr0" path="res://Sprites/Main Character Short Climb.png" id="1_5xvp8"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s06ti"]
+atlas = ExtResource("1_5xvp8")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q04rj"]
+atlas = ExtResource("1_5xvp8")
+region = Rect2(48, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m2vbd"]
+atlas = ExtResource("1_5xvp8")
+region = Rect2(96, 0, 48, 48)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s06ti")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q04rj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m2vbd")
+}],
+"loop": false,
+"name": &"Small Climb",
+"speed": 12.0
+}]

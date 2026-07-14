@@ -13,6 +13,7 @@ signal death_end()
 const IDLESTATEPARAM := "parameters/StandardMovement/Idle/MoveState/transition_request"
 const MOVESTATEPARAM := "parameters/StandardMovement/Move/MoveState/transition_request"
 const FIRESTATEPARAM := "parameters/RangedFire/MoveState/transition_request"
+const TILE_SIZE := 48
 
 @export_group("Movement")
 @export var moveSpeed := 500.0
@@ -93,9 +94,12 @@ func _move_player_pos(pos: Vector2) -> void:
 	position = pos
 
 func jump() -> void:
-	velocity.y = -jumpForce
 	_jumpBufferTimer = 0
 	_coyoteTimer = 0
+	if try_mantle():
+		return
+	
+	velocity.y = -jumpForce
 
 func attack() -> void:
 	print("Attack!")
@@ -125,6 +129,13 @@ func shoot() -> void:
 	_attackCooldownTimer = shootCooldown
 	_shootBufferTimer = 0
 	anim_fire = true
+
+#region Handlers
+func handle_vertical_speed() -> void:
+	if velocity.y < -1000:
+		velocity.y = -1000
+	elif velocity.y > 1500:
+		velocity.y = 1500
 
 func handle_jump_and_gravity(delta: float) -> void:
 	# Add the gravity.
@@ -164,6 +175,36 @@ func handle_knockback_movement(delta: float) -> void:
 		velocity.x += _moveInput * knockbackDI
 	_knockbackTimer -= delta
 	set_anim_move_state(MoveState.Knockback, false)
+
+func handle_inputs() -> void:
+	if(!PlayerManager.canMove or _currentHealth <= 0): return
+	
+	_moveInput = Input.get_axis("Left", "Right")
+	_vertMoveInput = Input.get_axis("Up","Down")
+	_crouchInput = Input.is_action_pressed("Crouch")
+	_climbInput = Input.is_action_pressed("Climb")	
+	
+	if Input.is_action_just_pressed("Jump"):
+		set_jump_input()
+	if Input.is_action_just_pressed("Attack"):
+		set_attack_input()
+	if Input.is_action_just_pressed("Shoot"):
+		set_shoot_input()
+
+func handle_invuln_blinking(delta: float) -> void:
+	if _invulnTimer <= 0:
+		_invulnBlinkTimer = 0
+		sprite.show()
+		return
+	
+	if _invulnBlinkTimer > invulnBlinkInterval/2:
+		sprite.hide()
+	else:
+		sprite.show()
+	_invulnBlinkTimer -= delta
+	if _invulnBlinkTimer < 0:
+		_invulnBlinkTimer += invulnBlinkInterval
+#endregion
 
 func determine_move_state() -> MoveState:
 	if _knockbackTimer > 0:
@@ -302,35 +343,6 @@ func reset_all_inputs() -> void:
 	unset_attack_input()
 	unset_shoot_input()
 
-func handle_inputs() -> void:
-	if(!PlayerManager.canMove or _currentHealth <= 0): return
-	
-	_moveInput = Input.get_axis("Left", "Right")
-	_vertMoveInput = Input.get_axis("Up","Down")
-	_crouchInput = Input.is_action_pressed("Crouch")
-	_climbInput = Input.is_action_pressed("Climb")	
-	
-	if Input.is_action_just_pressed("Jump"):
-		set_jump_input()
-	if Input.is_action_just_pressed("Attack"):
-		set_attack_input()
-	if Input.is_action_just_pressed("Shoot"):
-		set_shoot_input()
-
-func handle_invuln_blinking(delta: float) -> void:
-	if _invulnTimer <= 0:
-		_invulnBlinkTimer = 0
-		sprite.show()
-		return
-	
-	if _invulnBlinkTimer > invulnBlinkInterval/2:
-		sprite.hide()
-	else:
-		sprite.show()
-	_invulnBlinkTimer -= delta
-	if _invulnBlinkTimer < 0:
-		_invulnBlinkTimer += invulnBlinkInterval
-
 func _process( _delta: float) -> void:
 	handle_inputs()
 	handle_invuln_blinking(_delta)
@@ -340,12 +352,7 @@ func _process( _delta: float) -> void:
 		anim_fire = false
 		anim_swing = false
 
-func handle_vertical_speed() -> void:
-	if velocity.y < -1000:
-		velocity.y = -1000
-	elif velocity.y > 1500:
-		velocity.y = 1500
-
+#region Damage and respawn
 func die() -> void:
 	_invulnTimer = 0
 	anim_death = true
@@ -373,12 +380,14 @@ func _on_hit(_hurtBox: Hurtbox, hit_info: HitInfo, _source: Hitbox) -> void:
 	anim_hurt = true
 	if _currentHealth <= 0:
 		die()
+#endregion
 
 func collect(pickup: Pickup) -> bool:
 	print("Collect pickup " + pickup.get_type_as_str())
 	pickup_collected.emit(pickup)
 	return true
 
+#region Jetpack
 func do_jetpack_logic(net_accel: float, max_speed: float, delta: float):
 	var drag_coef := -velocity.y/max_speed
 	var total_accel := get_gravity().y + (net_accel * (1-drag_coef))
@@ -389,3 +398,46 @@ func disable_jetpack() -> void:
 
 func enable_jetpack() -> void:
 	jetpack.process_mode = Node.PROCESS_MODE_INHERIT
+#endregion
+	
+#region Mantle
+func try_mantle() -> bool:
+	if not is_on_floor():
+		return false
+	
+	var foreground = get_foreground()
+	var mantle_block = get_map_position( foreground )
+	mantle_block.x += -1 if sprite.flip_h else 1
+	if foreground.get_cell_source_id(mantle_block) == -1:
+		return false
+	
+	var air_check = Vector2i(mantle_block.x, mantle_block.y - 1)
+	if foreground.get_cell_source_id(air_check) != -1:
+		return false
+	
+	mantle()
+	return true
+
+func get_foreground() -> TileMapLayer:
+	var children = get_tree().get_first_node_in_group("Geometry").get_children()
+	var foreground : TileMapLayer = children.filter(func(child): return child.name.begins_with("Fore"))[0]
+	return foreground
+
+func get_map_position(foreground: TileMapLayer, relative_to_player: Vector2 = Vector2.ZERO) -> Vector2i:
+	var map_pos : Vector2i = foreground.local_to_map(foreground.to_local( global_position + relative_to_player ))
+	return map_pos
+
+#TODO Replace both of these functions (As well as the tempClimber) with things in the animtree
+func mantle() -> void:
+	$TempClimberSinceZachIsStupid.flip_h = sprite.flip_h
+	$TempClimberSinceZachIsStupid.position.x = -15 if sprite.flip_h else 15
+	$TempClimberSinceZachIsStupid.visible = true
+	$Character.modulate = Color(1,1,1,0)
+	$TempClimberSinceZachIsStupid.play("Small Climb")
+
+func _on_mantle_complete() -> void:
+	set_anim_move_state(MoveState.Crouching, false)
+	$TempClimberSinceZachIsStupid.visible = false
+	$Character.modulate = Color(1,1,1,1)
+	position += Vector2(-TILE_SIZE,-TILE_SIZE) if sprite.flip_h else Vector2(TILE_SIZE, -TILE_SIZE)
+#endregion

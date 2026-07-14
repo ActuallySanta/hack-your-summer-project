@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://btpjpn1y6y23a" path="res://Sprites/character_swing.png" id="8_m3db5"]
 [ext_resource type="Script" uid="uid://crhoj1q6iw1an" path="res://Scripts/Player/player_collision_manager.gd" id="9_k8qpn"]
 [ext_resource type="PackedScene" uid="uid://cfpoti64f7omn" path="res://Scenes/Entities/jetpack_asset.tscn" id="10_13iwc"]
+[ext_resource type="SpriteFrames" uid="uid://bpguk1hi3u5j6" path="res://Sprites/Character_Small_Climb_Sprites.tres" id="11_xxqkx"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_f1ek2"]
 radius = 24.0
@@ -83,15 +84,16 @@ input_2/break_loop_at_end = false
 input_2/reset = true
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_tx1dd"]
-graph_offset = Vector2(-515.7741, 78.69971)
+graph_offset = Vector2(-429.62784, 30.87207)
+nodes/output/position = Vector2(302.4, 268.8)
 nodes/MoveState/node = SubResource("AnimationNodeTransition_gymyn")
-nodes/MoveState/position = Vector2(133.33333, 146.66667)
+nodes/MoveState/position = Vector2(100.8, 252)
 nodes/Animation/node = SubResource("AnimationNodeAnimation_tx1dd")
-nodes/Animation/position = Vector2(-106.666664, 80)
+nodes/Animation/position = Vector2(-100.8, 84)
 "nodes/Animation 2/node" = SubResource("AnimationNodeAnimation_8erm5")
-"nodes/Animation 2/position" = Vector2(-93.333336, 253.33333)
+"nodes/Animation 2/position" = Vector2(-100.8, 319.2)
 "nodes/Animation 3/node" = SubResource("AnimationNodeAnimation_f1ek2")
-"nodes/Animation 3/position" = Vector2(-80, 440)
+"nodes/Animation 3/position" = Vector2(-100.8, 571.2)
 node_connections = [&"output", 0, &"MoveState", &"MoveState", 0, &"Animation", &"MoveState", 1, &"Animation 2", &"MoveState", 2, &"Animation 3"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_7dp3o"]
@@ -168,7 +170,7 @@ states/Move/position = Vector2(598, 78.53333)
 states/jump/node = SubResource("AnimationNodeAnimation_ukyrk")
 states/jump/position = Vector2(462.66666, 204)
 transitions = ["Idle", "Move", SubResource("AnimationNodeStateMachineTransition_7dp3o"), "Move", "Idle", SubResource("AnimationNodeStateMachineTransition_h4iuc"), "Idle", "jump", SubResource("AnimationNodeStateMachineTransition_fd4e3"), "jump", "Idle", SubResource("AnimationNodeStateMachineTransition_qqcod"), "jump", "Move", SubResource("AnimationNodeStateMachineTransition_igrcy"), "Move", "jump", SubResource("AnimationNodeStateMachineTransition_fs7ks"), "Start", "Idle", SubResource("AnimationNodeStateMachineTransition_l6n3p")]
-graph_offset = Vector2(14, -38)
+graph_offset = Vector2(64, -39)
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_pu2lt"]
 animation = &"death"
@@ -219,14 +221,17 @@ states/MeleeSwing/position = Vector2(489.66666, -14.482391)
 states/RangedFire/node = SubResource("AnimationNodeBlendTree_f1ek2")
 states/RangedFire/position = Vector2(214.33331, -7.8404236)
 states/StandardMovement/node = SubResource("AnimationNodeStateMachine_olqyp")
-states/StandardMovement/position = Vector2(354.3333, 101.16837)
+states/StandardMovement/position = Vector2(354.3333, 101.00107)
 states/Start/position = Vector2(162.66669, 101.15924)
 states/death/node = SubResource("AnimationNodeAnimation_pu2lt")
 states/death/position = Vector2(665.6666, 99.51996)
 states/knockback/node = SubResource("AnimationNodeAnimation_gymyn")
 states/knockback/position = Vector2(569.3334, 187.82626)
 transitions = ["knockback", "death", SubResource("AnimationNodeStateMachineTransition_vfarp"), "Start", "StandardMovement", SubResource("AnimationNodeStateMachineTransition_wpjfl"), "StandardMovement", "RangedFire", SubResource("AnimationNodeStateMachineTransition_bi64h"), "StandardMovement", "MeleeSwing", SubResource("AnimationNodeStateMachineTransition_2ijsl"), "StandardMovement", "knockback", SubResource("AnimationNodeStateMachineTransition_p1odr"), "knockback", "StandardMovement", SubResource("AnimationNodeStateMachineTransition_0gysh"), "MeleeSwing", "StandardMovement", SubResource("AnimationNodeStateMachineTransition_83xs0"), "RangedFire", "StandardMovement", SubResource("AnimationNodeStateMachineTransition_ypfnu"), "death", "StandardMovement", SubResource("AnimationNodeStateMachineTransition_f1ek2")]
-graph_offset = Vector2(52, -28.889816)
+graph_offset = Vector2(14, -24.889816)
+
+[sub_resource type="Animation" id="Animation_j8xm3"]
+resource_name = "Mantle"
 
 [sub_resource type="Animation" id="Animation_btcbx"]
 length = 0.001
@@ -354,7 +359,7 @@ tracks/9/keys = {
 
 [sub_resource type="Animation" id="Animation_5fcxh"]
 resource_name = "climb"
-length = 0.8
+length = 2.1666667
 loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -399,7 +404,7 @@ tracks/3/path = NodePath("Character:frame")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.4, 0.6),
+"times": PackedFloat32Array(0, 0.53333336, 1.0666667, 1.6),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
 "values": [0, 1, 2, 3]
@@ -584,7 +589,7 @@ tracks/9/keys = {
 
 [sub_resource type="Animation" id="Animation_apopc"]
 resource_name = "crouch"
-length = 0.03333667
+length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -1199,6 +1204,7 @@ tracks/3/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_gymyn"]
 _data = {
+&"Mantle": SubResource("Animation_j8xm3"),
 &"RESET": SubResource("Animation_btcbx"),
 &"climb": SubResource("Animation_5fcxh"),
 &"cover_shoot": SubResource("Animation_kn20l"),
@@ -1290,4 +1296,12 @@ visible = false
 net_acceleration = 1800.0
 max_speed = 800.0
 
+[node name="TempClimberSinceZachIsStupid" type="AnimatedSprite2D" parent="." unique_id=1814478294]
+visible = false
+position = Vector2(15, -27)
+scale = Vector2(3, 3)
+sprite_frames = ExtResource("11_xxqkx")
+animation = &"Small Climb"
+
 [connection signal="hit" from="Hurtbox" to="." method="_on_hit"]
+[connection signal="animation_finished" from="TempClimberSinceZachIsStupid" to="." method="_on_mantle_complete"]
