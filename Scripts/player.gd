@@ -1,20 +1,13 @@
 class_name Player
 extends CharacterBody2D
 
+# Signals
 signal pickup_collected(pickup : Pickup)
 signal save_station_used()
 signal death_start(anim_duration: float)
 signal death_end()
 
-## Get animationtree ##
-@onready var animator: AnimationTree = $AnimationTree
-@onready var animPlayback: AnimationNodeStateMachinePlayback = animator.get("parameters/playback")
-
-const IDLESTATEPARAM := "parameters/StandardMovement/Idle/MoveState/transition_request"
-const MOVESTATEPARAM := "parameters/StandardMovement/Move/MoveState/transition_request"
-const FIRESTATEPARAM := "parameters/RangedFire/MoveState/transition_request"
-const TILE_SIZE := 48
-
+# Exports
 @export_group("Movement")
 @export var moveSpeed := 500.0
 @export var crouchSpeedMult := 0.5
@@ -36,58 +29,76 @@ const TILE_SIZE := 48
 @export var hitInvulnTime := 1.0
 @export var invulnBlinkInterval := 0.15
 @export var knockbackDI := 300.0
+@export var canClimb : bool = false
 
-var _moveInput : float
-var _vertMoveInput :float
-var _crouchInput : bool
-var _climbInput : bool
-var _facingRight : bool
-var _jumpBufferTimer : float
-var _coyoteTimer : float
-var _currentHealth : int
-var _attackCooldownTimer : float
-var _attackBufferTimer : float
-var _shootCooldownTimer : float
-var _shootBufferTimer : float
-var _knockbackTimer : float
-var _knockbackForce : float
-var _invulnTimer : float
-var _invulnBlinkTimer : float
-var _deathRespawnTimer : float
-var _is_vaulting : bool
-var _camera_offset : Vector2
-var _need_to_move_camera : bool
-
-var _camera_anim_pos : Vector2
-var _camera_anim_time : float
-var _camera_anim_elapsed_time : float
-
+# Enums
 enum MoveState{
 	Standing,
 	Crouching,
 	Climbing,
 	Jumping,
-	Knockback
+	Knockback,
 }
 
+# Onreadys
+@onready var animator: AnimationTree = $AnimationTree
+@onready var animPlayback: AnimationNodeStateMachinePlayback = animator.get("parameters/playback")
+@onready var jetpack: Sprite2D = $JetpackAsset
+@onready var sprite : Sprite2D = $Character
+@onready var collisionManager: Node = $CollisionManager
+
+# Consts
+const IDLESTATEPARAM := "parameters/StandardMovement/Idle/MoveState/transition_request"
+const MOVESTATEPARAM := "parameters/StandardMovement/Move/MoveState/transition_request"
+const FIRESTATEPARAM := "parameters/RangedFire/MoveState/transition_request"
+const TILE_SIZE := 48
+# Input
+var _moveInput : float
+var _vertMoveInput :float
+var _crouchInput : bool
+var _climbInput : bool
+# Direction
+var _facingRight : bool
+# Jumping and air
+var _jumpBufferTimer : float
+var _coyoteTimer : float
+# Health
+var _currentHealth : int
+# Attack
+var _attackCooldownTimer : float
+var _attackBufferTimer : float
+# Shooting
+var _shootCooldownTimer : float
+var _shootBufferTimer : float
+# Knockback
+var _knockbackTimer : float
+var _knockbackForce : float
+# Invinciblity frames
+var _invulnTimer : float
+var _invulnBlinkTimer : float
+var _deathRespawnTimer : float
+# Mantling and Vaulting
+var _is_vaulting : bool
+# Camera offset
+var _camera_offset : Vector2
+var _need_to_move_camera : bool
+# Camera animation
+var _camera_anim_pos : Vector2
+var _camera_anim_time : float
+var _camera_anim_elapsed_time : float
+# Player MoveState
 var playerMoveState: MoveState
 var previousMoveState: MoveState
-
+#Animation
 var anim_moving : bool
 var anim_jumping : bool
 var anim_hurt : bool
 var anim_death : bool
 var anim_swing : bool
 var anim_fire : bool
-
-
-@export var canClimb : bool = false
-
+# Map and MetSys
 var previous_cell_Group := "None"
 
-@onready var jetpack: Sprite2D = $JetpackAsset
-@onready var sprite : Sprite2D = $Character
-@onready var collisionManager: Node = $CollisionManager
 
 func _ready() -> void:
 	PlayerManager.player = self
@@ -228,37 +239,6 @@ func determine_move_state() -> MoveState:
 	
 	return MoveState.Standing
 
-func set_anim_move_state(moveState: MoveState, moving: bool) -> void:
-	match moveState:
-		MoveState.Standing:
-			animator.set(IDLESTATEPARAM, "Stand")
-			animator.set(MOVESTATEPARAM, "Stand")
-			animator.set(FIRESTATEPARAM, "Stand")
-			anim_jumping = false
-			anim_moving = moving
-			anim_hurt = false
-		MoveState.Crouching:
-			animator.set(IDLESTATEPARAM, "Crouch")
-			animator.set(MOVESTATEPARAM, "Crouch")
-			animator.set(FIRESTATEPARAM, "Crouch")
-			anim_jumping = false
-			anim_moving = moving
-			anim_hurt = false
-		MoveState.Climbing:
-			animator.set(IDLESTATEPARAM, "Climb")
-			animator.set(MOVESTATEPARAM, "Climb")
-			animator.set(FIRESTATEPARAM, "Jump")
-			anim_jumping = false
-			anim_moving = moving
-			anim_hurt = false
-		MoveState.Jumping:
-			animator.set(FIRESTATEPARAM, "Jump")
-			anim_jumping = true
-			anim_moving = true
-			anim_hurt = false
-		MoveState.Knockback:
-			anim_hurt = true
-
 func translate_state() -> CollisionManager.State:
 	if playerMoveState == MoveState.Standing or playerMoveState == MoveState.Climbing or playerMoveState == MoveState.Knockback:
 		return CollisionManager.State.WALK
@@ -323,39 +303,11 @@ func _physics_process(delta: float) -> void:
 		on_cell_group_change(group)
 		previous_cell_Group = group
 
-func set_jump_input() -> void:
-	_jumpBufferTimer = jumpBufferTime
-	
-func unset_jump_input() -> void:
-	_jumpBufferTimer = 0
-
-func set_attack_input() -> void:
-	_attackBufferTimer = attackBufferTime
-	
-func unset_attack_input() -> void:
-	_attackBufferTimer = 0
-
-func set_shoot_input() -> void:
-	_shootBufferTimer = shootBufferTime
-	
-func unset_shoot_input() -> void:
-	_shootBufferTimer = 0
-
-func reset_all_inputs() -> void:
-	_moveInput = 0
-	_vertMoveInput = 0
-	_crouchInput = 0
-	_climbInput = 0
-	unset_jump_input()
-	unset_attack_input()
-	unset_shoot_input()
-
 func _process( _delta: float ) -> void:
 	handle_inputs()
 	handle_invuln_blinking( _delta )
 	handle_vertical_speed()
 	get_camera().global_position += _camera_offset
-	print( _camera_offset )
 	if _need_to_move_camera:
 		anim_camera_update( _delta )
 	
@@ -431,15 +383,6 @@ func try_mantle() -> bool:
 	mantle()
 	return true
 
-func get_foreground() -> TileMapLayer:
-	var children = get_tree().get_first_node_in_group("Geometry").get_children()
-	var foreground : TileMapLayer = children.filter(func(child): return child.name.begins_with("Fore"))[0]
-	return foreground
-
-func get_map_position(foreground: TileMapLayer, relative_to_player: Vector2 = Vector2.ZERO) -> Vector2i:
-	var map_pos : Vector2i = foreground.local_to_map(foreground.to_local( global_position + relative_to_player ))
-	return map_pos
-
 #TODO Replace both of these functions (As well as the tempClimber) with things in the animtree
 func mantle() -> void:
 	_is_vaulting = true
@@ -461,9 +404,6 @@ func _on_mantle_complete() -> void:
 #endregion
 
 #region Camera stuffs
-func get_camera() -> Camera2D:
-	return get_viewport().get_camera_2d()
-
 func move_camera(x: float, y: float) -> void:
 	_camera_offset.x += x
 	_camera_offset.y += y
@@ -484,4 +424,77 @@ func reset_camera() -> void:
 	_camera_anim_time = -1.0
 	_need_to_move_camera = false
 	_camera_offset = Vector2.ZERO
+#endregion
+
+#region Getters and Setters
+func get_camera() -> Camera2D:
+	return get_viewport().get_camera_2d()
+
+func get_foreground() -> TileMapLayer:
+	var children = get_tree().get_first_node_in_group("Geometry").get_children()
+	var foreground : TileMapLayer = children.filter(func(child): return child.name.begins_with("Fore"))[0]
+	return foreground
+
+func get_map_position(foreground: TileMapLayer, relative_to_player: Vector2 = Vector2.ZERO) -> Vector2i:
+	var map_pos : Vector2i = foreground.local_to_map(foreground.to_local( global_position + relative_to_player ))
+	return map_pos
+
+func set_jump_input() -> void:
+	_jumpBufferTimer = jumpBufferTime
+
+func unset_jump_input() -> void:
+	_jumpBufferTimer = 0
+
+func set_attack_input() -> void:
+	_attackBufferTimer = attackBufferTime
+
+func unset_attack_input() -> void:
+	_attackBufferTimer = 0
+
+func set_shoot_input() -> void:
+	_shootBufferTimer = shootBufferTime
+
+func unset_shoot_input() -> void:
+	_shootBufferTimer = 0
+
+func reset_all_inputs() -> void:
+	_moveInput = 0
+	_vertMoveInput = 0
+	_crouchInput = 0
+	_climbInput = 0
+	unset_jump_input()
+	unset_attack_input()
+	unset_shoot_input()
+
+func set_anim_move_state(moveState: MoveState, moving: bool) -> void:
+	match moveState:
+		MoveState.Standing:
+			animator.set(IDLESTATEPARAM, "Stand")
+			animator.set(MOVESTATEPARAM, "Stand")
+			animator.set(FIRESTATEPARAM, "Stand")
+			anim_jumping = false
+			anim_moving = moving
+			anim_hurt = false
+		MoveState.Crouching:
+			animator.set(IDLESTATEPARAM, "Crouch")
+			animator.set(MOVESTATEPARAM, "Crouch")
+			animator.set(FIRESTATEPARAM, "Crouch")
+			anim_jumping = false
+			anim_moving = moving
+			anim_hurt = false
+		MoveState.Climbing:
+			animator.set(IDLESTATEPARAM, "Climb")
+			animator.set(MOVESTATEPARAM, "Climb")
+			animator.set(FIRESTATEPARAM, "Jump")
+			anim_jumping = false
+			anim_moving = moving
+			anim_hurt = false
+		MoveState.Jumping:
+			animator.set(FIRESTATEPARAM, "Jump")
+			anim_jumping = true
+			anim_moving = true
+			anim_hurt = false
+		MoveState.Knockback:
+			anim_hurt = true
+
 #endregion
