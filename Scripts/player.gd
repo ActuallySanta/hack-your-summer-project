@@ -211,12 +211,8 @@ func handle_jump_and_gravity(delta: float) -> void:
 		_jumpBufferTimer -= delta
 
 func handle_wall_jumping(delta: float) -> void:
-	if validate_wall_jump():
-		print(" == Can prepare wall jump == ")
-	else:
+	if not validate_wall_jump():
 		_wall_jump_buffer -= delta
-		if _wall_jump_buffer > 0:
-			print("  buffer: ", _wall_jump_buffer)
 
 func handle_standard_movement(_delta: float) -> void:
 	# Get the input direction and handle the movement/deceleration.
