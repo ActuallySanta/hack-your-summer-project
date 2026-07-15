@@ -1,22 +1,8 @@
 [gd_scene format=3 uid="uid://b2ibnxde1hrva"]
 
-[ext_resource type="Texture2D" uid="uid://ch5hi7bj4svnc" path="res://Sprites/Characters/Space Marine Enemy/scifi_marine_stand_1.png" id="1_t0t5w"]
 [ext_resource type="Script" uid="uid://ji4q20pb7lkf" path="res://Scripts/Enemies/ranged_enemy.gd" id="1_yfht6"]
-[ext_resource type="Texture2D" uid="uid://0prsb54qja34" path="res://Sprites/Characters/Space Marine Enemy/scifi_marine_shoot_1.png" id="2_oxo1n"]
 [ext_resource type="BehaviorTree" uid="uid://bk3pchousfnbu" path="res://ai/trees/ranged_enemy.tres" id="2_qj8iq"]
-[ext_resource type="Texture2D" uid="uid://v5rtj7iyjv0o" path="res://Sprites/Characters/Space Marine Enemy/scifi_marine_shoot_2.png" id="3_654aa"]
-[ext_resource type="Texture2D" uid="uid://2y0le27aj44w" path="res://Sprites/Characters/Space Marine Enemy/scifi_marine_stand_2.png" id="4_0cvt3"]
-[ext_resource type="Texture2D" uid="uid://dn5u00wbsi2a0" path="res://Sprites/Characters/Space Marine Enemy/scifi_marine_run_1.png" id="5_eejfn"]
-[ext_resource type="Texture2D" uid="uid://b6ercphm16gss" path="res://Sprites/Characters/Space Marine Enemy/scifi_marine_run_2.png" id="6_dj2jm"]
-[ext_resource type="Texture2D" uid="uid://bg10y0vh53oub" path="res://Sprites/Characters/Space Marine Enemy/scifi_marine_die_1.png" id="6_nmng3"]
-[ext_resource type="Texture2D" uid="uid://dmx3sw6hmanu1" path="res://Sprites/Characters/Space Marine Enemy/scifi_marine_die_2.png" id="6_qj8iq"]
-[ext_resource type="Texture2D" uid="uid://c7fgblnrma5wo" path="res://Sprites/Characters/Space Marine Enemy/scifi_marine_die_3.png" id="7_i4bsx"]
-[ext_resource type="Texture2D" uid="uid://88bk511xhkq5" path="res://Sprites/Characters/Space Marine Enemy/scifi_marine_run_3.png" id="7_yingu"]
-[ext_resource type="Texture2D" uid="uid://ri8nu5o1wixs" path="res://Sprites/Characters/Space Marine Enemy/scifi_marine_die_4.png" id="8_xtnlt"]
-[ext_resource type="Texture2D" uid="uid://bxpwdgo7pqiys" path="res://Sprites/Characters/Space Marine Enemy/scifi_marine_run_4.png" id="8_y8gpg"]
-[ext_resource type="Texture2D" uid="uid://bnl3twyy3dcyt" path="res://Sprites/Characters/Space Marine Enemy/scifi_marine_die_5.png" id="9_86kn8"]
-[ext_resource type="Texture2D" uid="uid://dse2uwvsbme7u" path="res://Sprites/Characters/Space Marine Enemy/scifi_marine_run_5.png" id="9_yfht6"]
-[ext_resource type="Texture2D" uid="uid://brfbg8o7ofbvf" path="res://Sprites/Characters/Space Marine Enemy/scifi_marine_run_6.png" id="10_qj8iq"]
+[ext_resource type="Texture2D" uid="uid://damwt4i44c6" path="res://Sprites/Characters/Ranged_Andriod.png" id="3_8o70e"]
 [ext_resource type="PackedScene" uid="uid://djmeyycufny61" path="res://Scenes/Components/Hurtbox.tscn" id="18_6j4xf"]
 
 [sub_resource type="BlackboardPlan" id="BlackboardPlan_be0ij"]
@@ -26,39 +12,27 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Visual:texture")
+tracks/0/path = NodePath("Visual:frame_coords")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("1_t0t5w")]
+"values": [Vector2i(0, 3)]
 }
 
 [sub_resource type="Animation" id="Animation_xtnlt"]
 resource_name = "attack"
 length = 0.2
 loop_mode = 1
-tracks/0/type = "value"
+tracks/0/type = "method"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Visual:texture")
+tracks/0/path = NodePath(".")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.09893014),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [ExtResource("2_oxo1n"), ExtResource("3_654aa")]
-}
-tracks/1/type = "method"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
 "times": PackedFloat32Array(0.1),
 "transitions": PackedFloat32Array(1),
 "values": [{
@@ -66,21 +40,33 @@ tracks/1/keys = {
 "method": &"spawnBullet"
 }]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visual:frame_coords")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.08),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Vector2i(0, 2), Vector2i(1, 2)]
+}
 
 [sub_resource type="Animation" id="Animation_nmng3"]
 resource_name = "die"
-length = 0.6
+length = 0.4
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Visual:texture")
+tracks/0/path = NodePath("Visual:frame_coords")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.100080535, 0.20130484, 0.3, 0.40000004),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
-"values": [ExtResource("6_nmng3"), ExtResource("6_qj8iq"), ExtResource("7_i4bsx"), ExtResource("8_xtnlt"), ExtResource("9_86kn8")]
+"values": [Vector2i(0, 0), Vector2i(1, 0), Vector2i(2, 0), Vector2i(1, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_86kn8"]
@@ -90,14 +76,14 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Visual:texture")
+tracks/0/path = NodePath("Visual:frame_coords")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.09950864, 0.10000001, 0.20000002, 0.20016107, 0.3, 0.3008135),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3024767),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
-"values": [ExtResource("6_nmng3"), ExtResource("6_qj8iq"), ExtResource("6_qj8iq"), ExtResource("7_i4bsx"), ExtResource("6_nmng3"), ExtResource("8_xtnlt"), ExtResource("6_qj8iq")]
+"values": [Vector2i(1, 0), Vector2i(0, 0), Vector2i(1, 0), Vector2i(0, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_2nh82"]
@@ -107,30 +93,32 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Visual:texture")
+tracks/0/path = NodePath("Visual:frame_coords")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.2),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [ExtResource("1_t0t5w"), ExtResource("4_0cvt3")]
+"values": [Vector2i(0, 3), Vector2i(1, 3)]
 }
 
 [sub_resource type="Animation" id="Animation_u7u8m"]
 resource_name = "run"
+length = 0.6
 loop_mode = 1
+step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Visual:texture")
+tracks/0/path = NodePath("Visual:frame_coords")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.10000001, 0.1998931, 0.3, 0.40000004, 0.5, 0.6, 0.6986094, 0.8000001, 0.89985776),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [ExtResource("5_eejfn"), ExtResource("6_dj2jm"), ExtResource("7_yingu"), ExtResource("8_y8gpg"), ExtResource("9_yfht6"), ExtResource("10_qj8iq"), ExtResource("9_yfht6"), ExtResource("8_y8gpg"), ExtResource("7_yingu"), ExtResource("6_dj2jm")]
+"values": [Vector2i(0, 1), Vector2i(1, 1), Vector2i(2, 1), Vector2i(3, 1), Vector2i(4, 1), Vector2i(5, 1)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_07m26"]
@@ -144,8 +132,8 @@ _data = {
 }
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_mgs6e"]
-radius = 45.0
-height = 132.0
+radius = 25.0
+height = 90.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_aajnb"]
 radius = 450.0
@@ -167,10 +155,14 @@ libraries/ = SubResource("AnimationLibrary_07m26")
 
 [node name="Visual" type="Sprite2D" parent="." unique_id=930293805]
 scale = Vector2(3, 3)
-texture = ExtResource("1_t0t5w")
+texture = ExtResource("3_8o70e")
+hframes = 7
+vframes = 4
+frame = 21
+region_rect = Rect2(0, 0, 64, 64)
 
 [node name="Physics Body" type="CollisionShape2D" parent="." unique_id=281236112]
-position = Vector2(0, 31)
+position = Vector2(8, 3)
 shape = SubResource("CapsuleShape2D_mgs6e")
 
 [node name="Player Detection Check" type="ShapeCast2D" parent="." unique_id=1092179563]
@@ -192,7 +184,7 @@ target_position = Vector2(150, 0)
 collision_layer = 4
 
 [node name="Shape" type="CollisionShape2D" parent="Hurtbox" unique_id=326280550]
-position = Vector2(0, 31)
+position = Vector2(8, 3)
 shape = SubResource("CapsuleShape2D_mgs6e")
 
 [node name="GroundCheck" type="ShapeCast2D" parent="." unique_id=1574451794]
