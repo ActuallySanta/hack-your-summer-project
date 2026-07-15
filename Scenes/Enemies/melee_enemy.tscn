@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" uid="uid://mg2g6xuu4xeq" path="res://Scripts/Enemies/melee_enemy.gd" id="1_vrdla"]
 [ext_resource type="BehaviorTree" uid="uid://d1xmalrj37niq" path="res://ai/trees/melee_enemy.tres" id="2_ony87"]
+[ext_resource type="AudioStream" uid="uid://b8jk1ibtjk5cx" path="res://Sounds/Entities/Enemies/Machines/HeavyFootSteps.wav" id="6_0u8ws"]
+[ext_resource type="AudioStream" uid="uid://dlmq2r0g7qa57" path="res://Sounds/Entities/Enemies/Machines/RobotHit.wav" id="6_yxfb2"]
 [ext_resource type="Texture2D" uid="uid://b8o1up866gpb4" path="res://Sprites/SpaceStation_Android_Sheet.png" id="14_dn20t"]
 [ext_resource type="PackedScene" uid="uid://liprjmtialrh" path="res://Scenes/Components/Hitbox.tscn" id="18_jgjap"]
 [ext_resource type="PackedScene" uid="uid://djmeyycufny61" path="res://Scenes/Components/Hurtbox.tscn" id="19_jgjap"]
@@ -21,6 +23,18 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [8]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("MoveSFX:playing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_xtnlt"]
@@ -107,7 +121,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_u7u8m"]
 resource_name = "run"
-length = 0.6
+length = 1.2
 loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -116,10 +130,22 @@ tracks/0/path = NodePath("Visual:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.10000001, 0.20000002, 0.3, 0.40000004, 0.5),
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6, 0.8, 1),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [0, 1, 2, 3, 4, 5]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("MoveSFX:playing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, true]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_07m26"]
@@ -218,5 +244,11 @@ shape = SubResource("CircleShape2D_0u8ws")
 target_position = Vector2(250, 0)
 collision_mask = 2
 collide_with_areas = true
+
+[node name="HitSFX" type="AudioStreamPlayer2D" parent="." unique_id=358000880]
+stream = ExtResource("6_yxfb2")
+
+[node name="MoveSFX" type="AudioStreamPlayer2D" parent="." unique_id=1798124624]
+stream = ExtResource("6_0u8ws")
 
 [connection signal="on_hit" from="Melee Hitbox" to="." method="_on_melee_hitbox_on_hit"]

@@ -11,6 +11,7 @@
 [ext_resource type="Script" uid="uid://crhoj1q6iw1an" path="res://Scripts/Player/player_collision_manager.gd" id="9_k8qpn"]
 [ext_resource type="PackedScene" uid="uid://cfpoti64f7omn" path="res://Scenes/Entities/jetpack_asset.tscn" id="10_13iwc"]
 [ext_resource type="SpriteFrames" uid="uid://bpguk1hi3u5j6" path="res://Sprites/Character_Small_Climb_Sprites.tres" id="11_xxqkx"]
+[ext_resource type="AudioStream" uid="uid://cuesku8232hdq" path="res://Sounds/Entities/Player/Gun Fire.wav" id="12_j8xm3"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_f1ek2"]
 radius = 24.0
@@ -412,7 +413,7 @@ tracks/3/keys = {
 
 [sub_resource type="Animation" id="Animation_kn20l"]
 resource_name = "cover_shoot"
-length = 0.2
+length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -833,6 +834,18 @@ tracks/9/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [9]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("ShootSFX:playing")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_k53q1"]
@@ -1274,6 +1287,7 @@ hframes = 8
 vframes = 9
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=480447104]
+callback_mode_discrete = 0
 libraries/ = SubResource("AnimationLibrary_gymyn")
 
 [node name="CollisionManager" type="Node" parent="." unique_id=1753210868]
@@ -1303,6 +1317,9 @@ position = Vector2(15, -27)
 scale = Vector2(3, 3)
 sprite_frames = ExtResource("11_xxqkx")
 animation = &"Small Climb"
+
+[node name="ShootSFX" type="AudioStreamPlayer2D" parent="." unique_id=2111788026]
+stream = ExtResource("12_j8xm3")
 
 [connection signal="hit" from="Hurtbox" to="." method="_on_hit"]
 [connection signal="animation_finished" from="TempClimberSinceZachIsStupid" to="." method="_on_mantle_complete"]
