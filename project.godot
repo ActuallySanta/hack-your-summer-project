@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Hack Your Summer Project"
 run/main_scene="uid://5uhi1nn3ykxt"
-config/features=PackedStringArray("4.6", "GL Compatibility")
+config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [autoload]
@@ -23,14 +23,13 @@ LevelManager="*uid://cd4f1h6qke8ex"
 CheckpointEventBus="*uid://dhboilckmjc7f"
 GlobalSignals="*uid://bac60hesolscg"
 SceneLoader="*uid://bdtr22633bwcl"
-ItemCollectionTooling="*uid://dufcsaf2fngyk"
-LimboConsole="*uid://dyxornv8vwibg"
 MusicManager="*uid://d0sejejpytdhi"
 Game="*uid://bo6qgt11s8q53"
 
 [display]
 
 window/size/viewport_height=672
+window/stretch/aspect="expand"
 
 [dotnet]
 
