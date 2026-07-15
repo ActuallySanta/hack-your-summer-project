@@ -6,6 +6,7 @@ extends Node2D
 @onready var doorLockCollider = $StaticBody2D/LockedDoorCollider
 
 var _player_started_through_here = false
+var _player_exited = false
 var _apply_helpful_force = false
 var _door_closed = false
 var _player_node : CharacterBody2D
@@ -38,7 +39,7 @@ func verify_player_location(quad: Area2D) -> bool:
 
 func _on_initial_quadrant_body_entered(body: Node2D) -> void:
 	await get_tree().physics_frame
-	if _player_started_through_here:
+	if not _player_started_through_here:
 		return
 	
 	if body.is_in_group("player"):
@@ -47,7 +48,7 @@ func _on_initial_quadrant_body_entered(body: Node2D) -> void:
 
 func _on_initial_quadrant_body_exited(body: Node2D) -> void:
 	await get_tree().physics_frame
-	if verify_player_location( InitQuad ):
+	if verify_player_location( InitQuad ) or not _player_started_through_here or _player_exited:
 		return
 	if body.is_in_group("player") and not _door_closed:
 		door.play("DoorOpen")
@@ -58,7 +59,7 @@ func _on_initial_quadrant_body_exited(body: Node2D) -> void:
 
 func _on_balance_quadrant_body_exited(body: Node2D) -> void:
 	await get_tree().physics_frame
-	if verify_player_location( BalanceQuad ):
+	if verify_player_location( BalanceQuad ) or not _player_started_through_here or _player_exited:
 		return
 	if body.is_in_group("player") and _door_closed:
 		doorLockCollider.set_deferred("disabled", true)
@@ -66,3 +67,4 @@ func _on_balance_quadrant_body_exited(body: Node2D) -> void:
 		door.play("DoorClose")
 		_door_closed = false
 		door.frame = 5-curr_frame
+		_player_exited = true
