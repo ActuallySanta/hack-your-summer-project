@@ -29,6 +29,7 @@ Game="*uid://bo6qgt11s8q53"
 [display]
 
 window/size/viewport_height=672
+window/stretch/mode="viewport"
 window/stretch/aspect="expand"
 
 [dotnet]
