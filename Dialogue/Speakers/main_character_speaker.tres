@@ -1,15 +1,20 @@
 [gd_resource type="Resource" script_class="DialogueSpeaker" format=3 uid="uid://ncxfmcocxh4q"]
 
-[ext_resource type="Texture2D" uid="uid://d0s2cju6xmrb1" path="res://Sprites/Dialogue Portraits/Player/Player_Neutral.png" id="1_1ewke"]
+[ext_resource type="Texture2D" uid="uid://c64ipaoj02dp2" path="res://Sprites/Dialogue Portraits/MC expressions/MC 3quarter neutral.png" id="1_d3d0i"]
 [ext_resource type="Script" uid="uid://58h5b48tp7ij" path="res://Scripts/Resources/Dialogue/dialogue_speaker.gd" id="1_fs2iu"]
+[ext_resource type="Texture2D" uid="uid://0cghatvadadf" path="res://Sprites/Dialogue Portraits/MC expressions/MC 3quarter happy1.png" id="2_igb3h"]
+[ext_resource type="Texture2D" uid="uid://0tltsobpxwel" path="res://Sprites/Dialogue Portraits/MC expressions/MC 3quarter angry1.png" id="3_eajmp"]
+[ext_resource type="Texture2D" uid="uid://bvgy14w72vlmn" path="res://Sprites/Dialogue Portraits/MC expressions/MC 3quarter sad.png" id="4_wgw7e"]
+[ext_resource type="Texture2D" uid="uid://c8ktcjyrvxrr0" path="res://Sprites/Dialogue Portraits/MC expressions/MC 3quarter annoyed.png" id="5_igb3h"]
 
 [resource]
 script = ExtResource("1_fs2iu")
 characterPortraits = Dictionary[int, Texture2D]({
-0: ExtResource("1_1ewke"),
-1: ExtResource("1_1ewke"),
-2: ExtResource("1_1ewke"),
-3: ExtResource("1_1ewke")
+0: ExtResource("1_d3d0i"),
+1: ExtResource("2_igb3h"),
+2: ExtResource("3_eajmp"),
+3: ExtResource("4_wgw7e"),
+4: ExtResource("5_igb3h")
 })
 speakerName = "Player"
 metadata/_custom_type_script = "uid://58h5b48tp7ij"
