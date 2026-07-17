@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c68ko5chpl32g"]
 
-[ext_resource type="Script" uid="uid://dll1tjcvn5mn3" path="res://Scripts/UI/game_over_menu.gd" id="1_8rf44"]
+[ext_resource type="Script" uid="uid://cwlfjkwda64co" path="res://Scripts/UI/pause_menu.gd" id="1_8rf44"]
 [ext_resource type="PackedScene" uid="uid://c8jdrquxbl6nn" path="res://Scenes/UI/main_menu_button.tscn" id="2_r2i2h"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1d3b0"]
@@ -10,6 +10,7 @@ bg_color = Color(0.18039216, 0.18039216, 0.18039216, 1)
 font_size = 64
 
 [node name="Game Complete Menu" type="Control" unique_id=2070875949]
+process_mode = 3
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -52,9 +53,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -230.0
-offset_top = -135.0
+offset_top = -190.5
 offset_right = 230.0
-offset_bottom = 135.0
+offset_bottom = 190.5
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -63,7 +64,7 @@ layout_mode = 2
 size_flags_vertical = 3
 text = "RESUME GAME"
 
-[node name="Main Menu Button5" parent="Background/Button Container" unique_id=1030041492 instance=ExtResource("2_r2i2h")]
+[node name="Main Menu Button5" parent="Background/Button Container" unique_id=60882796 instance=ExtResource("2_r2i2h")]
 layout_mode = 2
 size_flags_vertical = 3
 text = "RETURN TO MAIN MENU"
@@ -78,5 +79,7 @@ layout_mode = 2
 size_flags_vertical = 3
 text = "QUIT GAME"
 
-[connection signal="pressed" from="Background/Button Container/Main Menu Button2" to="." method="_on_main_menu_button_2_pressed"]
+[connection signal="pressed" from="Background/Button Container/Main Menu Button2" to="." method="_on_resume_button_pressed"]
 [connection signal="pressed" from="Background/Button Container/Main Menu Button5" to="." method="_on_main_menu_button_2_pressed"]
+[connection signal="pressed" from="Background/Button Container/Main Menu Button5" to="." method="_on_return_to_main_menu_button_pressed"]
+[connection signal="pressed" from="Background/Button Container/Main Menu Button4" to="." method="_on_quit_game_button_pressed"]
