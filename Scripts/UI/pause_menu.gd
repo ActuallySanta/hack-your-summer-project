@@ -8,6 +8,7 @@ func _ready() -> void:
 func Resume()->void:
 	get_tree().paused = false
 	hide()
+	Game.isInGame = false
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	doneResuming.emit()
 	GlobalSignals.OnGameResume.emit()
@@ -19,7 +20,7 @@ func Pause() ->void:
 	GlobalSignals.OnGamePause.emit()
 
 func _input(event: InputEvent) -> void:
-	if(event.is_action_pressed("pause")):
+	if(event.is_action_pressed("pause") and Game.isInGame):
 		if(get_tree().paused):
 			Resume()
 		else :
