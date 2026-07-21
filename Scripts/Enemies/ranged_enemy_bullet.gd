@@ -24,3 +24,7 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 	
 	#print(name + " HIT: " + body.name)
 	queue_free()
+
+
+func _on_hitbox_on_hit(hitbox: Hitbox, target: Hurtbox) -> void:
+	queue_free()
