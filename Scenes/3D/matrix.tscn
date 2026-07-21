@@ -1,10 +1,17 @@
 [gd_scene format=3 uid="uid://n4jqhgpueq7f"]
 
+[ext_resource type="Shader" uid="uid://seo748jwlhmd" path="res://Shaders/quantizer.gdshader" id="1_hyctl"]
 [ext_resource type="PackedScene" uid="uid://djcmvws6qeiof" path="res://Scenes/3D/test_cube.tscn" id="1_wadox"]
+[ext_resource type="Texture2D" uid="uid://fk20cnv3ce3g" path="res://Textures/Palettes/6_bit_pallet.png" id="2_hyctl"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7hv6g"]
+shader = ExtResource("1_hyctl")
+shader_parameter/palette = ExtResource("2_hyctl")
 
 [node name="Matrix" type="SubViewportContainer" unique_id=587305981]
 texture_filter = 1
 texture_repeat = 1
+material = SubResource("ShaderMaterial_7hv6g")
 custom_minimum_size = Vector2(1152, 672)
 anchors_preset = 15
 anchor_right = 1.0
@@ -32,4 +39,4 @@ projection = 1
 fov = 69.5
 
 [node name="OmniLight3D" type="OmniLight3D" parent="SubViewport" unique_id=2008891008]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.23256516)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.20592633)
