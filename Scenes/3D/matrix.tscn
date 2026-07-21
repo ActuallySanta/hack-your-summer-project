@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://n4jqhgpueq7f"]
+
+[ext_resource type="PackedScene" uid="uid://djcmvws6qeiof" path="res://Scenes/3D/test_cube.tscn" id="1_wadox"]
+
+[node name="Matrix" type="SubViewportContainer" unique_id=587305981]
+texture_filter = 1
+texture_repeat = 1
+custom_minimum_size = Vector2(1152, 672)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+stretch_shrink = 7
+mouse_target = true
+
+[node name="SubViewport" type="SubViewport" parent="." unique_id=627918124]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(164, 96)
+size_2d_override = Vector2i(48, 48)
+render_target_update_mode = 4
+
+[node name="TestCube2" parent="SubViewport" unique_id=327573373 instance=ExtResource("1_wadox")]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
+
+[node name="Camera3D" type="Camera3D" parent="SubViewport" unique_id=786003809]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.11519432, 0, 1.8942966)
+keep_aspect = 0
+projection = 1
+fov = 69.5
+
+[node name="OmniLight3D" type="OmniLight3D" parent="SubViewport" unique_id=2008891008]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.23256516)

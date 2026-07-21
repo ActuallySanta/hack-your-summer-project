@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://djcmvws6qeiof"]
+
+[ext_resource type="PackedScene" uid="uid://cahae1ieu7pbv" path="res://Models/TestCube.glb" id="1_y54ss"]
+[ext_resource type="Script" uid="uid://bssot8ixi1qbk" path="res://Scripts/Animation/test_3D_rotations.gd" id="2_bea15"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_y54ss"]
+diffuse_mode = 3
+specular_mode = 1
+metallic = 0.7
+metallic_specular = 0.0
+roughness = 0.0
+
+[node name="TestCube" unique_id=327573373 instance=ExtResource("1_y54ss")]
+script = ExtResource("2_bea15")
+
+[node name="Cube" parent="." index="0" unique_id=1224344760]
+material_override = SubResource("StandardMaterial3D_y54ss")
