@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" uid="uid://bs0loqfendiak" path="res://Scripts/player.gd" id="1_00tjw"]
 [ext_resource type="Texture2D" uid="uid://d1irxkv8rmbly" path="res://Sprites/SpaceStation_Character_Sheet.png" id="1_pv8u5"]
+[ext_resource type="PackedScene" uid="uid://ch0cbeo8ehblm" path="res://Scenes/Players/player_melee_swing.tscn" id="2_gymyn"]
+[ext_resource type="PackedScene" uid="uid://jammv02ygc7v" path="res://Scenes/Players/player_bullet.tscn" id="3_pu2lt"]
 [ext_resource type="PackedScene" uid="uid://djmeyycufny61" path="res://Scenes/Components/Hurtbox.tscn" id="4_00tjw"]
 [ext_resource type="Texture2D" uid="uid://bqj73yi85o2dx" path="res://Sprites/Main Character Climb.png" id="7_f1ek2"]
 [ext_resource type="Texture2D" uid="uid://c8km3q4omapxt" path="res://Sprites/Main Character Crawl.png" id="8_tx1dd"]
@@ -9,12 +11,6 @@
 [ext_resource type="Texture2D" uid="uid://btpjpn1y6y23a" path="res://Sprites/character_swing.png" id="9_tx1dd"]
 [ext_resource type="Script" uid="uid://crhoj1q6iw1an" path="res://Scripts/Player/player_collision_manager.gd" id="10_gymyn"]
 [ext_resource type="PackedScene" uid="uid://cfpoti64f7omn" path="res://Scenes/Entities/jetpack_asset.tscn" id="10_tx1dd"]
-
-[sub_resource type="Resource" id="Resource_f1ek2"]
-metadata/__load_path__ = "res://Scenes/player_melee_swing.tscn"
-
-[sub_resource type="Resource" id="Resource_tx1dd"]
-metadata/__load_path__ = "res://Scenes/player_bullet.tscn"
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_f1ek2"]
 radius = 24.0
@@ -1238,8 +1234,8 @@ climbingSpeed = 250
 jumpForce = 950.0
 coyoteTime = 0.1
 swingOffset = 80.0
-swingScene = SubResource("Resource_f1ek2")
-bulletScene = SubResource("Resource_tx1dd")
+swingScene = ExtResource("2_gymyn")
+bulletScene = ExtResource("3_pu2lt")
 knockbackDI = 400.0
 
 [node name="Hurtbox" parent="." unique_id=470143312 instance=ExtResource("4_00tjw")]

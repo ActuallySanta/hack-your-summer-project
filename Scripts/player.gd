@@ -357,9 +357,9 @@ func _process( _delta: float ) -> void:
 	handle_inputs()
 	handle_invuln_blinking( _delta )
 	handle_vertical_speed()
-	get_camera().global_position += _camera_offset
-	if _need_to_move_camera:
-		anim_camera_update( _delta )
+	#get_camera().global_position += _camera_offset
+	#if _need_to_move_camera:
+	#	anim_camera_update( _delta )
 	
 	if animPlayback.get_current_node() == "RangedFire" or animPlayback.get_current_node() == "MeleeSwing":
 		anim_fire = false
