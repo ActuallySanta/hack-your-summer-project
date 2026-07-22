@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://ji4q20pb7lkf" path="res://Scripts/Enemies/ranged_enemy.gd" id="1_yfht6"]
 [ext_resource type="BehaviorTree" uid="uid://bk3pchousfnbu" path="res://ai/trees/ranged_enemy.tres" id="2_qj8iq"]
-[ext_resource type="Texture2D" path="res://Sprites/Characters/Ranged_Andriod.png" id="3_8o70e"]
+[ext_resource type="Texture2D" uid="uid://du0akvrhemp8c" path="res://Sprites/Characters/Enemy SpriteSheets/Ranged_Andriod.png" id="3_8o70e"]
 [ext_resource type="PackedScene" uid="uid://djmeyycufny61" path="res://Scenes/Components/Hurtbox.tscn" id="18_6j4xf"]
 
 [sub_resource type="BlackboardPlan" id="BlackboardPlan_be0ij"]
