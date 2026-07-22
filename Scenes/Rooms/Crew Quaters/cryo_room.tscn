@@ -6,6 +6,8 @@
 [ext_resource type="PackedScene" uid="uid://sjty08w4065m" path="res://Scenes/Rooms/CommonRoomComponents/space_background.tscn" id="3_gx82q"]
 [ext_resource type="Script" uid="uid://q5q152xvydxb" path="res://Scripts/brightness_oscillator.gd" id="5_kl5k2"]
 [ext_resource type="PackedScene" uid="uid://be2no1m3vqjxl" path="res://Scenes/Enemies/fallen_cyborg.tscn" id="6_oqqe7"]
+[ext_resource type="PackedScene" uid="uid://b2ibnxde1hrva" path="res://Scenes/Enemies/ranged_enemy.tscn" id="7_qbq0e"]
+[ext_resource type="PackedScene" uid="uid://41tgjv6lxsko" path="res://Scenes/Enemies/melee_enemy.tscn" id="8_htoce"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_oqqe7"]
 size = Vector2(3320, 20)
@@ -53,3 +55,9 @@ position = Vector2(1149, 528)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1438075046]
 position = Vector2(1801, 538)
 shape = SubResource("RectangleShape2D_oqqe7")
+
+[node name="Ranged Enemy" parent="." unique_id=1835408748 instance=ExtResource("7_qbq0e")]
+position = Vector2(569, 478)
+
+[node name="Melee Enemy" parent="." unique_id=1789377839 instance=ExtResource("8_htoce")]
+position = Vector2(1677, 470)

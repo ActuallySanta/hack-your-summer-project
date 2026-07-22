@@ -19,6 +19,7 @@ radius = 20.0
 size = Vector2(45, 51)
 
 [node name="Fallen_Cyborg" type="CharacterBody2D" unique_id=2020790701]
+collision_layer = 4
 script = ExtResource("1_65w47")
 
 [node name="BTPlayer" type="BTPlayer" parent="." unique_id=635174070]
@@ -27,6 +28,7 @@ blackboard_plan = SubResource("BlackboardPlan_65w47")
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=814725642]
 
 [node name="Collider" type="CollisionShape2D" parent="." unique_id=1654249364]
+visible = false
 position = Vector2(22.5, -25.5)
 shape = SubResource("RectangleShape2D_jqfyr")
 
@@ -62,6 +64,7 @@ target_position = Vector2(45, 0)
 max_results = 0
 
 [node name="Target Range Check" type="ShapeCast2D" parent="." unique_id=1410742575]
+visible = false
 position = Vector2(24, -39)
 shape = SubResource("CircleShape2D_5afkt")
 target_position = Vector2(250, 0)
@@ -69,6 +72,7 @@ collision_mask = 2
 collide_with_areas = true
 
 [node name="Hurtbox" parent="." unique_id=470143312 instance=ExtResource("3_5afkt")]
+visible = false
 collision_layer = 4
 
 [node name="Shape" type="CollisionShape2D" parent="Hurtbox" unique_id=1759339018]

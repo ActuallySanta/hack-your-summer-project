@@ -1,0 +1,36 @@
+[gd_resource type="BehaviorTree" format=3 uid="uid://36b1u17d1cg3"]
+
+[ext_resource type="Script" uid="uid://q3siycoeq6oo" path="res://ai/tasks/get_hurt.gd" id="1_4vj60"]
+
+[sub_resource type="BlackboardPlan" id="BlackboardPlan_lytq1"]
+
+[sub_resource type="BBVariant" id="BBVariant_lytq1"]
+type = 4
+saved_value = "hurt"
+resource_name = "hurt"
+
+[sub_resource type="BTCheckVar" id="BTCheckVar_4vj60"]
+variable = &"State"
+value = SubResource("BBVariant_lytq1")
+
+[sub_resource type="BBNode" id="BBNode_lytq1"]
+saved_value = NodePath("AnimationPlayer")
+resource_name = "AnimationPlayer"
+
+[sub_resource type="BTPlayAnimation" id="BTPlayAnimation_4vj60"]
+animation_player = SubResource("BBNode_lytq1")
+animation_name = &"hurt"
+
+[sub_resource type="BTAction" id="BTAction_n1pcd"]
+script = ExtResource("1_4vj60")
+
+[sub_resource type="BTSequence" id="BTSequence_4vj60"]
+custom_name = "Hurt"
+children = [SubResource("BTCheckVar_4vj60"), SubResource("BTPlayAnimation_4vj60"), SubResource("BTAction_n1pcd")]
+
+[sub_resource type="BTSelector" id="BTSelector_n1pcd"]
+children = [SubResource("BTSequence_4vj60")]
+
+[resource]
+blackboard_plan = SubResource("BlackboardPlan_lytq1")
+root_task = SubResource("BTSelector_n1pcd")
