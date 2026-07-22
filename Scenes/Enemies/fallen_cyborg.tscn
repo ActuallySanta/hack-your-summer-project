@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://be2no1m3vqjxl"]
+[gd_scene format=3 uid="uid://hg8h8fo8hw85"]
 
 [ext_resource type="Script" uid="uid://cmqkqaiio0cq" path="res://Scripts/Enemies/fallen_cyborg.gd" id="1_65w47"]
 [ext_resource type="Texture2D" uid="uid://8gyuvkigb1yk" path="res://Sprites/Characters/Enemy SpriteSheets/Faulty_Android.png" id="1_qhda0"]
