@@ -1,0 +1,76 @@
+[gd_scene format=3 uid="uid://be2no1m3vqjxl"]
+
+[ext_resource type="Script" uid="uid://cmqkqaiio0cq" path="res://Scripts/Enemies/fallen_cyborg.gd" id="1_65w47"]
+[ext_resource type="Texture2D" uid="uid://8gyuvkigb1yk" path="res://Sprites/Characters/Enemy SpriteSheets/Faulty_Android.png" id="1_qhda0"]
+[ext_resource type="PackedScene" uid="uid://djmeyycufny61" path="res://Scenes/Components/Hurtbox.tscn" id="3_5afkt"]
+
+[sub_resource type="BlackboardPlan" id="BlackboardPlan_65w47"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jqfyr"]
+size = Vector2(45, 51)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_65w47"]
+radius = 400.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_5afkt"]
+radius = 20.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5afkt"]
+size = Vector2(45, 51)
+
+[node name="Fallen_Cyborg" type="CharacterBody2D" unique_id=2020790701]
+script = ExtResource("1_65w47")
+
+[node name="BTPlayer" type="BTPlayer" parent="." unique_id=635174070]
+blackboard_plan = SubResource("BlackboardPlan_65w47")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=814725642]
+
+[node name="Collider" type="CollisionShape2D" parent="." unique_id=1654249364]
+position = Vector2(22.5, -25.5)
+shape = SubResource("RectangleShape2D_jqfyr")
+
+[node name="Visual" type="Sprite2D" parent="." unique_id=1225338681]
+position = Vector2(48, -48)
+scale = Vector2(3, 3)
+texture = ExtResource("1_qhda0")
+hframes = 7
+vframes = 4
+
+[node name="Player Detection Check" type="ShapeCast2D" parent="." unique_id=1009719527]
+visible = false
+shape = SubResource("CircleShape2D_65w47")
+target_position = Vector2(0, 0)
+collision_mask = 2
+
+[node name="Player Obstruction Check" type="RayCast2D" parent="." unique_id=986039840]
+visible = false
+position = Vector2(24, -39)
+target_position = Vector2(450, 0)
+collision_mask = 3
+
+[node name="Target Location Check" type="RayCast2D" parent="." unique_id=127399542]
+visible = false
+position = Vector2(24, -39)
+target_position = Vector2(150, 0)
+
+[node name="GroundCheck" type="ShapeCast2D" parent="." unique_id=712370075]
+visible = false
+enabled = false
+shape = SubResource("CircleShape2D_5afkt")
+target_position = Vector2(45, 0)
+max_results = 0
+
+[node name="Target Range Check" type="ShapeCast2D" parent="." unique_id=1410742575]
+position = Vector2(24, -39)
+shape = SubResource("CircleShape2D_5afkt")
+target_position = Vector2(250, 0)
+collision_mask = 2
+collide_with_areas = true
+
+[node name="Hurtbox" parent="." unique_id=470143312 instance=ExtResource("3_5afkt")]
+collision_layer = 4
+
+[node name="Shape" type="CollisionShape2D" parent="Hurtbox" unique_id=1759339018]
+position = Vector2(22.5, -25.5)
+shape = SubResource("RectangleShape2D_5afkt")

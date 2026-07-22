@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://ji4q20pb7lkf" path="res://Scripts/Enemies/ranged_enemy.gd" id="1_yfht6"]
 [ext_resource type="BehaviorTree" uid="uid://bk3pchousfnbu" path="res://ai/trees/ranged_enemy.tres" id="2_qj8iq"]
-[ext_resource type="Texture2D" uid="uid://damwt4i44c6" path="res://Sprites/Characters/Ranged_Andriod.png" id="3_8o70e"]
+[ext_resource type="Texture2D" path="res://Sprites/Characters/Ranged_Andriod.png" id="3_8o70e"]
 [ext_resource type="PackedScene" uid="uid://djmeyycufny61" path="res://Scenes/Components/Hurtbox.tscn" id="18_6j4xf"]
 
 [sub_resource type="BlackboardPlan" id="BlackboardPlan_be0ij"]
@@ -180,13 +180,6 @@ collision_mask = 3
 visible = false
 target_position = Vector2(150, 0)
 
-[node name="Hurtbox" parent="." unique_id=470143312 instance=ExtResource("18_6j4xf")]
-collision_layer = 4
-
-[node name="Shape" type="CollisionShape2D" parent="Hurtbox" unique_id=326280550]
-position = Vector2(8, 3)
-shape = SubResource("CapsuleShape2D_mgs6e")
-
 [node name="GroundCheck" type="ShapeCast2D" parent="." unique_id=1574451794]
 position = Vector2(48, 52)
 shape = SubResource("CircleShape2D_6j4xf")
@@ -198,3 +191,10 @@ shape = SubResource("CircleShape2D_6j4xf")
 target_position = Vector2(250, 0)
 collision_mask = 2
 collide_with_areas = true
+
+[node name="Hurtbox" parent="." unique_id=470143312 instance=ExtResource("18_6j4xf")]
+collision_layer = 4
+
+[node name="Shape" type="CollisionShape2D" parent="Hurtbox" unique_id=326280550]
+position = Vector2(8, 3)
+shape = SubResource("CapsuleShape2D_mgs6e")

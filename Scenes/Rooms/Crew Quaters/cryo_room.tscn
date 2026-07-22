@@ -5,6 +5,7 @@
 [ext_resource type="TileSet" uid="uid://hkvfy5by8aqr" path="res://Tileset/Main_Level.tres" id="3_grocq"]
 [ext_resource type="PackedScene" uid="uid://sjty08w4065m" path="res://Scenes/Rooms/CommonRoomComponents/space_background.tscn" id="3_gx82q"]
 [ext_resource type="Script" uid="uid://q5q152xvydxb" path="res://Scripts/brightness_oscillator.gd" id="5_kl5k2"]
+[ext_resource type="PackedScene" uid="uid://be2no1m3vqjxl" path="res://Scenes/Enemies/fallen_cyborg.tscn" id="6_oqqe7"]
 
 [node name="CryoRoom" type="Node2D" unique_id=1425201056]
 
@@ -40,3 +41,6 @@ z_index = 10
 scale = Vector2(1.5, 1.5)
 tile_map_data = PackedByteArray("AACMABAABAAIAAAAAACMABEABAAIAAEAAACMABIABAAIAAIAAACMABMABAAIAAMAAACMABQABAAIAAQAAACMABUABAAIAAUAAACNABAABAAJAAAAAACNABEABAAJAAEAAACNABIABAAJAAIAAACNABMABAAJAAMAAACNABQABAAJAAQAAACNABUABAAJAAUAAACOABAABAAKAAAAAACOABEABAAKAAEAAACOABIABAAKAAIAAACOABMABAAKAAMAAACOABQABAAKAAQAAACOABUABAAKAAUAAACPABAABAALAAAAAACPABEABAALAAEAAACPABIABAALAAIAAACPABMABAALAAMAAACPABQABAALAAQAAACPABUABAALAAUAAAA=")
 tile_set = ExtResource("3_grocq")
+
+[node name="Fallen_Cyborg" parent="." unique_id=2020790701 instance=ExtResource("6_oqqe7")]
+position = Vector2(1149, 528)
