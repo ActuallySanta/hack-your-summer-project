@@ -14,6 +14,6 @@ func _tick(delta: float) -> Status:
 	_running -= agent.stunDuration * delta
 	if _running > 0:
 		return Status.RUNNING
-		
+	
 	blackboard.set_var("state","idle")
 	return Status.SUCCESS

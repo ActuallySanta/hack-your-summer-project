@@ -1251,6 +1251,7 @@ knockbackDI = 400.0
 collision_layer = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=1301816998]
+scale = Vector2(0.8, 0.93)
 shape = SubResource("CapsuleShape2D_f1ek2")
 
 [node name="AnimationTree" type="AnimationTree" parent="." unique_id=738334773]

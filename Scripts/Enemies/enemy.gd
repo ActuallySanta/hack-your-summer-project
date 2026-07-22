@@ -31,9 +31,9 @@ func move(targetPos : Vector2, delta :float):
 	update_flip(dir.x)
 
 func update_flip(dir:float):
-	var doFlip : bool = dir<0
-	if(doFlip != isFlipped):
-		scale.x =-1
+	var doFlip : bool = dir < 0
+	if doFlip != isFlipped:
+		scale.x = -1
 	else:
 		scale.x = 1
 	isFlipped = doFlip
@@ -50,17 +50,7 @@ func _physics_process(delta: float) -> void:
 		update_flip(scale.x * -1)
 		switch_state("idle")
 	
-	# Player interactions
-	if not player_detection_check.collision_result.find(playerReference):
-		move_and_slide()
-		return
-	
-	switch_state(
-		"patrolling" if not can_see_player() 
-		else "attacking" if target_range_check.collision_result.find(playerReference)
-		else "chasing"
-	)
-	
+	switch_state("patrolling" if not can_see_player() else "attacking")
 	move_and_slide()
 
 func getValidPos() -> Vector2:
@@ -79,6 +69,17 @@ func takeDamage(_hurtBox: Hurtbox, _hit_info: HitInfo, _source: Hitbox):
 
 func can_see_player() -> bool:
 	return player_obstruction_check.is_colliding() and player_obstruction_check.get_collider() == playerReference
+
+func shapeCast_hit_playerRef(variable: ShapeCast2D) -> bool:
+	if variable.collision_result.size() < 1:
+		return false
+	
+	var playerRID = playerReference.get_rid()
+	for collision in variable.collision_result:
+		if collision[ "rid" ] == playerRID:
+			return true
+		
+	return false
 
 func switch_state(state_name: String) -> void:
 	bt_player.blackboard.set_var("state", state_name)
