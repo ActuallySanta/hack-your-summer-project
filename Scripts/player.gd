@@ -133,6 +133,7 @@ func wall_jump() -> void:
 	velocity.y = -800
 
 func validate_wall_jump() -> bool:
+	return false #TEMPORARY TESTING MEASURE, REMOVE BEFORE MERGING
 	if not is_on_wall_only():
 		return false
 
@@ -417,6 +418,7 @@ func enable_jetpack() -> void:
 	
 #region Mantle
 func try_mantle() -> bool:
+	return false #TEMPORARY TESTING MEASURE, REMOVE BEFORE MERGING
 	if not is_on_floor():
 		return false
 	

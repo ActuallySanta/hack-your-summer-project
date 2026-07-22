@@ -1,16 +1,12 @@
 [gd_scene format=4 uid="uid://xj1jsobc5mry"]
 
 [ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="1_1p551"]
-[ext_resource type="PackedScene" uid="uid://dohmyoeiilp0v" path="res://Scenes/Players/player.tscn" id="2_mpw3j"]
 [ext_resource type="TileSet" uid="uid://hkvfy5by8aqr" path="res://Tileset/Main_Level.tres" id="3_5xyry"]
 [ext_resource type="PackedScene" uid="uid://41tgjv6lxsko" path="res://Scenes/Enemies/melee_enemy.tscn" id="4_6damd"]
 
 [node name="ObservationDeck" type="Node2D" unique_id=836677756]
 
 [node name="RoomInstance" parent="." unique_id=1343940931 instance=ExtResource("1_1p551")]
-
-[node name="Player" parent="." unique_id=862395343 instance=ExtResource("2_mpw3j")]
-position = Vector2(52, 464)
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1736701765]
 scale = Vector2(3, 3)

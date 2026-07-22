@@ -1,23 +1,20 @@
 [gd_scene format=3 uid="uid://5uhi1nn3ykxt"]
 
+[ext_resource type="Script" uid="uid://bo6qgt11s8q53" path="res://00_Globals/game.gd" id="1_wrm1d"]
 [ext_resource type="PackedScene" uid="uid://dohmyoeiilp0v" path="res://Scenes/Players/player.tscn" id="2_qxrlw"]
 [ext_resource type="PackedScene" uid="uid://c4thct0jgtock" path="res://Scenes/game_hud.tscn" id="3_wrm1d"]
 
 [node name="Game" type="Node" unique_id=651801150]
+script = ExtResource("1_wrm1d")
+use_custom_save = true
+save_room = "uid://77ql1xom04cr"
+save_pos = Vector2(74, 863)
 
 [node name="Player" parent="." unique_id=862395343 instance=ExtResource("2_qxrlw")]
 position = Vector2(2493, 399)
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1429657112 groups=["Cameras"]]
 
-[node name="HUD" parent="." unique_id=98304293 node_paths=PackedStringArray("_menus") instance=ExtResource("3_wrm1d")]
-_menus = {
-"uid://ba6llpnlufq83": NodePath("Game Complete Menu"),
-"uid://c8sg7punnpidp": NodePath("Game Over Menu"),
-"uid://dbr2sfm8y3rni": NodePath("Main Menu")
-}
-
-[node name="Main Menu" parent="HUD" index="3" unique_id=766264186 node_paths=PackedStringArray("mainGameObjects")]
-mainGameObjects = [NodePath("../../Player"), NodePath("../../Camera2D"), NodePath("../Player HUD")]
+[node name="HUD" parent="." unique_id=98304293 instance=ExtResource("3_wrm1d")]
 
 [editable path="HUD"]

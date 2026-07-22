@@ -5,8 +5,9 @@ const START_ROOM_UID = "uid://esk4fom87pxl" #Cryo Room
 const START_POS = Vector2(1000, 483)
 const SaveManager = preload("res://addons/MetroidvaniaSystem/Template/Scripts/SaveManager.gd")
 
-
-@onready var _hud : GameHUD
+@onready var _player : Player = $Player
+@onready var _camera : Camera2D = $Camera2D
+@onready var _hud : GameHUD = $HUD
 
 @export var cameraDeadzone := Vector2(0, 0)
 @export var death_respawn_delay := 2.0
@@ -19,25 +20,34 @@ const SaveManager = preload("res://addons/MetroidvaniaSystem/Template/Scripts/Sa
 
 var save
 var isInGame : bool = false
-var _camera : Camera2D
 
+func _ready() -> void:
+	_hud.start_new_game.connect(_new_game)
+	_hud.load_game.connect(_load_game)
+	_hud.quit_game.connect(get_tree().quit)
+	_init_metsys_and_objects()
+	isInGame = false
+	#if using a custom save, skip the main menu and head straight to the game
+	if use_custom_save:
+		_load_game()
+	else:
+		_hud.show_menu(GameHUD.MenuType.MainMenu)
 
 #initialize metsys and its modules
 func _init_metsys_and_objects() -> void:
-	_camera = get_tree().get_first_node_in_group("Cameras")
-	_hud = get_tree().get_first_node_in_group("HUD")
 	MetSys.reset_state()
-	set_player(PlayerManager.player)
+	set_player(_player)
 	add_module("RoomTransitions.gd")
 	MetSys.room_changed.connect(_on_room_changed)
-	PlayerManager.player.pickup_collected.connect(_on_pickup_collected)
-	PlayerManager.player.save_station_used.connect(save_game.bind(0))
+	_player.pickup_collected.connect(_on_pickup_collected)
+	_player.save_station_used.connect(save_game.bind(0))
 	#prevent player from acting while game is loading
-	PlayerManager.player.process_mode = Node.PROCESS_MODE_DISABLED
-	PlayerManager.player.reset_all_inputs()
+	_player.process_mode = Node.PROCESS_MODE_DISABLED
+	_player.reset_all_inputs()
 
 func _load_game() -> void:
-	print("Begin load")
+	_hud.hide_menus()
+	_hud.show_load_screen()
 	# save.load_from_text should automatically call MetSys.set_save_data()
 	# but if there's no save data (i.e. it's a fresh save), that won't happen
 	# so set empty save data first to make sure there's at least something
@@ -49,29 +59,31 @@ func _load_game() -> void:
 		save.load_from_text(get_save_path(0))
 		
 	if save.get_value("jetpack_collected", false):
-		PlayerManager.player.enable_jetpack()
+		_player.enable_jetpack()
 	else:
-		PlayerManager.player.disable_jetpack()
+		_player.disable_jetpack()
 	var room_id = save.get_value("current_room", START_ROOM_UID)
 	await load_room(room_id)
-	PlayerManager.player.global_position = save.get_value("player_pos", START_POS)
-	LevelManager.set_checkpoint(room_id, PlayerManager.player.position, false)
-	PlayerManager.player.process_mode = Node.PROCESS_MODE_INHERIT
-	PlayerManager.player.position = save.get_value("player_pos", START_POS)
-	PlayerManager.player.process_mode = Node.PROCESS_MODE_INHERIT
-	print("Finish load")
 	await get_tree().create_timer(artificial_load_time).timeout
+	_player.global_position = save.get_value("player_pos", START_POS)
+	LevelManager.set_checkpoint(room_id, _player.position, false)
+	_player.process_mode = Node.PROCESS_MODE_INHERIT
+	isInGame = true
+	_hud.hide_load_screen()
 
 
 func _new_game():
+	_hud.hide_menus()
+	_hud.show_load_screen()
 	MetSys.set_save_data()
 	save = SaveManager.new()
+	_player.disable_jetpack()
 	await load_room(START_ROOM_UID)
-	PlayerManager.player.position = START_POS
-	PlayerManager.player.disable_jetpack()
-	PlayerManager.player.process_mode = Node.PROCESS_MODE_INHERIT
-	print("Finish load")
 	await get_tree().create_timer(artificial_load_time).timeout
+	_player.global_position = START_POS
+	_player.process_mode = Node.PROCESS_MODE_INHERIT
+	isInGame = true
+	_hud.hide_load_screen()
 
 func _load_custom_save() -> void:
 	save = SaveManager.new()
@@ -146,5 +158,5 @@ func _on_player_death(_anim_duration: float) -> void:
 func end_game():
 	PlayerManager.player.process_mode = Node.PROCESS_MODE_DISABLED
 	_hud.show_load_screen()
-	_hud.load_menu("uid://ba6llpnlufq83")
+	_hud.show_menu(GameHUD.MenuType.GameComplete)
 	_hud.hide_load_screen()
