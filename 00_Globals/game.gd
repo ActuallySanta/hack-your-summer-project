@@ -70,7 +70,7 @@ func _new_game():
 	PlayerManager.player.position = START_POS
 	PlayerManager.player.disable_jetpack()
 	PlayerManager.player.process_mode = Node.PROCESS_MODE_INHERIT
-	print("Finish load")
+	#print("Finish load")
 	await get_tree().create_timer(artificial_load_time).timeout
 
 func _load_custom_save() -> void:
@@ -85,7 +85,7 @@ func get_save_path(save_index: int) -> StringName:
 
 func _on_room_changed(new_room: String) -> void:
 	save.set_value("current_room", new_room)
-	print("Entering room " + new_room)
+	#print("Entering room " + new_room)
 
 func _on_pickup_collected(pickup: Pickup) -> void:
 	match pickup.type:

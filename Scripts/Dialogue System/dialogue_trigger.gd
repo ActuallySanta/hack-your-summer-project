@@ -9,7 +9,6 @@ func _on_body_entered(body: Node2D) -> void:
 
 func _input(event: InputEvent) -> void:
 	if(event.is_action_pressed("Dialogue Begin") and inRange and !PlayerManager.inDialogue):
-		print("Began Dialogue")
 		GlobalSignals.OnDialogueBegin.emit(loadedConversation)
 		
 

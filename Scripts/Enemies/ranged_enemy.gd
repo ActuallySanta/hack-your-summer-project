@@ -2,12 +2,6 @@ extends Enemy
 
 @onready var bulletScene = preload("uid://dmxbgtwmp5c0q")
 
-
-
-
-
-
-
 func spawnBullet():
 	velocity = Vector2.ZERO
 	bt_player.blackboard.set_var("canAttack",false)
@@ -20,4 +14,3 @@ func spawnBullet():
 	await get_tree().create_timer(attackCooldown).timeout
 	
 	bt_player.blackboard.set_var("canAttack",true)
-	pass

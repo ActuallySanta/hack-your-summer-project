@@ -1,10 +1,10 @@
-[gd_scene format=3 uid="uid://bfdxh46jtantj"]
+[gd_scene format=3 uid="uid://hg8h8fo8hw85"]
 
-[ext_resource type="Script" path="res://Scripts/Enemies/fallen_cyborg.gd" id="1_65w47"]
-[ext_resource type="Texture2D" path="res://Sprites/Characters/Enemy SpriteSheets/Faulty_Android.png" id="1_qhda0"]
-[ext_resource type="BehaviorTree" uid="uid://i6hf0uvusyaa" path="res://ai/trees/fallen_cyborg.tres" id="2_jcgcb"]
+[ext_resource type="Script" uid="uid://cmqkqaiio0cq" path="res://Scripts/Enemies/fallen_cyborg.gd" id="1_65w47"]
+[ext_resource type="Texture2D" uid="uid://8gyuvkigb1yk" path="res://Sprites/Characters/Enemy SpriteSheets/Faulty_Android.png" id="1_qhda0"]
+[ext_resource type="BehaviorTree" uid="uid://36b1u17d1cg3" path="res://ai/trees/fallen_cyborg.tres" id="2_jcgcb"]
 [ext_resource type="PackedScene" uid="uid://djmeyycufny61" path="res://Scenes/Components/Hurtbox.tscn" id="3_5afkt"]
-[ext_resource type="Script" path="res://Scripts/Resources/Tools/Fallen_Cyborg_Sprite_Connector_For_Debugging.gd" id="4_a7tiw"]
+[ext_resource type="Script" uid="uid://b38rxpp8gn23u" path="res://Scripts/Resources/Tools/Fallen_Cyborg_Sprite_Connector_For_Debugging.gd" id="4_a7tiw"]
 
 [sub_resource type="BlackboardPlan" id="BlackboardPlan_65w47"]
 

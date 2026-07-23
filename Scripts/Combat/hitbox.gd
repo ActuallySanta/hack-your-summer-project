@@ -28,9 +28,7 @@ func _ready() -> void:
 func reset() -> void:
 	previous_hits = []
 
-func _on_area_entered(area: Area2D) -> void:
-	print(area.name)
-	
+func _on_area_entered(area: Area2D) -> void:	
 	var hurtbox := area as Hurtbox
 	if not hurtbox:
 		return
@@ -42,6 +40,5 @@ func _on_area_entered(area: Area2D) -> void:
 	hurtbox.register_hit(hit_info, self)
 
 func _on_body_entered(body: Node2D) -> void:
-	print("on_body_entered " + body.to_string())
 	if body is TileMapLayer or (body as PhysicsBody2D).collision_layer & 1:
 		environment_hit.emit(body)

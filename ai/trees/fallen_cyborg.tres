@@ -1,4 +1,4 @@
-[gd_resource type="BehaviorTree" format=3 uid="uid://i6hf0uvusyaa"]
+[gd_resource type="BehaviorTree" format=3 uid="uid://36b1u17d1cg3"]
 
 [ext_resource type="Script" uid="uid://q3siycoeq6oo" path="res://ai/tasks/get_hurt.gd" id="1_4vj60"]
 
