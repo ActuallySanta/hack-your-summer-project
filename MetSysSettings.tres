@@ -2,10 +2,44 @@
 
 [ext_resource type="Script" uid="uid://3tfxltpsrr1c" path="res://addons/MetroidvaniaSystem/Scripts/CustomElementManager.gd" id="1_3kt0x"]
 [ext_resource type="Script" uid="uid://orxlanqpgccv" path="res://addons/MetroidvaniaSystem/Scripts/Settings.gd" id="1_ui0vk"]
-[ext_resource type="Resource" uid="uid://cua5dfmrbmlho" path="res://addons/MetroidvaniaSystem/Themes/MF/Theme.tres" id="2_ui0vk"]
+[ext_resource type="Texture2D" uid="uid://bdwn8iyx5fcbd" path="res://Textures/MapTextures/Wall_Shared2.png" id="3_b7d76"]
+[ext_resource type="Texture2D" uid="uid://ckncltgk5di6p" path="res://Textures/MapTextures/AreaTile.png" id="3_p8w4a"]
+[ext_resource type="Texture2D" uid="uid://d1g2a6m32j4v5" path="res://Textures/MapTextures/EmptySpaceTile.png" id="4_onrci"]
+[ext_resource type="Texture2D" uid="uid://mxjicuydbfnq" path="res://Textures/MapTextures/Walls0.png" id="6_3rx3w"]
+[ext_resource type="Texture2D" uid="uid://bkn051gtn084o" path="res://Textures/MapTextures/LCornerTile.png" id="6_b7d76"]
+[ext_resource type="PackedScene" uid="uid://jm00e7eg4gpc" path="res://addons/MetroidvaniaSystem/Themes/MF/PlayerLocation.tscn" id="7_y6ab7"]
+[ext_resource type="Script" uid="uid://b7ofctgav4kq4" path="res://addons/MetroidvaniaSystem/Scripts/MapTheme.gd" id="8_yjq5m"]
+[ext_resource type="Texture2D" uid="uid://rlvgrpgw77v7" path="res://Textures/MapTextures/IconTiles/Icons0.png" id="10_b7d76"]
+[ext_resource type="Texture2D" uid="uid://07brhmr58gjp" path="res://Textures/MapTextures/IconTiles/Icons1.png" id="11_l37ui"]
+[ext_resource type="Texture2D" uid="uid://du8a5k7noaem7" path="res://Textures/MapTextures/IconTiles/Icons2.png" id="12_y070r"]
+[ext_resource type="Texture2D" uid="uid://ce461utgt3d8b" path="res://Textures/MapTextures/IconTiles/Icons3.png" id="13_b7d76"]
+[ext_resource type="Texture2D" uid="uid://ckl8jalmeb084" path="res://Textures/MapTextures/IconTiles/Icons4.png" id="14_b7d76"]
+[ext_resource type="Texture2D" uid="uid://bdlm0dxerbq5g" path="res://Textures/MapTextures/Wall_Shared1.png" id="15_24you"]
+[ext_resource type="Texture2D" uid="uid://c3of0r64w28s2" path="res://Textures/MapTextures/IconTiles/Icons5.png" id="15_b7d76"]
+[ext_resource type="Texture2D" uid="uid://bn3w8ojxpekam" path="res://Textures/MapTextures/UCornerTile.png" id="16_l37ui"]
+
+[sub_resource type="Resource" id="Resource_b7d76"]
+script = ExtResource("8_yjq5m")
+center_texture = ExtResource("3_p8w4a")
+empty_space_texture = ExtResource("4_onrci")
+player_location_scene = ExtResource("7_y6ab7")
+use_shared_borders = true
+default_center_color = Color(1, 1, 1, 1)
+mapped_center_color = Color(0.45685214, 0.4568522, 0.4568522, 1)
+default_border_color = Color(1, 1, 1, 1)
+mapped_border_color = Color(1, 1, 1, 1)
+symbols = Array[Texture2D]([ExtResource("10_b7d76"), ExtResource("11_l37ui"), ExtResource("12_y070r"), ExtResource("13_b7d76"), ExtResource("14_b7d76"), ExtResource("15_b7d76")])
+uncollected_item_symbol = 0
+collected_item_symbol = 1
+wall = ExtResource("15_24you")
+passage = ExtResource("6_3rx3w")
+borders = Array[Texture2D]([ExtResource("3_b7d76")])
+u_corner = ExtResource("16_l37ui")
+l_corner = ExtResource("6_b7d76")
+metadata/_custom_type_script = "uid://b7ofctgav4kq4"
 
 [resource]
 script = ExtResource("1_ui0vk")
-theme = ExtResource("2_ui0vk")
+theme = SubResource("Resource_b7d76")
 in_game_cell_size = Vector2(1152, 672)
 custom_element_script = ExtResource("1_3kt0x")
