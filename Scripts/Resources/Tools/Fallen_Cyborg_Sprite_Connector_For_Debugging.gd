@@ -1,9 +1,18 @@
 @tool
-extends Sprite2D
+extends Sprite2D  # Or Sprite2D / AnimatedSprite2D depending on your node type
 
-func _notification(what: int) -> void:
-	if Engine.is_editor_hint():
-		var parent = get_parent()
-		if parent and "start_flipped" in parent:
-			# Set flip_h to the value of the parent's variable
-			flip_h = parent.start_flipped
+# This node caches its parent (the Enemy)
+@onready var enemy = get_parent()
+
+func _process(_delta: float) -> void:
+	# Only run inside the editor workspace
+	if not Engine.is_editor_hint():
+		set_process(false) # Disable during actual gameplay to save performance
+		return
+
+	# Safely read the value from the parent script
+	if enemy and "start_flipped" in enemy:
+		if enemy.start_flipped:
+			flip_h = true
+		else:
+			flip_h = false
