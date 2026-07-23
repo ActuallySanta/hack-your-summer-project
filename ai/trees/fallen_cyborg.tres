@@ -1,0 +1,126 @@
+[gd_resource type="BehaviorTree" format=3 uid="uid://i6hf0uvusyaa"]
+
+[ext_resource type="Script" uid="uid://q3siycoeq6oo" path="res://ai/tasks/get_hurt.gd" id="1_4vj60"]
+
+[sub_resource type="BlackboardPlan" id="BlackboardPlan_lytq1"]
+
+[sub_resource type="BBVariant" id="BBVariant_lytq1"]
+type = 4
+saved_value = "hurt"
+resource_name = "hurt"
+
+[sub_resource type="BTCheckVar" id="BTCheckVar_4vj60"]
+variable = &"state"
+value = SubResource("BBVariant_lytq1")
+
+[sub_resource type="BBNode" id="BBNode_lytq1"]
+saved_value = NodePath("AnimationPlayer")
+resource_name = "AnimationPlayer"
+
+[sub_resource type="BTPlayAnimation" id="BTPlayAnimation_4vj60"]
+animation_player = SubResource("BBNode_lytq1")
+animation_name = &"hurt"
+
+[sub_resource type="BTAction" id="BTAction_n1pcd"]
+script = ExtResource("1_4vj60")
+
+[sub_resource type="BTSequence" id="BTSequence_4vj60"]
+custom_name = "Hurt"
+children = [SubResource("BTCheckVar_4vj60"), SubResource("BTPlayAnimation_4vj60"), SubResource("BTAction_n1pcd")]
+
+[sub_resource type="BBVariant" id="BBVariant_4vj60"]
+type = 4
+saved_value = "attack"
+resource_name = "attack"
+
+[sub_resource type="BTCheckVar" id="BTCheckVar_n1pcd"]
+variable = &"state"
+value = SubResource("BBVariant_4vj60")
+
+[sub_resource type="BBVariant" id="BBVariant_keixm"]
+type = 1
+saved_value = true
+resource_name = "true"
+
+[sub_resource type="BTCheckVar" id="BTCheckVar_a61s3"]
+variable = &"canAttack"
+value = SubResource("BBVariant_keixm")
+
+[sub_resource type="BBNode" id="BBNode_4vj60"]
+saved_value = NodePath("AnimationPlayer")
+resource_name = "AnimationPlayer"
+
+[sub_resource type="BTPlayAnimation" id="BTPlayAnimation_n1pcd"]
+await_completion = 1.0
+animation_player = SubResource("BBNode_4vj60")
+animation_name = &"attack"
+
+[sub_resource type="BTSequence" id="BTSequence_n1pcd"]
+custom_name = "Attack Player"
+children = [SubResource("BTCheckVar_n1pcd"), SubResource("BTCheckVar_a61s3"), SubResource("BTPlayAnimation_n1pcd")]
+
+[sub_resource type="BBVariant" id="BBVariant_n1pcd"]
+type = 4
+saved_value = "idle"
+resource_name = "idle"
+
+[sub_resource type="BTCheckVar" id="BTCheckVar_keixm"]
+variable = &"state"
+value = SubResource("BBVariant_n1pcd")
+
+[sub_resource type="BBVariant" id="BBVariant_a61s3"]
+type = 1
+saved_value = false
+resource_name = "false"
+
+[sub_resource type="BBNode" id="BBNode_a61s3"]
+saved_value = NodePath(".")
+resource_name = "."
+
+[sub_resource type="BTCallMethod" id="BTCallMethod_6gtj3"]
+node = SubResource("BBNode_a61s3")
+method = &"set_weapon_raised"
+args = Array[BBVariant]([SubResource("BBVariant_a61s3")])
+
+[sub_resource type="BBNode" id="BBNode_n1pcd"]
+saved_value = NodePath("AnimationPlayer")
+resource_name = "AnimationPlayer"
+
+[sub_resource type="BTPlayAnimation" id="BTPlayAnimation_keixm"]
+animation_player = SubResource("BBNode_n1pcd")
+animation_name = &"idle"
+
+[sub_resource type="BTRandomWait" id="BTRandomWait_a61s3"]
+
+[sub_resource type="BTSequence" id="BTSequence_keixm"]
+custom_name = "Idle"
+children = [SubResource("BTCheckVar_keixm"), SubResource("BTCallMethod_6gtj3"), SubResource("BTPlayAnimation_keixm"), SubResource("BTRandomWait_a61s3")]
+
+[sub_resource type="BBVariant" id="BBVariant_mjb0x"]
+type = 4
+saved_value = "bear arms"
+resource_name = "bear arms"
+
+[sub_resource type="BTCheckVar" id="BTCheckVar_qmkgw"]
+variable = &"state"
+value = SubResource("BBVariant_mjb0x")
+
+[sub_resource type="BBNode" id="BBNode_keixm"]
+saved_value = NodePath("AnimationPlayer")
+resource_name = "AnimationPlayer"
+
+[sub_resource type="BTPlayAnimation" id="BTPlayAnimation_a61s3"]
+await_completion = 0.4
+animation_player = SubResource("BBNode_keixm")
+animation_name = &"bear_arms"
+
+[sub_resource type="BTSequence" id="BTSequence_a61s3"]
+custom_name = "Bear Arms"
+children = [SubResource("BTCheckVar_qmkgw"), SubResource("BTPlayAnimation_a61s3")]
+
+[sub_resource type="BTSelector" id="BTSelector_n1pcd"]
+children = [SubResource("BTSequence_4vj60"), SubResource("BTSequence_n1pcd"), SubResource("BTSequence_keixm"), SubResource("BTSequence_a61s3")]
+
+[resource]
+blackboard_plan = SubResource("BlackboardPlan_lytq1")
+root_task = SubResource("BTSelector_n1pcd")
