@@ -105,9 +105,9 @@ $ln;Ship;NewMap
 [1,5,1]
 1,0,2,-1|||Scenes/Rooms/Tutorial Area/service_crossroads.tscn
 [2,5,1]
--1,0,1,0|||Scenes/Rooms/Tutorial Area/observation_deck.tscn
+-1,0,1,1|||Scenes/Rooms/Docking Bay/oberservatory.tscn
 [3,5,1]
-0,0,-1,1|||Scenes/Rooms/Tutorial Area/observation_deck.tscn
+0,0,-1,0|||Scenes/Rooms/Docking Bay/oberservatory.tscn
 [-1,5,1]
 2,0,0,-1|||Scenes/Rooms/Tutorial Area/docking_station.tscn
 [-1,4,1]
@@ -117,6 +117,6 @@ $ln;Ship;NewMap
 [0,3,1]
 1,0,0,0|||Scenes/Rooms/Tutorial Area/maintenence_room.tscn
 [3,4,1]
-0,1,-1,0|||Scenes/Rooms/Tutorial Area/storage_room.tscn
+0,0,-1,0|||Scenes/Rooms/Tutorial Area/storage_room.tscn
 [2,4,1]
--1,0,1,0|||Scenes/Rooms/Tutorial Area/storage_room.tscn
+-1,1,1,0|||Scenes/Rooms/Tutorial Area/storage_room.tscn
