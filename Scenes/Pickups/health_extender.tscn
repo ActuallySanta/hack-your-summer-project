@@ -21,5 +21,5 @@ shape = SubResource("CircleShape2D_xq6nv")
 sprite_frames = ExtResource("1_shdog")
 animation = &"Rotate"
 autoplay = "Rotate"
-frame_progress = 0.87142915
+frame_progress = 0.18109939
 script = ExtResource("2_jqxec")

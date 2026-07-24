@@ -20,11 +20,10 @@ layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -224.0
+offset_left = -160.0
 offset_right = 0.0
-offset_bottom = 160.0
 grow_horizontal = 0
 smooth_scroll = false
-area = Vector2i(7, 5)
+area = Vector2i(5, 3)
 
 [node name="PlayerHealth" parent="." unique_id=1360041974 instance=ExtResource("3_jh2mb")]

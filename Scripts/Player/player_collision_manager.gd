@@ -8,7 +8,6 @@ enum State { WALK, AIR, CROUCH}
 @onready var crouch_collider = $"../CrouchCollision"
 
 var colliders
-var states
 var _active_collision
 
 func _ready() -> void:
@@ -18,6 +17,11 @@ func _ready() -> void:
 		State.AIR: jumping_collider,
 		State.CROUCH: crouch_collider,
 	}
+
+func get_bounds() -> Array[Vector2]:
+	var collider = colliders[ _active_collision ]
+	var bounds = collider.shape.get_rect()
+	return [ collider.to_global(bounds.end), collider.to_global(bounds.position) ]
 
 func swap_active_collision(name: State):
 	set_disabled(_active_collision, true)
