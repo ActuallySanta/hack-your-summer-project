@@ -20,11 +20,13 @@ const SaveManager = preload("res://addons/MetroidvaniaSystem/Template/Scripts/Sa
 
 var save
 var isInGame : bool = false
+var paused : bool = false
 
 func _ready() -> void:
 	_hud.start_new_game.connect(_new_game)
 	_hud.load_game.connect(_load_game)
 	_hud.quit_game.connect(get_tree().quit)
+	_hud.resume_game.connect(resume_game)
 	_init_metsys_and_objects()
 	isInGame = false
 	#if using a custom save, skip the main menu and head straight to the game
@@ -46,6 +48,8 @@ func _init_metsys_and_objects() -> void:
 	_player.reset_all_inputs()
 
 func _load_game() -> void:
+	get_tree().paused = false
+	paused = false
 	_hud.hide_menus()
 	_hud.show_load_screen()
 	# save.load_from_text should automatically call MetSys.set_save_data()
@@ -73,6 +77,8 @@ func _load_game() -> void:
 
 
 func _new_game():
+	get_tree().paused = false
+	paused = false
 	_hud.hide_menus()
 	_hud.show_load_screen()
 	MetSys.set_save_data()
@@ -94,6 +100,16 @@ func _load_custom_save() -> void:
 
 func get_save_path(save_index: int) -> StringName:
 	return "user://save" + str(save_index) +".sav"
+
+func pause_game() -> void:
+	get_tree().paused = true
+	_hud.show_menu(GameHUD.MenuType.Pause)
+	paused = true
+
+func resume_game() -> void:
+	get_tree().paused = false
+	_hud.hide_menus()
+	paused = false
 
 func _on_room_changed(new_room: String) -> void:
 	save.set_value("current_room", new_room)
@@ -126,6 +142,12 @@ func _process(_delta: float) -> void:
 	
 	if allow_save_anywhere and Input.is_action_just_pressed(&"debug_save"):
 		save_game(0)
+	if Input.is_action_just_pressed("pause"):
+		if paused:
+			resume_game()
+		else:
+			pause_game()
+		
 
 #Add any other variables you need as you save them, they will be saved as a dictionary
 func save_game(save_index: int, set_checkpoint := true) -> void:
