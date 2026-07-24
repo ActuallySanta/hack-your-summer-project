@@ -97,7 +97,7 @@ func get_save_path(save_index: int) -> StringName:
 
 func _on_room_changed(new_room: String) -> void:
 	save.set_value("current_room", new_room)
-	print("Entering room " + new_room)
+	#print("Entering room " + new_room)
 
 func _on_pickup_collected(pickup: Pickup) -> void:
 	match pickup.type:

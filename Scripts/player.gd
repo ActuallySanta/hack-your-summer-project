@@ -151,7 +151,6 @@ func validate_wall_jump() -> bool:
 	return false
 
 func attack() -> void:
-	print("Attack!")
 	var newAttack := swingScene.instantiate() as PlayerMeleeSwing
 	var swingX := swingOffset
 	if !_facingRight:
@@ -165,7 +164,6 @@ func attack() -> void:
 	anim_swing = true
 
 func shoot() -> void:
-	print("Fire!")
 	var newBullet := bulletScene.instantiate() as PlayerBullet
 	var bulletX := bulletOffset
 	if !_facingRight:
@@ -384,7 +382,6 @@ func respawn() -> void:
 func _on_hit(_hurtBox: Hurtbox, hit_info: HitInfo, _source: Hitbox) -> void:
 	if _invulnTimer > 0 or _currentHealth <= 0:
 		return
-	print("Player took damage!")
 	_currentHealth -= hit_info.damage
 	GlobalSignals.health_changed.emit(_currentHealth, baseHealth)
 	_knockbackTimer = hit_info.knockback_duration

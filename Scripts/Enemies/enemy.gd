@@ -31,55 +31,56 @@ func move(targetPos : Vector2, delta :float):
 	update_flip(dir.x)
 
 func update_flip(dir:float):
-	var doFlip : bool = dir<0
-	if(doFlip != isFlipped):
-		scale.x =-1
+	var doFlip : bool = dir < 0
+	if doFlip != isFlipped:
+		scale.x = -1
 	else:
 		scale.x = 1
 	isFlipped = doFlip
 
 func _physics_process(delta: float) -> void:
-	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 	
-
+	if bt_player.blackboard.get_var("state") == "hurt":
+		move_and_slide()
+		return
 	
-	if(bt_player.blackboard.get_var("state") != "hurt"):
-		if(ground_check.get_collision_count() == 0):
-			update_flip(scale.x*-1) #flip the enemy
-			bt_player.blackboard.set_var("state","idle")
-			bt_player.restart()
-			
-		#If the player can see the enemy
-		if(player_detection_check.collision_result.find(playerReference)):
-			#And the player is not obstructed
-			if(player_obstruction_check.is_colliding() && player_obstruction_check.get_collider() == playerReference):
-				if(target_range_check.collision_result.find(playerReference)):
-					bt_player.blackboard.set_var("state","attacking")
-				else:
-					bt_player.blackboard.set_var("state","chasing")
-				bt_player.restart()
-			else:
-				bt_player.blackboard.set_var("state","patrolling")
+	if ground_check.get_collision_count() == 0:
+		update_flip(scale.x * -1)
+		switch_state("idle")
 	
+	switch_state("patrolling" if not can_see_player() else "attacking")
 	move_and_slide()
 
 func getValidPos() -> Vector2:
-	
 	var currWanderDistance : float = randf_range(-wanderDistance,wanderDistance)
 	target_location_check.target_position.x = currWanderDistance
 	
-	var collisionPoint:Vector2 = target_location_check.get_collision_point()
+	var collisionPoint : Vector2 = target_location_check.get_collision_point()
 	var collisionWidth = (physics_body.shape as CapsuleShape2D).radius
-	if(target_location_check.is_colliding()):
-		return  collisionPoint + (collisionPoint.direction_to(position)* collisionWidth/2)
+	if target_location_check.is_colliding():
+		return collisionPoint + (collisionPoint.direction_to(position) * collisionWidth/2)
 	else:
 		return Vector2(position.x + currWanderDistance,position.y)
 	
-	return Vector2.ZERO
+func takeDamage(_hurtBox: Hurtbox, _hit_info: HitInfo, _source: Hitbox):
+	switch_state("hurt")
+
+func can_see_player() -> bool:
+	return player_obstruction_check.is_colliding() and player_obstruction_check.get_collider() == playerReference
+
+func shapeCast_hit_playerRef(variable: ShapeCast2D) -> bool:
+	if variable.collision_result.size() < 1:
+		return false
 	
-func takeDamage(hurtBox: Hurtbox, hit_info: HitInfo, source: Hitbox):
-	print(name +" took damage")
-	bt_player.blackboard.set_var("state","hurt")
+	var playerRID = playerReference.get_rid()
+	for collision in variable.collision_result:
+		if collision[ "rid" ] == playerRID:
+			return true
+		
+	return false
+
+func switch_state(state_name: String) -> void:
+	bt_player.blackboard.set_var("state", state_name)
 	bt_player.restart()

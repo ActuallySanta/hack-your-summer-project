@@ -20,7 +20,6 @@ func _ready() -> void:
 		var already_collected = MetSys.register_storable_object(self)
 		# MetSys automatically despawns the object if it was already collected
 		if already_collected:
-			print("Already Collected!")
 			return
 
 func _on_body_entered(body: Node2D) -> void:
@@ -33,7 +32,6 @@ func _on_body_entered(body: Node2D) -> void:
 		return
 		
 	if not respawn_on_load:
-		print("Storing pickup " + MetSys.get_object_id(self))
 		MetSys.store_object(self)
 	queue_free()
 

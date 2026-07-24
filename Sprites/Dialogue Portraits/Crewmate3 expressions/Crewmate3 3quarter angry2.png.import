@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://damwt4i44c6"
-path="res://.godot/imported/Ranged_Andriod.png-0c34e99357c0ecaec33d1cd1b43ea6fb.ctex"
+uid="uid://dxy7ey5ix3rxu"
+path="res://.godot/imported/Crewmate3 3quarter angry2.png-2c9766f5030439c9ccc101e79352d796.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/Characters/Ranged_Andriod.png"
-dest_files=["res://.godot/imported/Ranged_Andriod.png-0c34e99357c0ecaec33d1cd1b43ea6fb.ctex"]
+source_file="res://Sprites/Dialogue Portraits/Crewmate3 expressions/Crewmate3 3quarter angry2.png"
+dest_files=["res://.godot/imported/Crewmate3 3quarter angry2.png-2c9766f5030439c9ccc101e79352d796.ctex"]
 
 [params]
 

@@ -22,7 +22,6 @@ func try_open_door() -> void:
 
 func dramatic_door_open_very_cool(num_to_open: int) -> void:
 	if MetSys.save_data.stored_objects.get(door_name, false):
-		print("already Opened")
 		return
 	
 	for i in num_to_open:
