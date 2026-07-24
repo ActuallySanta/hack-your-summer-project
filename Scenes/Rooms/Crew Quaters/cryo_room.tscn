@@ -5,7 +5,7 @@
 [ext_resource type="TileSet" uid="uid://hkvfy5by8aqr" path="res://Tileset/Main_Level.tres" id="3_grocq"]
 [ext_resource type="PackedScene" uid="uid://sjty08w4065m" path="res://Scenes/Rooms/CommonRoomComponents/space_background.tscn" id="3_gx82q"]
 [ext_resource type="Script" uid="uid://q5q152xvydxb" path="res://Scripts/brightness_oscillator.gd" id="5_kl5k2"]
-[ext_resource type="PackedScene" uid="uid://hg8h8fo8hw85" path="res://Scenes/Enemies/fallen_cyborg.tscn" id="6_oqqe7"]
+[ext_resource type="PackedScene" uid="uid://bnpsyl86ggbjm" path="res://Scenes/Pickups/health_extender.tscn" id="7_qbq0e"]
 
 [node name="CryoRoom" type="Node2D" unique_id=1425201056]
 
@@ -42,11 +42,5 @@ scale = Vector2(1.5, 1.5)
 tile_map_data = PackedByteArray("AACMABAABAAIAAAAAACMABEABAAIAAEAAACMABIABAAIAAIAAACMABMABAAIAAMAAACMABQABAAIAAQAAACMABUABAAIAAUAAACNABAABAAJAAAAAACNABEABAAJAAEAAACNABIABAAJAAIAAACNABMABAAJAAMAAACNABQABAAJAAQAAACNABUABAAJAAUAAACOABAABAAKAAAAAACOABEABAAKAAEAAACOABIABAAKAAIAAACOABMABAAKAAMAAACOABQABAAKAAQAAACOABUABAAKAAUAAACPABAABAALAAAAAACPABEABAALAAEAAACPABIABAALAAIAAACPABMABAALAAMAAACPABQABAALAAQAAACPABUABAALAAUAAAA=")
 tile_set = ExtResource("3_grocq")
 
-[node name="Fallen_Cyborg2" parent="." unique_id=2020790701 instance=ExtResource("6_oqqe7")]
-position = Vector2(1246, 528)
-bullet_spawn_offset = Vector2(20, -20.5)
-
-[node name="Fallen_Cyborg" parent="." unique_id=77851453 instance=ExtResource("6_oqqe7")]
-position = Vector2(1149, 528)
-bullet_spawn_offset = Vector2(20, -20.5)
-start_flipped = true
+[node name="HealthExtender" parent="." unique_id=1304663654 instance=ExtResource("7_qbq0e")]
+position = Vector2(3238, 493)

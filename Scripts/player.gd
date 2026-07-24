@@ -111,6 +111,7 @@ func _ready() -> void:
 	jetpack.jetpack_updated.connect(do_jetpack_logic)
 	disable_jetpack()
 	playerMoveState = MoveState.Standing
+	GlobalSignals.health_extended_by_one.connect(increment_health_amount_by_one)
 
 func _move_player_pos(pos: Vector2) -> void:
 	position = pos
@@ -364,6 +365,10 @@ func _process( _delta: float ) -> void:
 		anim_swing = false
 	
 #region Damage and respawn
+func increment_health_amount_by_one() -> void:
+	baseHealth += 1
+	_currentHealth = baseHealth
+
 func die() -> void:
 	_invulnTimer = 0
 	anim_death = true

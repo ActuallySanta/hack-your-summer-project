@@ -1,0 +1,33 @@
+[gd_resource type="TileSet" format=3 uid="uid://buxceg5xwah17"]
+
+[ext_resource type="Texture2D" uid="uid://b201wdn5apbf4" path="res://Sprites/Game UI/Player HUD/UI1.png" id="1_ntih7"]
+[ext_resource type="Texture2D" uid="uid://p56qjkg3kj2j" path="res://Sprites/Game UI/Player HUD/HYS_Health_icon.png" id="2_fmlb6"]
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_ntih7"]
+tile_data = PackedInt32Array(0, 0, 0, 65536, 0, 1)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fmlb6"]
+texture = ExtResource("1_ntih7")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_d75cw"]
+texture = ExtResource("2_fmlb6")
+texture_region_size = Vector2i(36, 30)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+
+[resource]
+sources/0 = SubResource("TileSetAtlasSource_fmlb6")
+sources/1 = SubResource("TileSetAtlasSource_d75cw")
+pattern_0 = SubResource("TileMapPattern_ntih7")
