@@ -189,10 +189,9 @@ func handle_jump_and_gravity(delta: float) -> void:
 	# Add the gravity.
 	if not is_on_floor():
 		if playerMoveState != MoveState.Climbing:
-			var gravity = 1.8 * get_gravity() * delta
+			var gravity = get_gravity() * delta
 			if _holdingDownSpaceForSpace:
-				gravity.y -= 30
-			print(gravity)
+				gravity.y -= 10
 			velocity += gravity
 		_coyoteTimer -= delta
 	else:
