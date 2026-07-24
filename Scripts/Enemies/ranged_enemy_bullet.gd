@@ -26,3 +26,6 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 
 func flip_graphics() -> void:
 	$AnimatedSprite2D.flip_h = !$AnimatedSprite2D.flip_h
+
+func _on_hitbox_on_hit(hitbox: Hitbox, target: Hurtbox) -> void:
+	queue_free()
