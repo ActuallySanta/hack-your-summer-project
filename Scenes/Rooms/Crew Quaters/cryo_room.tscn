@@ -43,4 +43,4 @@ tile_map_data = PackedByteArray("AACMABAABAAIAAAAAACMABEABAAIAAEAAACMABIABAAIAAI
 tile_set = ExtResource("3_grocq")
 
 [node name="HealthExtender" parent="." unique_id=1304663654 instance=ExtResource("7_qbq0e")]
-position = Vector2(3238, 493)
+position = Vector2(1797, 378)
