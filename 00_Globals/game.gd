@@ -14,6 +14,12 @@ const SaveManager = preload("res://addons/MetroidvaniaSystem/Template/Scripts/Sa
 ## each boundary's own [member SoftCameraBoundary.resistance] blends between this
 ## smoothing (0.0) and an instant, uncrossable push-out (1.0).
 @export var cameraSoftSmoothing := 10.0
+## When a camera-path projection jumps farther than this (pixels) in one frame,
+## ease across it over [member cameraPathSmoothTime] instead of snapping. Below it,
+## normal following stays crisp; jumps bigger than a screen (room changes) snap.
+@export var cameraPathJumpThreshold := 48.0
+## Seconds to ease across a detected camera-path corner jump.
+@export var cameraPathSmoothTime := 0.5
 @export var death_respawn_delay := 2.0
 @export var artificial_load_time := 0.0
 @export var allow_save_anywhere := false
@@ -25,6 +31,12 @@ const SaveManager = preload("res://addons/MetroidvaniaSystem/Template/Scripts/Sa
 var save
 var isInGame : bool = false
 var _camera : Camera2D
+# Camera-path jump smoothing state (see _smooth_path_jump).
+var _path_pos: Vector2
+var _path_from: Vector2
+var _path_active := false
+var _path_elapsed := 0.0
+var _path_initialized := false
 
 
 #initialize metsys and its modules
@@ -90,6 +102,9 @@ func get_save_path(save_index: int) -> StringName:
 
 func _on_room_changed(new_room: String) -> void:
 	save.set_value("current_room", new_room)
+	# Force the camera-path smoother to snap on the next frame instead of sliding
+	# across the room boundary during a transition.
+	_path_initialized = false
 	#print("Entering room " + new_room)
 
 func _on_pickup_collected(pickup: Pickup) -> void:
@@ -116,7 +131,7 @@ func _process(_delta: float) -> void:
 	if abs(posDiff.y) > cameraDeadzone.y:
 		camPos.y = playerPos.y + (cameraDeadzone.y * sign(posDiff.y))
 	camPos = _apply_soft_camera_bounds(camPos, _delta)
-	camPos = _apply_camera_path_bounds(camPos)
+	camPos = _apply_camera_path_bounds(camPos, _delta)
 	_camera.position = camPos
 	
 	if allow_save_anywhere and Input.is_action_just_pressed(&"debug_save"):
@@ -153,9 +168,11 @@ func _apply_soft_camera_bounds(cam_center: Vector2, delta: float) -> Vector2:
 ## Confines the camera centre to any registered camera-path boundaries (the
 ## alternative approach: the polygon dictates where the centre may go), then
 ## re-applies the rectangular hard bounds so they remain the final authority.
-func _apply_camera_path_bounds(cam_center: Vector2) -> Vector2:
+func _apply_camera_path_bounds(cam_center: Vector2, delta: float) -> Vector2:
 	var boundaries := get_tree().get_nodes_in_group(CameraPathBoundary.GROUP)
 	if boundaries.is_empty():
+		# Re-arm so re-entering a path room snaps rather than smoothing from a stale pos.
+		_path_initialized = false
 		return cam_center
 
 	var result := cam_center
@@ -167,7 +184,50 @@ func _apply_camera_path_bounds(cam_center: Vector2) -> Vector2:
 		_camera.limit_right - _camera.limit_left,
 		_camera.limit_bottom - _camera.limit_top)
 	var half_view := _camera.get_viewport_rect().size * 0.5 / _camera.zoom
-	return _clamp_view_to_rect(result, half_view, hard_rect)
+	var target := _clamp_view_to_rect(result, half_view, hard_rect)
+	return _smooth_path_jump(target, half_view, delta)
+
+## Band-aid smoothing for the camera-path projection: normal following passes
+## through untouched, but a jump larger than [member cameraPathJumpThreshold]
+## (yet smaller than a screen — i.e. not a room-change teleport) is eased across
+## over [member cameraPathSmoothTime] seconds so corners don't snap.
+func _smooth_path_jump(target: Vector2, half_view: Vector2, delta: float) -> Vector2:
+	# Jumps bigger than roughly half a screen are teleports (room change / respawn) -> snap.
+	var snap_limit := half_view.length()
+
+	if not _path_initialized:
+		_path_pos = target
+		_path_initialized = true
+		_path_active = false
+		return _path_pos
+
+	var jump := target.distance_to(_path_pos)
+
+	if _path_active:
+		if jump > snap_limit:
+			_path_active = false
+			_path_pos = target
+			return _path_pos
+		_path_elapsed += delta
+		var t := 1.0 if cameraPathSmoothTime <= 0.0 else clampf(_path_elapsed / cameraPathSmoothTime, 0.0, 1.0)
+		_path_pos = _path_from.lerp(target, smoothstep(0.0, 1.0, t))
+		if t >= 1.0:
+			_path_active = false
+			_path_pos = target
+		return _path_pos
+
+	if jump > cameraPathJumpThreshold and jump <= snap_limit:
+		# Begin easing across this corner jump (and take the first step now).
+		_path_active = true
+		_path_from = _path_pos
+		_path_elapsed = delta
+		var t := 1.0 if cameraPathSmoothTime <= 0.0 else clampf(_path_elapsed / cameraPathSmoothTime, 0.0, 1.0)
+		_path_pos = _path_from.lerp(target, smoothstep(0.0, 1.0, t))
+		return _path_pos
+
+	# Small everyday follow, or an outright teleport -> track exactly.
+	_path_pos = target
+	return _path_pos
 
 ## Clamps a camera centre so its view rectangle stays within [param rect].
 ## If the room is smaller than the view on an axis, the view is centred there.
