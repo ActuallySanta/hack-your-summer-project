@@ -1,6 +1,8 @@
 extends Area2D
 @export var loadedConversation : Dialogue_Conversation
-
+@export var chooseToStart : bool = false
+@export var canReRead: bool = false
+@export var hasBeenRead: bool = false
 var inRange: bool = false
 
 func _on_body_entered(body: Node2D) -> void:
@@ -8,8 +10,10 @@ func _on_body_entered(body: Node2D) -> void:
 		inRange = true
 
 func _input(event: InputEvent) -> void:
-	if(event.is_action_pressed("Dialogue Begin") and inRange and !PlayerManager.inDialogue):
-		GlobalSignals.OnDialogueBegin.emit(loadedConversation)
+	if(inRange and !PlayerManager.inDialogue and (canReRead or (!canReRead and !hasBeenRead))):
+		if(!chooseToStart or (event.is_action_pressed("Dialogue Begin") and chooseToStart)):
+			hasBeenRead = true
+			GlobalSignals.OnDialogueBegin.emit(loadedConversation)
 		
 
 

@@ -32,7 +32,6 @@ const SaveManager = preload("res://addons/MetroidvaniaSystem/Template/Scripts/Sa
 var save
 var isInGame : bool = false
 var paused : bool = false
-var _camera : Camera2D
 # Camera-path jump smoothing state (see _smooth_path_jump).
 var _path_pos: Vector2
 var _path_from: Vector2

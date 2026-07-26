@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="DialogueSpeaker" format=3 uid="uid://ncxfmcocxh4q"]
+
+[ext_resource type="Texture2D" uid="uid://c64ipaoj02dp2" path="res://Sprites/Dialogue Portraits/MC expressions/MC 3quarter neutral.png" id="1_eb1j3"]
+[ext_resource type="Texture2D" uid="uid://0cghatvadadf" path="res://Sprites/Dialogue Portraits/MC expressions/MC 3quarter happy1.png" id="2_5sfbq"]
+[ext_resource type="Texture2D" uid="uid://0tltsobpxwel" path="res://Sprites/Dialogue Portraits/MC expressions/MC 3quarter angry1.png" id="3_47gmd"]
+[ext_resource type="Texture2D" uid="uid://bvgy14w72vlmn" path="res://Sprites/Dialogue Portraits/MC expressions/MC 3quarter sad.png" id="4_11yiy"]
+[ext_resource type="Texture2D" uid="uid://c8ktcjyrvxrr0" path="res://Sprites/Dialogue Portraits/MC expressions/MC 3quarter annoyed.png" id="5_w147m"]
+[ext_resource type="Script" uid="uid://58h5b48tp7ij" path="res://Scripts/Resources/Dialogue/dialogue_speaker.gd" id="6_w68tb"]
+
+[resource]
+script = ExtResource("6_w68tb")
+characterPortraits = Dictionary[int, Texture2D]({
+0: ExtResource("1_eb1j3"),
+1: ExtResource("2_5sfbq"),
+2: ExtResource("3_47gmd"),
+3: ExtResource("4_11yiy"),
+4: ExtResource("5_w147m")
+})
+speakerName = "Aayla"
+metadata/_custom_type_script = "uid://58h5b48tp7ij"

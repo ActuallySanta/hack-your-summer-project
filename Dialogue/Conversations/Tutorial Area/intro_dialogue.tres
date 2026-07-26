@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="Dialogue_Conversation" format=3 uid="uid://cau5m12a4go6c"]
+
+[ext_resource type="Script" uid="uid://bdh437kih1wx8" path="res://Scripts/Resources/Dialogue/dialogue_entry.gd" id="1_1cyga"]
+[ext_resource type="Script" uid="uid://bf316n5tk84lf" path="res://Scripts/Resources/Dialogue/dialogue_conversation.gd" id="2_1itsv"]
+[ext_resource type="Resource" uid="uid://ncxfmcocxh4q" path="res://Dialogue/Speakers/aayla_speaker.tres" id="2_8uvay"]
+
+[sub_resource type="Resource" id="Resource_1dd61"]
+script = ExtResource("1_1cyga")
+entryText = "Alright, I've made it into the docking bay. What did you say that we were doing here again?"
+speaker = ExtResource("2_8uvay")
+metadata/_custom_type_script = "uid://bdh437kih1wx8"
+
+[sub_resource type="Resource" id="Resource_wpfr4"]
+script = ExtResource("1_1cyga")
+entryText = "Hello?"
+speakerEmotion = 4
+speaker = ExtResource("2_8uvay")
+metadata/_custom_type_script = "uid://bdh437kih1wx8"
+
+[sub_resource type="Resource" id="Resource_1itsv"]
+script = ExtResource("1_1cyga")
+entryText = "Dammit the signal must've been cut off by all the trash in the way, I'll have to see if I can find a relay to get through to the captain"
+speakerEmotion = 2
+speaker = ExtResource("2_8uvay")
+metadata/_custom_type_script = "uid://bdh437kih1wx8"
+
+[resource]
+script = ExtResource("2_1itsv")
+conversationContents = Array[ExtResource("1_1cyga")]([SubResource("Resource_1dd61"), SubResource("Resource_wpfr4"), SubResource("Resource_1itsv")])
+metadata/_custom_type_script = "uid://bf316n5tk84lf"
