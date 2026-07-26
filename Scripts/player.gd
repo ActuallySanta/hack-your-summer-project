@@ -271,6 +271,30 @@ func handle_invuln_blinking(delta: float) -> void:
 	_invulnBlinkTimer -= delta
 	if _invulnBlinkTimer < 0:
 		_invulnBlinkTimer += invulnBlinkInterval
+
+func handle_attack(delta: float) -> void:
+	if _attackCooldownTimer > 0:
+		_attackCooldownTimer -= delta
+	
+	if _attackBufferTimer <= 0:
+		return
+		
+	if _attackCooldownTimer <= 0:
+		attack()
+	else:
+		_attackBufferTimer -= delta
+
+func handle_shooting(delta: float) -> void:
+	if _shootCooldownTimer > 0:
+		_shootCooldownTimer -= delta
+	
+	if _shootBufferTimer <= 0:
+		return
+	
+	if _shootCooldownTimer <= 0:
+		shoot()
+	else:
+		_shootBufferTimer -= delta
 #endregion
 
 func determine_move_state() -> MoveState:
@@ -306,8 +330,7 @@ func translate_state() -> CollisionManager.State:
 	
 	return CollisionManager.State.WALK
 
-func on_cell_group_change(new_group: String) -> void:
-	MusicManager.set_background_track(new_group)
+
 
 func _physics_process(delta: float) -> void:
 	if _is_vaulting:
@@ -329,41 +352,25 @@ func _physics_process(delta: float) -> void:
 	else:
 		handle_standard_movement(delta)
 	
-	# Handle attack
-	if _attackCooldownTimer > 0:
-		_attackCooldownTimer -= delta
-	if _attackBufferTimer > 0:
-		if _attackCooldownTimer <= 0:
-			attack()
-		else:
-			_attackBufferTimer -= delta
-	# Handle shooting
-	if _shootCooldownTimer > 0:
-		_shootCooldownTimer -= delta
-	if _shootBufferTimer > 0:
-		if _shootCooldownTimer <= 0:
-			shoot()
-		else:
-			_shootBufferTimer -= delta
+	handle_attack(delta)
+	handle_shooting(delta)
 	
 	if _invulnTimer > 0:
 		_invulnTimer -= delta
+	
 	move_and_slide()
+	
+	sprite.flip_h = false if _facingRight else true
+	
+	refresh_cell_group_music()
+	
 
-	# 3. Flip the sprite visually based on which way we are running
-	if _facingRight:
-		sprite.flip_h = false  # Facing Right
-	else:
-		sprite.flip_h = true   # Facing Left
-
-	var groups = MetSys.get_cell_groups( MetSys.get_current_coords() )
-	if groups.size() == 0:
+func refresh_cell_group_music(force := false) -> void:
+	var groups := MetSys.get_cell_groups(MetSys.get_current_coords())
+	if groups.is_empty():
 		return
-	var group_id = groups[0]
-	var group = MetSys.get_group_name( group_id )
-	if group  != previous_cell_Group:
-		on_cell_group_change(group)
-		previous_cell_Group = group
+	
+	MusicManager.set_background_track(groups)
 
 func _process( _delta: float ) -> void:
 	handle_inputs()
