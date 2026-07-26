@@ -1,0 +1,64 @@
+[gd_resource type="Resource" script_class="Dialogue_Conversation" format=3 uid="uid://c06gmgnj0emaj"]
+
+[ext_resource type="Script" uid="uid://bdh437kih1wx8" path="res://Scripts/Resources/Dialogue/dialogue_entry.gd" id="1_qq6bw"]
+[ext_resource type="Script" uid="uid://bf316n5tk84lf" path="res://Scripts/Resources/Dialogue/dialogue_conversation.gd" id="2_36xb0"]
+[ext_resource type="Resource" uid="uid://ncxfmcocxh4q" path="res://Dialogue/Speakers/aayla_speaker.tres" id="2_kybq4"]
+[ext_resource type="Resource" uid="uid://berx7jp4gc8xj" path="res://Dialogue/Speakers/charlie_speaker.tres" id="3_kybq4"]
+
+[sub_resource type="Resource" id="Resource_8vki4"]
+script = ExtResource("1_qq6bw")
+entryText = "Alright Charlie, that should do it,  the power should be on"
+speakerEmotion = 1
+speaker = ExtResource("2_kybq4")
+metadata/_custom_type_script = "uid://bdh437kih1wx8"
+
+[sub_resource type="Resource" id="Resource_u4lwu"]
+script = ExtResource("1_qq6bw")
+entryText = "Yeah I can see that, all the lights turned on and the life support systems seem to be working again. You should be alright to move further into the ship and begin looking for the package"
+speaker = ExtResource("3_kybq4")
+metadata/_custom_type_script = "uid://bdh437kih1wx8"
+
+[sub_resource type="Resource" id="Resource_8umba"]
+script = ExtResource("1_qq6bw")
+entryText = "Roger that, what was it that I was supposed to be looking for?"
+speaker = ExtResource("2_kybq4")
+metadata/_custom_type_script = "uid://bdh437kih1wx8"
+
+[sub_resource type="Resource" id="Resource_aqldk"]
+script = ExtResource("1_qq6bw")
+entryText = "REPENTANCE"
+speakerEmotion = 2
+speaker = ExtResource("3_kybq4")
+metadata/_custom_type_script = "uid://bdh437kih1wx8"
+
+[sub_resource type="Resource" id="Resource_x3bfs"]
+script = ExtResource("1_qq6bw")
+entryText = "What?"
+speaker = ExtResource("2_kybq4")
+metadata/_custom_type_script = "uid://bdh437kih1wx8"
+
+[sub_resource type="Resource" id="Resource_656h0"]
+script = ExtResource("1_qq6bw")
+entryText = "Repentance, the new Bio weapon that got lost when the ship went down? The whole reason we’re here??"
+speakerEmotion = 4
+speaker = ExtResource("3_kybq4")
+metadata/_custom_type_script = "uid://bdh437kih1wx8"
+
+[sub_resource type="Resource" id="Resource_fovcu"]
+script = ExtResource("1_qq6bw")
+entryText = "Oh, yeah, right…"
+speakerEmotion = 1
+speaker = ExtResource("2_kybq4")
+metadata/_custom_type_script = "uid://bdh437kih1wx8"
+
+[sub_resource type="Resource" id="Resource_pxw0m"]
+script = ExtResource("1_qq6bw")
+entryText = "My god it’s like working with a goldfish"
+speakerEmotion = 4
+speaker = ExtResource("3_kybq4")
+metadata/_custom_type_script = "uid://bdh437kih1wx8"
+
+[resource]
+script = ExtResource("2_36xb0")
+conversationContents = Array[ExtResource("1_qq6bw")]([SubResource("Resource_8vki4"), SubResource("Resource_u4lwu"), SubResource("Resource_8umba"), SubResource("Resource_aqldk"), SubResource("Resource_x3bfs"), SubResource("Resource_656h0"), SubResource("Resource_fovcu"), SubResource("Resource_pxw0m")])
+metadata/_custom_type_script = "uid://bf316n5tk84lf"
