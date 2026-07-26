@@ -60,6 +60,7 @@ func _init_metsys_and_objects() -> void:
 	MetSys.room_changed.connect(_on_room_changed)
 	_player.pickup_collected.connect(_on_pickup_collected)
 	_player.save_station_used.connect(save_game.bind(0))
+	_player.death_start.connect(_on_player_death)
 	#prevent player from acting while game is loading
 	_player.process_mode = Node.PROCESS_MODE_DISABLED
 	_player.reset_all_inputs()
