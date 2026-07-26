@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://dosodgrjxvkn1"]
+
+[ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="1_3lkru"]
+
+[node name="SpecimenStorageBRS" type="Node2D" unique_id=1169436027]
+
+[node name="RoomInstance" parent="." unique_id=330132753 instance=ExtResource("1_3lkru")]
