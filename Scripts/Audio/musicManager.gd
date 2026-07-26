@@ -12,11 +12,11 @@ const LOWER_BRS = preload("res://Sounds/Music/BRS.ogg")
 const MAIN_MENU = DEBUG
 
 const ANDROID = DEBUG
-const MATRIX = DEBUG
+const MATRIX = preload("res://Sounds/Music/Uncertainty.ogg")
 
-const MAP = DEBUG
-const SAVE = DEBUG
-const PICKUP = DEBUG
+const MAP = preload("res://Sounds/Music/Uncertainty.ogg")
+const SAVE = preload("res://Sounds/Music/Uncertainty.ogg")
+const PICKUP = preload("res://Sounds/Music/Uncertainty.ogg")
 
 @onready var ui_ost := {
 	"Main Menu": DEBUG,
@@ -41,7 +41,7 @@ const PICKUP = DEBUG
 @onready var special_ost := {
 	"Map": MAP,
 	"Save": SAVE,
-	"Item Pickup": PICKUP,
+	"Pickup": PICKUP,
 }
 
 @onready var osts := {
@@ -110,7 +110,9 @@ func set_background_track_from_room_instance() -> void:
 	if groups.is_empty():
 		return
 	
-	play_background_track( _get_current_cell_group_music( groups ) )
+	var track = _get_current_cell_group_music( groups )
+	print("Sending: ", track)
+	play_background_track( track )
 
 func _get_current_cell_group_music(groups: PackedInt32Array) -> AudioStream:
 	var best_guess: AudioStream
@@ -123,8 +125,10 @@ func _get_current_cell_group_music(groups: PackedInt32Array) -> AudioStream:
 		else:
 			best_guess = location_ost.get(group_name)
 	
+	
 	return best_guess
 
 func _parse_special_room(type: String, special_name: String) -> AudioStream:
 	var dictionary = osts[type]
+	print(dictionary)
 	return dictionary.get(special_name)

@@ -10,6 +10,9 @@ $ln;Demo Level;NewMap
 8;Docking Bay:-8,-6,0:3,5,1:2,5,1:1,5,1:0,5,1:-1,5,1:-1,4,1:0,4,1:1,4,1:2,4,1:3,4,1:1,3,1:0,3,1
 9;Docking Bay Hidden:-7,-6,0
 10;_BOSS_Matrix:15,-3,0:14,-3,0
+11;_SPECIAL_Map:3,5,0:2,1,0:12,3,0
+12;_SPECIAL_Save:2,9,0:1,9,0:0,0,0:15,0,0:13,-2,0
+13;_SPECIAL_Pickup:3,8,0
 [4,3,0]
 0,-1,1,0|0023ff,,,,||Scenes/Rooms/Crew Quaters/stairway_cq.tscn
 [4,4,0]
