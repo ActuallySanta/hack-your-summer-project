@@ -29,7 +29,8 @@ func BeginDialogue(_conversation : Dialogue_Conversation):
 		conversationContents.push_back(entry.entryText)
 		conversationSpeaker.push_back(entry.speaker)
 		conversationSpeakerEmotion.push_back(entry.speakerEmotion)
-
+	PresentLine()
+	
 	pass
 
 func PresentLine():

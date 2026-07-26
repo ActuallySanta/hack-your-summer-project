@@ -1,10 +1,21 @@
 class_name GameHUD
 extends CanvasLayer
 
+enum MenuType { MainMenu, GameOver, GameComplete, Pause }
+
 signal death_screen_fade_complete(fade_in : bool)
+signal start_new_game()
+signal load_game()
+signal resume_game()
+signal quit_game()
 
 @onready var loading_screen: Control = $LoadingScreen
 @onready var death_screen: Control = $DeathScreen
+@onready var main_menu: Menu = $"Main Menu"
+@onready var game_over_menu: EndMenu = $"Game Over Menu"
+@onready var game_complete_menu: EndMenu = $"Game Complete Menu"
+@onready var pause_menu : PauseMenu = $"Pause Menu"
+@onready var menus: Array[Control] = [main_menu, game_over_menu, game_complete_menu, pause_menu]
 
 @export var load_screen_fade_time := 0.8
 @export var death_screen_fade_time := 1.5
@@ -13,10 +24,24 @@ var load_fade_timer: SceneTreeTimer
 var death_fade_timer: SceneTreeTimer
 var death_fade_in: bool
 
-@export var _menus : Dictionary[String,Control]
 
 func _ready() -> void:
 	death_screen.modulate.a = 0
+	#pass-through menu signals
+	main_menu.start_game_pressed.connect(start_new_game.emit)
+	main_menu.load_game_pressed.connect(load_game.emit)
+	main_menu.quit_game_pressed.connect(quit_game.emit)
+	game_over_menu.load_game_pressed.connect(load_game.emit)
+	game_over_menu.quit_game_pressed.connect(quit_game.emit)
+	game_complete_menu.load_game_pressed.connect(load_game.emit)
+	game_complete_menu.quit_game_pressed.connect(quit_game.emit)
+	pause_menu.resume_pressed.connect(resume_game.emit)
+	pause_menu.restart_pressed.connect(load_game.emit)
+	pause_menu.quit_pressed.connect(quit_game.emit)
+
+	game_over_menu.go_to_main_menu.connect(show_menu.bind(MenuType.MainMenu))
+	game_complete_menu.go_to_main_menu.connect(show_menu.bind(MenuType.MainMenu))
+	pause_menu.main_menu_pressed.connect(show_menu.bind(MenuType.MainMenu))
 
 func _process(_delta: float) -> void:
 	if load_fade_timer:
@@ -53,9 +78,11 @@ func fade_out_death_screen() -> void:
 		death_screen.modulate.a = 0
 		death_screen_fade_complete.emit(false))
 
-func load_menu(menu_UID: String):
-	for items in _menus.values():
-		items.visible = false
-		
-	_menus.get(menu_UID).process_mode = Node.PROCESS_MODE_INHERIT
-	_menus.get(menu_UID).visible = true
+func show_menu(type: MenuType) -> void:
+	hide_menus()
+	menus[type].visible = true
+
+func hide_menus() -> void:
+	for item in menus:
+		item.visible = false
+	

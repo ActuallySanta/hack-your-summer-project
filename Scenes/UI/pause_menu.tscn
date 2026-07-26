@@ -9,7 +9,7 @@ bg_color = Color(0.18039216, 0.18039216, 0.18039216, 1)
 [sub_resource type="LabelSettings" id="LabelSettings_xqyep"]
 font_size = 64
 
-[node name="Game Complete Menu" type="Control" unique_id=2070875949]
+[node name="Pause Menu" type="Control" unique_id=2070875949]
 process_mode = 3
 layout_mode = 3
 anchors_preset = 15

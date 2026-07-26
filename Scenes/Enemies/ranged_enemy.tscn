@@ -199,5 +199,11 @@ target_position = Vector2(250, 0)
 collision_mask = 2
 collide_with_areas = true
 
+[node name="Hurtbox" parent="." unique_id=470143312 instance=ExtResource("18_6j4xf")]
+collision_layer = 4
+
+[node name="Shape" type="CollisionShape2D" parent="Hurtbox" unique_id=326280550]
+position = Vector2(8, 3)
+shape = SubResource("CapsuleShape2D_mgs6e")
 [node name="FiringPoint" type="Node2D" parent="." unique_id=956708712]
 position = Vector2(44, -8)
