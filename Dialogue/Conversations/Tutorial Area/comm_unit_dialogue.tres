@@ -1,0 +1,84 @@
+[gd_resource type="Resource" script_class="Dialogue_Conversation" format=3 uid="uid://crb6upc214a3u"]
+
+[ext_resource type="Script" uid="uid://bdh437kih1wx8" path="res://Scripts/Resources/Dialogue/dialogue_entry.gd" id="1_tpatx"]
+[ext_resource type="Script" uid="uid://bf316n5tk84lf" path="res://Scripts/Resources/Dialogue/dialogue_conversation.gd" id="2_76voq"]
+[ext_resource type="Resource" uid="uid://ncxfmcocxh4q" path="res://Dialogue/Speakers/aayla_speaker.tres" id="2_gvu28"]
+[ext_resource type="Resource" uid="uid://berx7jp4gc8xj" path="res://Dialogue/Speakers/charlie_speaker.tres" id="3_on3xb"]
+
+[sub_resource type="Resource" id="Resource_8ndba"]
+script = ExtResource("1_tpatx")
+entryText = "Ah great, there's a working comm unit, that should let me get in contact with HQ"
+speakerEmotion = 1
+speaker = ExtResource("2_gvu28")
+metadata/_custom_type_script = "uid://bdh437kih1wx8"
+
+[sub_resource type="Resource" id="Resource_b82dc"]
+script = ExtResource("1_tpatx")
+entryText = "Hello? Command? Do you copy? This is Aalya reporting in"
+speaker = ExtResource("2_gvu28")
+metadata/_custom_type_script = "uid://bdh437kih1wx8"
+
+[sub_resource type="Resource" id="Resource_5h345"]
+script = ExtResource("1_tpatx")
+entryText = "Ksshk... h...lo?"
+speaker = ExtResource("3_on3xb")
+metadata/_custom_type_script = "uid://bdh437kih1wx8"
+
+[sub_resource type="Resource" id="Resource_f5ii4"]
+script = ExtResource("1_tpatx")
+entryText = "Charlie! Great, can you hear me? I had to find a separate comm unit to break through the interference"
+speakerEmotion = 1
+speaker = ExtResource("2_gvu28")
+metadata/_custom_type_script = "uid://bdh437kih1wx8"
+
+[sub_resource type="Resource" id="Resource_gvu28"]
+script = ExtResource("1_tpatx")
+entryText = "Ah there we go! Sorry Aayla I was having some trouble finding the unmute button and I couldn't get through haha"
+speakerEmotion = 1
+speaker = ExtResource("3_on3xb")
+metadata/_custom_type_script = "uid://bdh437kih1wx8"
+
+[sub_resource type="Resource" id="Resource_on3xb"]
+script = ExtResource("1_tpatx")
+entryText = "..."
+speakerEmotion = 4
+speaker = ExtResource("2_gvu28")
+metadata/_custom_type_script = "uid://bdh437kih1wx8"
+
+[sub_resource type="Resource" id="Resource_wml4a"]
+script = ExtResource("1_tpatx")
+entryText = "Are you serious?"
+speakerEmotion = 4
+speaker = ExtResource("2_gvu28")
+metadata/_custom_type_script = "uid://bdh437kih1wx8"
+
+[sub_resource type="Resource" id="Resource_l55ao"]
+script = ExtResource("1_tpatx")
+entryText = "Aanyways. to get going, your first task is to try to get power back on, it should let you get through those unpowered doors, I'm sure you can figure it out"
+speaker = ExtResource("3_on3xb")
+metadata/_custom_type_script = "uid://bdh437kih1wx8"
+
+[sub_resource type="Resource" id="Resource_6p5h7"]
+script = ExtResource("1_tpatx")
+entryText = "Ughhhh fine, I'll start looking around"
+speakerEmotion = 4
+speaker = ExtResource("2_gvu28")
+metadata/_custom_type_script = "uid://bdh437kih1wx8"
+
+[sub_resource type="Resource" id="Resource_e6tee"]
+script = ExtResource("1_tpatx")
+entryText = "And Aayla. don't try to get too lost, remember what happened last time?"
+speakerEmotion = 2
+speaker = ExtResource("3_on3xb")
+metadata/_custom_type_script = "uid://bdh437kih1wx8"
+
+[sub_resource type="Resource" id="Resource_n8u2j"]
+script = ExtResource("1_tpatx")
+entryText = "Yeah yeah yeah I'll be careful"
+speaker = ExtResource("2_gvu28")
+metadata/_custom_type_script = "uid://bdh437kih1wx8"
+
+[resource]
+script = ExtResource("2_76voq")
+conversationContents = Array[ExtResource("1_tpatx")]([SubResource("Resource_8ndba"), SubResource("Resource_b82dc"), SubResource("Resource_5h345"), SubResource("Resource_f5ii4"), SubResource("Resource_gvu28"), SubResource("Resource_on3xb"), SubResource("Resource_wml4a"), SubResource("Resource_l55ao"), SubResource("Resource_6p5h7"), SubResource("Resource_e6tee"), SubResource("Resource_n8u2j")])
+metadata/_custom_type_script = "uid://bf316n5tk84lf"

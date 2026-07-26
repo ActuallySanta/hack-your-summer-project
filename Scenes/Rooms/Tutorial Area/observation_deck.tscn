@@ -3,6 +3,10 @@
 [ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="1_1p551"]
 [ext_resource type="TileSet" uid="uid://hkvfy5by8aqr" path="res://Tileset/Main_Level.tres" id="3_5xyry"]
 [ext_resource type="PackedScene" uid="uid://41tgjv6lxsko" path="res://Scenes/Enemies/melee_enemy.tscn" id="4_6damd"]
+[ext_resource type="PackedScene" uid="uid://k8xepgfoggiq" path="res://Scenes/Dialogue System/dialogue_trigger.tscn" id="4_qhhs7"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ak2ew"]
+size = Vector2(111, 145)
 
 [node name="ObservationDeck" type="Node2D" unique_id=836677756]
 
@@ -21,3 +25,10 @@ position = Vector2(1922, 477)
 
 [node name="Melee Enemy3" parent="." unique_id=1529421838 instance=ExtResource("4_6damd")]
 position = Vector2(767, 479)
+
+[node name="DialogueTrigger" parent="." unique_id=1367779263 instance=ExtResource("4_qhhs7")]
+position = Vector2(461, 168)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DialogueTrigger" unique_id=1198697951]
+position = Vector2(0.5, 0)
+shape = SubResource("RectangleShape2D_ak2ew")
