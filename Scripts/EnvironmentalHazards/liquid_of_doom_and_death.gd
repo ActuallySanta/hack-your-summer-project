@@ -1,5 +1,8 @@
 extends TileMapLayer
 
+
+@export_range(0,10,0.1,"or_greater") var timeBetweenDamage : float
+@export var damageDealt : float
 @onready var areaCollider : CollisionShape2D = $Area2D/CollisionShape2D
 
 var is_player_in_doom : bool
@@ -26,7 +29,6 @@ func _process(delta: float) -> void:
 	if not is_player_in_doom:
 		return
 	
-	print("Player is in")
 
 func _on_body_entered(body: Node2D) -> void:
 	if not body.is_in_group("player"):

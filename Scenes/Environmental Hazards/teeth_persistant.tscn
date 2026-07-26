@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://dklylswmcw1pk"]
+
+[ext_resource type="TileSet" uid="uid://bu22bwu2vygi2" path="res://Tileset/EnvironmentalDamages.tres" id="1_05ryq"]
+
+[node name="TeethPersistant" type="TileMapLayer" unique_id=424263396]
+tile_set = ExtResource("1_05ryq")

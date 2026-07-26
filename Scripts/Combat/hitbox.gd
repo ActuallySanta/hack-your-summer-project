@@ -28,7 +28,7 @@ func _ready() -> void:
 func reset() -> void:
 	previous_hits = []
 
-func _on_area_entered(area: Area2D) -> void:	
+func _on_area_entered(area: Area2D) -> void:
 	var hurtbox := area as Hurtbox
 	if not hurtbox:
 		return
