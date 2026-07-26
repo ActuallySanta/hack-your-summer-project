@@ -12,7 +12,7 @@
 [node name="RoomInstance" parent="." unique_id=45362626 instance=ExtResource("1_mcopu")]
 
 [node name="Background2" parent="." unique_id=1411061257 instance=ExtResource("2_io01w")]
-position = Vector2(1196, 430)
+position = Vector2(1200, 432)
 
 [node name="VisualAssets" parent="." unique_id=1359070375 instance=ExtResource("3_xaksc")]
 

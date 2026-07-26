@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://l6pm6ykcs8hd"]
+
+[ext_resource type="Texture2D" uid="uid://p56qjkg3kj2j" path="res://Sprites/Game UI/Player HUD/HYS_Health_icon.png" id="1_5ohd3"]
+[ext_resource type="Script" uid="uid://c84q53jt6mj1h" path="res://Scripts/UI/Health_HUD_Unit.gd" id="2_r60ub"]
+
+[node name="HealthUnit" type="Sprite2D" unique_id=1796882770]
+position = Vector2(5.999998, 5)
+texture = ExtResource("1_5ohd3")
+hframes = 3
+script = ExtResource("2_r60ub")

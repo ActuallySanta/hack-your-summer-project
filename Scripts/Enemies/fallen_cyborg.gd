@@ -4,7 +4,6 @@ extends Enemy
 @export var start_flipped : bool = false:
 	set(value):
 		start_flipped = value
-		notify_property_list_changed()
 
 @onready var bulletScene = preload("uid://dmxbgtwmp5c0q")
 var is_weapon_raised : bool = false

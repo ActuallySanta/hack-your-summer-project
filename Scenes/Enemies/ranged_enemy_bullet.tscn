@@ -39,7 +39,6 @@ frame_progress = 0.31567594
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2046364853]
 position = Vector2(11, 0)
 shape = SubResource("RectangleShape2D_k6rrm")
-disabled = true
 
 [node name="Bullet Lifetime" type="Timer" parent="." unique_id=1057932148]
 wait_time = 3.0

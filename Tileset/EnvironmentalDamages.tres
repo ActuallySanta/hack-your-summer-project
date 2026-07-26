@@ -1,0 +1,55 @@
+[gd_resource type="TileSet" format=3 uid="uid://bu22bwu2vygi2"]
+
+[ext_resource type="Texture2D" uid="uid://chqtjp8d40ily" path="res://Sprites/EnvironmentalDamages/Acid.png" id="1_807im"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_kecdv"]
+texture = ExtResource("1_807im")
+0:3/0 = 0
+0:0/animation_separation = Vector2i(2, 0)
+0:0/animation_frame_0/duration = 0.1
+0:0/animation_frame_1/duration = 0.1
+0:0/animation_frame_2/duration = 0.1
+0:0/0 = 0
+0:1/animation_separation = Vector2i(2, 0)
+0:1/animation_frame_0/duration = 0.1
+0:1/animation_frame_1/duration = 0.1
+0:1/animation_frame_2/duration = 0.1
+0:1/0 = 0
+0:2/animation_separation = Vector2i(2, 0)
+0:2/animation_frame_0/duration = 0.1
+0:2/animation_frame_1/duration = 0.1
+0:2/animation_frame_2/duration = 0.1
+0:2/0 = 0
+1:0/animation_separation = Vector2i(2, 0)
+1:0/animation_frame_0/duration = 0.1
+1:0/animation_frame_1/duration = 0.1
+1:0/animation_frame_2/duration = 0.1
+1:0/0 = 0
+1:1/animation_separation = Vector2i(2, 0)
+1:1/animation_frame_0/duration = 0.1
+1:1/animation_frame_1/duration = 0.1
+1:1/animation_frame_2/duration = 0.1
+1:1/0 = 0
+1:2/animation_separation = Vector2i(2, 0)
+1:2/animation_frame_0/duration = 0.1
+1:2/animation_frame_1/duration = 0.1
+1:2/animation_frame_2/duration = 0.1
+1:2/0 = 0
+2:2/animation_separation = Vector2i(2, 0)
+2:2/animation_frame_0/duration = 0.1
+2:2/animation_frame_1/duration = 0.1
+2:2/animation_frame_2/duration = 0.1
+2:2/0 = 0
+2:1/animation_separation = Vector2i(2, 0)
+2:1/animation_frame_0/duration = 0.1
+2:1/animation_frame_1/duration = 0.1
+2:1/animation_frame_2/duration = 0.1
+2:1/0 = 0
+2:0/animation_separation = Vector2i(2, 0)
+2:0/animation_frame_0/duration = 0.1
+2:0/animation_frame_1/duration = 0.1
+2:0/animation_frame_2/duration = 0.1
+2:0/0 = 0
+
+[resource]
+sources/0 = SubResource("TileSetAtlasSource_kecdv")

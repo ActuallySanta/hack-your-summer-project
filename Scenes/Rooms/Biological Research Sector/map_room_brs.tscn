@@ -54,5 +54,6 @@ script = ExtResource("6_0ohsf")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Demo Win Trigger" unique_id=523498344]
 position = Vector2(122, 266)
 shape = SubResource("RectangleShape2D_d6p85")
+disabled = true
 
 [connection signal="body_entered" from="Demo Win Trigger" to="Demo Win Trigger" method="_on_body_entered"]

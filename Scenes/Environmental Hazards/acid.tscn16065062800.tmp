@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://hss23uqsvd7d"]
+
+[ext_resource type="TileSet" uid="uid://bu22bwu2vygi2" path="res://Tileset/EnvironmentalDamages.tres" id="1_fe33h"]
+[ext_resource type="Script" uid="uid://kkrjl24d2tb1" path="res://Scripts/EnvironmentalHazards/liquid_of_doom_and_death.gd" id="2_osni7"]
+[ext_resource type="Script" uid="uid://dmt4kusa5g6p2" path="res://Scripts/BehaviorAdjustments/Area2DFitToTileMap.gd" id="3_bds7y"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fe33h"]
+size = Vector2(0, 0)
+
+[node name="Acid" type="TileMapLayer" unique_id=149797592]
+tile_set = ExtResource("1_fe33h")
+script = ExtResource("2_osni7")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=903072364]
+script = ExtResource("3_bds7y")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=692635070]
+shape = SubResource("RectangleShape2D_fe33h")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_body_exited"]

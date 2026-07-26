@@ -61,6 +61,7 @@ var _climbInput : bool
 # Direction
 var _facingRight : bool
 # Jumping and air
+var _holdingDownSpaceForSpace : bool
 var _jumpBufferTimer : float
 var _coyoteTimer : float
 var _wall_jump_speed_bonus : float
@@ -103,7 +104,6 @@ var anim_fire : bool
 # Map and MetSys
 var previous_cell_Group := "None"
 
-
 func _ready() -> void:
 	PlayerManager.player = self
 	_facingRight = true
@@ -111,11 +111,13 @@ func _ready() -> void:
 	jetpack.jetpack_updated.connect(do_jetpack_logic)
 	disable_jetpack()
 	playerMoveState = MoveState.Standing
+	GlobalSignals.health_extended_by_one.connect(increment_health_amount_by_one)
 
 func _move_player_pos(pos: Vector2) -> void:
 	position = pos
 
 func jump() -> void:
+	_holdingDownSpaceForSpace = true
 	_jumpBufferTimer = 0
 	_coyoteTimer = 0
 	if try_mantle():
@@ -128,9 +130,9 @@ func wall_jump() -> void:
 	_coyoteTimer = 0
 	_wall_jump_buffer = 0
 	
-	_wall_jump_speed_bonus = 600
+	_wall_jump_speed_bonus = 700
 	_wall_jump_dir = _moveInput
-	velocity.y = -800
+	velocity.y = -1000
 
 func validate_wall_jump() -> bool:
 	if not is_on_wall_only():
@@ -186,8 +188,11 @@ func handle_vertical_speed() -> void:
 func handle_jump_and_gravity(delta: float) -> void:
 	# Add the gravity.
 	if not is_on_floor():
-		if(playerMoveState != MoveState.Climbing):
-			velocity += get_gravity() * delta
+		if playerMoveState != MoveState.Climbing:
+			var gravity = get_gravity() * delta
+			if _holdingDownSpaceForSpace:
+				gravity.y -= 10
+			velocity += gravity
 		_coyoteTimer -= delta
 	else:
 		_coyoteTimer = coyoteTime
@@ -195,7 +200,6 @@ func handle_jump_and_gravity(delta: float) -> void:
 	# Handle jump.
 	if _wall_jump_speed_bonus > 0:
 		_wall_jump_speed_bonus -= 50
-	
 	
 	if _jumpBufferTimer <= 0:
 		return
@@ -251,6 +255,8 @@ func handle_inputs() -> void:
 		set_attack_input()
 	if Input.is_action_just_pressed("Shoot"):
 		set_shoot_input()
+	if not Input.is_action_pressed("Jump"):
+		_holdingDownSpaceForSpace = false
 
 func handle_invuln_blinking(delta: float) -> void:
 	if _invulnTimer <= 0:
@@ -268,6 +274,14 @@ func handle_invuln_blinking(delta: float) -> void:
 #endregion
 
 func determine_move_state() -> MoveState:
+	if previousMoveState == MoveState.Crouching:
+		var forground = get_foreground()
+		var pos = get_map_position_player_bounds(forground)
+		for i in pos:
+			i.y -= 1
+			if not is_tile_air(forground, i):
+				return MoveState.Crouching
+		
 	if _knockbackTimer > 0:
 		return MoveState.Knockback
 	
@@ -364,6 +378,10 @@ func _process( _delta: float ) -> void:
 		anim_swing = false
 	
 #region Damage and respawn
+func increment_health_amount_by_one() -> void:
+	baseHealth += 1
+	_currentHealth = baseHealth
+
 func die() -> void:
 	_invulnTimer = 0
 	anim_death = true
@@ -393,7 +411,6 @@ func _on_hit(_hurtBox: Hurtbox, hit_info: HitInfo, _source: Hitbox) -> void:
 #endregion
 
 func collect(pickup: Pickup) -> bool:
-	print("Collect pickup " + pickup.get_type_as_str())
 	pickup_collected.emit(pickup)
 	return true
 
@@ -486,7 +503,19 @@ func get_foreground() -> TileMapLayer:
 	return foreground
 
 func get_map_position(foreground: TileMapLayer, relative_to_player: Vector2i = Vector2i.ZERO) -> Vector2i:
-	var map_pos : Vector2i = foreground.local_to_map(foreground.to_local( global_position )) + relative_to_player
+	var map_pos : Vector2i = get_map_cordinates(foreground, global_position) + relative_to_player
+	return map_pos
+
+func get_map_cordinates(foreground: TileMapLayer, position: Vector2 ) -> Vector2i:
+	return foreground.local_to_map(foreground.to_local( position ))
+
+func get_map_position_player_bounds(foreground: TileMapLayer) -> Array[Vector2i]:
+	var bounds = $CollisionManager.get_bounds()
+	var map_pos : Array[ Vector2i ]
+	map_pos.append( get_map_cordinates( foreground, bounds[0] ) )
+	map_pos.append( get_map_cordinates( foreground, Vector2(bounds[1].x, bounds[0].y) ) )
+	map_pos.append( get_map_cordinates( foreground, Vector2(bounds[0].x, bounds[1].y) ) )
+	map_pos.append( get_map_cordinates( foreground, bounds[1] ) )
 	return map_pos
 
 func set_jump_input() -> void:
