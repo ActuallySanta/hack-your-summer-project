@@ -27,7 +27,6 @@ collision_enabled = false
 [node name="Matrix" parent="VisualAssets" unique_id=587305981 instance=ExtResource("7_40eh6")]
 offset_right = 1152.0
 offset_bottom = 672.0
-stretch_shrink = 6
 
 [node name="Foreground2" type="TileMapLayer" parent="VisualAssets" unique_id=428777155]
 self_modulate = Color(0.5882353, 0.5882353, 0.5882353, 1)
