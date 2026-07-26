@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://cocos0jynr7fu"]
+
+[ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="1_f5xob"]
+
+[node name="ElevatorShaftBRS" type="Node2D" unique_id=1759125049]
+
+[node name="RoomInstance" parent="." unique_id=939876668 instance=ExtResource("1_f5xob")]

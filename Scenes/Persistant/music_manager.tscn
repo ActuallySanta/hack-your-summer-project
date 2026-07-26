@@ -4,7 +4,6 @@
 
 [node name="MusicManager" type="AudioStreamPlayer2D" unique_id=1474149195]
 volume_db = -9.142
-autoplay = true
 max_distance = 10000.0
 attenuation = 1e-05
 panning_strength = 0.0

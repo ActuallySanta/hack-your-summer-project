@@ -24,11 +24,13 @@ CheckpointEventBus="*uid://dhboilckmjc7f"
 GlobalSignals="*uid://bac60hesolscg"
 SceneLoader="*uid://bdtr22633bwcl"
 MusicManager="*uid://d0sejejpytdhi"
+Game="*uid://bo6qgt11s8q53"
 
 [display]
 
 window/size/viewport_height=672
 window/stretch/mode="viewport"
+window/stretch/aspect="expand"
 
 [dotnet]
 

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://sjty08w4065m"]
 
 [ext_resource type="Texture2D" uid="uid://6ooirgr7gm10" path="res://Textures/PropsAndBackgrounds/Illegal_Temp_Image.png" id="1_okp4d"]
-[ext_resource type="Script" uid="uid://bcs455frmded7" path="res://Scenes/Rooms/Biological Research Sector/backgroundScroll.gd" id="2_t15nn"]
+[ext_resource type="Script" uid="uid://bcs455frmded7" path="res://Scripts/Animation/backgroundScroll.gd" id="2_t15nn"]
 
 [node name="Background" type="Sprite2D" unique_id=1411061257]
 texture_filter = 1
