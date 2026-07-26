@@ -1,7 +1,33 @@
-[gd_scene format=3 uid="uid://bmclhydvd2g3x"]
+[gd_scene format=4 uid="uid://bmclhydvd2g3x"]
 
 [ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="1_hu15e"]
+[ext_resource type="Texture2D" uid="uid://camjrh4pdycb8" path="res://Textures/Tiles/BathroomAssets.png" id="2_opss5"]
+[ext_resource type="PackedScene" uid="uid://bnpsyl86ggbjm" path="res://Scenes/Pickups/health_extender.tscn" id="3_b6gb0"]
+[ext_resource type="TileSet" uid="uid://hkvfy5by8aqr" path="res://Tileset/Main_Level.tres" id="4_nipiv"]
 
 [node name="RestroomsBRS" type="Node2D" unique_id=1842789224]
 
 [node name="RoomInstance" parent="." unique_id=1907674836 instance=ExtResource("1_hu15e")]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=887108844]
+position = Vector2(576, 336)
+scale = Vector2(3, 3)
+texture = ExtResource("2_opss5")
+
+[node name="HealthExtender" parent="." unique_id=545634817 instance=ExtResource("3_b6gb0")]
+position = Vector2(274, 423)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1616099498]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D" unique_id=637858840]
+polygon = PackedVector2Array(1152, 528, 192, 528, 192, 240, 960, 240, 960, 384, 1152, 384, 1153, 0, 0, 0, 0, 672, 1152, 672)
+
+[node name="DoorBackground" type="TileMapLayer" parent="." unique_id=1198466503]
+scale = Vector2(3, 3)
+tile_map_data = PackedByteArray("AAAVAAoAAQAIAAcAAAAWAAoAAQAJAAcAAAAXAAoAAQAKAAcAAAAVAAkAAQAIAAcAAAAWAAkAAQAJAAcAAAAXAAkAAQAKAAcAAAAVAAgAAQAIAAcAAAAWAAgAAQAJAAcAAAAXAAgAAQAKAAcAAAA=")
+tile_set = ExtResource("4_nipiv")
+
+[node name="Door" type="TileMapLayer" parent="." unique_id=2125381732]
+scale = Vector2(1.5, 1.5)
+tile_map_data = PackedByteArray("AAAsABAABAAQAAAAAAAsABEABAAQAAEAAAAsABIABAAQAAIAAAAsABMABAAQAAMAAAAsABQABAAQAAQAAAAsABUABAAQAAUAAAAtABAABAARAAAAAAAtABEABAARAAEAAAAtABIABAARAAIAAAAtABMABAARAAMAAAAtABQABAARAAQAAAAtABUABAARAAUAAAAuABAABAASAAAAAAAuABEABAASAAEAAAAuABIABAASAAIAAAAuABMABAASAAMAAAAuABQABAASAAQAAAAuABUABAASAAUAAAAvABAABAATAAAAAAAvABEABAATAAEAAAAvABIABAATAAIAAAAvABMABAATAAMAAAAvABQABAATAAQAAAAvABUABAATAAUAAAA=")
+tile_set = ExtResource("4_nipiv")
