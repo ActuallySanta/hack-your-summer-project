@@ -190,7 +190,7 @@ $ln;Demo Level;NewMap
 [12,3,0]
 1,0,0,0|ff0000,,,,|4|Scenes/Rooms/Biological Research Sector/map_room_lower_brs.tscn
 [16,3,0]
--1,-1,1,0|ff0000,,,,||Scenes/Rooms/Biological Research Sector/lower_entryway_brs.tscn
+-1,-1,1,0|ff0000,,,,||
 [16,1,0]
 0,-1,1,0|ff0000,,,,||Scenes/Rooms/Biological Research Sector/reactor_chamber_brs.tscn
 [16,2,0]
@@ -232,11 +232,11 @@ $ln;Demo Level;NewMap
 [18,1,0]
 0,-1,0,1|ff0000,,,,||Scenes/Rooms/Biological Research Sector/reactor_chamber_brs.tscn
 [17,3,0]
--1,0,-1,0|ff0000,,,,||Scenes/Rooms/Biological Research Sector/lower_entryway_brs.tscn
+-1,0,-1,0|ff0000,,,,||
 [16,4,0]
-0,0,1,-1|ff0000,,,,||Scenes/Rooms/Biological Research Sector/lower_entryway_brs.tscn
+0,0,1,-1|ff0000,,,,||
 [18,3,0]
-1,0,-1,0|ff0000,,,,||Scenes/Rooms/Biological Research Sector/lower_entryway_brs.tscn
+0,0,-1,0|ff0000,,,,||
 [15,-1,0]
 1,0,1,0|ad0000,,,,||Scenes/Rooms/Biological Research Sector/management_brs.tscn
 [15,0,0]
@@ -361,53 +361,3 @@ $ln;Demo Level;NewMap
 -1,0,1,0|ad0000,,,,||
 [15,4,1]
 1,0,0,0|ff0000,,,,|0|
-[19,1,0]
--1,-1,0,0|00ff91,,,,||
-[20,1,0]
--1,-1,-1,0|00ff91,,,,||
-[21,1,0]
--1,-1,-1,0|00ff91,,,,||
-[22,1,0]
-0,-1,-1,0|00ff91,,,,||
-[19,2,0]
--1,-1,0,-1|00ff91,,,,||
-[20,2,0]
--1,-1,-1,-1|00ff91,,,,||
-[21,2,0]
--1,-1,-1,-1|00ff91,,,,||
-[22,2,0]
-0,-1,-1,-1|00ff91,,,,||
-[19,3,0]
--1,-1,0,-1|00ff91,,,,||
-[20,3,0]
--1,-1,-1,-1|00ff91,,,,||
-[21,3,0]
--1,-1,-1,-1|00ff91,,,,||
-[22,3,0]
-0,-1,-1,-1|00ff91,,,,||
-[19,4,0]
--1,0,0,-1|00ff91,,,,||
-[20,4,0]
--1,0,-1,-1|00ff91,,,,||
-[21,4,0]
--1,0,-1,-1|00ff91,,,,||
-[22,4,0]
-0,0,-1,-1|00ff91,,,,||
-[12,5,0]
--1,-1,-1,-1|ffb400,,,,||
-[12,4,0]
--1,-1,-1,0|ffb400,,,,||
-[11,4,0]
--1,-1,0,0|ffb400,,,,||
-[13,4,0]
-0,-1,-1,0|ffb400,,,,||
-[11,5,0]
--1,-1,0,-1|ffb400,,,,||
-[11,6,0]
--1,0,0,-1|ffb400,,,,||
-[12,6,0]
--1,0,-1,-1|ffb400,,,,||
-[13,6,0]
-0,0,-1,-1|ffb400,,,,||
-[13,5,0]
-0,-1,-1,-1|ffb400,,,,||

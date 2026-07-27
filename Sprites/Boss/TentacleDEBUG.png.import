@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dtforhtm5y7jn"
-path="res://.godot/imported/SpaceInternals.png-318c3e2c36771c1f11815888ead88a06.ctex"
+uid="uid://ssoadyv5etyw"
+path="res://.godot/imported/TentacleDEBUG.png-3d4f7084dd3cb78297505758866e0555.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Textures/Tiles/SpaceInternals.png"
-dest_files=["res://.godot/imported/SpaceInternals.png-318c3e2c36771c1f11815888ead88a06.ctex"]
+source_file="res://Sprites/Boss/TentacleDEBUG.png"
+dest_files=["res://.godot/imported/TentacleDEBUG.png-3d4f7084dd3cb78297505758866e0555.ctex"]
 
 [params]
 

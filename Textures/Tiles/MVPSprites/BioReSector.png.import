@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cf8e2uqtjdbol"
-path="res://.godot/imported/SpaceStation_Tileset.png-f2844c6777c1adc2ccd86b14cc752033.ctex"
+uid="uid://besxsg2ic83r8"
+path="res://.godot/imported/BioReSector.png-d247339d11890c825ebbd17d21a4bfc9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Textures/Tiles/SpaceStation_Tileset.png"
-dest_files=["res://.godot/imported/SpaceStation_Tileset.png-f2844c6777c1adc2ccd86b14cc752033.ctex"]
+source_file="res://Textures/Tiles/MVPSprites/BioReSector.png"
+dest_files=["res://.godot/imported/BioReSector.png-d247339d11890c825ebbd17d21a4bfc9.ctex"]
 
 [params]
 
