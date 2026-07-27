@@ -1,5 +1,7 @@
 extends Node3D
 
+@onready var camera_3d: Camera3D = $Camera3D
+
 @export var Limbs : Array[Node3D]
 var limbDir : Array = [1,-1,1,-1]
 
@@ -24,5 +26,6 @@ func _process(delta: float) -> void:
 	
 	#Slowly move towards the player
 	if(PlayerManager.player != null):
-		position.x = lerp(position.x,PlayerManager.player.position.x,0.5)
-		position.y = lerp(position.y,PlayerManager.player.position.y,0.5)
+		var playerProjectedPos = camera_3d.project_position(PlayerManager.player.position,1.0) 
+		position.x = playerProjectedPos.x
+		position.y = playerProjectedPos.y

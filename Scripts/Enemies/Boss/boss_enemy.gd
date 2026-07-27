@@ -1,5 +1,7 @@
 extends SubViewportContainer
 
+@export var maxHealth : float = 150
+
 @export var aggroLevel : int = 1
 @export var lowerEnvAttackChance : float = 50.0
 
