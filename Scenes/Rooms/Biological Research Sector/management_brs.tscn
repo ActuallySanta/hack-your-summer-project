@@ -30,4 +30,4 @@ tile_set = ExtResource("2_5xqju")
 script = ExtResource("4_6jiru")
 horizontal_shift = 2.0
 vertical_shift = 2.0
-occilations_per_second = 4.0
+occilations_per_second = 0.25

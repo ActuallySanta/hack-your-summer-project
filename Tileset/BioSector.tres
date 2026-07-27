@@ -56,8 +56,29 @@ tile_data = PackedInt32Array(0, 327680, 5)
 [sub_resource type="TileMapPattern" id="TileMapPattern_sh2wi"]
 tile_data = PackedInt32Array(0, 327680, 6)
 
+[sub_resource type="TileMapPattern" id="TileMapPattern_82lvw"]
+tile_data = PackedInt32Array(0, 458752, 8, 65536, 458752, 9, 131072, 458752, 10, 1, 524288, 8, 65537, 524288, 9, 131073, 524288, 10, 2, 589824, 8, 65538, 589824, 9, 131074, 589824, 10)
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_cscnm"]
+tile_data = PackedInt32Array(0, 262144, 8, 65536, 262144, 9, 131072, 262144, 10, 1, 327680, 8, 65537, 327680, 9, 131073, 327680, 10)
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_hyh47"]
+tile_data = PackedInt32Array(0, 393216, 8, 65536, 393216, 9, 131072, 393216, 10)
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_o6ola"]
+tile_data = PackedInt32Array(0, 655360, 12, 65536, 655360, 13, 1, 720896, 12, 65537, 720896, 13, 2, 786432, 12, 65538, 786432, 13, 3, 851968, 12, 65539, 851968, 13)
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_5ppx7"]
+tile_data = PackedInt32Array(0, 262144, 11, 1, 327680, 11, 2, 393216, 11)
+
 [sub_resource type="TileMapPattern" id="TileMapPattern_cnn73"]
 tile_data = PackedInt32Array(0, 786432, 7, 1, 851968, 7)
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_fygiy"]
+tile_data = PackedInt32Array(0, 458752, 11)
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_uvwjf"]
+tile_data = PackedInt32Array(0, 655360, 10, 65536, 655360, 11)
 
 [sub_resource type="TileMapPattern" id="TileMapPattern_yx8mu"]
 tile_data = PackedInt32Array(0, 655360, 0, 65536, 655360, 1, 1, 720896, 0, 65537, 720896, 1)
@@ -277,6 +298,8 @@ texture = ExtResource("1_yx8mu")
 13:13/0 = 0
 
 [resource]
+physics_layer_0/collision_layer = 1
+physics_layer_0/collision_mask = 6
 sources/0 = SubResource("TileSetAtlasSource_xswec")
 pattern_0 = SubResource("TileMapPattern_gwt14")
 pattern_1 = SubResource("TileMapPattern_4mu3p")
@@ -303,3 +326,10 @@ pattern_21 = SubResource("TileMapPattern_8jjiv")
 pattern_22 = SubResource("TileMapPattern_urbub")
 pattern_23 = SubResource("TileMapPattern_7nrif")
 pattern_24 = SubResource("TileMapPattern_sh2wi")
+pattern_25 = SubResource("TileMapPattern_82lvw")
+pattern_26 = SubResource("TileMapPattern_cscnm")
+pattern_27 = SubResource("TileMapPattern_hyh47")
+pattern_28 = SubResource("TileMapPattern_o6ola")
+pattern_29 = SubResource("TileMapPattern_5ppx7")
+pattern_30 = SubResource("TileMapPattern_fygiy")
+pattern_31 = SubResource("TileMapPattern_uvwjf")
