@@ -80,6 +80,9 @@ tile_data = PackedInt32Array(0, 458752, 11)
 [sub_resource type="TileMapPattern" id="TileMapPattern_uvwjf"]
 tile_data = PackedInt32Array(0, 655360, 10, 65536, 655360, 11)
 
+[sub_resource type="TileMapPattern" id="TileMapPattern_kxtru"]
+tile_data = PackedInt32Array(0, 196608, 2, 65536, 196608, 2, 131072, 196608, 2, 1, 262144, 2, 65537, 262144, 2, 131073, 262144, 2, 2, 327680, 2, 65538, 327680, 2, 131074, 327680, 2)
+
 [sub_resource type="TileMapPattern" id="TileMapPattern_yx8mu"]
 tile_data = PackedInt32Array(0, 655360, 0, 65536, 655360, 1, 1, 720896, 0, 65537, 720896, 1)
 
@@ -333,3 +336,4 @@ pattern_28 = SubResource("TileMapPattern_o6ola")
 pattern_29 = SubResource("TileMapPattern_5ppx7")
 pattern_30 = SubResource("TileMapPattern_fygiy")
 pattern_31 = SubResource("TileMapPattern_uvwjf")
+pattern_32 = SubResource("TileMapPattern_kxtru")
