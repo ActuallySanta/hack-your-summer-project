@@ -92,6 +92,14 @@ func set_region(new_source_id: int, new_origin: Vector2i) -> void:
 	_suppress_signals = false
 
 
+## Used when the pipe path painter claims the viewport, so two tools can't
+## fight over the same drag.
+func force_disable() -> void:
+	if _toggle.button_pressed:
+		_toggle.set_pressed_no_signal(false)
+		_update_disabled_state()
+
+
 func set_status(text: String, is_warning: bool = false) -> void:
 	_status.text = text
 	_status.modulate = Color(1, 0.55, 0.45) if is_warning else Color(1, 1, 1, 0.7)

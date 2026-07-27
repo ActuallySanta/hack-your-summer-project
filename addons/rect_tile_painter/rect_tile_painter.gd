@@ -18,6 +18,11 @@ const RectPaintToolbar := preload("res://addons/rect_tile_painter/rect_paint_too
 ## sharing a tileset should share the setting. Keyed by tileset resource path.
 const SETTINGS_PATH := "res://addons/rect_tile_painter/tileset_regions.cfg"
 
+## Shared latch so this and the pipe path painter can't both swallow the same
+## drag. Whichever tool is switched on last owns the viewport.
+const ACTIVE_TOOL_META := "tile_paint_active_tool"
+const TOOL_ID := "rect_paint"
+
 var _layer: TileMapLayer = null
 var _toolbar: RectPaintToolbar = null
 var _settings := ConfigFile.new()
@@ -74,7 +79,7 @@ func _make_visible(visible: bool) -> void:
 #region Input
 
 func _forward_canvas_gui_input(event: InputEvent) -> bool:
-	if _layer == null or _toolbar == null or not _toolbar.paint_enabled:
+	if not _owns_viewport():
 		return false
 	if _layer.tile_set == null:
 		return false
@@ -232,9 +237,9 @@ func _report_missing(missing: Array[String]) -> void:
 #region Overlay
 
 func _forward_canvas_draw_over_viewport(overlay: Control) -> void:
-	if _layer == null or _toolbar == null or not _toolbar.paint_enabled:
+	if not _owns_viewport():
 		return
-		
+
 	if _layer.tile_set == null:
 		return
 	
@@ -335,11 +340,27 @@ func _on_region_changed(source_id: int, region_origin: Vector2i) -> void:
 
 
 func _on_enabled_changed(enabled: bool) -> void:
-	if not enabled:
+	if enabled:
+		Engine.set_meta(ACTIVE_TOOL_META, TOOL_ID)
+	else:
 		_cancel_drag()
 		_has_hover = false
+		if Engine.has_meta(ACTIVE_TOOL_META) and str(Engine.get_meta(ACTIVE_TOOL_META)) == TOOL_ID:
+			Engine.set_meta(ACTIVE_TOOL_META, "")
 	_refresh_status()
 	update_overlays()
+
+
+## False when another tile tool has claimed the viewport, so the two never
+## fight over one drag.
+func _owns_viewport() -> bool:
+	if _layer == null or _toolbar == null or not _toolbar.paint_enabled:
+		return false
+	if Engine.has_meta(ACTIVE_TOOL_META) and str(Engine.get_meta(ACTIVE_TOOL_META)) != TOOL_ID:
+		_toolbar.force_disable()
+		_cancel_drag()
+		return false
+	return true
 
 
 func _refresh_status() -> void:
