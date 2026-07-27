@@ -1,11 +1,7 @@
 extends Node3D
 
-@onready var top_foot: MeshInstance3D = $"Top Foot"
-@onready var bottom_foot: MeshInstance3D = $"Bottom Foot"
-@onready var top_leg_joint: MeshInstance3D = $"Top Leg Joint"
-@onready var bottom_leg_joint: MeshInstance3D = $"Bottom Leg Joint"
-
 @export var Limbs : Array[Node3D]
+var limbDir : Array = [1,-1,1,-1]
 
 @export var xMoveAmp : float = .5
 @export var xMoveFreq : float = 2.5
@@ -21,8 +17,8 @@ func _process(delta: float) -> void:
 	moveTimer+= delta
 	
 	for i in Limbs.size():
-		var xPos : float = sin((moveTimer+i+1)*xMoveFreq) *xMoveAmp
-		var yPos : float = sin((moveTimer+i+1)*yMoveFreq) *yMoveAmp
+		var xPos : float = sin(limbDir[i]*(moveTimer+i+1)*xMoveFreq) *xMoveAmp
+		var yPos : float = sin((limbDir[i]*-1)*(moveTimer+i+1)*yMoveFreq) *yMoveAmp
 		Limbs[i].position.x = xPos
 		Limbs[i].position.y = yPos
 		

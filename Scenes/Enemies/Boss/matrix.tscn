@@ -37,7 +37,7 @@ render_target_update_mode = 4
 
 [node name="Boss Body" type="Node3D" parent="SubViewport" unique_id=903589714 node_paths=PackedStringArray("Limbs")]
 script = ExtResource("4_mrtkm")
-Limbs = [NodePath("Top Foot"), NodePath("Bottom Foot"), NodePath("Top Leg Joint"), NodePath("Bottom Leg Joint")]
+Limbs = [NodePath("Top Foot"), NodePath("Top Leg Joint"), NodePath("Bottom Leg Joint"), NodePath("Bottom Foot")]
 
 [node name="Head" parent="SubViewport/Boss Body" unique_id=327573373 instance=ExtResource("4_lk8hn")]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
