@@ -20,7 +20,7 @@ every layer using that tileset picks it up. Settings live in
 
 | Action | Result |
 | --- | --- |
-| Toggle **Rect Paint** off | The layer edits exactly as it normally does; the plugin stops touching viewport input |
+| Toggle **Rect Paint** off | The layer edits exactly as it normally does; the plugin stops touching viewport input, and the rest of the strip collapses so it isn't stretching the viewport. Your settings are kept. |
 | LMB drag | Fill the rectangle |
 | RMB drag | Erase the rectangle |
 | `Esc` mid-drag | Cancel |

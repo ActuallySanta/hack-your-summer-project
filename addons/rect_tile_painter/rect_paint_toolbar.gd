@@ -28,6 +28,7 @@ var forced_tile_name: String:
 		return _tile_option.get_item_text(_tile_option.selected)
 
 var _toggle: CheckButton
+var _extras: HBoxContainer
 var _source_spin: SpinBox
 var _origin_x: SpinBox
 var _origin_y: SpinBox
@@ -48,21 +49,28 @@ func _init() -> void:
 	_toggle.toggled.connect(_on_toggled)
 	add_child(_toggle)
 
-	add_child(_make_separator())
+	# Everything past the toggle is hidden while the tool is off, so two of
+	# these strips don't stretch the 2D viewport. The controls still exist, so
+	# their values survive being switched off and back on.
+	_extras = HBoxContainer.new()
+	_extras.add_theme_constant_override("separation", 6)
+	add_child(_extras)
 
-	add_child(_make_label("Src", "TileSet source id the 4x4 region lives in."))
+	_extras.add_child(_make_separator())
+
+	_extras.add_child(_make_label("Src", "TileSet source id the 4x4 region lives in."))
 	_source_spin = _make_spin(0, 4096, "Atlas source id.")
-	add_child(_source_spin)
+	_extras.add_child(_source_spin)
 
-	add_child(_make_label("Region", "Atlas coord of the TOP-LEFT tile of the 4x4 block."))
+	_extras.add_child(_make_label("Region", "Atlas coord of the TOP-LEFT tile of the 4x4 block."))
 	_origin_x = _make_spin(0, 4096, "4x4 region origin: X (in tiles).")
-	add_child(_origin_x)
+	_extras.add_child(_origin_x)
 	_origin_y = _make_spin(0, 4096, "4x4 region origin: Y (in tiles).")
-	add_child(_origin_y)
+	_extras.add_child(_origin_y)
 
-	add_child(_make_separator())
+	_extras.add_child(_make_separator())
 
-	add_child(_make_label("Tile", "Debug: force every painted cell to one named tile."))
+	_extras.add_child(_make_label("Tile", "Debug: force every painted cell to one named tile."))
 	_tile_option = OptionButton.new()
 	_tile_option.tooltip_text = (
 		"Auto picks corners/edges/fill from the rect shape.\n"
@@ -73,14 +81,14 @@ func _init() -> void:
 	for tile_name in RectTileLayout.tile_names():
 		_tile_option.add_item(tile_name)
 	_tile_option.select(0)
-	add_child(_tile_option)
+	_extras.add_child(_tile_option)
 
 	_status = Label.new()
 	_status.add_theme_font_size_override("font_size", 11)
 	_status.modulate = Color(1, 1, 1, 0.7)
-	add_child(_status)
+	_extras.add_child(_status)
 
-	_update_disabled_state()
+	_update_collapsed_state()
 
 
 ## Push values in without re-emitting change signals.
@@ -97,7 +105,7 @@ func set_region(new_source_id: int, new_origin: Vector2i) -> void:
 func force_disable() -> void:
 	if _toggle.button_pressed:
 		_toggle.set_pressed_no_signal(false)
-		_update_disabled_state()
+		_update_collapsed_state()
 
 
 func set_status(text: String, is_warning: bool = false) -> void:
@@ -106,7 +114,7 @@ func set_status(text: String, is_warning: bool = false) -> void:
 
 
 func _on_toggled(pressed: bool) -> void:
-	_update_disabled_state()
+	_update_collapsed_state()
 	enabled_changed.emit(pressed)
 
 
@@ -116,12 +124,11 @@ func _on_region_spin_changed(_value: float) -> void:
 	region_changed.emit(source_id, region_origin)
 
 
-func _update_disabled_state() -> void:
-	var off := not paint_enabled
-	_source_spin.editable = not off
-	_origin_x.editable = not off
-	_origin_y.editable = not off
-	_tile_option.disabled = off
+func _update_collapsed_state() -> void:
+	# Guarded: a script hot-reload can fire signals on an instance whose
+	# fields haven't been rebuilt yet, since _init doesn't re-run.
+	if _extras != null:
+		_extras.visible = paint_enabled
 
 
 func _make_label(text: String, tooltip: String) -> Label:

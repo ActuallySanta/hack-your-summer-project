@@ -20,7 +20,7 @@ so configuring a tileset once covers every layer that uses it.
 
 | Action | Result |
 | --- | --- |
-| Toggle **Pipe Path** off | The layer edits exactly as it normally does |
+| Toggle **Pipe Path** off | The layer edits exactly as it normally does, and the rest of the strip collapses so it isn't stretching the viewport. Your settings are kept. |
 | LMB drag | Paint a freehand path, snapped to 90-degree turns |
 | RMB drag | Erase along the path |
 | Hold **Shift** | The stroke becomes a straight run from where you are to the cursor |
