@@ -5,6 +5,7 @@
 [ext_resource type="TileSet" uid="uid://b1y41todkrtnk" path="res://Tileset/BioSector.tres" id="2_nsgul"]
 [ext_resource type="Script" uid="uid://6pnsqk3ndc0" path="res://Scripts/BehaviorAdjustments/camera_path_boundary.gd" id="3_nsgul"]
 [ext_resource type="Script" uid="uid://whdtoijov1so" path="res://Scripts/occilator.gd" id="5_6mqpv"]
+[ext_resource type="TileSet" uid="uid://c0dbvnpaoeomc" path="res://Tileset/TransitionTileSet.tres" id="6_udmmt"]
 
 [node name="LaboratoriesBRS" type="Node2D" unique_id=1620527591]
 
@@ -39,3 +40,7 @@ script = ExtResource("5_6mqpv")
 horizontal_shift = 2.0
 vertical_shift = 2.0
 occilations_per_second = 0.25
+
+[node name="Doors" parent="." unique_id=119055941 instance=ExtResource("2_abdyw")]
+tile_map_data = PackedByteArray("AAAuAAQAAQAIAAAAAAAuAAUAAQAIAAEAAAAuAAYAAQAIAAIAAAAvAAQAAQAJAAAAAAAvAAUAAQAJAAEAAAAvAAYAAQAJAAIAAAA=")
+tile_set = ExtResource("6_udmmt")

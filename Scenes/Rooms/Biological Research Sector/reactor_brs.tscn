@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://bfdxh46jtantj" path="res://Scenes/Enemies/fallen_cyborg.tscn" id="6_w27b3"]
 [ext_resource type="PackedScene" uid="uid://hss23uqsvd7d" path="res://Scenes/Environmental Hazards/acid.tscn" id="7_c1pxo"]
 [ext_resource type="Script" uid="uid://whdtoijov1so" path="res://Scripts/occilator.gd" id="8_7b1ul"]
+[ext_resource type="TileSet" uid="uid://c0dbvnpaoeomc" path="res://Tileset/TransitionTileSet.tres" id="9_5n6h4"]
 
 [node name="Reactor_BRS" type="Node2D" unique_id=525804736]
 
@@ -62,3 +63,7 @@ script = ExtResource("8_7b1ul")
 horizontal_shift = 2.0
 vertical_shift = 2.0
 occilations_per_second = 0.25
+
+[node name="Doors" parent="." unique_id=1313532593 instance=ExtResource("3_25bn8")]
+tile_map_data = PackedByteArray("AAAuAAgAAQAIAAAAAAAuAAkAAQAIAAEAAAAuAAoAAQAIAAIAAAAvAAgAAQAJAAAAAAAvAAkAAQAJAAEAAAAvAAoAAQAJAAIAAAABAAQAAQAIAAAAABAAAAQAAQAJAAAAABABAAUAAQAIAAEAABAAAAUAAQAJAAEAABABAAYAAQAIAAIAABAAAAYAAQAJAAIAABA=")
+tile_set = ExtResource("9_5n6h4")

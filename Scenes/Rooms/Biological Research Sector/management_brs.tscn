@@ -4,6 +4,7 @@
 [ext_resource type="TileSet" uid="uid://b1y41todkrtnk" path="res://Tileset/BioSector.tres" id="2_5xqju"]
 [ext_resource type="PackedScene" uid="uid://c23c0urqh5mm5" path="res://Scenes/Components/ScaledTileMap.tscn" id="2_ap26h"]
 [ext_resource type="Script" uid="uid://whdtoijov1so" path="res://Scripts/occilator.gd" id="4_6jiru"]
+[ext_resource type="TileSet" uid="uid://c0dbvnpaoeomc" path="res://Tileset/TransitionTileSet.tres" id="5_eaa0g"]
 
 [node name="ManagementBRS" type="Node2D" unique_id=1192930274]
 
@@ -32,3 +33,7 @@ script = ExtResource("4_6jiru")
 horizontal_shift = 2.0
 vertical_shift = 2.0
 occilations_per_second = 0.25
+
+[node name="Doors" parent="." unique_id=1239865968 instance=ExtResource("2_ap26h")]
+tile_map_data = PackedByteArray("AAAWAAQAAQAIAAAAAAAWAAUAAQAIAAEAAAAWAAYAAQAIAAIAAAAXAAQAAQAJAAAAAAAXAAUAAQAJAAEAAAAXAAYAAQAJAAIAAAABAAQAAQAIAAAAABAAAAQAAQAJAAAAABABAAUAAQAIAAEAABAAAAUAAQAJAAEAABABAAYAAQAIAAIAABAAAAYAAQAJAAIAABA=")
+tile_set = ExtResource("5_eaa0g")
