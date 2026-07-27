@@ -21,4 +21,8 @@ func _process(delta: float) -> void:
 		var yPos : float = sin((limbDir[i]*-1)*(moveTimer+i+1)*yMoveFreq) *yMoveAmp
 		Limbs[i].position.x = xPos
 		Limbs[i].position.y = yPos
-		
+	
+	#Slowly move towards the player
+	if(PlayerManager.player != null):
+		position.x = lerp(position.x,PlayerManager.player.position.x,0.5)
+		position.y = lerp(position.y,PlayerManager.player.position.y,0.5)
