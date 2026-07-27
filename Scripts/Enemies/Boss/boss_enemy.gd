@@ -1,4 +1,4 @@
-extends Enemy
+extends SubViewportContainer
 
 @export var aggroLevel : int = 1
 @export var lowerEnvAttackChance : float = 50.0

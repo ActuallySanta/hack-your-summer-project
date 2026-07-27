@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://fk20cnv3ce3g" path="res://Textures/Palettes/6_bit_pallet.png" id="2_u7cdo"]
 [ext_resource type="Script" uid="uid://sk5kxrvm5piu" path="res://Scripts/Enemies/Boss/boss_enemy.gd" id="3_mrtkm"]
 [ext_resource type="PackedScene" uid="uid://djcmvws6qeiof" path="res://Scenes/3D/test_cube.tscn" id="4_lk8hn"]
+[ext_resource type="Script" uid="uid://bklh0qhyhk21d" path="res://Scripts/Enemies/Boss/boss_body.gd" id="4_mrtkm"]
 [ext_resource type="PackedScene" uid="uid://dklylswmcw1pk" path="res://Scenes/Environmental Hazards/teeth_persistant.tscn" id="5_u7cdo"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7hv6g"]
@@ -34,33 +35,37 @@ size = Vector2i(384, 224)
 size_2d_override = Vector2i(48, 48)
 render_target_update_mode = 4
 
-[node name="Head" parent="SubViewport" unique_id=327573373 instance=ExtResource("4_lk8hn")]
-transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0.6286336, 0, 0)
+[node name="Boss Body" type="Node3D" parent="SubViewport" unique_id=903589714 node_paths=PackedStringArray("Limbs")]
+script = ExtResource("4_mrtkm")
+Limbs = [NodePath("Top Foot"), NodePath("Bottom Foot"), NodePath("Top Leg Joint"), NodePath("Bottom Leg Joint")]
 
-[node name="Camera3D" type="Camera3D" parent="SubViewport" unique_id=786003809]
+[node name="Head" parent="SubViewport/Boss Body" unique_id=327573373 instance=ExtResource("4_lk8hn")]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
+
+[node name="Camera3D" type="Camera3D" parent="SubViewport/Boss Body" unique_id=786003809]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.11519432, 0, 1.8942966)
 keep_aspect = 0
 projection = 1
 fov = 69.5
 size = 2.0517473
 
-[node name="OmniLight3D" type="OmniLight3D" parent="SubViewport" unique_id=2008891008]
+[node name="OmniLight3D" type="OmniLight3D" parent="SubViewport/Boss Body" unique_id=2008891008]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8660599, -0.42681587, 0.23289692)
 
-[node name="Top Foot" type="MeshInstance3D" parent="SubViewport" unique_id=1448299761]
-transform = Transform3D(0.14064062, 0, 0, 0, 0.15526348, 0, 0, 0, 0.29723716, 0.8424159, 0.37474307, 0)
+[node name="Top Foot" type="MeshInstance3D" parent="SubViewport/Boss Body" unique_id=1448299761]
+transform = Transform3D(0.14064062, 0, 0, 0, 0.15526348, 0, 0, 0, 0.29723716, 0.09297943, 0.37474307, 0)
 mesh = SubResource("SphereMesh_hyctl")
 
-[node name="Bottom Foot" type="MeshInstance3D" parent="SubViewport" unique_id=1667207126]
-transform = Transform3D(0.14064062, 0, 0, 0, 0.15526348, 0, 0, 0, 0.29723716, 0.8424159, -0.37632194, 0)
+[node name="Bottom Foot" type="MeshInstance3D" parent="SubViewport/Boss Body" unique_id=1667207126]
+transform = Transform3D(0.14064062, 0, 0, 0, 0.15526348, 0, 0, 0, 0.29723716, 0.09297943, -0.37632194, 0)
 mesh = SubResource("SphereMesh_hyctl")
 
-[node name="Top Leg Joint" type="MeshInstance3D" parent="SubViewport" unique_id=129013677]
-transform = Transform3D(0.055439938, 0, 0, 0, 0.07395341, 0, 0, 0, 0.10136266, 0.6632964, 0.23053864, -0.0657078)
+[node name="Top Leg Joint" type="MeshInstance3D" parent="SubViewport/Boss Body" unique_id=129013677]
+transform = Transform3D(0.055439938, 0, 0, 0, 0.07395341, 0, 0, 0, 0.10136266, -0.086140096, 0.23053864, -0.0657078)
 mesh = SubResource("SphereMesh_hyctl")
 
-[node name="Bottom Leg Joint" type="MeshInstance3D" parent="SubViewport" unique_id=1644600526]
-transform = Transform3D(0.055439938, 0, 0, 0, 0.07395341, 0, 0, 0, 0.10136266, 0.6632964, -0.20810997, -0.0657078)
+[node name="Bottom Leg Joint" type="MeshInstance3D" parent="SubViewport/Boss Body" unique_id=1644600526]
+transform = Transform3D(0.055439938, 0, 0, 0, 0.07395341, 0, 0, 0, 0.10136266, -0.086140096, -0.20810997, -0.0657078)
 mesh = SubResource("SphereMesh_hyctl")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=681641156]
