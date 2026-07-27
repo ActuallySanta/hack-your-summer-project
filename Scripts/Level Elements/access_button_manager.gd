@@ -3,6 +3,8 @@ extends Node2D
 @export var button_name: String
 @onready var icon_manager := $MonitorIconManager
 
+signal OnButtonInteract
+
 var has_been_collected := false
 
 # Called when the node enters the scene tree for the first time.
@@ -19,6 +21,8 @@ func OnButtonInteraction(body: Node2D) -> void:
 		MetSys.store_object(self)
 		icon_manager.switch_to_activated()
 		has_been_collected = true
+		OnButtonInteract.emit()
+		
 
 func switch_to_activated_with_icon_manager() -> void:
 	icon_manager.switch_to_activated()
