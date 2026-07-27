@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://1edv7orydrhs"]
+
+[ext_resource type="Script" uid="uid://m80a5sniejik" path="res://Scripts/Enemies/Boss/boss_projectile.gd" id="1_0toso"]
+[ext_resource type="Texture2D" uid="uid://bu60fnslj7mj3" path="res://Sprites/Boss/BoingBoingEye.png" id="1_jlrcw"]
+[ext_resource type="Script" uid="uid://ctc17oyja7fup" path="res://Scripts/Combat/hitbox.gd" id="2_ebybx"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_0toso"]
+
+[node name="Boss Projectile" type="RigidBody2D" unique_id=1665872422]
+script = ExtResource("1_0toso")
+
+[node name="Visual" type="Sprite2D" parent="." unique_id=1218230438]
+texture = ExtResource("1_jlrcw")
+
+[node name="Hitbox" type="Area2D" parent="." unique_id=818367466]
+script = ExtResource("2_ebybx")
+metadata/_custom_type_script = "uid://ctc17oyja7fup"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=522248482]
+shape = SubResource("CircleShape2D_0toso")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=928854332]
+shape = SubResource("CircleShape2D_0toso")

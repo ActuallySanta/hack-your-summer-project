@@ -1,0 +1,71 @@
+[gd_resource type="BehaviorTree" format=3 uid="uid://bw8myafit8doo"]
+
+[ext_resource type="Script" uid="uid://q3siycoeq6oo" path="res://ai/tasks/get_hurt.gd" id="1_x2qe4"]
+
+[sub_resource type="BlackboardPlan" id="BlackboardPlan_6jjlm"]
+var/state/name = &"state"
+var/state/type = 4
+var/state/value = ""
+var/state/hint = 0
+var/state/hint_string = ""
+var/aggroLevel/name = &"aggroLevel"
+var/aggroLevel/type = 2
+var/aggroLevel/value = 0
+var/aggroLevel/hint = 0
+var/aggroLevel/hint_string = ""
+
+[sub_resource type="BBVariant" id="BBVariant_6jjlm"]
+type = 4
+saved_value = "stunned"
+resource_name = "stunned"
+
+[sub_resource type="BTCheckVar" id="BTCheckVar_x2qe4"]
+variable = &"state"
+value = SubResource("BBVariant_6jjlm")
+
+[sub_resource type="BBNode" id="BBNode_6jjlm"]
+saved_value = NodePath("AnimationPlayer")
+resource_name = "AnimationPlayer"
+
+[sub_resource type="BTPlayAnimation" id="BTPlayAnimation_x2qe4"]
+animation_player = SubResource("BBNode_6jjlm")
+animation_name = &"stunned"
+
+[sub_resource type="BTAction" id="BTAction_eo33s"]
+script = ExtResource("1_x2qe4")
+
+[sub_resource type="BTSequence" id="BTSequence_6jjlm"]
+custom_name = "Stunned"
+children = [SubResource("BTCheckVar_x2qe4"), SubResource("BTPlayAnimation_x2qe4"), SubResource("BTAction_eo33s")]
+
+[sub_resource type="BTComment" id="BTComment_wxsuy"]
+custom_name = "Simple Eye Attack"
+
+[sub_resource type="BTProbability" id="BTProbability_b0xag"]
+run_chance = 0.75
+children = [SubResource("BTComment_wxsuy")]
+
+[sub_resource type="BTComment" id="BTComment_kh3r6"]
+custom_name = "Spray Eye Attack"
+
+[sub_resource type="BTProbability" id="BTProbability_0njd2"]
+run_chance = 0.25
+children = [SubResource("BTComment_kh3r6")]
+
+[sub_resource type="BTComment" id="BTComment_54iha"]
+custom_name = "Corner Eye Attack"
+
+[sub_resource type="BTProbability" id="BTProbability_j65i4"]
+run_chance = 0.25
+children = [SubResource("BTComment_54iha")]
+
+[sub_resource type="BTSequence" id="BTSequence_x2qe4"]
+custom_name = "Attack Player"
+children = [SubResource("BTProbability_b0xag"), SubResource("BTProbability_0njd2"), SubResource("BTProbability_j65i4")]
+
+[sub_resource type="BTSelector" id="BTSelector_x2qe4"]
+children = [SubResource("BTSequence_6jjlm"), SubResource("BTSequence_x2qe4")]
+
+[resource]
+blackboard_plan = SubResource("BlackboardPlan_6jjlm")
+root_task = SubResource("BTSelector_x2qe4")
