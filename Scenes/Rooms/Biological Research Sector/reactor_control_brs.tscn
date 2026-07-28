@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="1_bm7xr"]
 [ext_resource type="PackedScene" uid="uid://c23c0urqh5mm5" path="res://Scenes/Components/ScaledTileMap.tscn" id="2_2j2m0"]
+[ext_resource type="TileSet" uid="uid://c0dbvnpaoeomc" path="res://Tileset/TransitionTileSet.tres" id="3_wq1va"]
 
 [node name="ReactorControlBRS" type="Node2D" unique_id=1118010867]
 
@@ -12,3 +13,6 @@
 [node name="WallForeground" parent="." unique_id=128654252 instance=ExtResource("2_2j2m0")]
 
 [node name="Foreground" parent="." unique_id=759437344 instance=ExtResource("2_2j2m0")]
+
+[node name="Doors" parent="." unique_id=1091198654 instance=ExtResource("2_2j2m0")]
+tile_set = ExtResource("3_wq1va")

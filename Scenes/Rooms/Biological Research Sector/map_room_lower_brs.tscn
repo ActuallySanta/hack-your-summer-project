@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="1_41avo"]
 [ext_resource type="PackedScene" uid="uid://c23c0urqh5mm5" path="res://Scenes/Components/ScaledTileMap.tscn" id="2_lid1g"]
+[ext_resource type="TileSet" uid="uid://c0dbvnpaoeomc" path="res://Tileset/TransitionTileSet.tres" id="3_pomwb"]
 
 [node name="MapRoomLowerBRS" type="Node2D" unique_id=1801084952]
 
@@ -12,3 +13,6 @@
 [node name="WallForeground" parent="." unique_id=1607560914 instance=ExtResource("2_lid1g")]
 
 [node name="Foreground" parent="." unique_id=2132095557 instance=ExtResource("2_lid1g")]
+
+[node name="Doors" parent="." unique_id=496618039 instance=ExtResource("2_lid1g")]
+tile_set = ExtResource("3_pomwb")
