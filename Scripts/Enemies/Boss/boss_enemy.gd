@@ -1,4 +1,4 @@
-extends SubViewportContainer
+extends Node2D
 
 @export var maxHealth : float = 150
 
@@ -29,8 +29,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	
 	if(PlayerManager.player != null):
-		position.x = PlayerManager.player.position.x
-		position.y = PlayerManager.player.position.y
+		position.x = lerp(position.x,PlayerManager.player.position.x,0.01)
 
 func _spawnEyes():
 	pass
