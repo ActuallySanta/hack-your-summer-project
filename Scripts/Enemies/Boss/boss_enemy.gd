@@ -1,6 +1,7 @@
 extends Node2D
 
 @export var maxHealth : float = 150
+@onready var currHealth : float = maxHealth
 
 @export var aggroLevel : int = 1
 @export var lowerEnvAttackChance : float = 50.0
@@ -11,6 +12,7 @@ extends Node2D
 @onready var lower_teeth_attack: TileMapLayer = $"Lower Teeth Attack"
 @onready var upper_teeth_attack: TileMapLayer = $"Upper Teeth Attack"
 
+@onready var hurtbox: Hurtbox = $Hurtbox
 
 
 var minEyeCount := 3
@@ -20,6 +22,8 @@ var envAttackDuration : float = 2.5
 var envAttackAggressionModifiers : Array = [1.0,.75,.5]
 
 func _ready() -> void:
+	hurtbox.hit.connect(_takeDamage)
+	
 	lower_teeth_attack.reparent(get_tree().current_scene)
 	upper_teeth_attack.reparent(get_tree().current_scene)
 	disableEnvAttacks()
@@ -65,3 +69,18 @@ func disableEnvAttacks():
 	
 	lower_teeth_attack.visible = false
 	lower_teeth_attack.process_mode = Node.PROCESS_MODE_DISABLED
+
+func _takeDamage(_hitInfo : HitInfo):
+	currHealth -= _hitInfo.damage
+	
+	if(currHealth > (maxHealth *(1/3)) and currHealth < (maxHealth*(2/3))):
+		#Phase 2
+		aggroLevel = 2
+	elif(currHealth > 0 and currHealth < (maxHealth*(1/3))):
+		#Phase 3
+		aggroLevel = 3
+	else:
+		#Boss Die
+		queue_free()
+	
+	pass

@@ -5,9 +5,12 @@
 [ext_resource type="PackedScene" uid="uid://dklylswmcw1pk" path="res://Scenes/Environmental Hazards/teeth_persistant.tscn" id="1_ytkdc"]
 [ext_resource type="Script" uid="uid://dhgcprjrtfobr" path="res://Scripts/Combat/hurtbox.gd" id="2_gi0e2"]
 [ext_resource type="Texture2D" uid="uid://ckncltgk5di6p" path="res://Textures/MapTextures/AreaTile.png" id="3_b1kuf"]
+[ext_resource type="BehaviorTree" uid="uid://bw8myafit8doo" path="res://ai/trees/boss_enemy.tres" id="6_wbur8"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o1nrd"]
 size = Vector2(135, 125)
+
+[sub_resource type="BlackboardPlan" id="BlackboardPlan_o1nrd"]
 
 [node name="Boss" type="Node2D" unique_id=475289835]
 script = ExtResource("1_o1nrd")
@@ -37,3 +40,7 @@ shape = SubResource("RectangleShape2D_o1nrd")
 visible = false
 scale = Vector2(4.068537, 4.068537)
 texture = ExtResource("3_b1kuf")
+
+[node name="BTPlayer" type="BTPlayer" parent="." unique_id=5900899]
+behavior_tree = ExtResource("6_wbur8")
+blackboard_plan = SubResource("BlackboardPlan_o1nrd")
