@@ -1,7 +1,14 @@
 [gd_scene format=3 uid="uid://bhqmc68ruopmr"]
 
 [ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="1_fxsgd"]
+[ext_resource type="PackedScene" uid="uid://c23c0urqh5mm5" path="res://Scenes/Components/ScaledTileMap.tscn" id="2_y57jy"]
 
 [node name="CentralSaveBRS" type="Node2D" unique_id=206006049]
 
 [node name="RoomInstance" parent="." unique_id=2042379914 instance=ExtResource("1_fxsgd")]
+
+[node name="Background" parent="." unique_id=2101826522 instance=ExtResource("2_y57jy")]
+
+[node name="WallForeground" parent="." unique_id=1593656319 instance=ExtResource("2_y57jy")]
+
+[node name="Foreground" parent="." unique_id=481560266 instance=ExtResource("2_y57jy")]

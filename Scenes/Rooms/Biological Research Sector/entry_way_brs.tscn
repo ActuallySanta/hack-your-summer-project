@@ -1,7 +1,18 @@
 [gd_scene format=3 uid="uid://dp5mj3g1jfdg2"]
 
 [ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="1_7rxjg"]
+[ext_resource type="PackedScene" uid="uid://c23c0urqh5mm5" path="res://Scenes/Components/ScaledTileMap.tscn" id="2_oujso"]
+[ext_resource type="TileSet" uid="uid://b1y41todkrtnk" path="res://Tileset/BioSector.tres" id="3_nfvxo"]
 
 [node name="EntryWayBRS" type="Node2D" unique_id=323447654]
 
 [node name="RoomInstance" parent="." unique_id=1069562225 instance=ExtResource("1_7rxjg")]
+
+[node name="Background" parent="." unique_id=2101826522 instance=ExtResource("2_oujso")]
+tile_set = ExtResource("3_nfvxo")
+
+[node name="WallForeground" parent="." unique_id=894871091 instance=ExtResource("2_oujso")]
+tile_set = ExtResource("3_nfvxo")
+
+[node name="Foreground" parent="." unique_id=178727853 instance=ExtResource("2_oujso")]
+tile_set = ExtResource("3_nfvxo")

@@ -1,9 +1,10 @@
 [gd_scene format=4 uid="uid://bmclhydvd2g3x"]
 
 [ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="1_hu15e"]
-[ext_resource type="Texture2D" uid="uid://camjrh4pdycb8" path="res://Textures/Tiles/BathroomAssets.png" id="2_opss5"]
+[ext_resource type="Texture2D" uid="uid://dj3fnq87wwgxu" path="res://Textures/Tiles/MVPSprites/BathroomAssets.png" id="2_nipiv"]
 [ext_resource type="PackedScene" uid="uid://bnpsyl86ggbjm" path="res://Scenes/Pickups/health_extender.tscn" id="3_b6gb0"]
-[ext_resource type="TileSet" uid="uid://hkvfy5by8aqr" path="res://Tileset/Main_Level.tres" id="4_nipiv"]
+[ext_resource type="TileSet" uid="uid://c0dbvnpaoeomc" path="res://Tileset/TransitionTileSet.tres" id="4_nipiv"]
+[ext_resource type="TileSet" uid="uid://b1y41todkrtnk" path="res://Tileset/BioSector.tres" id="4_x6a2k"]
 
 [node name="RestroomsBRS" type="Node2D" unique_id=1842789224]
 
@@ -12,7 +13,7 @@
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=887108844]
 position = Vector2(576, 336)
 scale = Vector2(3, 3)
-texture = ExtResource("2_opss5")
+texture = ExtResource("2_nipiv")
 
 [node name="HealthExtender" parent="." unique_id=545634817 instance=ExtResource("3_b6gb0")]
 position = Vector2(274, 423)
@@ -24,10 +25,10 @@ polygon = PackedVector2Array(1152, 528, 192, 528, 192, 240, 960, 240, 960, 384, 
 
 [node name="DoorBackground" type="TileMapLayer" parent="." unique_id=1198466503]
 scale = Vector2(3, 3)
-tile_map_data = PackedByteArray("AAAVAAoAAQAIAAcAAAAWAAoAAQAJAAcAAAAXAAoAAQAKAAcAAAAVAAkAAQAIAAcAAAAWAAkAAQAJAAcAAAAXAAkAAQAKAAcAAAAVAAgAAQAIAAcAAAAWAAgAAQAJAAcAAAAXAAgAAQAKAAcAAAA=")
-tile_set = ExtResource("4_nipiv")
+tile_map_data = PackedByteArray("AAAVAAgAAQALAAkAAAAVAAkAAQALAAkAAAAVAAoAAQALAAkAAAAWAAgAAQAMAAkAAAAWAAkAAQAMAAkAAAAWAAoAAQAMAAkAAAAXAAgAAQANAAkAAAAXAAkAAQANAAkAAAAXAAoAAQANAAkAAAA=")
+tile_set = ExtResource("4_x6a2k")
 
 [node name="Door" type="TileMapLayer" parent="." unique_id=2125381732]
-scale = Vector2(1.5, 1.5)
-tile_map_data = PackedByteArray("AAAsABAABAAQAAAAAAAsABEABAAQAAEAAAAsABIABAAQAAIAAAAsABMABAAQAAMAAAAsABQABAAQAAQAAAAsABUABAAQAAUAAAAtABAABAARAAAAAAAtABEABAARAAEAAAAtABIABAARAAIAAAAtABMABAARAAMAAAAtABQABAARAAQAAAAtABUABAARAAUAAAAuABAABAASAAAAAAAuABEABAASAAEAAAAuABIABAASAAIAAAAuABMABAASAAMAAAAuABQABAASAAQAAAAuABUABAASAAUAAAAvABAABAATAAAAAAAvABEABAATAAEAAAAvABIABAATAAIAAAAvABMABAATAAMAAAAvABQABAATAAQAAAAvABUABAATAAUAAAA=")
+scale = Vector2(3, 3)
+tile_map_data = PackedByteArray("AAAWAAgAAQAAAAAAAAAWAAkAAQAAAAEAAAAWAAoAAQAAAAIAAAAXAAgAAQABAAAAAAAXAAkAAQABAAEAAAAXAAoAAQABAAIAAAA=")
 tile_set = ExtResource("4_nipiv")
