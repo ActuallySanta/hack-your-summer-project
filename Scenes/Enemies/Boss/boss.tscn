@@ -34,5 +34,6 @@ metadata/_custom_type_script = "uid://dhgcprjrtfobr"
 shape = SubResource("RectangleShape2D_o1nrd")
 
 [node name="Hurtbox Visualization" type="Sprite2D" parent="Hurtbox" unique_id=1685119355]
+visible = false
 scale = Vector2(4.068537, 4.068537)
 texture = ExtResource("3_b1kuf")

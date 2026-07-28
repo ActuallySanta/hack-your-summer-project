@@ -20,6 +20,8 @@ var envAttackDuration : float = 2.5
 var envAttackAggressionModifiers : Array = [1.0,.75,.5]
 
 func _ready() -> void:
+	lower_teeth_attack.reparent(get_tree().current_scene)
+	upper_teeth_attack.reparent(get_tree().current_scene)
 	disableEnvAttacks()
 	environmental_attack_cooldown_timer.wait_time = minEnvironmentalAttackCooldown
 	environmental_attack_cooldown_timer.start()
