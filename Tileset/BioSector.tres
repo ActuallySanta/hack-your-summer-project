@@ -96,6 +96,12 @@ tile_data = PackedInt32Array(0, 720897, 1342177289, 65536, 786433, 1342177289, 1
 [sub_resource type="TileMapPattern" id="TileMapPattern_twl15"]
 tile_data = PackedInt32Array(0, 589825, 7, 65536, 524289, 7)
 
+[sub_resource type="TileMapPattern" id="TileMapPattern_nfgtq"]
+tile_data = PackedInt32Array(0, 524289, 4, 1, 589825, 4, 2, 655361, 4)
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_1b55v"]
+tile_data = PackedInt32Array(0, 524289, 4, 1, 589825, 4, 2, 589825, 4, 3, 589825, 4, 4, 655361, 4)
+
 [sub_resource type="TileMapPattern" id="TileMapPattern_yx8mu"]
 tile_data = PackedInt32Array(0, 655360, 0, 65536, 655360, 1, 1, 720896, 0, 65537, 720896, 1)
 
@@ -692,6 +698,8 @@ texture = ExtResource("2_gwt14")
 13:9/0 = 0
 6:6/0 = 0
 6:6/0/physics_layer_0/polygon_0/points = PackedVector2Array(8, -8, 8, 8, -8, 8)
+6:10/0 = 0
+7:10/0 = 0
 
 [resource]
 physics_layer_0/collision_layer = 1
@@ -735,3 +743,5 @@ pattern_33 = SubResource("TileMapPattern_hu5jd")
 pattern_34 = SubResource("TileMapPattern_fptpt")
 pattern_35 = SubResource("TileMapPattern_d23wm")
 pattern_36 = SubResource("TileMapPattern_twl15")
+pattern_37 = SubResource("TileMapPattern_nfgtq")
+pattern_38 = SubResource("TileMapPattern_1b55v")
