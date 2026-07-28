@@ -26,6 +26,12 @@ func _ready() -> void:
 	await environmental_attack_cooldown_timer.timeout
 	_environmentalAttack()
 
+func _process(delta: float) -> void:
+	
+	if(PlayerManager.player != null):
+		position.x = PlayerManager.player.position.x
+		position.y = PlayerManager.player.position.y
+
 func _spawnEyes():
 	pass
 

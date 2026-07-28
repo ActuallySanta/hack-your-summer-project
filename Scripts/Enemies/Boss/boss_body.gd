@@ -11,7 +11,9 @@ var limbDir : Array = [1,-1,1,-1]
 @export var yMoveAmp : float = .25
 @export var yMoveFreq : float = 1.25
 
-@export var randVariance : float = 1.5
+@export var bodyMoveAmp: float = .25
+@export var bodyMoveFreq: float = 1
+
 
 var moveTimer := 0.0
 func _process(delta: float) -> void:
@@ -24,8 +26,5 @@ func _process(delta: float) -> void:
 		Limbs[i].position.x = xPos
 		Limbs[i].position.y = yPos
 	
-	#Slowly move towards the player
-	if(PlayerManager.player != null):
-		var playerProjectedPos = camera_3d.project_position(PlayerManager.player.position,1.0) 
-		position.x = playerProjectedPos.x
-		position.y = playerProjectedPos.y
+	self.global_position.x = sin(moveTimer*bodyMoveFreq)*bodyMoveAmp
+	print(global_position.x)

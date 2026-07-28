@@ -23,9 +23,15 @@ texture_filter = 1
 texture_repeat = 1
 material = SubResource("ShaderMaterial_7hv6g")
 custom_minimum_size = Vector2(1152, 672)
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -576.0
+offset_top = -335.0
+offset_right = 576.0
+offset_bottom = 337.0
 grow_horizontal = 2
 grow_vertical = 2
 stretch = true
@@ -39,6 +45,13 @@ handle_input_locally = false
 size = Vector2i(384, 224)
 size_2d_override = Vector2i(48, 48)
 render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="SubViewport" unique_id=786003809]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.11519432, 0, 1.8942966)
+keep_aspect = 0
+projection = 1
+fov = 69.5
+size = 2.0517473
 
 [node name="Boss Body" type="Node3D" parent="SubViewport" unique_id=903589714 node_paths=PackedStringArray("Limbs")]
 script = ExtResource("4_mrtkm")
@@ -57,13 +70,6 @@ shape = SubResource("RectangleShape2D_lcc16")
 
 [node name="Sprite2D" type="Sprite2D" parent="SubViewport/Boss Body/Head/Hurtbox" unique_id=1893489775]
 texture = ExtResource("7_lcc16")
-
-[node name="Camera3D" type="Camera3D" parent="SubViewport/Boss Body" unique_id=786003809]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.11519432, 0, 1.8942966)
-keep_aspect = 0
-projection = 1
-fov = 69.5
-size = 2.0517473
 
 [node name="OmniLight3D" type="OmniLight3D" parent="SubViewport/Boss Body" unique_id=2008891008]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8660599, -0.42681587, 0.23289692)
