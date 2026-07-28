@@ -9,6 +9,7 @@
 [node name="SpecimenStorageBRS" type="Node2D" unique_id=1169436027]
 
 [node name="RoomInstance" parent="." unique_id=330132753 instance=ExtResource("1_3lkru")]
+visible = false
 
 [node name="Background" parent="." unique_id=2101826522 instance=ExtResource("2_qimtj")]
 modulate = Color(0.78431374, 0.78431374, 0.78431374, 1)

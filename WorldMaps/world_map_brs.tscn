@@ -1,0 +1,92 @@
+[gd_scene format=3 uid="uid://bo3gn3a58ss5g"]
+
+[ext_resource type="PackedScene" uid="uid://dwi7xjover0a6" path="res://Scenes/Rooms/Biological Research Sector/containment_room.tscn" id="1_hdue2"]
+[ext_resource type="PackedScene" uid="uid://n5oo0nvaktcg" path="res://Scenes/Rooms/Biological Research Sector/analysis_room_brs.tscn" id="2_nml2s"]
+[ext_resource type="PackedScene" uid="uid://bhqmc68ruopmr" path="res://Scenes/Rooms/Biological Research Sector/central_save_brs.tscn" id="3_xjf2l"]
+[ext_resource type="PackedScene" uid="uid://g1108rirj0rn" path="res://Scenes/Rooms/Biological Research Sector/communications_bay_brs.tscn" id="4_bhayh"]
+[ext_resource type="PackedScene" uid="uid://bw7s0a0c2hbg2" path="res://Scenes/Rooms/Biological Research Sector/containment_access_brs.tscn" id="5_5cu4s"]
+[ext_resource type="PackedScene" uid="uid://dxdyiiyo8hmkp" path="res://Scenes/Rooms/Biological Research Sector/stairway_brs.tscn" id="6_ky3yk"]
+[ext_resource type="PackedScene" uid="uid://cocos0jynr7fu" path="res://Scenes/Rooms/Biological Research Sector/elevator_shaft_brs.tscn" id="7_viofv"]
+[ext_resource type="PackedScene" uid="uid://dp5mj3g1jfdg2" path="res://Scenes/Rooms/Biological Research Sector/entry_way_brs.tscn" id="8_x3q54"]
+[ext_resource type="PackedScene" uid="uid://dywwr37l2qhrc" path="res://Scenes/Rooms/Biological Research Sector/faulty_communications_chamber_brs.tscn" id="9_ftgrj"]
+[ext_resource type="PackedScene" uid="uid://b071iuo5kdwg5" path="res://Scenes/Rooms/Biological Research Sector/genetic_modification_brs.tscn" id="10_sonwl"]
+[ext_resource type="PackedScene" uid="uid://mslutqhqgy2c" path="res://Scenes/Rooms/Biological Research Sector/laboratories_brs.tscn" id="11_mjlml"]
+[ext_resource type="PackedScene" uid="uid://bdbnco1qgqns5" path="res://Scenes/Rooms/Biological Research Sector/lower_entryway_brs.tscn" id="12_lcj01"]
+[ext_resource type="PackedScene" uid="uid://cfqwap6lbetfl" path="res://Scenes/Rooms/Biological Research Sector/management_brs.tscn" id="13_rcgvo"]
+[ext_resource type="PackedScene" uid="uid://d070f4q3oef17" path="res://Scenes/Rooms/Biological Research Sector/map_access.tscn" id="14_0tbjt"]
+[ext_resource type="PackedScene" uid="uid://bfqx67xq4rgmu" path="res://Scenes/Rooms/Biological Research Sector/map_room_lower_brs.tscn" id="15_n08ax"]
+[ext_resource type="PackedScene" uid="uid://bglv7cxh1mlel" path="res://Scenes/Rooms/Biological Research Sector/reactor_brs.tscn" id="16_h4no8"]
+[ext_resource type="PackedScene" uid="uid://d3e7yw2mx87ac" path="res://Scenes/Rooms/Biological Research Sector/reactor_chamber_brs.tscn" id="17_ie28f"]
+[ext_resource type="PackedScene" uid="uid://dk4yr51n5nxtm" path="res://Scenes/Rooms/Biological Research Sector/reactor_control_brs.tscn" id="18_0pt8s"]
+[ext_resource type="PackedScene" uid="uid://bmclhydvd2g3x" path="res://Scenes/Rooms/Biological Research Sector/restrooms_brs.tscn" id="19_vvo7k"]
+[ext_resource type="PackedScene" uid="uid://d4ja0idcmfato" path="res://Scenes/Rooms/Biological Research Sector/save_room_brs.tscn" id="20_r86cc"]
+[ext_resource type="PackedScene" uid="uid://dosodgrjxvkn1" path="res://Scenes/Rooms/Biological Research Sector/specimen_storage_brs.tscn" id="21_6c30w"]
+
+[node name="WorldMapBRS" type="Node2D" unique_id=740908366]
+
+[node name="Upper BRS" type="Node2D" parent="." unique_id=1811147956]
+
+[node name="LaboratoriesBRS" parent="Upper BRS" unique_id=1620527591 instance=ExtResource("11_mjlml")]
+position = Vector2(-843, 982)
+
+[node name="ContainmentRoom" parent="Upper BRS" unique_id=1705506379 instance=ExtResource("1_hdue2")]
+position = Vector2(309, -362)
+
+[node name="AnalysisRoomBRS" parent="Upper BRS" unique_id=1019046132 instance=ExtResource("2_nml2s")]
+position = Vector2(309, 310)
+
+[node name="ContainmentAccessBRS" parent="Upper BRS" unique_id=1221004614 instance=ExtResource("5_5cu4s")]
+position = Vector2(1461, 310)
+
+[node name="GeneticModificationBRS" parent="Upper BRS" unique_id=2145370645 instance=ExtResource("10_sonwl")]
+position = Vector2(3765, 310)
+
+[node name="ManagementBRS" parent="Upper BRS" unique_id=1192930274 instance=ExtResource("13_rcgvo")]
+position = Vector2(1461, 982)
+
+[node name="Reactor_BRS" parent="Upper BRS" unique_id=525804736 instance=ExtResource("16_h4no8")]
+position = Vector2(2613, 982)
+
+[node name="SaveRoomBRS" parent="Upper BRS" unique_id=44430063 instance=ExtResource("20_r86cc")]
+position = Vector2(-843, 310)
+
+[node name="SpecimenStorageBRS" parent="Upper BRS" unique_id=1169436027 instance=ExtResource("21_6c30w")]
+position = Vector2(-843, 982)
+
+[node name="Lower BRS" type="Node2D" parent="." unique_id=1491858236]
+
+[node name="CentralSaveBRS" parent="Lower BRS" unique_id=206006049 instance=ExtResource("3_xjf2l")]
+position = Vector2(1461, 1654)
+
+[node name="StairwayBRS" parent="Lower BRS" unique_id=281267232 instance=ExtResource("6_ky3yk")]
+position = Vector2(1461, 2326)
+
+[node name="ElevatorShaftBRS" parent="Lower BRS" unique_id=1759125049 instance=ExtResource("7_viofv")]
+position = Vector2(-1995, 310)
+
+[node name="ReactorChamberBRS" parent="Lower BRS" unique_id=121549162 instance=ExtResource("17_ie28f")]
+position = Vector2(2613, 2326)
+
+[node name="LowerEntrywayBRS" parent="Lower BRS" unique_id=322927179 instance=ExtResource("12_lcj01")]
+position = Vector2(2613, 3670)
+
+[node name="ReactorControlBRS" parent="Lower BRS" unique_id=1118010867 instance=ExtResource("18_0pt8s")]
+position = Vector2(4917, 1654)
+
+[node name="RestroomsBRS" parent="Lower BRS" unique_id=1842789224 instance=ExtResource("19_vvo7k")]
+position = Vector2(1460, 4342)
+
+[node name="EntryWayBRS" parent="Lower BRS" unique_id=323447654 instance=ExtResource("8_x3q54")]
+position = Vector2(-3147, 2326)
+
+[node name="CommunicationsBayBRS" parent="Lower BRS" unique_id=12119071 instance=ExtResource("4_bhayh")]
+position = Vector2(-1995, 2998)
+
+[node name="FaultyCommunicationsChamberBRS" parent="Lower BRS" unique_id=963030422 instance=ExtResource("9_ftgrj")]
+position = Vector2(-3147, 2998)
+
+[node name="MapAccess" parent="Lower BRS" unique_id=1149204188 instance=ExtResource("14_0tbjt")]
+position = Vector2(-843, 3670)
+
+[node name="MapRoomLowerBRS" parent="Lower BRS" unique_id=1801084952 instance=ExtResource("15_n08ax")]
+position = Vector2(-1995, 3670)

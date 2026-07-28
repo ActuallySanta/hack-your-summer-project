@@ -34,6 +34,7 @@ tile_map_data = PackedByteArray("AABFAAsAAQADAAIAAABGAAsAAQAEAAIAAABHAAsAAQAFAAI
 tile_set = ExtResource("3_kvopp")
 
 [node name="Doors" parent="." unique_id=183816320 instance=ExtResource("2_xg16q")]
+tile_map_data = PackedByteArray("AAABAAgAAQAIAAAAABAAAAgAAQAJAAAAABABAAkAAQAIAAEAABAAAAkAAQAJAAEAABABAAoAAQAIAAIAABAAAAoAAQAJAAIAABBHAAgAAQAJAAAAAABGAAgAAQAIAAAAAABHAAkAAQAJAAEAAABGAAkAAQAIAAEAAABHAAoAAQAJAAIAAABGAAoAAQAIAAIAAAA=")
 tile_set = ExtResource("3_jc32v")
 
 [node name="Riser" parent="." unique_id=1020301332 instance=ExtResource("5_o7h52")]

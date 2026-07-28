@@ -19,6 +19,7 @@ texture = ExtResource("2_nipiv")
 position = Vector2(274, 423)
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1616099498]
+visible = false
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D" unique_id=637858840]
 polygon = PackedVector2Array(1152, 528, 192, 528, 192, 240, 960, 240, 960, 384, 1152, 384, 1153, 0, 0, 0, 0, 672, 1152, 672)

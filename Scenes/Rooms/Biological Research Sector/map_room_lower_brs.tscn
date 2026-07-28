@@ -9,6 +9,7 @@
 [node name="MapRoomLowerBRS" type="Node2D" unique_id=1801084952]
 
 [node name="RoomInstance" parent="." unique_id=778290962 instance=ExtResource("1_41avo")]
+visible = false
 
 [node name="Background" parent="." unique_id=2101826522 instance=ExtResource("2_lid1g")]
 modulate = Color(0.735357, 0.735357, 0.735357, 1)
