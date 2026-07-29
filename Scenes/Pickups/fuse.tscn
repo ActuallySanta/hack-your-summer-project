@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://drg4fijv5i2sf"]
+
+[ext_resource type="Script" uid="uid://cnrub5aht5y2k" path="res://Scripts/pickup.gd" id="1_kqp3d"]
+[ext_resource type="Texture2D" uid="uid://ddgxo8dx7cjqj" path="res://Sprites/Pickups/Fuse.png" id="2_ejgmn"]
+[ext_resource type="Script" uid="uid://c7chwo6ql6udc" path="res://Scripts/oscillator.gd" id="3_k81ci"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dclox"]
+size = Vector2(36, 36)
+
+[node name="Fuse" type="Area2D" unique_id=2024901390]
+collision_layer = 16
+collision_mask = 2
+script = ExtResource("1_kqp3d")
+type = 4
+destroy_on_pickup = true
+use_custom_id = true
+custom_id = &"Fuse"
+metadata/_custom_type_script = "uid://cnrub5aht5y2k"
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1295625606]
+scale = Vector2(3, 3)
+texture = ExtResource("2_ejgmn")
+script = ExtResource("3_k81ci")
+height = 6.0
+hover_cycle_seconds = 4.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1498740582]
+shape = SubResource("RectangleShape2D_dclox")

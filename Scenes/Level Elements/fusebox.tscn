@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://b3d6cwvyjev0s"]
+
+[ext_resource type="Texture2D" uid="uid://80elibwbcv6m" path="res://Sprites/Fusebox_Empty.png" id="1_pxli5"]
+
+[node name="Fusebox" type="Node2D" unique_id=1487914227]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1395764608]
+scale = Vector2(3, 3)
+texture = ExtResource("1_pxli5")

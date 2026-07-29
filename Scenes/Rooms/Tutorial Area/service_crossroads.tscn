@@ -28,14 +28,11 @@ tile_set = ExtResource("2_dcofc")
 
 [node name="Fallen_Cyborg" parent="." unique_id=2020790701 instance=ExtResource("5_af1yr")]
 position = Vector2(1065, 1199)
-collision_layer = 4
 start_flipped = true
 
 [node name="Fallen_Cyborg2" parent="." unique_id=708168055 instance=ExtResource("5_af1yr")]
 position = Vector2(211, 1581)
-collision_layer = 4
 
 [node name="Fallen_Cyborg3" parent="." unique_id=1135235308 instance=ExtResource("5_af1yr")]
 position = Vector2(527, 622)
-collision_layer = 4
 start_flipped = true
