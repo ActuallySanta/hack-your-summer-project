@@ -1,4 +1,4 @@
-extends TileMapLayer
+extends Node2D
 
 @export var start_brightness: float = 1
 @export var end_brightness: float = 0

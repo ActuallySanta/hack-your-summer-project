@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c0w5j5ymakv4e"
-path="res://.godot/imported/DockingBay (2).png-b748d39f1db28573681403382776d926.ctex"
+uid="uid://cgsrvx2ya3eoi"
+path="res://.godot/imported/Turret.png-3eb5921012d317000adf03025b777529.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Textures/Tiles/DockingBay (2).png"
-dest_files=["res://.godot/imported/DockingBay (2).png-b748d39f1db28573681403382776d926.ctex"]
+source_file="res://Sprites/EnvironmentalDamages/Turret.png"
+dest_files=["res://.godot/imported/Turret.png-3eb5921012d317000adf03025b777529.ctex"]
 
 [params]
 

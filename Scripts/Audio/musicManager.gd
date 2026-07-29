@@ -111,7 +111,6 @@ func set_background_track_from_room_instance() -> void:
 		return
 	
 	var track = _get_current_cell_group_music( groups )
-	print("Sending: ", track)
 	play_background_track( track )
 
 func _get_current_cell_group_music(groups: PackedInt32Array) -> AudioStream:
