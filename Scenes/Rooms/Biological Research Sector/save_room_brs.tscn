@@ -9,6 +9,7 @@
 [node name="SaveRoomBRS" type="Node2D" unique_id=44430063]
 
 [node name="RoomInstance" parent="." unique_id=669595171 instance=ExtResource("1_x1lvh")]
+visible = false
 z_index = 10
 
 [node name="Background" parent="." unique_id=2101826522 instance=ExtResource("5_t8uhg")]

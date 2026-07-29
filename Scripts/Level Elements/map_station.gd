@@ -1,6 +1,6 @@
 extends Node2D
 
-@export_enum("Crew Quarters", "Bio Research Sector") var region: int
+@export_enum("Crew Quarters", "BRS") var region: int
 @export var activeTimeSeconds = 1.5
 
 @onready var BRS = $ActiveBRS
@@ -94,7 +94,7 @@ func _on_interaction_entered(body: Node2D) -> void:
 		return
 	
 	_has_been_interacted_with = true
-	var regionName = "Crew Quarters" if region == 0 else "Biological Research Sector"
+	var regionName = "Crew Quarters" if region == 0 else "BRS"
 	MetSys.discover_cell_group( MetSys.get_group_by_name(regionName) )
 	MetSys.store_object(self)
 	activate()
