@@ -13,6 +13,10 @@ extends AnimatedSprite2D
 @export var loopTimeSeconds : float
 ## Should the teeth start by waiting or grabing
 @export var startWaiting : bool
+## Initial offset time
+@export var offsetTime : float:
+	set(value):
+		offsetTime = min(value, loopTimeSeconds)
 
 var _is_queued : bool
 var _timer : float
@@ -26,10 +30,10 @@ func _validate_property(property: Dictionary) -> void:
 		property["usage"] = PROPERTY_USAGE_NO_EDITOR
 
 func _ready() -> void:
-	_timer = loopTimeSeconds if startWaiting else 0.0
+	_timer = offsetTime if startWaiting else 0.0
 
 func _process(delta: float) -> void:
-	if loop == false or Engine.is_editor_hint():
+	if loop == false or cannot_play() or Engine.is_editor_hint():
 		return
 	
 	_timer -= delta
