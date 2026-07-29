@@ -504,10 +504,15 @@ func is_tile_air(foreground: TileMapLayer, pos: Vector2i) -> bool:
 func get_camera() -> Camera2D:
 	return get_viewport().get_camera_2d()
 
+	
+
 func get_foreground() -> TileMapLayer:
-	var children = get_tree().get_first_node_in_group("Geometry").get_children()
-	var foreground : TileMapLayer = children.filter(func(child): return child.name.begins_with("Fore"))[0]
-	return foreground
+	var geoNode = get_tree().get_first_node_in_group("Geometry")
+	return geoNode
+	#var options = geoNode.filter(func(child): return child.name.begins_with("Fore"))
+	#print(options)
+	#var foreground : TileMapLayer = options[0]
+	#return foreground
 
 func get_map_position(foreground: TileMapLayer, relative_to_player: Vector2i = Vector2i.ZERO) -> Vector2i:
 	var map_pos : Vector2i = get_map_cordinates(foreground, global_position) + relative_to_player
