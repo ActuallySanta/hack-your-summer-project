@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="1_5emhe"]
 [ext_resource type="TileSet" uid="uid://chq502fexv5m" path="res://Tileset/DockingBay.tres" id="2_dcofc"]
 [ext_resource type="PackedScene" uid="uid://cdsjsvuyovomn" path="res://Scenes/tile_map_for_rooms.tscn" id="3_g8nr5"]
+[ext_resource type="PackedScene" uid="uid://cy2osx3ogepds" path="res://Scenes/Rooms/Tutorial Area/locked_door.tscn" id="5_006sv"]
 [ext_resource type="PackedScene" uid="uid://bfdxh46jtantj" path="res://Scenes/Enemies/fallen_cyborg.tscn" id="5_af1yr"]
 
 [node name="ServiceCrossroads" type="Node2D" unique_id=1037229723]
@@ -36,3 +37,6 @@ position = Vector2(211, 1581)
 [node name="Fallen_Cyborg3" parent="." unique_id=1135235308 instance=ExtResource("5_af1yr")]
 position = Vector2(527, 622)
 start_flipped = true
+
+[node name="LockedDoor" parent="." unique_id=1290327451 instance=ExtResource("5_006sv")]
+position = Vector2(129, 1800)

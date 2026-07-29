@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://cy2osx3ogepds"]
+
+[ext_resource type="Texture2D" uid="uid://bojnpiiamxek3" path="res://Textures/PropsAndBackgrounds/VertDoor.png" id="1_46d5w"]
+
+[node name="LockedDoor" type="Node2D" unique_id=1290327451]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1861477510]
+scale = Vector2(2.25, 2.25)
+texture = ExtResource("1_46d5w")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 64)
