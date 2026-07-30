@@ -9,22 +9,31 @@ var state : int
 
 func _init(coords: Vector2i, p_replacedTileID: Vector2i, p_respawn_time: float = 2, p_time = 0) -> void:
 	coord = coords
-	p_replacedTileID = replacedTileID
+	replacedTileID = p_replacedTileID
 	respawnTime = p_respawn_time
 	time = p_time
-	state = -5
+	state = 0
+
+## Sends the tile back to the start of its break animation, as though it had
+## only just been destroyed. Used when the tile cannot be rebuilt yet because
+## the player is standing where the block would reappear.
+func reset() -> void:
+	state = 0
+	time = 0
 
 ## Returns 0 if nothing should change, 1 if should go empty, and 2 if should reappear
 func iterate(delta: float) -> int:
 	time += delta
-	if state < 0 and time >= 0.1:
+	if state < 6 and time >= 0.1:
 		state += 1
 		time = 0
 		return state
-	if state == 0:
-		state = 1
+	elif state == 6 and time >= respawnTime:
+		state = 7
+	elif state > 6 and state < 12 and time >= 0.1:
+		state += 1
+		time = 0
 		return state
-	elif state == 1 and time >= respawnTime:
-		state = 2
-		return state
-	return -10
+	elif state == 12:
+		return -2
+	return -1

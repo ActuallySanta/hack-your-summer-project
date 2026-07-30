@@ -88,6 +88,7 @@ func _load_game() -> void:
 	await load_room(room_id)
 	await get_tree().create_timer(artificial_load_time).timeout
 	_player.global_position = save.get_value("player_pos", START_POS)
+	GlobalSignals.player_spawned.emit()
 	LevelManager.set_checkpoint(room_id, _player.position, false)
 	_player.process_mode = Node.PROCESS_MODE_INHERIT
 	isInGame = true
@@ -105,6 +106,7 @@ func _new_game():
 	await load_room(START_ROOM_UID)
 	await get_tree().create_timer(artificial_load_time).timeout
 	_player.global_position = START_POS
+	GlobalSignals.player_spawned.emit()
 	_player.process_mode = Node.PROCESS_MODE_INHERIT
 	isInGame = true
 	_hud.hide_load_screen()
@@ -300,6 +302,7 @@ func respawn_player_at_checkpoint() -> void:
 	PlayerManager.player.global_position = LevelManager.checkpoint_pos
 	PlayerManager.player._facingRight = !LevelManager.checkpoint_facing_left
 	PlayerManager.player.respawn()
+	GlobalSignals.player_spawned.emit()
 
 func _on_player_death(_anim_duration: float) -> void:
 	await get_tree().create_timer(death_respawn_delay).timeout
