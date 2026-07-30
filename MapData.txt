@@ -48,7 +48,7 @@ $ln;Demo Level;NewMap
 [12,-2,0]
 2,-1,0,0|ff0000,,,,||Scenes/Rooms/Biological Research Sector/elevator_shaft_brs.tscn
 [14,-1,0]
-1,-1,4,0|ad0000,,,,||Scenes/Rooms/Biological Research Sector/laboratories_brs.tscn
+1,-1,0,0|ad0000,,,,||Scenes/Rooms/Biological Research Sector/laboratories_brs.tscn
 [12,-1,0]
 0,-1,0,-1|ff0000,,,,||Scenes/Rooms/Biological Research Sector/elevator_shaft_brs.tscn
 [16,-1,0]
@@ -76,13 +76,13 @@ $ln;Demo Level;NewMap
 [15,1,0]
 1,-1,1,1|ff0000,,,,||Scenes/Rooms/Biological Research Sector/stairway_brs.tscn
 [12,0,0]
-2,1,0,-1|ff0000,,,,||Scenes/Rooms/Biological Research Sector/elevator_shaft_brs.tscn
+0,1,0,-1|ff0000,,,,||Scenes/Rooms/Biological Research Sector/elevator_shaft_brs.tscn
 [15,2,0]
 0,-1,1,-1|ff0000,,,,||Scenes/Rooms/Biological Research Sector/stairway_brs.tscn
 [14,0,0]
 0,0,-1,-1|ad0000,,,,||Scenes/Rooms/Biological Research Sector/laboratories_brs.tscn
 [13,0,0]
--1,0,4,0|ad0000,,,,||Scenes/Rooms/Biological Research Sector/laboratories_brs.tscn
+-1,0,0,0|ad0000,,,,||Scenes/Rooms/Biological Research Sector/laboratories_brs.tscn
 [16,0,0]
 -1,0,0,-1|ad0000,,,,||Scenes/Rooms/Biological Research Sector/reactor_brs.tscn
 [17,0,0]
@@ -150,7 +150,7 @@ $ln;Demo Level;NewMap
 [15,0,0]
 0,1,0,0|ff0000,,,,|3|Scenes/Rooms/Biological Research Sector/central_save_brs.tscn
 [13,-1,0]
-4,0,0,0|ad0000,,,,|0|Scenes/Rooms/Biological Research Sector/specimen_storage_brs.tscn
+0,0,0,0|ad0000,,,,|0|Scenes/Rooms/Biological Research Sector/specimen_storage_brs.tscn
 [-10,-10,0]
 -1,-1,0,0|f200ff,,,,||
 [-9,-10,0]
@@ -348,7 +348,7 @@ $ln;Demo Level;NewMap
 [9,4,0]
 0,0,0,0|0023ff,,,,|4|
 [7,5,0]
-1,-1,0,0|0023ff,,,,||
+0,-1,0,0|0023ff,,,,||
 [7,6,0]
 -1,0,1,-1|0023ff,,,,||
 [8,6,0]
@@ -362,7 +362,7 @@ $ln;Demo Level;NewMap
 [10,6,0]
 1,0,-1,-1|0023ff,,,,||
 [8,5,0]
-0,0,1,0|0017a2,,,,|0|
+0,0,4,0|0017a2,,,,|0|
 [6,5,0]
 0,1,0,-1|0017a2,,,,||
 [6,6,0]

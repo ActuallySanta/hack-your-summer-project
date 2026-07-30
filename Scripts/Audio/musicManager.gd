@@ -7,7 +7,7 @@ const CREW_QUARTERS = preload("res://Sounds/Music/A surprise infusion.ogg")
 const INTERNALS = DEBUG
 const LABS = preload("res://Sounds/Music/Jetpack Joyride DEMO.ogg")
 const BRS = preload("res://Sounds/Music/BRS.ogg")
-const LOWER_BRS = preload("res://Sounds/Music/BRS.ogg")
+const LOWER_BRS = preload("res://Sounds/Music/Lower Biological Zone.ogg")
 
 const MAIN_MENU = DEBUG
 
@@ -29,8 +29,8 @@ const PICKUP = preload("res://Sounds/Music/Uncertainty.ogg")
 	"Internals Hidden": INTERNALS,
 	"Maintainence": LABS,
 	"Maintainence Hidden": LABS,
-	"BRS": BRS,
-	"BRS Hidden": LOWER_BRS,
+	"BRS": LOWER_BRS,
+	"BRS Hidden": BRS,
 }
 
 @onready var boss_ost := {
@@ -125,7 +125,6 @@ func _get_current_cell_group_music(groups: PackedInt32Array) -> AudioStream:
 			return _parse_special_room(type[ 0 ], type[ 1 ])
 		else:
 			best_guess = location_ost.get(group_name)
-	
 	
 	return best_guess
 
