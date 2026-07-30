@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://6jbhsdtefk1p"]
+
+[ext_resource type="TileSet" uid="uid://c0dbvnpaoeomc" path="res://Tileset/TransitionTileSet.tres" id="1_cummr"]
+
+[node name="DoorTileMapLayer" type="TileMapLayer" unique_id=197313074]
+z_index = 20
+scale = Vector2(3, 3)
+tile_set = ExtResource("1_cummr")

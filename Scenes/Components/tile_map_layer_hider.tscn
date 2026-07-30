@@ -5,6 +5,3 @@
 [node name="TileMapLayerHider" type="Area2D" unique_id=1871147111]
 collision_mask = 2
 script = ExtResource("1_egnhh")
-
-[connection signal="body_entered" from="." to="." method="_on_body_entered"]
-[connection signal="body_exited" from="." to="." method="_on_body_exited"]

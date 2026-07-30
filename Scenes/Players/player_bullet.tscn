@@ -5,21 +5,22 @@
 [ext_resource type="Texture2D" uid="uid://d2bn5f3iju4g5" path="res://Sprites/Characters/scifi_blasterfire_1.png" id="3_jskx8"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nocgn"]
-size = Vector2(29, 14)
+size = Vector2(32, 0)
 
 [node name="PlayerBullet" unique_id=125498642 instance=ExtResource("1_3m2mg")]
 collision_layer = 8
-collision_mask = 39
+collision_mask = 37
 monitorable = true
 script = ExtResource("2_jskx8")
 speed = 1200.0
 lifetime = 10.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." index="0" unique_id=704812034]
-position = Vector2(13.5, 0)
+position = Vector2(-16, 0)
 shape = SubResource("RectangleShape2D_nocgn")
 
 [node name="Sprite2D" type="Sprite2D" parent="." index="1" unique_id=1518511123]
+position = Vector2(-28, 0)
 scale = Vector2(2, 2)
 texture = ExtResource("3_jskx8")
 
