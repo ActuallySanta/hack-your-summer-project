@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://cbjf5karnoyrk"]
+
+[ext_resource type="PackedScene" uid="uid://bo3gn3a58ss5g" path="res://WorldMaps/world_map_brs.tscn" id="1_jv6wm"]
+[ext_resource type="PackedScene" uid="uid://bgwc4emcqyj3l" path="res://WorldMaps/world_map_db.tscn" id="2_boi75"]
+
+[node name="WorldMap" type="Node2D" unique_id=1287662466]
+
+[node name="WorldMapDB" parent="." unique_id=19893736 instance=ExtResource("2_boi75")]
+position = Vector2(-5567, 926)
+
+[node name="WorldMapBRS" parent="." unique_id=740908366 instance=ExtResource("1_jv6wm")]
+position = Vector2(1149, 456)

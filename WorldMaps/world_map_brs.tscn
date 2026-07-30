@@ -29,7 +29,6 @@ script = ExtResource("1_viofv")
 [node name="Camera2D" type="Camera2D" parent="." unique_id=451296804]
 
 [node name="Upper BRS" type="Node2D" parent="." unique_id=1811147956]
-visible = false
 
 [node name="LaboratoriesBRS" parent="Upper BRS" unique_id=1620527591 instance=ExtResource("11_mjlml")]
 position = Vector2(-843, 982)
