@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://c23c0urqh5mm5" path="res://Scenes/Components/ScaledTileMap.tscn" id="2_67epy"]
 [ext_resource type="TileSet" uid="uid://c0dbvnpaoeomc" path="res://Tileset/TransitionTileSet.tres" id="3_1vxox"]
 [ext_resource type="TileSet" uid="uid://b1y41todkrtnk" path="res://Tileset/BioSector.tres" id="3_l0m8s"]
-[ext_resource type="Script" uid="uid://6pnsqk3ndc0" path="res://Scripts/BehaviorAdjustments/camera_path_boundary.gd" id="5_tplv0"]
+[ext_resource type="Script" uid="uid://b3xkq7wnva8y" path="res://Scripts/BehaviorAdjustments/camera_axis_region.gd" id="5_tplv0"]
 [ext_resource type="PackedScene" uid="uid://dfqqikkhf2oeu" path="res://Scenes/Environmental Hazards/teeth_grab_animator.tscn" id="6_7t5db"]
 [ext_resource type="PackedScene" uid="uid://dklylswmcw1pk" path="res://Scenes/Environmental Hazards/teeth_persistant.tscn" id="7_ooh2a"]
 [ext_resource type="PackedScene" uid="uid://dydfka6mw2bm2" path="res://Scenes/Pickups/jetpack_pickup.tscn" id="8_qysch"]

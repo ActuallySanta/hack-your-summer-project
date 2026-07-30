@@ -1,7 +1,7 @@
 [gd_scene format=4 uid="uid://b071iuo5kdwg5"]
 
 [ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="1_n6rr1"]
-[ext_resource type="Script" uid="uid://6pnsqk3ndc0" path="res://Scripts/BehaviorAdjustments/camera_path_boundary.gd" id="5_5d6np"]
+[ext_resource type="Script" uid="uid://b3xkq7wnva8y" path="res://Scripts/BehaviorAdjustments/camera_axis_region.gd" id="5_5d6np"]
 [ext_resource type="PackedScene" uid="uid://cla3jfy66axw6" path="res://Scenes/Components/riser.tscn" id="6_06aq0"]
 [ext_resource type="TileSet" uid="uid://c0dbvnpaoeomc" path="res://Tileset/TransitionTileSet.tres" id="6_p5ho2"]
 [ext_resource type="PackedScene" uid="uid://hss23uqsvd7d" path="res://Scenes/Environmental Hazards/acid.tscn" id="6_x4fye"]
