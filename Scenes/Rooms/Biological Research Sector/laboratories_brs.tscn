@@ -29,6 +29,7 @@ tile_map_data = PackedByteArray("AAABABkAAAABAAAAAAACABkAAAABAAAAAAADABkAAAABAAA
 tile_set = ExtResource("2_nsgul")
 
 [node name="CameraBoundsVertical" type="Area2D" parent="." unique_id=822873864]
+visible = false
 script = ExtResource("3_nsgul")
 preserved_axis = 1
 claim_directions = 6
