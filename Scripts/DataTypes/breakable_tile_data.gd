@@ -1,6 +1,6 @@
 class_name BreakableTileData extends RefCounted
 
-const TIME_ANIM : float = 0.5
+const TIME_ANIM : float = 0.1
 var replacedTileID : Vector2i
 var coord : Vector2i
 var respawnTime : float
@@ -24,13 +24,13 @@ func reset() -> void:
 ## Returns 0 if nothing should change, 1 if should go empty, and 2 if should reappear
 func iterate(delta: float) -> int:
 	time += delta
-	if state < 6 and time >= 0.1:
+	if state < 6 and time >= TIME_ANIM:
 		state += 1
 		time = 0
 		return state
 	elif state == 6 and time >= respawnTime:
 		state = 7
-	elif state > 6 and state < 12 and time >= 0.1:
+	elif state > 6 and state < 12 and time >= TIME_ANIM:
 		state += 1
 		time = 0
 		return state

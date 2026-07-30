@@ -21,6 +21,7 @@ texture = ExtResource("2_nipiv")
 
 [node name="HealthExtender" parent="." unique_id=545634817 instance=ExtResource("3_b6gb0")]
 position = Vector2(274, 423)
+use_custom_id = false
 
 [node name="DoorBackground" type="TileMapLayer" parent="." unique_id=1198466503]
 scale = Vector2(3, 3)

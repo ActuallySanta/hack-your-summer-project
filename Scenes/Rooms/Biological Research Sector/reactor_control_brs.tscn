@@ -32,3 +32,4 @@ position = Vector2(672, 600)
 
 [node name="HealthExtender" parent="." unique_id=545634817 instance=ExtResource("6_nwqe3")]
 position = Vector2(170, 462)
+use_custom_id = false

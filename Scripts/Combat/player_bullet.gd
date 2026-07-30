@@ -30,8 +30,7 @@ func _on_environment_hit(target: Node2D) -> void:
 		
 		var foreground : TileMapLayer = get_tree().get_first_node_in_group("Geometry")
 		var coordinates = tile_target.local_to_map(tile_target.to_local( global_position ) )
-		foreground.set_cell(coordinates, -1)
-		tile_target.destroy_tile( coordinates )
+		tile_target.destroy_tile( coordinates, foreground )
 		
 		queue_free()
 		return
