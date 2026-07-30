@@ -38,6 +38,7 @@ metadata/_custom_type_script = "uid://ctc17oyja7fup"
 position = Vector2(0, -3)
 scale = Vector2(3, 3)
 sprite_frames = SubResource("SpriteFrames_lcx1n")
+autoplay = "default"
 frame_progress = 0.5150398
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2034432269]

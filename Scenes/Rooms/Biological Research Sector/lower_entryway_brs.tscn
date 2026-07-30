@@ -40,28 +40,23 @@ polygon = PackedVector2Array(2881, 337, 809, 339, 577, 1007.4167, 577, 1009, 575
 
 [node name="TeethGrab" parent="TeethMasterWest" unique_id=656100795 instance=ExtResource("6_7t5db")]
 position = Vector2(888, 312)
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 1.2
 
 [node name="TeethGrab2" parent="TeethMasterWest" unique_id=1822489224 instance=ExtResource("6_7t5db")]
 position = Vector2(984, 312)
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 1.2
 
 [node name="TeethGrab3" parent="TeethMasterWest" unique_id=1207380359 instance=ExtResource("6_7t5db")]
 position = Vector2(936, 312)
-queueTimeSeconds = 0.0
 loopTimeSeconds = 0.8
-startWaiting = false
 
 [node name="TeethGrab4" parent="TeethMasterWest" unique_id=2060451583 instance=ExtResource("6_7t5db")]
 position = Vector2(888, 216)
 rotation = 3.1415927
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 1.2
@@ -69,7 +64,6 @@ offsetTime = 1.2
 [node name="TeethGrab5" parent="TeethMasterWest" unique_id=1715579500 instance=ExtResource("6_7t5db")]
 position = Vector2(984, 216)
 rotation = 3.1415927
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 1.2
@@ -77,28 +71,23 @@ offsetTime = 1.2
 [node name="TeethGrab6" parent="TeethMasterWest" unique_id=106915355 instance=ExtResource("6_7t5db")]
 position = Vector2(936, 216)
 rotation = 3.1415927
-queueTimeSeconds = 0.0
 loopTimeSeconds = 0.8
-startWaiting = false
 
 [node name="TeethMasterCenter" type="Node2D" parent="." unique_id=1524417535]
 
 [node name="TeethGrabBotoom" parent="TeethMasterCenter" unique_id=752118776 instance=ExtResource("6_7t5db")]
 position = Vector2(1368, 312)
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 
 [node name="TeethGrabTop" parent="TeethMasterCenter" unique_id=1044546095 instance=ExtResource("6_7t5db")]
 position = Vector2(1368, 216)
 rotation = 3.1415927
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 
 [node name="TeethGrabBotoom2" parent="TeethMasterCenter" unique_id=414766301 instance=ExtResource("6_7t5db")]
 position = Vector2(1416, 312)
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.1
@@ -106,14 +95,12 @@ offsetTime = 0.1
 [node name="TeethGrabTop2" parent="TeethMasterCenter" unique_id=53057265 instance=ExtResource("6_7t5db")]
 position = Vector2(1416, 216)
 rotation = 3.1415927
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.1
 
 [node name="TeethGrabBotoom3" parent="TeethMasterCenter" unique_id=1922479558 instance=ExtResource("6_7t5db")]
 position = Vector2(1464, 312)
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.2
@@ -121,14 +108,12 @@ offsetTime = 0.2
 [node name="TeethGrabTop3" parent="TeethMasterCenter" unique_id=1252024472 instance=ExtResource("6_7t5db")]
 position = Vector2(1464, 216)
 rotation = 3.1415927
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.2
 
 [node name="TeethGrabBotoom4" parent="TeethMasterCenter" unique_id=811775022 instance=ExtResource("6_7t5db")]
 position = Vector2(1512, 312)
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.3
@@ -136,14 +121,12 @@ offsetTime = 0.3
 [node name="TeethGrabTop4" parent="TeethMasterCenter" unique_id=721562590 instance=ExtResource("6_7t5db")]
 position = Vector2(1512, 216)
 rotation = 3.1415927
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.3
 
 [node name="TeethGrabBotoom5" parent="TeethMasterCenter" unique_id=548615419 instance=ExtResource("6_7t5db")]
 position = Vector2(1560, 312)
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.4
@@ -151,14 +134,12 @@ offsetTime = 0.4
 [node name="TeethGrabTop5" parent="TeethMasterCenter" unique_id=553970064 instance=ExtResource("6_7t5db")]
 position = Vector2(1560, 216)
 rotation = 3.1415927
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.4
 
 [node name="TeethGrabBotoom6" parent="TeethMasterCenter" unique_id=1011303682 instance=ExtResource("6_7t5db")]
 position = Vector2(1608, 312)
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.5
@@ -166,14 +147,12 @@ offsetTime = 0.5
 [node name="TeethGrabTop6" parent="TeethMasterCenter" unique_id=1651998605 instance=ExtResource("6_7t5db")]
 position = Vector2(1608, 216)
 rotation = 3.1415927
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.5
 
 [node name="TeethGrabBotoom7" parent="TeethMasterCenter" unique_id=949598776 instance=ExtResource("6_7t5db")]
 position = Vector2(1656, 312)
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.6
@@ -181,14 +160,12 @@ offsetTime = 0.6
 [node name="TeethGrabTop7" parent="TeethMasterCenter" unique_id=328459327 instance=ExtResource("6_7t5db")]
 position = Vector2(1656, 216)
 rotation = 3.1415927
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.6
 
 [node name="TeethGrabBotoom8" parent="TeethMasterCenter" unique_id=634163213 instance=ExtResource("6_7t5db")]
 position = Vector2(1704, 312)
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.7
@@ -196,14 +173,12 @@ offsetTime = 0.7
 [node name="TeethGrabTop8" parent="TeethMasterCenter" unique_id=487762535 instance=ExtResource("6_7t5db")]
 position = Vector2(1704, 216)
 rotation = 3.1415927
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.7
 
 [node name="TeethGrabBotoom9" parent="TeethMasterCenter" unique_id=1420145544 instance=ExtResource("6_7t5db")]
 position = Vector2(1368, 504)
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.7
@@ -211,14 +186,12 @@ offsetTime = 0.7
 [node name="TeethGrabTop9" parent="TeethMasterCenter" unique_id=148160589 instance=ExtResource("6_7t5db")]
 position = Vector2(1368, 408)
 rotation = 3.1415927
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.7
 
 [node name="TeethGrabBotoom10" parent="TeethMasterCenter" unique_id=1563545610 instance=ExtResource("6_7t5db")]
 position = Vector2(1416, 504)
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.6
@@ -226,14 +199,12 @@ offsetTime = 0.6
 [node name="TeethGrabTop10" parent="TeethMasterCenter" unique_id=273439026 instance=ExtResource("6_7t5db")]
 position = Vector2(1416, 408)
 rotation = 3.1415927
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.6
 
 [node name="TeethGrabBotoom11" parent="TeethMasterCenter" unique_id=2118638073 instance=ExtResource("6_7t5db")]
 position = Vector2(1464, 504)
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.5
@@ -241,14 +212,12 @@ offsetTime = 0.5
 [node name="TeethGrabTop11" parent="TeethMasterCenter" unique_id=467701229 instance=ExtResource("6_7t5db")]
 position = Vector2(1464, 408)
 rotation = 3.1415927
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.5
 
 [node name="TeethGrabBotoom12" parent="TeethMasterCenter" unique_id=90427627 instance=ExtResource("6_7t5db")]
 position = Vector2(1512, 504)
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.4
@@ -256,14 +225,12 @@ offsetTime = 0.4
 [node name="TeethGrabTop12" parent="TeethMasterCenter" unique_id=1863754207 instance=ExtResource("6_7t5db")]
 position = Vector2(1512, 408)
 rotation = 3.1415927
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.4
 
 [node name="TeethGrabBotoom13" parent="TeethMasterCenter" unique_id=731296439 instance=ExtResource("6_7t5db")]
 position = Vector2(1560, 504)
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.3
@@ -271,14 +238,12 @@ offsetTime = 0.3
 [node name="TeethGrabTop13" parent="TeethMasterCenter" unique_id=9867282 instance=ExtResource("6_7t5db")]
 position = Vector2(1560, 408)
 rotation = 3.1415927
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.3
 
 [node name="TeethGrabBotoom14" parent="TeethMasterCenter" unique_id=552597621 instance=ExtResource("6_7t5db")]
 position = Vector2(1608, 504)
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.2
@@ -286,14 +251,12 @@ offsetTime = 0.2
 [node name="TeethGrabTop14" parent="TeethMasterCenter" unique_id=1288896715 instance=ExtResource("6_7t5db")]
 position = Vector2(1608, 408)
 rotation = 3.1415927
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.2
 
 [node name="TeethGrabBotoom15" parent="TeethMasterCenter" unique_id=1328512082 instance=ExtResource("6_7t5db")]
 position = Vector2(1656, 504)
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.1
@@ -301,21 +264,18 @@ offsetTime = 0.1
 [node name="TeethGrabTop15" parent="TeethMasterCenter" unique_id=1306588315 instance=ExtResource("6_7t5db")]
 position = Vector2(1656, 408)
 rotation = 3.1415927
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.1
 
 [node name="TeethGrabBotoom16" parent="TeethMasterCenter" unique_id=2128158132 instance=ExtResource("6_7t5db")]
 position = Vector2(1704, 504)
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 
 [node name="TeethGrabTop16" parent="TeethMasterCenter" unique_id=1625147441 instance=ExtResource("6_7t5db")]
 position = Vector2(1704, 408)
 rotation = 3.1415927
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 
@@ -324,20 +284,17 @@ position = Vector2(1011, 0)
 
 [node name="TeethGrabBotoom" parent="TeethMasterEast" unique_id=1780031769 instance=ExtResource("6_7t5db")]
 position = Vector2(1368, 312)
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 
 [node name="TeethGrabTop" parent="TeethMasterEast" unique_id=1831587394 instance=ExtResource("6_7t5db")]
 position = Vector2(1368, 216)
 rotation = 3.1415927
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 
 [node name="TeethGrabBotoom2" parent="TeethMasterEast" unique_id=492583097 instance=ExtResource("6_7t5db")]
 position = Vector2(1416, 312)
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.1
@@ -345,14 +302,12 @@ offsetTime = 0.1
 [node name="TeethGrabTop2" parent="TeethMasterEast" unique_id=899751585 instance=ExtResource("6_7t5db")]
 position = Vector2(1416, 216)
 rotation = 3.1415927
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.1
 
 [node name="TeethGrabBotoom3" parent="TeethMasterEast" unique_id=533376497 instance=ExtResource("6_7t5db")]
 position = Vector2(1464, 312)
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.2
@@ -360,14 +315,12 @@ offsetTime = 0.2
 [node name="TeethGrabTop3" parent="TeethMasterEast" unique_id=406767461 instance=ExtResource("6_7t5db")]
 position = Vector2(1464, 216)
 rotation = 3.1415927
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.2
 
 [node name="TeethGrabBotoom4" parent="TeethMasterEast" unique_id=397398774 instance=ExtResource("6_7t5db")]
 position = Vector2(1512, 312)
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.3
@@ -375,14 +328,12 @@ offsetTime = 0.3
 [node name="TeethGrabTop4" parent="TeethMasterEast" unique_id=999391272 instance=ExtResource("6_7t5db")]
 position = Vector2(1512, 216)
 rotation = 3.1415927
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.3
 
 [node name="TeethGrabBotoom5" parent="TeethMasterEast" unique_id=1530797414 instance=ExtResource("6_7t5db")]
 position = Vector2(1560, 312)
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.4
@@ -390,14 +341,12 @@ offsetTime = 0.4
 [node name="TeethGrabTop5" parent="TeethMasterEast" unique_id=551054723 instance=ExtResource("6_7t5db")]
 position = Vector2(1560, 216)
 rotation = 3.1415927
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.4
 
 [node name="TeethGrabBotoom6" parent="TeethMasterEast" unique_id=1499011109 instance=ExtResource("6_7t5db")]
 position = Vector2(1608, 312)
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.5
@@ -405,14 +354,12 @@ offsetTime = 0.5
 [node name="TeethGrabTop6" parent="TeethMasterEast" unique_id=929989931 instance=ExtResource("6_7t5db")]
 position = Vector2(1608, 216)
 rotation = 3.1415927
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.5
 
 [node name="TeethGrabBotoom7" parent="TeethMasterEast" unique_id=1221901309 instance=ExtResource("6_7t5db")]
 position = Vector2(1656, 312)
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.6
@@ -420,14 +367,12 @@ offsetTime = 0.6
 [node name="TeethGrabTop7" parent="TeethMasterEast" unique_id=1813585610 instance=ExtResource("6_7t5db")]
 position = Vector2(1656, 216)
 rotation = 3.1415927
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.6
 
 [node name="TeethGrabBotoom8" parent="TeethMasterEast" unique_id=788278476 instance=ExtResource("6_7t5db")]
 position = Vector2(1704, 312)
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.7
@@ -435,14 +380,12 @@ offsetTime = 0.7
 [node name="TeethGrabTop8" parent="TeethMasterEast" unique_id=1492931470 instance=ExtResource("6_7t5db")]
 position = Vector2(1704, 216)
 rotation = 3.1415927
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.7
 
 [node name="TeethGrabBotoom9" parent="TeethMasterEast" unique_id=163943593 instance=ExtResource("6_7t5db")]
 position = Vector2(1368, 504)
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.7
@@ -450,14 +393,12 @@ offsetTime = 0.7
 [node name="TeethGrabTop9" parent="TeethMasterEast" unique_id=44167705 instance=ExtResource("6_7t5db")]
 position = Vector2(1368, 408)
 rotation = 3.1415927
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.7
 
 [node name="TeethGrabBotoom10" parent="TeethMasterEast" unique_id=873777395 instance=ExtResource("6_7t5db")]
 position = Vector2(1416, 504)
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.6
@@ -465,14 +406,12 @@ offsetTime = 0.6
 [node name="TeethGrabTop10" parent="TeethMasterEast" unique_id=1088442909 instance=ExtResource("6_7t5db")]
 position = Vector2(1416, 408)
 rotation = 3.1415927
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.6
 
 [node name="TeethGrabBotoom11" parent="TeethMasterEast" unique_id=1022519061 instance=ExtResource("6_7t5db")]
 position = Vector2(1464, 504)
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.5
@@ -480,14 +419,12 @@ offsetTime = 0.5
 [node name="TeethGrabTop11" parent="TeethMasterEast" unique_id=1823796373 instance=ExtResource("6_7t5db")]
 position = Vector2(1464, 408)
 rotation = 3.1415927
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.5
 
 [node name="TeethGrabBotoom12" parent="TeethMasterEast" unique_id=1436229376 instance=ExtResource("6_7t5db")]
 position = Vector2(1512, 504)
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.4
@@ -495,14 +432,12 @@ offsetTime = 0.4
 [node name="TeethGrabTop12" parent="TeethMasterEast" unique_id=1527804067 instance=ExtResource("6_7t5db")]
 position = Vector2(1512, 408)
 rotation = 3.1415927
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.4
 
 [node name="TeethGrabBotoom13" parent="TeethMasterEast" unique_id=1491201133 instance=ExtResource("6_7t5db")]
 position = Vector2(1560, 504)
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.3
@@ -510,14 +445,12 @@ offsetTime = 0.3
 [node name="TeethGrabTop13" parent="TeethMasterEast" unique_id=549669311 instance=ExtResource("6_7t5db")]
 position = Vector2(1560, 408)
 rotation = 3.1415927
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.3
 
 [node name="TeethGrabBotoom14" parent="TeethMasterEast" unique_id=1935178422 instance=ExtResource("6_7t5db")]
 position = Vector2(1608, 504)
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.2
@@ -525,14 +458,12 @@ offsetTime = 0.2
 [node name="TeethGrabTop14" parent="TeethMasterEast" unique_id=589716255 instance=ExtResource("6_7t5db")]
 position = Vector2(1608, 408)
 rotation = 3.1415927
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.2
 
 [node name="TeethGrabBotoom15" parent="TeethMasterEast" unique_id=2106783376 instance=ExtResource("6_7t5db")]
 position = Vector2(1656, 504)
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.1
@@ -540,21 +471,18 @@ offsetTime = 0.1
 [node name="TeethGrabTop15" parent="TeethMasterEast" unique_id=381463420 instance=ExtResource("6_7t5db")]
 position = Vector2(1656, 408)
 rotation = 3.1415927
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 offsetTime = 0.1
 
 [node name="TeethGrabBotoom16" parent="TeethMasterEast" unique_id=866757070 instance=ExtResource("6_7t5db")]
 position = Vector2(1704, 504)
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 
 [node name="TeethGrabTop16" parent="TeethMasterEast" unique_id=1826927067 instance=ExtResource("6_7t5db")]
 position = Vector2(1704, 408)
 rotation = 3.1415927
-queueTimeSeconds = 0.0
 loopTimeSeconds = 1.2
 startWaiting = true
 
@@ -563,3 +491,6 @@ tile_map_data = PackedByteArray("AAANABYAAQAAAAAAAAANABcAAQAAAAEAAAAOABYAAQAAAAA
 
 [node name="JetpackPickup" parent="." unique_id=1708906721 instance=ExtResource("8_qysch")]
 position = Vector2(3244, 470)
+
+[node name="Marker2D" type="Marker2D" parent="." unique_id=1534126342]
+position = Vector2(1088, 489)
