@@ -32,6 +32,7 @@ tile_map_data = PackedByteArray("AAAAAAkAAQAAAAwAAAAAAAoAAQAAAA0AAAABAAkAAQABAAw
 tile_set = ExtResource("3_d7f72")
 
 [node name="Doors" parent="." unique_id=2072320122 instance=ExtResource("2_y57jy")]
+z_index = 20
 tile_map_data = PackedByteArray("AAAEAAwAAQAIAAMAAAAEAA0AAQAIAAQAAAAFAAwAAQAJAAMAAAAFAA0AAQAJAAQAAAAGAAwAAQAKAAMAAAAGAA0AAQAKAAQAAAAHAAwAAQALAAMAAAAHAA0AAQALAAQAAAA=")
 tile_set = ExtResource("3_qblea")
 

@@ -24,6 +24,7 @@ tile_map_data = PackedByteArray("AAAAAAwAAQAAAAQAAAAAAA0AAQACAAEAAAABAAwAAQAKAAI
 tile_set = ExtResource("3_r2nqx")
 
 [node name="Doors" parent="." unique_id=1091198654 instance=ExtResource("2_2j2m0")]
+z_index = 20
 tile_map_data = PackedByteArray("AAAMAAwAAQAIAAMAAAAMAA0AAQAIAAQAAAANAAwAAQAJAAMAAAANAA0AAQAJAAQAAAAOAAwAAQAKAAMAAAAOAA0AAQAKAAQAAAAPAAwAAQALAAMAAAAPAA0AAQALAAQAAAA=")
 tile_set = ExtResource("3_wq1va")
 
@@ -32,4 +33,3 @@ position = Vector2(672, 600)
 
 [node name="HealthExtender" parent="." unique_id=545634817 instance=ExtResource("6_nwqe3")]
 position = Vector2(170, 462)
-use_custom_id = false

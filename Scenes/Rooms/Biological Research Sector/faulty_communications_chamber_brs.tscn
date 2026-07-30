@@ -54,5 +54,6 @@ cycle_seconds = 2.0
 polygon = PackedVector2Array(239.33334, 191.66667, 240, 112, 144, 112, 144, 80, 304, 80, 304, 48, 256, 48, 256, 16, 160, 16, 160, 48, 32, 48, 32, 80, 48, 80, 48, 112, 32, 112, 32, 192)
 
 [node name="Doors" parent="Geometry" unique_id=1166335761 instance=ExtResource("2_jhnnk")]
+z_index = 20
 tile_map_data = PackedByteArray("AAAWAAgAAQAIAAAAAAAWAAkAAQAIAAEAAAAWAAoAAQAIAAIAAAAXAAgAAQAJAAAAAAAXAAkAAQAJAAEAAAAXAAoAAQAJAAIAAAA=")
 tile_set = ExtResource("3_er532")

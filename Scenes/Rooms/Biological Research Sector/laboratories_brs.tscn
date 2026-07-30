@@ -44,6 +44,7 @@ vertical_shift = 2.0
 occilations_per_second = 0.25
 
 [node name="Doors" parent="." unique_id=119055941 instance=ExtResource("2_abdyw")]
+z_index = 20
 tile_map_data = PackedByteArray("AAAuAAQAAQAIAAAAAAAuAAUAAQAIAAEAAAAuAAYAAQAIAAIAAAAvAAQAAQAJAAAAAAAvAAUAAQAJAAEAAAAvAAYAAQAJAAIAAAA=")
 tile_set = ExtResource("6_udmmt")
 
