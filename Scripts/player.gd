@@ -32,6 +32,12 @@ signal death_end()
 @export var knockbackDI := 300.0
 @export var canClimb : bool = false
 
+@export_group("Visuals")
+## How far down the visuals are shifted while the shorter air collider is active.
+## Should match JumpCollision's offset from WalkingCollision in the player scene,
+## so the collider bottoms and the sprite's feet all stay at the same height.
+@export var airVisualOffset := 21.0
+
 # Enums
 enum MoveState{
 	Standing,
@@ -92,6 +98,10 @@ var _invulnBlinkTimer : float
 var _deathRespawnTimer : float
 # Mantling and Vaulting
 var _is_vaulting : bool
+# Visual alignment
+var _visual_offset_nodes : Array[Node2D]
+var _visual_offset_bases : PackedVector2Array
+var _visual_offset : float
 # Camera offset
 var _camera_offset : Vector2
 var _need_to_move_camera : bool
@@ -119,6 +129,7 @@ func _ready() -> void:
 	jetpack.jetpack_updated.connect(do_jetpack_logic)
 	disable_jetpack()
 	playerMoveState = MoveState.Standing
+	cache_visual_offset_nodes()
 	GlobalSignals.health_extended_by_one.connect(increment_health_amount_by_one)
 
 func _move_player_pos(pos: Vector2) -> void:
@@ -175,7 +186,8 @@ func attack() -> void:
 func shoot() -> void:
 	var newBullet := bulletScene.instantiate() as PlayerBullet
 	var bulletX := bulletOffset
-	var bulletY := bullet_y_offset[ playerMoveState ]
+	# The tuned offsets are relative to the sprite, so they follow it while airborne.
+	var bulletY := bullet_y_offset[ playerMoveState ] + _visual_offset
 	if !_facingRight:
 		bulletX *= -1
 		newBullet.scale.x = -1
@@ -349,8 +361,10 @@ func _physics_process(delta: float) -> void:
 	playerMoveState = determine_move_state()
 	
 	if previousMoveState != playerMoveState:
-		collisionManager.swap_active_collision( translate_state() )
-	
+		var collisionState := translate_state()
+		collisionManager.swap_active_collision( collisionState )
+		align_visuals_to_collider( collisionState )
+
 	handle_wall_jumping(delta)
 	handle_jump_and_gravity(delta)
 	
@@ -481,6 +495,31 @@ func _on_mantle_complete() -> void:
 	$Character.modulate = Color(1,1,1,1)
 	position += Vector2(-TILE_SIZE,-TILE_SIZE) if sprite.flip_h else Vector2(TILE_SIZE, -TILE_SIZE)
 	reset_camera()
+#endregion
+
+#region Visual alignment
+## The air collider is shorter than the walking one and is pushed down in the editor
+## so every collider shares the same bottom edge, which keeps the body origin (and so
+## the camera) at one height through a jump and landing. The visuals have to make the
+## same trip or the sprite hops up when the jump starts and drops when it ends.
+##
+## Only the children that read as "the player" move: the sprite, the worn jetpack and
+## the Hurtbox. The *Collision shapes belong to CollisionManager, the mantle stand-in
+## is only ever visible while grounded, and the rest carry no transform.
+func cache_visual_offset_nodes() -> void:
+	_visual_offset_nodes = [ sprite, jetpack, $Hurtbox ]
+	_visual_offset_bases = PackedVector2Array()
+	for node in _visual_offset_nodes:
+		_visual_offset_bases.append( node.position )
+
+func align_visuals_to_collider( state: CollisionManager.State ) -> void:
+	var offset := airVisualOffset if state == CollisionManager.State.AIR else 0.0
+	if is_equal_approx( offset, _visual_offset ):
+		return
+
+	_visual_offset = offset
+	for i in _visual_offset_nodes.size():
+		_visual_offset_nodes[ i ].position = _visual_offset_bases[ i ] + Vector2( 0, offset )
 #endregion
 
 #region Camera stuffs

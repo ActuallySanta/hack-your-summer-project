@@ -25,7 +25,7 @@ func _process(delta: float) -> void:
 		elif iteration_result < 6:
 			index =  iteration_result + 1
 		elif iteration_result > 6:
-			index = 5 - (iteration_result - 8)		
+			index = 5 - (iteration_result - 8)
 		
 		set_cell( tile_data.coord, 0, Vector2i( index, 0) )
 	

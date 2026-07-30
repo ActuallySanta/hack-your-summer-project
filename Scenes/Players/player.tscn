@@ -1291,7 +1291,7 @@ shape = SubResource("RectangleShape2D_gymyn")
 disabled = true
 
 [node name="JumpCollision" type="CollisionShape2D" parent="." unique_id=931990881]
-position = Vector2(0, -3)
+position = Vector2(0, 21)
 shape = SubResource("RectangleShape2D_j8xm3")
 disabled = true
 
