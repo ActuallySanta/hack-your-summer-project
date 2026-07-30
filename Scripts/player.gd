@@ -16,6 +16,9 @@ signal death_end()
 @export var jumpBufferTime := 0.25
 @export var coyoteTime := 0.2
 @export var wallJumpBufferTime := 0.2
+## How close the active collider's leading edge must be to the wall face, in pixels,
+## before a mantle is allowed. Keeps the vault from starting across the player's tile.
+@export var mantleWallDistance := 6.0
 
 @export_group("Combat")
 @export var baseHealth := 5
@@ -98,6 +101,7 @@ var _invulnBlinkTimer : float
 var _deathRespawnTimer : float
 # Mantling and Vaulting
 var _is_vaulting : bool
+var _mantle_dir : int = 1
 # Visual alignment
 var _visual_offset_nodes : Array[Node2D]
 var _visual_offset_bases : PackedVector2Array
@@ -464,37 +468,68 @@ func try_mantle() -> bool:
 	if not is_on_floor():
 		return false
 	
+	# Vault the way the player is pushing, not just the way they happen to face, so
+	# standing still against a ledge and tapping jump is an ordinary jump.
+	if is_zero_approx(_moveInput):
+		return false
+
+	var dir := 1 if _moveInput > 0 else -1
 	var foreground = get_foreground()
 	var mantle_block = get_map_position( foreground )
-	mantle_block.x += -1 if sprite.flip_h else 1
+	mantle_block.x += dir
 	if is_tile_air(foreground, mantle_block):
 		return false
-	
+
 	var air_check = Vector2i(mantle_block.x, mantle_block.y - 1)
 	if not is_tile_air(foreground, air_check):
 		return false
-	
+
+	if not is_against_wall( foreground, mantle_block, dir ):
+		return false
+
+	_mantle_dir = dir
 	mantle()
 	return true
+
+## True when the active collider's leading edge is within [member mantleWallDistance]
+## of the near face of [param block]. Without this the mantle triggers from anywhere
+## inside the player's own tile, so vaulting from the far edge floats them across it.
+func is_against_wall(foreground: TileMapLayer, block: Vector2i, dir: int) -> bool:
+	var bounds = collisionManager.get_bounds()
+	var right_edge : float = maxf( bounds[0].x, bounds[1].x )
+	var left_edge : float = minf( bounds[0].x, bounds[1].x )
+	var lead_edge := right_edge if dir > 0 else left_edge
+
+	var block_center := foreground.to_global( foreground.map_to_local( block ) )
+	var wall_face := block_center.x - (TILE_SIZE * 0.5 * dir)
+	return absf( wall_face - lead_edge ) <= mantleWallDistance
 
 #TODO Replace both of these functions (As well as the tempClimber) with things in the animtree
 func mantle() -> void:
 	_is_vaulting = true
-	$TempClimberSinceZachIsStupid.flip_h = sprite.flip_h
-	$TempClimberSinceZachIsStupid.position.x = -15 if sprite.flip_h else 15
+	$TempClimberSinceZachIsStupid.flip_h = _mantle_dir < 0
+	$TempClimberSinceZachIsStupid.position.x = 15 * _mantle_dir
 	$TempClimberSinceZachIsStupid.visible = true
 	$Character.modulate = Color(1,1,1,0)
 	$TempClimberSinceZachIsStupid.play("Small Climb")
-	var camera_pos = Vector2(-TILE_SIZE,-TILE_SIZE) if sprite.flip_h else Vector2(TILE_SIZE, -TILE_SIZE)
+	var camera_pos = Vector2(TILE_SIZE * _mantle_dir, -TILE_SIZE)
 	anim_camera_start(camera_pos.x, camera_pos.y, 0.25)
 
 func _on_mantle_complete() -> void:
 	_is_vaulting = false
-	set_anim_move_state(MoveState.Crouching, false)
 	$TempClimberSinceZachIsStupid.visible = false
 	$Character.modulate = Color(1,1,1,1)
-	position += Vector2(-TILE_SIZE,-TILE_SIZE) if sprite.flip_h else Vector2(TILE_SIZE, -TILE_SIZE)
+	position += Vector2(TILE_SIZE * _mantle_dir, -TILE_SIZE)
 	reset_camera()
+
+	# Come out of the vault crouched. determine_move_state()'s ceiling check only runs
+	# when the previous state was Crouching, so this is what lets a 1-tile-tall gap hold
+	# the player down; where there is headroom they stand up on the next frame anyway.
+	playerMoveState = MoveState.Crouching
+	var collisionState := translate_state()
+	collisionManager.swap_active_collision( collisionState )
+	align_visuals_to_collider( collisionState )
+	set_anim_move_state(MoveState.Crouching, false)
 #endregion
 
 #region Visual alignment
