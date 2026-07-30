@@ -49,8 +49,8 @@ func set_all_open() -> void:
 func _is_button_pressed(id: String) -> bool:
 	return MetSys.save_data.stored_objects.get(id, false)
 
-func get_children_with_name(identifier: String) -> Array[ Node2D ]:
-	return get_children().filter(func(child: Node2D): return identifier in child.name)
+func get_children_with_name(identifier: String) -> Array[ Node ]:
+	return get_children().filter(func(child: Node): return identifier in child.name)
 
 func _get_object_id() -> String:
 	return door_name

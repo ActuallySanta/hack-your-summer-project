@@ -21,6 +21,19 @@ func _physics_process(delta: float) -> void:
 func _on_hit(_hitbox: Hitbox, _target: Hurtbox) -> void:
 	queue_free()
 
-func _on_environment_hit(_target: Node2D) -> void:
-	#perhaps have different hit fx with combat & non-combat hits
+func _on_environment_hit(target: Node2D) -> void:
+	if "BreakAbles" in target.name:
+		var tile_target := target as TileMapLayer
+		if tile_target == null:
+			queue_free()
+			return
+		
+		var foreground : TileMapLayer = get_tree().get_first_node_in_group("Geometry")
+		var coordinates = tile_target.local_to_map(tile_target.to_local( global_position ) )
+		foreground.set_cell(coordinates, -1)
+		tile_target.destroy_tile( coordinates )
+		
+		queue_free()
+		return
+	
 	queue_free()

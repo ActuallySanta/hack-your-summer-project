@@ -36,6 +36,8 @@ tile_set = ExtResource("4_kxh7b")
 position = Vector2(576, 1944)
 
 [node name="SmallAccessDoor" parent="." unique_id=1984866545 instance=ExtResource("6_2nmab")]
+button_names = Array[String](["ContainmentSeal"])
+door_name = "ContainmentLeft"
 
 [node name="Door1" type="AnimatedSprite2D" parent="SmallAccessDoor" unique_id=2512210]
 position = Vector2(1032, 312)
