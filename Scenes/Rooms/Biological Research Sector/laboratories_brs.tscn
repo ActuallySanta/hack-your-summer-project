@@ -35,7 +35,7 @@ claim_directions = 6
 center_override = 1000.0
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="CameraBoundsVertical" unique_id=1694654520]
-polygon = PackedVector2Array(2304, 0, 2304, 1200, 1629, 1200, 1629, 1104, 1200, 1104, 1200, -2)
+polygon = PackedVector2Array(2304, 0, 2304, 1200, 1629, 1200, 1629, 1104, 1152, 1104, 1152, 0)
 
 [node name="CameraBounds" type="Area2D" parent="." unique_id=1749063286]
 visible = false

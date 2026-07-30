@@ -40,6 +40,9 @@ var _prev_player_pos := Vector2.ZERO
 var _prev_player_valid := false
 
 func _ready() -> void:
+	# Regions loaded inside a room find us through this to claim the camera on
+	# arrival, before the first frame in the room is drawn.
+	add_to_group(CameraAxisRegion.CONTROLLER_GROUP)
 	_hud.start_new_game.connect(_new_game)
 	_hud.load_game.connect(_load_game)
 	_hud.quit_game.connect(get_tree().quit)
@@ -183,9 +186,7 @@ func _process(_delta: float) -> void:
 ## every change of hands the blend restarts from the camera's current position, so
 ## a hand-over behaves exactly like a fresh entry (see [CameraAxisRegion]).
 func _apply_camera_axis_regions(cam_center: Vector2, delta: float) -> Vector2:
-	var player := PlayerManager.player
-	var movement := _player_movement(player, delta)
-	var player_pos := player.global_position
+	var movement := _player_movement(PlayerManager.player, delta)
 
 	# A region freed under us (room unloaded) just stops holding the camera.
 	if _axis_region != null and not is_instance_valid(_axis_region):
@@ -197,7 +198,7 @@ func _apply_camera_axis_regions(cam_center: Vector2, delta: float) -> Vector2:
 	var active_holds := false
 	for node in get_tree().get_nodes_in_group(CameraAxisRegion.GROUP):
 		var region := node as CameraAxisRegion
-		if not region.contains_point(player_pos):
+		if not region.contains_player():
 			continue
 		if region == _axis_region:
 			active_holds = true
@@ -230,6 +231,36 @@ func _apply_camera_axis_regions(cam_center: Vector2, delta: float) -> Vector2:
 		_camera.limit_bottom - _camera.limit_top)
 	var half_view := _camera.get_viewport_rect().size * 0.5 / _camera.zoom
 	return _clamp_view_to_rect(result, half_view, hard_rect)
+
+## Takes camera control for [param region] with the locked axis already sitting on
+## its centre line, and moves the camera there immediately.
+##
+## Called by a region that finds the player inside it as its room resolves, which
+## happens before the first frame in that room is drawn. There is no previous shot
+## to ease out of in that situation, so easing would just look like the camera
+## drifting into place after the room appears.
+func snap_to_camera_axis_region(region: CameraAxisRegion) -> void:
+	if not is_instance_valid(_camera):
+		return
+	_begin_axis_region(region)
+	# Nothing to travel: the shot starts at its destination.
+	_axis_progress = 1.0
+	_release_axis = -1
+
+	var room := MetSys.get_current_room_instance()
+	if not room:
+		return
+	# The room may not have been measured yet this frame, and the hard bounds have
+	# to win here too, so refresh the limits before clamping to them.
+	room.adjust_camera_limits(_camera)
+	var pos := _camera.position
+	pos[_axis_locked] = region.get_center_value()
+	var hard_rect := Rect2(
+		_camera.limit_left, _camera.limit_top,
+		_camera.limit_right - _camera.limit_left,
+		_camera.limit_bottom - _camera.limit_top)
+	var half_view := _camera.get_viewport_rect().size * 0.5 / _camera.zoom
+	_camera.position = _clamp_view_to_rect(pos, half_view, hard_rect)
 
 ## Hands the camera to [param region], measuring its slide from where the camera
 ## actually is right now.
@@ -280,6 +311,22 @@ func reset_camera_axis_state() -> void:
 	_axis_region = null
 	_release_axis = -1
 	_prev_player_valid = false
+	# MetSys can report the room change after the new room's regions have already
+	# resolved, so re-resolve rather than leaving the camera unclaimed until the
+	# player next moves. Deferred, because on a transition the room this belongs
+	# to is still being loaded.
+	_resolve_camera_arrival.call_deferred()
+
+## Gives the camera to whichever loaded region the player is already standing in,
+## centred and without easing. A no-op when they aren't in one.
+func _resolve_camera_arrival() -> void:
+	var best: CameraAxisRegion = null
+	for node in get_tree().get_nodes_in_group(CameraAxisRegion.GROUP):
+		var region := node as CameraAxisRegion
+		if region.contains_player() and (best == null or region.claim_priority > best.claim_priority):
+			best = region
+	if best != null:
+		snap_to_camera_axis_region(best)
 
 ## Clamps a camera centre so its view rectangle stays within [param rect].
 ## If the room is smaller than the view on an axis, the view is centred there.

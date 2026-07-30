@@ -44,6 +44,11 @@ extends Area2D
 ## Group that game.gd scans each frame to find the active regions.
 const GROUP := &"camera_axis_region"
 
+## Group game.gd puts itself in so a region loaded inside a room can hand it the
+## camera the moment the room resolves. Declared here so the dependency only runs
+## one way: game.gd knows this class, this class only knows a group name.
+const CONTROLLER_GROUP := &"camera_axis_controller"
+
 ## Bit values for [member claim_directions], matching the export flag order.
 const DIR_LEFT := 1
 const DIR_RIGHT := 2
@@ -103,43 +108,58 @@ enum PreservedAxis {
 		if Engine.is_editor_hint():
 			queue_redraw()
 
-## Cached polygons in global space, one entry per [CollisionPolygon2D] child.
-var _polygons: Array[PackedVector2Array] = []
-
-## Bounding box of every cached polygon, in global space.
+## Bounding box of every [CollisionPolygon2D] child, in global space. The centre
+## line is taken from this.
 var _bounds := Rect2()
+
+## False when there is no polygon to take a centre line from.
+var _has_bounds := false
+
+## Our shapes as [PlayerOverlap] pairs, cached once and re-read through their
+## owners' live transforms on every test.
+var _shapes: Array = []
 
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		set_process(true)
 		return
-	# The region is pure geometry; game.gd point-tests it rather than relying on
-	# physics callbacks, so overlaps stay correct across teleports and respawns.
+	# Overlap goes through PlayerOverlap rather than body_entered/exited, because
+	# the physics server cannot report an overlap that already exists when a room
+	# finishes loading - see PlayerOverlap for why. So our own signals are unused.
 	monitoring = false
 	monitorable = false
 	rebuild()
 	add_to_group(GROUP)
+	if _shapes.is_empty():
+		push_warning("CameraAxisRegion %s has no collision polygons, so it will never claim the camera." % name)
+
+	# A room can load with the player already standing in here - arriving through
+	# a transition, respawning, or loading a save. There is nothing to ease from in
+	# that case, so the shot simply starts centred. Resolve it now and again once
+	# the frame's work is done but before it is drawn, because a transition shifts
+	# the player onto its entrance immediately after loading us.
+	_claim_on_arrival()
+	_claim_on_arrival.call_deferred()
+	GlobalSignals.player_spawned.connect(_claim_on_arrival)
 
 ## Rebuilds the cached polygons from the current [CollisionPolygon2D] children.
 ## Call this if a polygon is edited or the node is moved at runtime.
 func rebuild() -> void:
-	_polygons.clear()
 	_bounds = Rect2()
-	var first := true
+	_has_bounds = false
+	if not Engine.is_editor_hint():
+		_shapes = PlayerOverlap.collect_shapes(self)
 	for child in get_children():
 		var col := child as CollisionPolygon2D
 		if col == null or col.polygon.size() < 3:
 			continue
-		var points := PackedVector2Array()
 		for point in col.polygon:
 			var global_point: Vector2 = col.global_transform * point
-			points.append(global_point)
-			if first:
-				_bounds = Rect2(global_point, Vector2.ZERO)
-				first = false
-			else:
+			if _has_bounds:
 				_bounds = _bounds.expand(global_point)
-		_polygons.append(points)
+			else:
+				_bounds = Rect2(global_point, Vector2.ZERO)
+				_has_bounds = true
 
 ## The axis index the camera is centred on: 0 for X, 1 for Y.
 func get_locked_axis() -> int:
@@ -156,16 +176,20 @@ func get_center_value() -> float:
 func get_release_rate() -> float:
 	return release_rate if release_rate > 0.0 else centering_rate
 
-## Whether [param point] (global) is inside any of this region's polygons.
-func contains_point(point: Vector2) -> bool:
-	# Grown by a pixel because Rect2.has_point() excludes the far edges, and a
-	# player standing exactly on the polygon's boundary should still count.
-	if not _bounds.grow(1.0).has_point(point):
-		return false
-	for polygon in _polygons:
-		if Geometry2D.is_point_in_polygon(point, polygon):
-			return true
-	return false
+## Whether the player's body currently overlaps this region.
+func contains_player() -> bool:
+	return PlayerOverlap.with_shapes(_shapes)
+
+## Hands the camera straight to this region, already centred, if the player is
+## standing in it as the room resolves. Direction doesn't gate this: claim
+## directions exist to stop a feeler grabbing the camera off a passer-by, and
+## a player who arrives inside the region has already committed to it.
+func _claim_on_arrival() -> void:
+	if not is_inside_tree() or not contains_player():
+		return
+	var controller := get_tree().get_first_node_in_group(CONTROLLER_GROUP)
+	if controller and controller.has_method(&"snap_to_camera_axis_region"):
+		controller.snap_to_camera_axis_region(self)
 
 ## Whether [param movement] (global pixels/second) is one of the directions that
 ## lets this region take control.
@@ -191,7 +215,7 @@ func _process(_delta: float) -> void:
 		queue_redraw()
 
 func _draw() -> void:
-	if not Engine.is_editor_hint() or _polygons.is_empty():
+	if not Engine.is_editor_hint() or not _has_bounds:
 		return
 	# Draw the centre line the camera will be pulled onto, spanning the polygon.
 	var color := Color(0.4, 0.9, 1.0, 0.85)
