@@ -41,6 +41,14 @@ enum MoveState{
 	Knockback,
 }
 
+var bullet_y_offset : Dictionary[ MoveState, float ] = {
+	MoveState.Standing: -20,
+	MoveState.Crouching: 4,
+	MoveState.Climbing: -20,
+	MoveState.Jumping: 0,
+	MoveState.Knockback: 0,
+}
+
 # Onreadys
 @onready var animator: AnimationTree = $AnimationTree
 @onready var animPlayback: AnimationNodeStateMachinePlayback = animator.get("parameters/playback")
@@ -167,10 +175,11 @@ func attack() -> void:
 func shoot() -> void:
 	var newBullet := bulletScene.instantiate() as PlayerBullet
 	var bulletX := bulletOffset
+	var bulletY := bullet_y_offset[ playerMoveState ]
 	if !_facingRight:
 		bulletX *= -1
 		newBullet.scale.x = -1
-	newBullet.position = position + Vector2(bulletX, 0)
+	newBullet.position = position + Vector2(bulletX, bulletY)
 	newBullet.direction = Vector2.RIGHT if _facingRight else Vector2.LEFT
 	get_tree().root.add_child(newBullet)
 	_shootCooldownTimer = shootCooldown

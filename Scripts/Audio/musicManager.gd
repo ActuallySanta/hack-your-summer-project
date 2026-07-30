@@ -122,7 +122,6 @@ func _get_current_cell_group_music(groups: PackedInt32Array) -> AudioStream:
 		var group_name = MetSys.get_group_name(group)
 		if group_name.begins_with( "_" ):
 			var type = group_name.split("_", false, 1)
-			print("Playing Music for: [ ", type[0], ": ", type[1], " ]")
 			return _parse_special_room(type[ 0 ], type[ 1 ])
 		else:
 			best_guess = location_ost.get(group_name)
@@ -132,5 +131,4 @@ func _get_current_cell_group_music(groups: PackedInt32Array) -> AudioStream:
 
 func _parse_special_room(type: String, special_name: String) -> AudioStream:
 	var dictionary = osts[type]
-	print(dictionary)
 	return dictionary.get(special_name)

@@ -5,7 +5,7 @@ extends Node2D
 
 var door_controls
 @onready var sound_player = $SFX
-var collider
+var collider : Node2D
 
 func _ready() -> void:
 	door_controls = get_children_with_name("Door")
@@ -14,9 +14,8 @@ func _ready() -> void:
 	if not colliders.is_empty():
 		collider = colliders[0]
 	
-	if collider == null:
-		if check_all_buttons():
-			set_all_open()
+	if check_all_buttons():
+		set_all_open()
 	
 	if MetSys.register_storable_object( self, set_all_open ):
 		if collider != null:
@@ -35,6 +34,10 @@ func try_open_door() -> void:
 	_open_door()
 
 func _open_door() -> void:
+	if not collider == null:
+		collider.queue_free()
+	else:
+		print("collider already removed...") 
 	play_animation( "Opening" )
 	sound_player.play()
 	MetSys.store_object(self)
@@ -45,6 +48,8 @@ func play_animation(identifier: String) -> void:
 
 func set_all_open() -> void:
 	play_animation( "IdleOpen" )
+	if not collider == null:
+		collider.queue_free()
 
 func _is_button_pressed(id: String) -> bool:
 	return MetSys.save_data.stored_objects.get(id, false)
