@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://b7memi6bt6if5"
+path="res://.godot/imported/Docking Bay Ruined.ogg-7bd8f16e3f8eeb920f3d506e114992db.oggvorbisstr"
+
+[deps]
+
+source_file="res://Sounds/Music/Docking Bay Ruined.ogg"
+dest_files=["res://.godot/imported/Docking Bay Ruined.ogg-7bd8f16e3f8eeb920f3d506e114992db.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
