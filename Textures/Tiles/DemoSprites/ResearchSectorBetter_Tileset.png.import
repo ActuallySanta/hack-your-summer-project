@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cx3f3qcgngplj"
-path="res://.godot/imported/DockingBay.png-6d559d7b11cedf16add8744234c77fe5.ctex"
+uid="uid://cdtqwfos0l6hg"
+path="res://.godot/imported/ResearchSectorBetter_Tileset.png-f99b758d9a537f0062ffb1276ba5f401.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Textures/Tiles/DockingBay.png"
-dest_files=["res://.godot/imported/DockingBay.png-6d559d7b11cedf16add8744234c77fe5.ctex"]
+source_file="res://Textures/Tiles/DemoSprites/ResearchSectorBetter_Tileset.png"
+dest_files=["res://.godot/imported/ResearchSectorBetter_Tileset.png-f99b758d9a537f0062ffb1276ba5f401.ctex"]
 
 [params]
 

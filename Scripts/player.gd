@@ -47,6 +47,7 @@ enum MoveState{
 @onready var jetpack: Sprite2D = $JetpackAsset
 @onready var sprite : Sprite2D = $Character
 @onready var collisionManager: Node = $CollisionManager
+@onready var hurtbox : Hurtbox = $Hurtbox
 
 # Consts
 const IDLESTATEPARAM := "parameters/StandardMovement/Idle/MoveState/transition_request"
@@ -357,6 +358,8 @@ func _physics_process(delta: float) -> void:
 	
 	if _invulnTimer > 0:
 		_invulnTimer -= delta
+		if _invulnTimer <= 0:
+			hurtbox.process_mode = Node.PROCESS_MODE_INHERIT
 	
 	move_and_slide()
 	
@@ -394,11 +397,11 @@ func die() -> void:
 	anim_death = true
 	reset_all_inputs()
 	_moveInput = 0
-	$Hurtbox.process_mode = Node.PROCESS_MODE_DISABLED
+	hurtbox.process_mode = Node.PROCESS_MODE_DISABLED
 	death_start.emit($AnimationPlayer.get_animation(&"death").length)
 
 func respawn() -> void:
-	$Hurtbox.process_mode = Node.PROCESS_MODE_INHERIT
+	hurtbox.process_mode = Node.PROCESS_MODE_INHERIT
 	_currentHealth = baseHealth
 	GlobalSignals.health_changed.emit(_currentHealth, baseHealth)
 	anim_death = false
@@ -412,6 +415,7 @@ func _on_hit(_hurtBox: Hurtbox, hit_info: HitInfo, _source: Hitbox) -> void:
 	_knockbackForce = hit_info.knockback_strength / _knockbackTimer
 	_invulnTimer = hitInvulnTime
 	_invulnBlinkTimer = invulnBlinkInterval
+	hurtbox.process_mode = Node.PROCESS_MODE_DISABLED
 	anim_hurt = true
 	if _currentHealth <= 0:
 		die()
@@ -504,10 +508,15 @@ func is_tile_air(foreground: TileMapLayer, pos: Vector2i) -> bool:
 func get_camera() -> Camera2D:
 	return get_viewport().get_camera_2d()
 
+	
+
 func get_foreground() -> TileMapLayer:
-	var children = get_tree().get_first_node_in_group("Geometry").get_children()
-	var foreground : TileMapLayer = children.filter(func(child): return child.name.begins_with("Fore"))[0]
-	return foreground
+	var geoNode = get_tree().get_first_node_in_group("Geometry")
+	return geoNode
+	#var options = geoNode.filter(func(child): return child.name.begins_with("Fore"))
+	#print(options)
+	#var foreground : TileMapLayer = options[0]
+	#return foreground
 
 func get_map_position(foreground: TileMapLayer, relative_to_player: Vector2i = Vector2i.ZERO) -> Vector2i:
 	var map_pos : Vector2i = get_map_cordinates(foreground, global_position) + relative_to_player
