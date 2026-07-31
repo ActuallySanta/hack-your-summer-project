@@ -82,7 +82,7 @@ $ln;Demo Level;NewMap
 [14,0,0]
 0,0,-1,-1|ad0000,,,,||Scenes/Rooms/Biological Research Sector/laboratories_brs.tscn
 [13,0,0]
--1,0,0,0|ad0000,,,,||Scenes/Rooms/Biological Research Sector/laboratories_brs.tscn
+-1,0,4,0|ad0000,,,,||Scenes/Rooms/Biological Research Sector/laboratories_brs.tscn
 [16,0,0]
 -1,0,0,-1|ad0000,,,,||Scenes/Rooms/Biological Research Sector/reactor_brs.tscn
 [17,0,0]
@@ -150,7 +150,7 @@ $ln;Demo Level;NewMap
 [15,0,0]
 0,1,0,0|ff0000,,,,|3|Scenes/Rooms/Biological Research Sector/central_save_brs.tscn
 [13,-1,0]
-0,0,0,0|ad0000,,,,|0|Scenes/Rooms/Biological Research Sector/specimen_storage_brs.tscn
+4,0,0,0|ad0000,,,,|0|Scenes/Rooms/Biological Research Sector/specimen_storage_brs.tscn
 [-10,-10,0]
 -1,-1,0,0|f200ff,,,,||
 [-9,-10,0]
@@ -270,41 +270,41 @@ $ln;Demo Level;NewMap
 [15,4,1]
 1,0,0,0|ff0000,,,,|0|
 [10,4,0]
-0,0,1,-1|0023ff,,,,||
+0,0,1,-1|0023ff,,,,||Scenes/Rooms/Crew Quaters/stairway_cq.tscn
 [10,3,0]
-1,-1,1,-1|0023ff,,,,||
+1,-1,1,-1|0023ff,,,,||Scenes/Rooms/Crew Quaters/stairway_cq.tscn
 [10,2,0]
-0,-1,1,1|0023ff,,,,||
+0,-1,1,1|0023ff,,,,||Scenes/Rooms/Crew Quaters/stairway_cq.tscn
 [11,5,0]
-0,0,1,-1|0023ff,,,,||
+0,0,1,-1|0023ff,,,,||Scenes/Rooms/Crew Quaters/elevator_cq.tscn
 [11,4,0]
-1,-1,0,-1|0023ff,,,,||
+1,-1,0,-1|0023ff,,,,||Scenes/Rooms/Crew Quaters/elevator_cq.tscn
 [11,3,0]
-0,-1,1,0|0023ff,,,,||
+0,-1,1,0|0023ff,,,,||Scenes/Rooms/Crew Quaters/elevator_cq.tscn
 [10,1,0]
-0,1,0,0|0023ff,,,,||
+0,1,0,0|0023ff,,,,|2|Scenes/Rooms/Crew Quaters/theater_cq.tscn
 [9,1,0]
-0,-1,-1,0|0023ff,,,,||
+0,-1,-1,0|0023ff,,,,||Scenes/Rooms/Crew Quaters/cafeteria.tscn
 [8,1,0]
--1,-1,1,0|0023ff,,,,||
+-1,-1,1,0|0023ff,,,,||Scenes/Rooms/Crew Quaters/cafeteria.tscn
 [8,2,0]
--1,0,1,-1|0023ff,,,,||
+-1,0,1,-1|0023ff,,,,||Scenes/Rooms/Crew Quaters/cafeteria.tscn
 [9,2,0]
-1,0,-1,-1|0023ff,,,,||
+1,0,-1,-1|0023ff,,,,||Scenes/Rooms/Crew Quaters/cafeteria.tscn
 [7,1,0]
-1,0,0,-1|0023ff,,,,||
+1,0,0,-1|0023ff,,,,||Scenes/Rooms/Crew Quaters/entryway_cq.tscn
 [7,2,0]
-1,0,0,0|0023ff,,,,|2|
+1,0,0,0|0023ff,,,,|2|Scenes/Rooms/Crew Quaters/kitchen_cq.tscn
 [7,0,0]
--1,-1,0,0|0023ff,,,,||
+-1,-1,0,0|0023ff,,,,||Scenes/Rooms/Crew Quaters/entryway_cq.tscn
 [8,0,0]
--1,0,-1,0|0023ff,,,,||
+-1,0,-1,0|0023ff,,,,||Scenes/Rooms/Crew Quaters/entryway_cq.tscn
 [9,0,0]
--1,0,-1,1|0023ff,,,,||
+-1,0,-1,1|0023ff,,,,||Scenes/Rooms/Crew Quaters/entryway_cq.tscn
 [11,0,0]
-0,0,1,0|0023ff,,,,|3|
+0,0,1,0|0023ff,,,,|3|Scenes/Rooms/Crew Quaters/crew_quarters_east_save_cq.tscn
 [10,0,0]
-0,0,-1,0|0023ff,,,,||
+1,0,-1,0|0023ff,,,,||Scenes/Rooms/Crew Quaters/entryway_cq.tscn
 [11,-1,0]
 0,0,1,1|ffb400,,,,||
 [11,-2,0]
@@ -326,88 +326,88 @@ $ln;Demo Level;NewMap
 [8,-1,0]
 0,0,0,-1|ffb400,,,,||
 [7,3,0]
--1,0,1,0|0023ff,,,,||
+-1,0,1,0|0023ff,,,,||Scenes/Rooms/Crew Quaters/cryo_room.tscn
 [8,3,0]
--1,0,-1,0|0023ff,,,,||
+-1,0,-1,0|0023ff,,,,||Scenes/Rooms/Crew Quaters/cryo_room.tscn
 [9,3,0]
-0,0,-1,0|0023ff,,,,||
+0,0,-1,0|0023ff,,,,||Scenes/Rooms/Crew Quaters/cryo_room.tscn
 [6,0,0]
-0,-1,-1,0|0017a2,,,,||
+0,-1,-1,0|0017a2,,,,||Scenes/Rooms/Crew Quaters/cross_roads_cq.tscn
 [6,1,0]
-0,-1,1,-1|0017a2,,,,||
+0,-1,1,-1|0017a2,,,,||Scenes/Rooms/Crew Quaters/cross_roads_cq.tscn
 [6,2,0]
-0,-1,0,-1|0017a2,,,,||
+0,-1,0,-1|0017a2,,,,||Scenes/Rooms/Crew Quaters/cross_roads_cq.tscn
 [6,3,0]
-0,-1,0,-1|0017a2,,,,||
+0,-1,0,-1|0017a2,,,,||Scenes/Rooms/Crew Quaters/cross_roads_cq.tscn
 [6,4,0]
-1,-1,1,-1|0017a2,,,,||
+1,-1,1,-1|0017a2,,,,||Scenes/Rooms/Crew Quaters/cross_roads_cq.tscn
 [7,4,0]
--1,0,0,0|0023ff,,,,||
+-1,0,0,0|0023ff,,,,||Scenes/Rooms/Crew Quaters/storage_cq.tscn
 [8,4,0]
-0,0,-1,0|0023ff,,,,|2|
+0,0,-1,0|0023ff,,,,|2|Scenes/Rooms/Crew Quaters/storage_cq.tscn
 [9,4,0]
-0,0,0,0|0023ff,,,,|4|
+0,0,0,0|0023ff,,,,|4|Scenes/Rooms/Crew Quaters/crew_quarters_map.tscn
 [7,5,0]
-0,-1,0,0|0023ff,,,,||
+4,-1,0,0|0023ff,,,,||Scenes/Rooms/Crew Quaters/sewage_treatment_plant_cq.tscn
 [7,6,0]
--1,0,1,-1|0023ff,,,,||
+-1,0,1,-1|0023ff,,,,||Scenes/Rooms/Crew Quaters/sewage_treatment_plant_cq.tscn
 [8,6,0]
--1,0,-1,0|0023ff,,,,||
+-1,0,-1,0|0023ff,,,,||Scenes/Rooms/Crew Quaters/sewage_treatment_plant_cq.tscn
 [9,6,0]
--1,0,-1,-1|0023ff,,,,||
+-1,0,-1,-1|0023ff,,,,||Scenes/Rooms/Crew Quaters/sewage_treatment_plant_cq.tscn
 [9,5,0]
--1,-1,0,0|0023ff,,,,||
+-1,-1,0,0|0023ff,,,,||Scenes/Rooms/Crew Quaters/sewage_treatment_plant_cq.tscn
 [10,5,0]
-0,-1,-1,0|0023ff,,,,||
+1,-1,-1,0|0023ff,,,,||Scenes/Rooms/Crew Quaters/sewage_treatment_plant_cq.tscn
 [10,6,0]
-1,0,-1,-1|0023ff,,,,||
+1,0,-1,-1|0023ff,,,,||Scenes/Rooms/Crew Quaters/sewage_treatment_plant_cq.tscn
 [8,5,0]
-0,0,4,0|0017a2,,,,|0|
+0,0,4,0|0017a2,,,,|0|Scenes/Rooms/Crew Quaters/ship_operations_room_cq.tscn
 [6,5,0]
-0,1,0,-1|0017a2,,,,||
+0,1,0,-1|0017a2,,,,||Scenes/Rooms/Crew Quaters/cross_roads_cq.tscn
 [6,6,0]
-0,0,0,1|0017a2,,,,||
+1,0,0,1|0017a2,,,,||Scenes/Rooms/Crew Quaters/sewage_access.tscn
 [5,1,0]
-1,-1,0,0|0017a2,,,,||
+1,-1,0,0|0017a2,,,,||Scenes/Rooms/Crew Quaters/green_room_cq.tscn
 [5,2,0]
-0,-1,1,-1|0017a2,,,,||
+0,-1,1,-1|0017a2,,,,||Scenes/Rooms/Crew Quaters/green_room_cq.tscn
 [5,3,0]
-0,0,1,-1|0017a2,,,,||
+0,0,1,-1|0017a2,,,,||Scenes/Rooms/Crew Quaters/green_room_cq.tscn
 [4,3,0]
-1,-1,0,0|0017a2,,,,||
+1,-1,0,0|0017a2,,,,||Scenes/Rooms/Crew Quaters/engine_room_cq.tscn
 [4,4,0]
-0,-1,0,-1|0017a2,,,,||
+0,-1,0,-1|0017a2,,,,||Scenes/Rooms/Crew Quaters/engine_room_cq.tscn
 [4,5,0]
-0,-1,0,-1|0017a2,,,,||
+0,-1,0,-1|0017a2,,,,||Scenes/Rooms/Crew Quaters/engine_room_cq.tscn
 [4,6,0]
-1,0,0,-1|0017a2,,,,||
+1,0,0,-1|0017a2,,,,||Scenes/Rooms/Crew Quaters/engine_room_cq.tscn
 [5,5,0]
-0,-1,0,0|0017a2,,,,|0|
+0,-1,0,0|0017a2,,,,|0|Scenes/Rooms/Crew Quaters/managers_office_cq.tscn
 [5,6,0]
-0,0,1,-1|0017a2,,,,||
+0,0,1,-1|0017a2,,,,||Scenes/Rooms/Crew Quaters/managers_office_cq.tscn
 [5,0,0]
--1,0,0,0|0017a2,,,,|0|
+-1,0,0,0|0017a2,,,,|0|Scenes/Rooms/Crew Quaters/cross_roads_cq.tscn
 [3,2,0]
--1,0,-1,0|0017a2,,,,|0|
+-1,0,-1,0|0017a2,,,,|0|Scenes/Rooms/Crew Quaters/armory_cq.tscn
 [4,2,0]
-1,0,-1,0|0017a2,,,,||
+1,0,-1,0|0017a2,,,,||Scenes/Rooms/Crew Quaters/armory_cq.tscn
 [5,4,0]
-1,0,0,0|0023ff,,,,|3|
+1,0,0,0|0023ff,,,,|3|Scenes/Rooms/Crew Quaters/crew_quarters_west_save_cq.tscn
 [2,2,0]
--1,0,0,0|0017a2,,ffffff,,||
+-1,0,0,0|0017a2,,ffffff,,||Scenes/Rooms/Crew Quaters/armory_cq.tscn
 [12,4,0]
--1,0,1,0|0017a2,,,,||
+-1,0,1,0|0017a2,,,,||Scenes/Rooms/Crew Quaters/shower_access_cq.tscn
 [13,4,0]
-1,0,-1,0|0017a2,,,,||
+1,0,-1,0|0017a2,,,,||Scenes/Rooms/Crew Quaters/shower_access_cq.tscn
 [14,4,0]
-0,0,1,0|0017a2,,,,|0|
+0,0,1,0|0017a2,,,,|0|Scenes/Rooms/Crew Quaters/showers_cq.tscn
 [11,6,0]
--1,0,1,0|0017a2,,,,||
+-1,0,1,0|0017a2,,,,||Scenes/Rooms/Crew Quaters/recycling_center.tscn
 [12,6,0]
--1,0,-1,0|0017a2,,,,||
+-1,0,-1,0|0017a2,,,,||Scenes/Rooms/Crew Quaters/recycling_center.tscn
 [13,6,0]
-0,0,-1,-1|0017a2,,,,||
+0,0,-1,-1|0017a2,,,,||Scenes/Rooms/Crew Quaters/recycling_center.tscn
 [12,5,0]
--1,0,0,0|0017a2,,,,|2|
+-1,0,0,0|0017a2,,,,|2|Scenes/Rooms/Crew Quaters/recycling_center.tscn
 [13,5,0]
-0,-1,-1,0|0017a2,,,,||
+0,-1,-1,0|0017a2,,,,||Scenes/Rooms/Crew Quaters/recycling_center.tscn
