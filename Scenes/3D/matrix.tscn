@@ -3,6 +3,7 @@
 [ext_resource type="Shader" uid="uid://seo748jwlhmd" path="res://Shaders/quantizer.gdshader" id="1_hyctl"]
 [ext_resource type="PackedScene" uid="uid://djcmvws6qeiof" path="res://Scenes/3D/test_cube.tscn" id="1_wadox"]
 [ext_resource type="Texture2D" uid="uid://fk20cnv3ce3g" path="res://Textures/Palettes/6_bit_pallet.png" id="2_hyctl"]
+[ext_resource type="PackedScene" uid="uid://w5nmhx6yk6g" path="res://Models/Matrix.glb" id="4_7hv6g"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7hv6g"]
 shader = ExtResource("1_hyctl")
@@ -59,3 +60,6 @@ mesh = SubResource("SphereMesh_hyctl")
 [node name="Bottom Leg Joint" type="MeshInstance3D" parent="SubViewport" unique_id=1644600526]
 transform = Transform3D(0.055439938, 0, 0, 0, 0.07395341, 0, 0, 0, 0.10136266, 0.6632964, -0.20810997, -0.0657078)
 mesh = SubResource("SphereMesh_hyctl")
+
+[node name="Matrix" parent="SubViewport" unique_id=114388929 instance=ExtResource("4_7hv6g")]
+transform = Transform3D(0.02, 0, 0, 0, 0.02, 0, 0, 0, 0.02, 0.6380902, 1.1920929e-07, 0.21366638)

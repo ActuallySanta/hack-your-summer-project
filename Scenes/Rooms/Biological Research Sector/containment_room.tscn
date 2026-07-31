@@ -8,6 +8,100 @@
 [ext_resource type="PackedScene" uid="uid://n4jqhgpueq7f" path="res://Scenes/3D/matrix.tscn" id="7_40eh6"]
 [ext_resource type="PackedScene" uid="uid://c23c0urqh5mm5" path="res://Scenes/Components/ScaledTileMap.tscn" id="7_e1wmb"]
 [ext_resource type="TileSet" uid="uid://b1y41todkrtnk" path="res://Tileset/BioSector.tres" id="8_36xtv"]
+[ext_resource type="PackedScene" path="res://Scenes/Level Elements/hanging_wire_rig.tscn" id="9_36xtv"]
+[ext_resource type="Script" uid="uid://d3d1sfke7spoo" path="res://Scripts/Level Elements/hanging_wire.gd" id="10_tfsr7"]
+
+[sub_resource type="Resource" id="Resource_q31j4"]
+script = ExtResource("10_tfsr7")
+point_a = Vector2(198, 144)
+point_b = Vector2(501, 144)
+length = 365.0
+wind_strength = Vector2(10, 1.5)
+wind_speed = 1.5
+metadata/_custom_type_script = "uid://d3d1sfke7spoo"
+
+[sub_resource type="Resource" id="Resource_36xtv"]
+script = ExtResource("10_tfsr7")
+point_a = Vector2(501, 144)
+point_b = Vector2(300, 144)
+length = 327.4340062442352
+wind_strength = Vector2(10, 1.5)
+wind_speed = 1.4
+metadata/_custom_type_script = "uid://d3d1sfke7spoo"
+
+[sub_resource type="Resource" id="Resource_tfsr7"]
+script = ExtResource("10_tfsr7")
+point_a = Vector2(798, 144)
+point_b = Vector2(501, 144)
+length = 516.0398518712027
+wind_speed = 1.47
+metadata/_custom_type_script = "uid://d3d1sfke7spoo"
+
+[sub_resource type="Resource" id="Resource_50sys"]
+script = ExtResource("10_tfsr7")
+point_a = Vector2(585, 144)
+point_b = Vector2(798, 144)
+length = 477.39103498496115
+wind_speed = 1.22
+wind_phase = 0.45
+metadata/_custom_type_script = "uid://d3d1sfke7spoo"
+
+[sub_resource type="Resource" id="Resource_luf1k"]
+script = ExtResource("10_tfsr7")
+point_a = Vector2(264, 144)
+point_b = Vector2(585, 144)
+length = 581.6364221456461
+wind_speed = 1.5
+metadata/_custom_type_script = "uid://d3d1sfke7spoo"
+
+[sub_resource type="Resource" id="Resource_4t7p3"]
+script = ExtResource("10_tfsr7")
+point_a = Vector2(300, 144)
+point_b = Vector2(744, 144)
+length = 583.1423129282193
+wind_speed = 1.3
+wind_phase = 0.6
+metadata/_custom_type_script = "uid://d3d1sfke7spoo"
+
+[sub_resource type="Resource" id="Resource_xmub5"]
+script = ExtResource("10_tfsr7")
+point_a = Vector2(144, 240)
+point_b = Vector2(300, 144)
+length = 336.77487570018275
+metadata/_custom_type_script = "uid://d3d1sfke7spoo"
+
+[sub_resource type="Resource" id="Resource_drpgc"]
+script = ExtResource("10_tfsr7")
+point_a = Vector2(672, 144)
+point_b = Vector2(144, 192)
+length = 632.3618620543857
+metadata/_custom_type_script = "uid://d3d1sfke7spoo"
+
+[sub_resource type="Resource" id="Resource_pa6ul"]
+script = ExtResource("10_tfsr7")
+point_a = Vector2(585, 144)
+point_b = Vector2(960, 144)
+length = 486.042373520223
+wind_speed = 1.6
+wind_phase = 1.3
+metadata/_custom_type_script = "uid://d3d1sfke7spoo"
+
+[sub_resource type="Resource" id="Resource_jj5pu"]
+script = ExtResource("10_tfsr7")
+point_a = Vector2(687, 528)
+point_b = Vector2(798, 144)
+length = 666.5915442498101
+wind_speed = 1.24
+wind_phase = 0.3
+metadata/_custom_type_script = "uid://d3d1sfke7spoo"
+
+[sub_resource type="Resource" id="Resource_fvfdj"]
+script = ExtResource("10_tfsr7")
+point_a = Vector2(765, 528)
+point_b = Vector2(909, 144)
+length = 497.53906409107276
+wind_speed = 1.5
+metadata/_custom_type_script = "uid://d3d1sfke7spoo"
 
 [node name="ContainmentRoom" type="Node2D" unique_id=1705506379]
 
@@ -65,3 +159,21 @@ script = ExtResource("4_ihd0u")
 horizontal_shift = 1.0
 vertical_shift = 2.0
 occilations_per_second = 0.33
+
+[node name="Wires" type="Node2D" parent="." unique_id=619908329]
+
+[node name="HangingWireRig2" parent="Wires" unique_id=1319207748 instance=ExtResource("9_36xtv")]
+position = Vector2(2071, 0)
+scale = Vector2(-2, 1)
+wires = Array[ExtResource("10_tfsr7")]([SubResource("Resource_q31j4"), SubResource("Resource_36xtv"), SubResource("Resource_tfsr7"), SubResource("Resource_50sys"), SubResource("Resource_luf1k"), SubResource("Resource_4t7p3"), SubResource("Resource_xmub5"), SubResource("Resource_drpgc"), SubResource("Resource_pa6ul"), SubResource("Resource_jj5pu"), SubResource("Resource_fvfdj")])
+color = Color(0.2901961, 0.078431375, 0.050980393, 1)
+shadow_color = Color(0.29836416, 0, 0.025586788, 1)
+tile_map_layer = NodePath("../../Foreground")
+animate_in_editor = true
+
+[node name="HangingWireRig" parent="Wires" unique_id=702299958 instance=ExtResource("9_36xtv")]
+wires = Array[ExtResource("10_tfsr7")]([SubResource("Resource_q31j4"), SubResource("Resource_36xtv"), SubResource("Resource_tfsr7"), SubResource("Resource_50sys"), SubResource("Resource_luf1k"), SubResource("Resource_4t7p3"), SubResource("Resource_xmub5"), SubResource("Resource_drpgc"), SubResource("Resource_pa6ul"), SubResource("Resource_jj5pu"), SubResource("Resource_fvfdj")])
+color = Color(0.5076987, 0.16456649, 0.11719864, 1)
+shadow_color = Color(0.29836416, 0, 0.025586788, 1)
+tile_map_layer = NodePath("../../Foreground")
+animate_in_editor = true

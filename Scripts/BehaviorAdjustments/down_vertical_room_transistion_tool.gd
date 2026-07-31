@@ -1,4 +1,4 @@
-extends Node2D
+class_name DownDoorTool extends Node2D
 
 @onready var InitQuad = $InitialQuadrant
 @onready var BalanceQuad = $BalanceQuadrant
