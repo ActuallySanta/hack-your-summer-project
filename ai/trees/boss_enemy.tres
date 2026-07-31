@@ -44,41 +44,38 @@ children = [SubResource("BTCheckVar_x2qe4"), SubResource("BTPlayAnimation_x2qe4"
 [sub_resource type="BTAction" id="BTAction_kh3r6"]
 script = ExtResource("3_b0xag")
 
-[sub_resource type="BTWait" id="BTWait_wxsuy"]
-duration = 150.0
-
 [sub_resource type="BTSequence" id="BTSequence_wxsuy"]
 custom_name = "Basic Attack"
-children = [SubResource("BTAction_kh3r6"), SubResource("BTWait_wxsuy")]
+children = [SubResource("BTAction_kh3r6")]
 metadata/_weight_ = 2.0
 
 [sub_resource type="BTAction" id="BTAction_0njd2"]
 script = ExtResource("3_b0xag")
 
-[sub_resource type="BTWait" id="BTWait_b0xag"]
-duration = 150.0
-
 [sub_resource type="BTSequence" id="BTSequence_b0xag"]
 custom_name = "Spray Attack"
-children = [SubResource("BTAction_0njd2"), SubResource("BTWait_b0xag")]
+children = [SubResource("BTAction_0njd2")]
 
 [sub_resource type="BTAction" id="BTAction_54iha"]
 script = ExtResource("3_b0xag")
 
-[sub_resource type="BTWait" id="BTWait_kh3r6"]
-duration = 150.0
-
 [sub_resource type="BTSequence" id="BTSequence_kh3r6"]
 custom_name = "Corner Attack"
-children = [SubResource("BTAction_54iha"), SubResource("BTWait_kh3r6")]
+children = [SubResource("BTAction_54iha")]
 
 [sub_resource type="BTProbabilitySelector" id="BTProbabilitySelector_wxsuy"]
 abort_on_failure = true
 custom_name = "Attack Player"
 children = [SubResource("BTSequence_wxsuy"), SubResource("BTSequence_b0xag"), SubResource("BTSequence_kh3r6")]
 
+[sub_resource type="BTWait" id="BTWait_kh3r6"]
+duration = 5.0
+
+[sub_resource type="BTSequence" id="BTSequence_0njd2"]
+children = [SubResource("BTProbabilitySelector_wxsuy"), SubResource("BTWait_kh3r6")]
+
 [sub_resource type="BTSelector" id="BTSelector_x2qe4"]
-children = [SubResource("BTSequence_6jjlm"), SubResource("BTProbabilitySelector_wxsuy")]
+children = [SubResource("BTSequence_6jjlm"), SubResource("BTSequence_0njd2")]
 
 [resource]
 blackboard_plan = SubResource("BlackboardPlan_6jjlm")

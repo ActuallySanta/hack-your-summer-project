@@ -22,7 +22,7 @@ func _tick(delta: float) -> Status:
 			instance.global_position = user.attack_point.global_position
 			agent.add_child(instance)
 			instance.reparent(agent.get_tree().current_scene)
-			instance.linear_velocity = Vector2.RIGHT.rotated(randf()*TAU) * projectileSpeed
+			instance.linear_velocity = instance.global_position.direction_to(PlayerManager.player.global_position)*projectileSpeed
 			return Status.SUCCESS
 		_:
 			print("No Attack Type Selected")

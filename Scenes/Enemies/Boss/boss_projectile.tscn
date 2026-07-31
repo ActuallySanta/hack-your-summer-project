@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://m80a5sniejik" path="res://Scripts/Enemies/Boss/boss_projectile.gd" id="1_0toso"]
 [ext_resource type="Texture2D" uid="uid://bu60fnslj7mj3" path="res://Sprites/Boss/BoingBoingEye.png" id="1_jlrcw"]
 [ext_resource type="Script" uid="uid://ctc17oyja7fup" path="res://Scripts/Combat/hitbox.gd" id="2_ebybx"]
+[ext_resource type="PackedScene" uid="uid://djmeyycufny61" path="res://Scenes/Components/Hurtbox.tscn" id="4_1rbge"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_0toso"]
 friction = 0.0
@@ -14,6 +15,7 @@ radius = 37.12142
 [node name="Boss Projectile" type="RigidBody2D" unique_id=1665872422]
 physics_material_override = SubResource("PhysicsMaterial_0toso")
 gravity_scale = 0.0
+linear_damp_mode = 1
 script = ExtResource("1_0toso")
 
 [node name="Visual" type="Sprite2D" parent="." unique_id=1218230438]
@@ -31,3 +33,18 @@ shape = SubResource("CircleShape2D_0toso")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=928854332]
 shape = SubResource("CircleShape2D_0toso")
+
+[node name="BulletLifeTime" type="Timer" parent="." unique_id=661273203]
+wait_time = 5.0
+autostart = true
+
+[node name="Hurtbox" parent="." unique_id=470143312 instance=ExtResource("4_1rbge")]
+collision_layer = 8
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=406089700]
+shape = SubResource("CircleShape2D_0toso")
+
+[connection signal="on_hit" from="Hitbox" to="." method="_on_hitbox_on_hit"]
+[connection signal="timeout" from="BulletLifeTime" to="." method="_on_bullet_life_time_timeout"]
+[connection signal="hit" from="Hurtbox" to="." method="_on_hurtbox_hit"]

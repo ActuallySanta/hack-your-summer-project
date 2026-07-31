@@ -13,7 +13,7 @@ class_name BossEnemy
 @onready var upper_teeth_attack: TileMapLayer = $"Upper Teeth Attack"
 
 @onready var hurtbox: Hurtbox = $BossVisual/Hurtbox
-@onready var attack_point: Node2D = $BossVisual/AttackPoint
+@onready var attack_point: Node2D = $BossVisual/Hurtbox/AttackPoint
 
 
 var minEyeCount := 3
