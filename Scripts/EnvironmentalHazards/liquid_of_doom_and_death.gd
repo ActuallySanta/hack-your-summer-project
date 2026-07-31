@@ -1,8 +1,5 @@
 extends TileMapLayer
 
-
-@export_range(0,10,0.1,"or_greater") var timeBetweenDamage : float
-@export var damageDealt : float
 @onready var areaCollider : CollisionShape2D = $Area2D/CollisionShape2D
 
 var is_player_in_doom : bool
