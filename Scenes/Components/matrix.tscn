@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://eja71qfkvm6t"]
+
+[ext_resource type="PackedScene" uid="uid://w5nmhx6yk6g" path="res://Models/Matrix.glb" id="1_hotda"]
+
+[node name="Matrix" unique_id=1327067418 instance=ExtResource("1_hotda")]

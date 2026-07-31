@@ -1,0 +1,4 @@
+[gd_scene format=3 uid="uid://c23c0urqh5mm5"]
+
+[node name="TileMapLayer" type="TileMapLayer" unique_id=2101826522]
+scale = Vector2(3, 3)

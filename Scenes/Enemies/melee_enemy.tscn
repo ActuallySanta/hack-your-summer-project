@@ -4,6 +4,7 @@
 [ext_resource type="BehaviorTree" uid="uid://d1xmalrj37niq" path="res://ai/trees/melee_enemy.tres" id="2_ony87"]
 [ext_resource type="AudioStream" uid="uid://b8jk1ibtjk5cx" path="res://Sounds/Entities/Enemies/Machines/HeavyFootSteps.wav" id="6_0u8ws"]
 [ext_resource type="AudioStream" uid="uid://dlmq2r0g7qa57" path="res://Sounds/Entities/Enemies/Machines/RobotHit.wav" id="6_yxfb2"]
+[ext_resource type="Script" uid="uid://ctc17oyja7fup" path="res://Scripts/Combat/hitbox.gd" id="8_ptuny"]
 [ext_resource type="Texture2D" uid="uid://b8o1up866gpb4" path="res://Sprites/SpaceStation_Android_Sheet.png" id="14_dn20t"]
 [ext_resource type="PackedScene" uid="uid://liprjmtialrh" path="res://Scenes/Components/Hitbox.tscn" id="18_jgjap"]
 [ext_resource type="PackedScene" uid="uid://djmeyycufny61" path="res://Scenes/Components/Hurtbox.tscn" id="19_jgjap"]
@@ -194,6 +195,7 @@ vframes = 4
 frame = 8
 
 [node name="Physics Body" type="CollisionShape2D" parent="." unique_id=2103185324]
+visible = false
 position = Vector2(-2, -2)
 shape = SubResource("CapsuleShape2D_mgs6e")
 
@@ -213,6 +215,7 @@ visible = false
 target_position = Vector2(150, 0)
 
 [node name="Hurtbox" parent="." unique_id=470143312 instance=ExtResource("19_jgjap")]
+visible = false
 collision_layer = 4
 
 [node name="Shape" type="CollisionShape2D" parent="Hurtbox" unique_id=326280550]
@@ -224,6 +227,7 @@ wait_time = 0.25
 
 [node name="Melee Hitbox" parent="." unique_id=1651839670 instance=ExtResource("18_jgjap")]
 process_mode = 4
+visible = false
 collision_mask = 2
 knockback_strength = 320.0
 knockback_duration = 0.1
@@ -234,11 +238,13 @@ rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_eyhix")
 
 [node name="GroundCheck" type="ShapeCast2D" parent="." unique_id=1523792078]
+visible = false
 position = Vector2(48, 0)
 shape = SubResource("CircleShape2D_xxn7r")
 collide_with_areas = true
 
 [node name="Target Range Check" type="ShapeCast2D" parent="." unique_id=1434664269]
+visible = false
 position = Vector2(48, 22)
 shape = SubResource("CircleShape2D_0u8ws")
 target_position = Vector2(250, 0)
@@ -250,5 +256,13 @@ stream = ExtResource("6_yxfb2")
 
 [node name="MoveSFX" type="AudioStreamPlayer2D" parent="." unique_id=1798124624]
 stream = ExtResource("6_0u8ws")
+
+[node name="Contact Damage Hitbox" type="Area2D" parent="." unique_id=504608643]
+script = ExtResource("8_ptuny")
+metadata/_custom_type_script = "uid://ctc17oyja7fup"
+
+[node name="Shape" type="CollisionShape2D" parent="Contact Damage Hitbox" unique_id=870296521]
+position = Vector2(-2, -2)
+shape = SubResource("CapsuleShape2D_mgs6e")
 
 [connection signal="on_hit" from="Melee Hitbox" to="." method="_on_melee_hitbox_on_hit"]

@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://bp1m57kp2adfy"]
+
+[ext_resource type="Script" uid="uid://bolhkxg50t11x" path="res://Scripts/Animation/tile_map_layer_hider.gd" id="1_egnhh"]
+
+[node name="TileMapLayerHider" type="Area2D" unique_id=1871147111]
+collision_mask = 2
+script = ExtResource("1_egnhh")

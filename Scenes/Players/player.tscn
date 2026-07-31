@@ -1235,7 +1235,7 @@ z_index = 5
 collision_layer = 2
 collision_mask = 17
 script = ExtResource("1_gfkdj")
-moveSpeed = 350.0
+moveSpeed = 1000.0
 crouchSpeedMult = 0.35
 climbingSpeed = 250
 jumpForce = 800.0
@@ -1244,6 +1244,7 @@ wallJumpBufferTime = 0.1
 baseHealth = 3
 swingOffset = 80.0
 swingScene = ExtResource("2_xxqkx")
+bulletOffset = 10.0
 bulletScene = ExtResource("3_j8xm3")
 knockbackDI = 400.0
 
@@ -1290,7 +1291,7 @@ shape = SubResource("RectangleShape2D_gymyn")
 disabled = true
 
 [node name="JumpCollision" type="CollisionShape2D" parent="." unique_id=931990881]
-position = Vector2(0, -3)
+position = Vector2(0, 21)
 shape = SubResource("RectangleShape2D_j8xm3")
 disabled = true
 

@@ -8,6 +8,7 @@
 size = Vector2(0, 0)
 
 [node name="Acid" type="TileMapLayer" unique_id=149797592]
+scale = Vector2(3, 3)
 tile_set = ExtResource("1_fe33h")
 script = ExtResource("2_osni7")
 

@@ -1,8 +1,11 @@
 [gd_scene format=3 uid="uid://ne13j5tl7gbr"]
 
+[ext_resource type="Script" uid="uid://utng5u4e7r4p" path="res://Scripts/UI/player_hud.gd" id="1_phud"]
 [ext_resource type="PackedScene" uid="uid://bnwse5pqyludv" path="res://Scenes/UI/dialogue_box.tscn" id="1_vkk4g"]
+[ext_resource type="Script" uid="uid://bx1rfwmx00a2i" path="res://Scripts/UI/hud_minimap.gd" id="2_hudmm"]
 [ext_resource type="PackedScene" uid="uid://dch8dyylb7526" path="res://addons/MetroidvaniaSystem/Template/Nodes/Minimap.tscn" id="2_y31ga"]
 [ext_resource type="PackedScene" uid="uid://c214glttpaw83" path="res://Scenes/UI/player_health.tscn" id="3_jh2mb"]
+[ext_resource type="PackedScene" path="res://Scenes/UI/full_map.tscn" id="4_fullmap"]
 
 [node name="Player HUD" type="Control" unique_id=890844106]
 layout_mode = 3
@@ -11,6 +14,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_phud")
 
 [node name="Dialogue Box Container" parent="." unique_id=973154834 instance=ExtResource("1_vkk4g")]
 layout_mode = 1
@@ -23,7 +27,27 @@ anchor_right = 1.0
 offset_left = -160.0
 offset_right = 0.0
 grow_horizontal = 0
+script = ExtResource("2_hudmm")
+animation_duration = 0.2
+hide_when_closed = true
 smooth_scroll = false
 area = Vector2i(5, 3)
 
 [node name="PlayerHealth" parent="." unique_id=1360041974 instance=ExtResource("3_jh2mb")]
+
+[node name="FullMap" parent="." unique_id=1902447311 instance=ExtResource("4_fullmap")]
+custom_minimum_size = Vector2(960, 576)
+layout_mode = 1
+offset_left = 96.0
+offset_top = 48.0
+offset_right = 1056.0
+offset_bottom = 624.0
+scroll_speed = null
+scroll_limit_up = null
+scroll_limit_down = null
+scroll_limit_left = null
+scroll_limit_right = null
+scroll_action_up = null
+scroll_action_down = null
+scroll_action_left = null
+scroll_action_right = null

@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://ji4q20pb7lkf" path="res://Scripts/Enemies/ranged_enemy.gd" id="1_yfht6"]
 [ext_resource type="BehaviorTree" uid="uid://bk3pchousfnbu" path="res://ai/trees/ranged_enemy.tres" id="2_qj8iq"]
 [ext_resource type="Texture2D" uid="uid://du0akvrhemp8c" path="res://Sprites/Characters/Enemy SpriteSheets/Ranged_Andriod.png" id="3_8o70e"]
+[ext_resource type="Script" uid="uid://ctc17oyja7fup" path="res://Scripts/Combat/hitbox.gd" id="5_sy4jm"]
 [ext_resource type="PackedScene" uid="uid://djmeyycufny61" path="res://Scenes/Components/Hurtbox.tscn" id="18_6j4xf"]
 
 [sub_resource type="BlackboardPlan" id="BlackboardPlan_be0ij"]
@@ -162,6 +163,7 @@ frame = 21
 region_rect = Rect2(0, 0, 64, 64)
 
 [node name="Physics Body" type="CollisionShape2D" parent="." unique_id=281236112]
+visible = false
 position = Vector2(8, 3)
 shape = SubResource("CapsuleShape2D_mgs6e")
 
@@ -181,37 +183,39 @@ visible = false
 target_position = Vector2(150, 0)
 
 [node name="Hurtbox" parent="." unique_id=470143312 instance=ExtResource("18_6j4xf")]
+visible = false
 collision_layer = 4
 
 [node name="Shape" type="CollisionShape2D" parent="Hurtbox" unique_id=326280550]
 position = Vector2(8, 3)
 shape = SubResource("CapsuleShape2D_mgs6e")
 
-[node name="Shape2" type="CollisionShape2D" parent="Hurtbox" unique_id=1546411995]
-position = Vector2(8, 3)
-shape = SubResource("CapsuleShape2D_mgs6e")
-
-[node name="Shape3" type="CollisionShape2D" parent="Hurtbox" unique_id=82821954]
+[node name="Shape2" type="CollisionShape2D" parent="Hurtbox" unique_id=1512523289]
 position = Vector2(8, 3)
 shape = SubResource("CapsuleShape2D_mgs6e")
 
 [node name="GroundCheck" type="ShapeCast2D" parent="." unique_id=1574451794]
+visible = false
 position = Vector2(48, 52)
 shape = SubResource("CircleShape2D_6j4xf")
 collide_with_areas = true
 
 [node name="Target Range Check" type="ShapeCast2D" parent="." unique_id=294550597]
+visible = false
 position = Vector2(48, 22)
 shape = SubResource("CircleShape2D_6j4xf")
 target_position = Vector2(250, 0)
 collision_mask = 2
 collide_with_areas = true
 
-[node name="Hurtbox2" parent="." unique_id=1355415092 instance=ExtResource("18_6j4xf")]
-collision_layer = 4
-
-[node name="Hurtbox3" parent="." unique_id=1651731871 instance=ExtResource("18_6j4xf")]
-collision_layer = 4
-
 [node name="FiringPoint" type="Node2D" parent="." unique_id=956708712]
+visible = false
 position = Vector2(44, -8)
+
+[node name="Contact Damage Hitbox" type="Area2D" parent="." unique_id=1261742805]
+script = ExtResource("5_sy4jm")
+metadata/_custom_type_script = "uid://ctc17oyja7fup"
+
+[node name="Shape" type="CollisionShape2D" parent="Contact Damage Hitbox" unique_id=786773970]
+position = Vector2(8, 3)
+shape = SubResource("CapsuleShape2D_mgs6e")

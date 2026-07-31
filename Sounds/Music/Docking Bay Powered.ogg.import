@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://dm2y02urmwx6k"
+path="res://.godot/imported/Docking Bay Powered.ogg-11bef51d257cd0816a86d05b6d7cbb83.oggvorbisstr"
+
+[deps]
+
+source_file="res://Sounds/Music/Docking Bay Powered.ogg"
+dest_files=["res://.godot/imported/Docking Bay Powered.ogg-11bef51d257cd0816a86d05b6d7cbb83.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

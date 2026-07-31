@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://ci0kv7wdsqpnc" path="res://Scenes/Rooms/CommonRoomComponents/locked_access_door.tscn" id="4_iy0ho"]
 [ext_resource type="Script" uid="uid://bwg3jvu3db8xy" path="res://Scripts/Level Elements/door_trigger.gd" id="5_ahjjv"]
 [ext_resource type="PackedScene" uid="uid://scnrv60doh5o" path="res://Scenes/Components/down_vertical_room_transistion_tool.tscn" id="6_dhtb3"]
-[ext_resource type="Script" uid="uid://6pnsqk3ndc0" path="res://Scripts/BehaviorAdjustments/camera_path_boundary.gd" id="7_4sy25"]
+[ext_resource type="Script" uid="uid://b3xkq7wnva8y" path="res://Scripts/BehaviorAdjustments/camera_axis_region.gd" id="7_4sy25"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dhtb3"]
 size = Vector2(136.66675, 255.33334)
@@ -55,6 +55,7 @@ position = Vector2(576, 4632)
 
 [node name="Area2D" type="Area2D" parent="." unique_id=999680676]
 script = ExtResource("7_4sy25")
+preserved_axis = 1
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area2D" unique_id=441126899]
 polygon = PackedVector2Array(1729, 337, 904, 337, 577, 665, 577, 4369, 575, 4369, 575, 335, 1729, 335)

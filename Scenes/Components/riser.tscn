@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://cla3jfy66axw6"]
 
-[ext_resource type="Script" uid="uid://c7chwo6ql6udc" path="res://Scripts/oscillator.gd" id="1_6f0fo"]
+[ext_resource type="Script" uid="uid://whdtoijov1so" path="res://Scripts/occilator.gd" id="1_6f0fo"]
 
 [node name="Riser" type="Node2D" unique_id=1020301332]
 script = ExtResource("1_6f0fo")
-height = 20.0
-hover_cycle_seconds = 10.0
+vertical_shift = 16.0
+occilations_per_second = 4.0

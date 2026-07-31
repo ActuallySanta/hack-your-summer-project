@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://bnpsyl86ggbjm"]
 
 [ext_resource type="SpriteFrames" uid="uid://drcq1lb0yfb1f" path="res://Sprites/Health_Pack_frames.tres" id="1_shdog"]
-[ext_resource type="Script" uid="uid://c7chwo6ql6udc" path="res://Scripts/oscillator.gd" id="2_jqxec"]
 [ext_resource type="Script" uid="uid://day882ajb72fn" path="res://Scripts/Pickups/HealthRune.gd" id="2_xq6nv"]
+[ext_resource type="Script" uid="uid://whdtoijov1so" path="res://Scripts/occilator.gd" id="3_jqxec"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_xq6nv"]
 radius = 22.022715
@@ -12,7 +12,7 @@ collision_layer = 23
 collision_mask = 23
 script = ExtResource("2_xq6nv")
 type = 1
-use_custom_id = true
+use_icon = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=825643651]
 shape = SubResource("CircleShape2D_xq6nv")
@@ -22,4 +22,4 @@ sprite_frames = ExtResource("1_shdog")
 animation = &"Rotate"
 autoplay = "Rotate"
 frame_progress = 0.18109939
-script = ExtResource("2_jqxec")
+script = ExtResource("3_jqxec")

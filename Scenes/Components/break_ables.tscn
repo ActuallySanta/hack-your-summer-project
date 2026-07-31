@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://ba6450qhwuqee"]
+
+[ext_resource type="TileSet" uid="uid://br5esnmcj21yj" path="res://Tileset/Breakable.tres" id="1_juyxd"]
+[ext_resource type="Script" uid="uid://cy4e0p8pj7dp6" path="res://Scripts/Animation/break_ables.gd" id="2_xxoxe"]
+
+[node name="BreakAbles" type="TileMapLayer" unique_id=1463144321]
+scale = Vector2(3, 3)
+tile_set = ExtResource("1_juyxd")
+navigation_enabled = false
+script = ExtResource("2_xxoxe")
