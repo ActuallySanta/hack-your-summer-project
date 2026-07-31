@@ -34,7 +34,7 @@ script = ExtResource("1_viofv")
 position = Vector2(-843, 982)
 
 [node name="ContainmentRoom" parent="Upper BRS" unique_id=1705506379 instance=ExtResource("1_hdue2")]
-position = Vector2(305, -362)
+position = Vector2(309, -362)
 
 [node name="AnalysisRoomBRS" parent="Upper BRS" unique_id=1019046132 instance=ExtResource("2_nml2s")]
 position = Vector2(309, 310)
