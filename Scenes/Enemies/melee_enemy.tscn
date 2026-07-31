@@ -194,7 +194,6 @@ vframes = 4
 frame = 8
 
 [node name="Physics Body" type="CollisionShape2D" parent="." unique_id=2103185324]
-visible = false
 position = Vector2(-2, -2)
 shape = SubResource("CapsuleShape2D_mgs6e")
 
@@ -214,7 +213,6 @@ visible = false
 target_position = Vector2(150, 0)
 
 [node name="Hurtbox" parent="." unique_id=470143312 instance=ExtResource("19_jgjap")]
-visible = false
 collision_layer = 4
 
 [node name="Shape" type="CollisionShape2D" parent="Hurtbox" unique_id=326280550]
@@ -226,7 +224,6 @@ wait_time = 0.25
 
 [node name="Melee Hitbox" parent="." unique_id=1651839670 instance=ExtResource("18_jgjap")]
 process_mode = 4
-visible = false
 collision_mask = 2
 knockback_strength = 320.0
 knockback_duration = 0.1
@@ -237,13 +234,11 @@ rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_eyhix")
 
 [node name="GroundCheck" type="ShapeCast2D" parent="." unique_id=1523792078]
-visible = false
 position = Vector2(48, 0)
 shape = SubResource("CircleShape2D_xxn7r")
 collide_with_areas = true
 
 [node name="Target Range Check" type="ShapeCast2D" parent="." unique_id=1434664269]
-visible = false
 position = Vector2(48, 22)
 shape = SubResource("CircleShape2D_0u8ws")
 target_position = Vector2(250, 0)

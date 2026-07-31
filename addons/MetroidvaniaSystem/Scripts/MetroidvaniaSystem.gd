@@ -220,9 +220,6 @@ func remove_custom_marker(coords: Vector3i, symbol_id: int):
 ## [br][br][param object] is the object that needs storing, [param stored_callback] is the callback that will be automatically called by this method when the object was already stored (defaults to [method Node.queue_free] for nodes). [param map_marker] is the ID of the symbol that will be added to the cell. If no symbol is provided, [member MapTheme.uncollected_item_symbol] will be used.
 ## [br][br][b]Note:[/b] [method get_object_id] is used to determine object's ID. You can make the same object appear in multiple places if you assign them custom ID (e.g. to make a collectible that changes its location after an event). [method get_object_coords] is used to determine where the marker should appear.
 func register_storable_object_with_marker(object: Object, stored_callback := Callable(), map_marker := DEFAULT_SYMBOL) -> bool:
-	if save_data == null:
-		return false
-	
 	if stored_callback.is_null():
 		if object is Node:
 			stored_callback = object.queue_free

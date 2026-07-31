@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cnrub5aht5y2k" path="res://Scripts/pickup.gd" id="1_2s1fn"]
 [ext_resource type="Texture2D" uid="uid://cj7bj3kv4kb3c" path="res://Sprites/Jetpack/jetpack_isOn_0.png" id="2_2lx4b"]
-[ext_resource type="Script" uid="uid://whdtoijov1so" path="res://Scripts/occilator.gd" id="3_2lx4b"]
+[ext_resource type="Script" uid="uid://c7chwo6ql6udc" path="res://Scripts/oscillator.gd" id="3_f85tt"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2lx4b"]
 size = Vector2(32, 32)
@@ -23,4 +23,4 @@ shape = SubResource("RectangleShape2D_2lx4b")
 position = Vector2(0, 3)
 scale = Vector2(2, 2)
 texture = ExtResource("2_2lx4b")
-script = ExtResource("3_2lx4b")
+script = ExtResource("3_f85tt")

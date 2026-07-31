@@ -1,0 +1,104 @@
+[gd_scene format=3 uid="uid://dfqqikkhf2oeu"]
+
+[ext_resource type="Texture2D" uid="uid://dthceys0n1k5a" path="res://Sprites/EnvironmentalDamages/TeethGrab.png" id="1_41lnf"]
+[ext_resource type="Script" uid="uid://bkmhqrn0opt6q" path="res://Scripts/EnvironmentalHazards/teeth_grab_animator.gd" id="2_e1dqu"]
+[ext_resource type="Script" uid="uid://ctc17oyja7fup" path="res://Scripts/Combat/hitbox.gd" id="3_fk5gu"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fk5gu"]
+atlas = ExtResource("1_41lnf")
+region = Rect2(16, 0, 16, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1mn30"]
+atlas = ExtResource("1_41lnf")
+region = Rect2(32, 0, 16, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xknnr"]
+atlas = ExtResource("1_41lnf")
+region = Rect2(48, 0, 16, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5jh7l"]
+atlas = ExtResource("1_41lnf")
+region = Rect2(64, 0, 16, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fpokq"]
+atlas = ExtResource("1_41lnf")
+region = Rect2(80, 0, 16, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_asbjh"]
+atlas = ExtResource("1_41lnf")
+region = Rect2(96, 0, 16, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fahd2"]
+atlas = ExtResource("1_41lnf")
+region = Rect2(112, 0, 16, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_67v38"]
+atlas = ExtResource("1_41lnf")
+region = Rect2(128, 0, 16, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_57jse"]
+atlas = ExtResource("1_41lnf")
+region = Rect2(144, 0, 16, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e1dqu"]
+atlas = ExtResource("1_41lnf")
+region = Rect2(0, 0, 16, 48)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_a67xf"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fk5gu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1mn30")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xknnr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5jh7l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fpokq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_asbjh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fahd2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_67v38")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_57jse")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e1dqu")
+}],
+"loop": false,
+"name": &"Bite",
+"speed": 10.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1mn30"]
+size = Vector2(14, 28)
+
+[node name="TeethGrab" type="AnimatedSprite2D" unique_id=656100795]
+scale = Vector2(3, 3)
+sprite_frames = SubResource("SpriteFrames_a67xf")
+animation = &"Bite"
+frame_progress = 0.7785712
+script = ExtResource("2_e1dqu")
+queueTimeSeconds = null
+loopTimeSeconds = null
+startWaiting = null
+
+[node name="Hitbox" type="Area2D" parent="." unique_id=760373872]
+script = ExtResource("3_fk5gu")
+metadata/_custom_type_script = "uid://ctc17oyja7fup"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=2086488917]
+position = Vector2(0, -6)
+shape = SubResource("RectangleShape2D_1mn30")

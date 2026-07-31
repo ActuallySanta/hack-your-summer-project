@@ -3,5 +3,4 @@
 [ext_resource type="TileSet" uid="uid://bu22bwu2vygi2" path="res://Tileset/EnvironmentalDamages.tres" id="1_05ryq"]
 
 [node name="TeethPersistant" type="TileMapLayer" unique_id=424263396]
-scale = Vector2(3, 3)
 tile_set = ExtResource("1_05ryq")

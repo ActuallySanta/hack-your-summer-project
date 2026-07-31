@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://nd6r1x1d5xjf"
-path="res://.godot/imported/LowerBRSTiles.png-ad1835466585e93e7f512347d7021b5d.ctex"
+uid="uid://61g2vrueq1fd"
+path="res://.godot/imported/BioReSector.png-cc2eef20f1df185d7e04024174807a8c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Textures/Tiles/MVPSprites/LowerBRSTiles.png"
-dest_files=["res://.godot/imported/LowerBRSTiles.png-ad1835466585e93e7f512347d7021b5d.ctex"]
+source_file="res://Textures/Tiles/BioReSector.png"
+dest_files=["res://.godot/imported/BioReSector.png-cc2eef20f1df185d7e04024174807a8c.ctex"]
 
 [params]
 

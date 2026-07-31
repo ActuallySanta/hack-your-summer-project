@@ -5,7 +5,7 @@
 [ext_resource type="TileSet" uid="uid://chq502fexv5m" path="res://Tileset/DockingBay.tres" id="2_d0xhl"]
 [ext_resource type="PackedScene" uid="uid://cdsjsvuyovomn" path="res://Scenes/tile_map_for_rooms.tscn" id="2_mrovi"]
 [ext_resource type="PackedScene" uid="uid://k8xepgfoggiq" path="res://Scenes/Dialogue System/dialogue_trigger.tscn" id="4_x1qgj"]
-[ext_resource type="PackedScene" uid="uid://b1ujnmnbsxx87" path="res://Scenes/Rooms/CommonRoomComponents/access_button_right.tscn" id="5_2fcpq"]
+[ext_resource type="PackedScene" uid="uid://b1ujnmnbsxx87" path="res://Scenes/Rooms/CommonRoomComponents/access_button.tscn" id="5_2fcpq"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_x1qgj"]
 size = Vector2(20, 344)

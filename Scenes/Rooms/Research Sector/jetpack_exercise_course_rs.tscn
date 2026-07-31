@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="1_73cw5"]
 [ext_resource type="PackedScene" uid="uid://cdsjsvuyovomn" path="res://Scenes/tile_map_for_rooms.tscn" id="2_us7qg"]
 [ext_resource type="TileSet" uid="uid://hkvfy5by8aqr" path="res://Tileset/Main_Level.tres" id="3_a7upy"]
-[ext_resource type="PackedScene" uid="uid://b1ujnmnbsxx87" path="res://Scenes/Rooms/CommonRoomComponents/access_button_right.tscn" id="4_a7upy"]
+[ext_resource type="PackedScene" uid="uid://b1ujnmnbsxx87" path="res://Scenes/Rooms/CommonRoomComponents/access_button.tscn" id="4_a7upy"]
 [ext_resource type="PackedScene" uid="uid://41tgjv6lxsko" path="res://Scenes/Enemies/melee_enemy.tscn" id="5_fcrum"]
 [ext_resource type="PackedScene" uid="uid://b2ibnxde1hrva" path="res://Scenes/Enemies/ranged_enemy.tscn" id="6_bdjya"]
 

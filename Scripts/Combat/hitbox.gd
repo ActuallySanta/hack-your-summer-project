@@ -7,10 +7,6 @@ class_name Hitbox extends Area2D
 ## YOU ARE SUPPOSED TO ADD IT YOURSELF IN THE SCENE THAT YOU ADD THE HITBOX IN.[br]
 ## It is recommended to adjust the collision layer masks based on the intended
 ## targets of the hurtbox (CollisionObject2D -> Collison -> Mask).[br]
-## THE BASE HITBOX SCENE SETS monitorable = false.[br]
-## An Area2D with monitorable off is never paired against *static* bodies, so a
-## Hitbox that needs to react to level geometry (StaticBody2D, TileMapLayer) must
-## turn monitorable back on in its own scene, or environment_hit will never fire.[br]
 ## [br]
 ## Hitbox does not apply the damage or knockback, it simply communicates those values.
 ## The object that the Hitbox is attached to is what processes the hit.
@@ -43,13 +39,6 @@ func _on_area_entered(area: Area2D) -> void:
 	var hit_info := HitInfo.new(damage, knockback_strength, knockback_duration)
 	hurtbox.register_hit(hit_info, self)
 
-## Layers that count as environment: level geometry (1) and BreakableBlocks (6).
-const ENVIRONMENT_LAYERS := 1 << 0 | 1 << 5
-
 func _on_body_entered(body: Node2D) -> void:
-	if body is TileMapLayer:
-		environment_hit.emit(body)
-		return
-	var physics_body := body as PhysicsBody2D
-	if physics_body and physics_body.collision_layer & ENVIRONMENT_LAYERS:
+	if body is TileMapLayer or (body as PhysicsBody2D).collision_layer & 1:
 		environment_hit.emit(body)

@@ -1245,7 +1245,7 @@ baseHealth = 3
 swingOffset = 80.0
 swingScene = ExtResource("2_xxqkx")
 bulletScene = ExtResource("3_j8xm3")
-knockbackDI = 150.0
+knockbackDI = 400.0
 
 [node name="Hurtbox" parent="." unique_id=470143312 instance=ExtResource("4_r5bcf")]
 collision_layer = 2

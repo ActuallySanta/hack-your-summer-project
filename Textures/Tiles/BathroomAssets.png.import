@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bi8ombygggk2u"
-path="res://.godot/imported/BioReSector.png-4ebe7122e3cac58831b3575d9660a922.ctex"
+uid="uid://camjrh4pdycb8"
+path="res://.godot/imported/BathroomAssets.png-e0a55daadb8054ebf013a699062f4ce0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Textures/Tiles/DemoSprites/BioReSector.png"
-dest_files=["res://.godot/imported/BioReSector.png-4ebe7122e3cac58831b3575d9660a922.ctex"]
+source_file="res://Textures/Tiles/BathroomAssets.png"
+dest_files=["res://.godot/imported/BathroomAssets.png-e0a55daadb8054ebf013a699062f4ce0.ctex"]
 
 [params]
 

@@ -1,8 +1,8 @@
-extends Node2D
+extends TileMapLayer
 
 @export var horizontal_shift: float
-@export var vertical_shift: float = 1.0
-@export var occilations_per_second: float = 1.0
+@export var vertical_shift: float
+@export var occilations_per_second: float
 
 var _time: float
 var _rps: float

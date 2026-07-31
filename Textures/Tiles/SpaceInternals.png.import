@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dyxa0gd77t0bx"
-path="res://.godot/imported/SpaceInternals.png-3168b374356d17449c4f92cca1781178.ctex"
+uid="uid://dtforhtm5y7jn"
+path="res://.godot/imported/SpaceInternals.png-318c3e2c36771c1f11815888ead88a06.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Textures/Tiles/DemoSprites/SpaceInternals.png"
-dest_files=["res://.godot/imported/SpaceInternals.png-3168b374356d17449c4f92cca1781178.ctex"]
+source_file="res://Textures/Tiles/SpaceInternals.png"
+dest_files=["res://.godot/imported/SpaceInternals.png-318c3e2c36771c1f11815888ead88a06.ctex"]
 
 [params]
 
