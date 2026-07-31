@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cnrub5aht5y2k" path="res://Scripts/pickup.gd" id="1_1y2p7"]
 [ext_resource type="Texture2D" uid="uid://c16n2y8423n57" path="res://Sprites/Pickups/Gun.png" id="2_1y2p7"]
-[ext_resource type="Script" path="res://Scripts/oscillator.gd" id="3_adqjb"]
+[ext_resource type="Script" uid="uid://whdtoijov1so" path="res://Scripts/occilator.gd" id="3_1y2p7"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dclox"]
 size = Vector2(36, 36)
@@ -21,9 +21,9 @@ metadata/_custom_type_script = "uid://cnrub5aht5y2k"
 rotation = -1.5707964
 scale = Vector2(3, 3)
 texture = ExtResource("2_1y2p7")
-script = ExtResource("3_adqjb")
-height = 6.0
-hover_cycle_seconds = 4.0
+script = ExtResource("3_1y2p7")
+vertical_shift = 6.0
+occilations_per_second = 5.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1498740582]
 shape = SubResource("RectangleShape2D_dclox")
