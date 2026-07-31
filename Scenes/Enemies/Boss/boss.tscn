@@ -17,6 +17,21 @@ script = ExtResource("1_o1nrd")
 
 [node name="BossVisual" parent="." unique_id=587305981 instance=ExtResource("1_b1kuf")]
 
+[node name="Hurtbox" type="Area2D" parent="BossVisual" unique_id=31647197]
+position = Vector2(576, 335)
+collision_layer = 4
+script = ExtResource("2_gi0e2")
+metadata/_custom_type_script = "uid://dhgcprjrtfobr"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BossVisual/Hurtbox" unique_id=1147828753]
+shape = SubResource("RectangleShape2D_o1nrd")
+
+[node name="Hurtbox Visualization" type="Sprite2D" parent="BossVisual/Hurtbox" unique_id=1685119355]
+scale = Vector2(4.068537, 4.068537)
+texture = ExtResource("3_b1kuf")
+
+[node name="AttackPoint" type="Node2D" parent="BossVisual" unique_id=763619416]
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=816862754]
 
 [node name="Enviromental Attack Cooldown Timer" type="Timer" parent="." unique_id=381613794]
@@ -28,18 +43,6 @@ tile_map_data = PackedByteArray("AAAAACMAAgAAAAAAAAABACMAAgAAAAAAAAACACMAAgAAAAA
 
 [node name="Upper Teeth Attack" parent="." unique_id=1814386097 instance=ExtResource("1_ytkdc")]
 tile_map_data = PackedByteArray("AAAIAAkAAQAAAAAAAQAJAAkAAQAAAAAAAQAKAAkAAQAAAAAAAQALAAkAAQAAAAAAAQAMAAkAAQAAAAAAAQANAAkAAQAAAAAAAQAOAAkAAQAAAAAAAQAPAAkAAQAAAAAAAQAQAAkAAQAAAAAAAQARAAkAAQAAAAAAAQASAAkAAQAAAAAAAQATAAkAAQAAAAAAAQAUAAkAAQAAAAAAAQAVAAkAAQAAAAAAAQAWAAkAAQAAAAAAAQAXAAkAAQAAAAAAAQAYAAkAAQAAAAAAAQAZAAkAAQAAAAAAAQAaAAkAAQAAAAAAAQAbAAkAAQAAAAAAAQAcAAkAAQAAAAAAAQAdAAkAAQAAAAAAAQAeAAkAAQAAAAAAAQAfAAkAAQAAAAAAAQAgAAkAAQAAAAAAAQAhAAkAAQAAAAAAAQAiAAkAAQAAAAAAAQAjAAkAAQAAAAAAAQAkAAkAAQAAAAAAAQAlAAkAAQAAAAAAAQAmAAkAAQAAAAAAAQAnAAkAAQAAAAAAAQAoAAkAAQAAAAAAAQApAAkAAQAAAAAAAQAqAAkAAQAAAAAAAQArAAkAAQAAAAAAAQAsAAkAAQAAAAAAAQAtAAkAAQAAAAAAAQAuAAkAAQAAAAAAAQAvAAkAAQAAAAAAAQAwAAkAAQAAAAAAAQAxAAkAAQAAAAAAAQAyAAkAAQAAAAAAAQAzAAkAAQAAAAAAAQA0AAkAAQAAAAAAAQA1AAkAAQAAAAAAAQA2AAkAAQAAAAAAAQA3AAkAAQAAAAAAAQA4AAkAAQAAAAAAAQA5AAkAAQAAAAAAAQA6AAkAAQAAAAAAAQA7AAkAAQAAAAAAAQA8AAkAAQAAAAAAAQA9AAkAAQAAAAAAAQA+AAkAAQAAAAAAAQA/AAkAAQAAAAAAAQBAAAkAAQAAAAAAAQBBAAkAAQAAAAAAAQBCAAkAAQAAAAAAAQBDAAkAAQAAAAAAAQBEAAkAAQAAAAAAAQBFAAkAAQAAAAAAAQBGAAkAAQAAAAAAAQBHAAkAAQAAAAAAAQBIAAkAAQAAAAAAAQBJAAkAAQAAAAAAAQBKAAkAAQAAAAAAAQBLAAkAAQAAAAAAAQBMAAkAAQAAAAAAAQBNAAkAAQAAAAAAAQBOAAkAAQAAAAAAAQBPAAkAAQAAAAAAAQA=")
-
-[node name="Hurtbox" type="Area2D" parent="." unique_id=31647197]
-script = ExtResource("2_gi0e2")
-metadata/_custom_type_script = "uid://dhgcprjrtfobr"
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=1147828753]
-shape = SubResource("RectangleShape2D_o1nrd")
-
-[node name="Hurtbox Visualization" type="Sprite2D" parent="Hurtbox" unique_id=1685119355]
-visible = false
-scale = Vector2(4.068537, 4.068537)
-texture = ExtResource("3_b1kuf")
 
 [node name="BTPlayer" type="BTPlayer" parent="." unique_id=5900899]
 behavior_tree = ExtResource("6_wbur8")

@@ -1,5 +1,5 @@
 extends Node2D
-
+class_name BossEnemy
 @export var maxHealth : float = 150
 @onready var currHealth : float = maxHealth
 
@@ -12,7 +12,8 @@ extends Node2D
 @onready var lower_teeth_attack: TileMapLayer = $"Lower Teeth Attack"
 @onready var upper_teeth_attack: TileMapLayer = $"Upper Teeth Attack"
 
-@onready var hurtbox: Hurtbox = $Hurtbox
+@onready var hurtbox: Hurtbox = $BossVisual/Hurtbox
+@onready var attack_point: Node2D = $BossVisual/AttackPoint
 
 
 var minEyeCount := 3
@@ -37,8 +38,6 @@ func _process(delta: float) -> void:
 	if(PlayerManager.player != null):
 		position.x = lerp(position.x,PlayerManager.player.position.x,0.01)
 
-func _spawnEyes():
-	pass
 
 func _environmentalAttack():
 	enviromental_attack_duration_timer.wait_time = envAttackDuration * envAttackAggressionModifiers[aggroLevel]

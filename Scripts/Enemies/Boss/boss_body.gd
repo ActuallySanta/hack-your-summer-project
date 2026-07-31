@@ -26,5 +26,5 @@ func _process(delta: float) -> void:
 		Limbs[i].position.x = xPos
 		Limbs[i].position.y = yPos
 	
-	self.global_position.x = sin(moveTimer*bodyMoveFreq)*bodyMoveAmp
-	print(global_position.x)
+	#self.global_position.x = sin(moveTimer*bodyMoveFreq)*bodyMoveAmp
+	#print(global_position.x)
