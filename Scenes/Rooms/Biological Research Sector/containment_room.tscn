@@ -121,7 +121,7 @@ self_modulate = Color(0.5882353, 0.5882353, 0.5882353, 1)
 position = Vector2(576, 600)
 
 [node name="Boss" parent="." unique_id=475289835 instance=ExtResource("10")]
-position = Vector2(826, 324)
+position = Vector2(826, 323)
 
 [node name="Lower Teeth Attack" parent="Boss" index="4" unique_id=424263396]
 position = Vector2(-685, -374)

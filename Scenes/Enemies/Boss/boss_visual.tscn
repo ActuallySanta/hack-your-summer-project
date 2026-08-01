@@ -33,10 +33,29 @@ size_2d_override = Vector2i(48, 48)
 render_target_update_mode = 4
 
 [node name="Head" parent="SubViewport" unique_id=327573373 instance=ExtResource("1_wadox")]
-transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0.6286336, 0, 0)
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
+
+[node name="Matrix" parent="SubViewport/Head" unique_id=114388929 instance=ExtResource("4_7hv6g")]
+transform = Transform3D(0.19999999, 0, 0, 0, 0.19999999, 0, 0, 0, 0.19999999, 0.09456587, 1.1920929e-06, 2.136664)
+
+[node name="Top Foot" type="MeshInstance3D" parent="SubViewport/Head" unique_id=1448299761]
+transform = Transform3D(1.4064062, 0, 0, 0, 1.5526348, 0, 0, 0, 2.9723716, 2.137823, 3.7474308, 0)
+mesh = SubResource("SphereMesh_hyctl")
+
+[node name="Bottom Foot" type="MeshInstance3D" parent="SubViewport/Head" unique_id=1667207126]
+transform = Transform3D(1.4064062, 0, 0, 0, 1.5526348, 0, 0, 0, 2.9723716, 2.137823, -3.7632194, 0)
+mesh = SubResource("SphereMesh_hyctl")
+
+[node name="Top Leg Joint" type="MeshInstance3D" parent="SubViewport/Head" unique_id=129013677]
+transform = Transform3D(0.5543994, 0, 0, 0, 0.73953414, 0, 0, 0, 1.0136266, 0.3466282, 2.3053863, -0.657078)
+mesh = SubResource("SphereMesh_hyctl")
+
+[node name="Bottom Leg Joint" type="MeshInstance3D" parent="SubViewport/Head" unique_id=1644600526]
+transform = Transform3D(0.5543994, 0, 0, 0, 0.73953414, 0, 0, 0, 1.0136266, 0.3466282, -2.0810997, -0.657078)
+mesh = SubResource("SphereMesh_hyctl")
 
 [node name="Camera3D" type="Camera3D" parent="SubViewport" unique_id=786003809]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.11519432, 0, 1.8942966)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.894)
 keep_aspect = 0
 projection = 1
 fov = 69.5
@@ -44,22 +63,3 @@ size = 2.0517473
 
 [node name="OmniLight3D" type="OmniLight3D" parent="SubViewport" unique_id=2008891008]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8660599, -0.42681587, 0.23289692)
-
-[node name="Top Foot" type="MeshInstance3D" parent="SubViewport" unique_id=1448299761]
-transform = Transform3D(0.14064062, 0, 0, 0, 0.15526348, 0, 0, 0, 0.29723716, 0.8424159, 0.37474307, 0)
-mesh = SubResource("SphereMesh_hyctl")
-
-[node name="Bottom Foot" type="MeshInstance3D" parent="SubViewport" unique_id=1667207126]
-transform = Transform3D(0.14064062, 0, 0, 0, 0.15526348, 0, 0, 0, 0.29723716, 0.8424159, -0.37632194, 0)
-mesh = SubResource("SphereMesh_hyctl")
-
-[node name="Top Leg Joint" type="MeshInstance3D" parent="SubViewport" unique_id=129013677]
-transform = Transform3D(0.055439938, 0, 0, 0, 0.07395341, 0, 0, 0, 0.10136266, 0.6632964, 0.23053864, -0.0657078)
-mesh = SubResource("SphereMesh_hyctl")
-
-[node name="Bottom Leg Joint" type="MeshInstance3D" parent="SubViewport" unique_id=1644600526]
-transform = Transform3D(0.055439938, 0, 0, 0, 0.07395341, 0, 0, 0, 0.10136266, 0.6632964, -0.20810997, -0.0657078)
-mesh = SubResource("SphereMesh_hyctl")
-
-[node name="Matrix" parent="SubViewport" unique_id=114388929 instance=ExtResource("4_7hv6g")]
-transform = Transform3D(0.02, 0, 0, 0, 0.02, 0, 0, 0, 0.02, 0.6380902, 1.1920929e-07, 0.21366638)
