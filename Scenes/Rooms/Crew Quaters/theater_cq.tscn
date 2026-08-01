@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://dpls5hv23md53" path="res://Scenes/Components/small_access_door.tscn" id="11_0duyg"]
 [ext_resource type="Script" uid="uid://bwg3jvu3db8xy" path="res://Scripts/Level Elements/door_trigger.gd" id="11_6geur"]
 [ext_resource type="SpriteFrames" uid="uid://2nvt5lepiug" path="res://Sprites/DoorFrames.tres" id="12_6geur"]
+[ext_resource type="PackedScene" uid="uid://scnrv60doh5o" path="res://Scenes/Components/down_vertical_room_transistion_tool.tscn" id="12_sywyk"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sywyk"]
 size = Vector2(36, 288)
@@ -44,7 +45,7 @@ cycle_seconds = 6.0
 [node name="Doors" type="TileMapLayer" parent="." unique_id=2138322309]
 z_index = 10
 scale = Vector2(3, 3)
-tile_map_data = PackedByteArray("AAAWAAgAAQAEAAAAAAAWAAkAAQAEAAEAAAAWAAoAAQAEAAIAAAAXAAgAAQAFAAAAAAAXAAkAAQAFAAEAAAAXAAoAAQAFAAIAAAA=")
+tile_map_data = PackedByteArray("AAAWAAgAAQAEAAAAAAAWAAkAAQAEAAEAAAAWAAoAAQAEAAIAAAAXAAgAAQAFAAAAAAAXAAkAAQAFAAEAAAAXAAoAAQAFAAIAAAADAAwAAQAEAAMAAAADAA0AAQAEAAQAAAAEAAwAAQAFAAMAAAAEAA0AAQAFAAQAAAAFAAwAAQAGAAMAAAAFAA0AAQAGAAQAAAAGAAwAAQAHAAMAAAAGAA0AAQAHAAQAAAA=")
 tile_set = ExtResource("8_jpsfx")
 
 [node name="AccessButtonLeft" parent="." unique_id=775097331 node_paths=PackedStringArray("doors_in_room") instance=ExtResource("6_jpsfx")]
@@ -100,5 +101,8 @@ script = ExtResource("5_nsswl")
 start_brightness = 0.8
 end_brightness = 0.7
 cycle_seconds = 6.0
+
+[node name="DownVerticalRoomTransistionTool" parent="." unique_id=847027462 instance=ExtResource("12_sywyk")]
+position = Vector2(240, 600)
 
 [connection signal="body_entered" from="LockedAccessDoor/Area2D" to="LockedAccessDoor/Area2D" method="_on_body_entered"]
