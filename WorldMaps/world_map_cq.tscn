@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://cx11mafvqsiv0"]
 
+[ext_resource type="Script" uid="uid://cphcuqed0ttgm" path="res://WorldMaps/world_map_viewer.gd" id="1_dj6y7"]
 [ext_resource type="PackedScene" uid="uid://mctfp5srksup" path="res://Scenes/Rooms/Crew Quaters/theater_cq.tscn" id="1_jeskr"]
 [ext_resource type="PackedScene" uid="uid://c6xbrg5l3x11l" path="res://Scenes/Rooms/Crew Quaters/storage_cq.tscn" id="2_dj6y7"]
 [ext_resource type="PackedScene" uid="uid://2i77irrthpt8" path="res://Scenes/Rooms/Crew Quaters/stairway_cq.tscn" id="3_eumge"]
@@ -24,6 +25,10 @@
 [ext_resource type="PackedScene" uid="uid://w30a3semhw2i" path="res://Scenes/Rooms/Crew Quaters/armory_cq.tscn" id="22_cmww0"]
 
 [node name="WorldMapCQ" type="Node2D" unique_id=1768770900]
+script = ExtResource("1_dj6y7")
+
+[node name="Cafeteria" parent="." unique_id=1977178993 instance=ExtResource("21_pcu82")]
+position = Vector2(-1000, 728)
 
 [node name="TheaterCQ" parent="." unique_id=552063030 instance=ExtResource("1_jeskr")]
 position = Vector2(1304, 728)
@@ -84,9 +89,6 @@ position = Vector2(152, 2744)
 
 [node name="CrewQuartersEastSaveCQ" parent="." unique_id=1827097843 instance=ExtResource("20_gokox")]
 position = Vector2(2456, 56)
-
-[node name="Cafeteria" parent="." unique_id=1977178993 instance=ExtResource("21_pcu82")]
-position = Vector2(-1000, 728)
 
 [node name="ArmoryCQ" parent="." unique_id=1922806432 instance=ExtResource("22_cmww0")]
 position = Vector2(-7912, 1400)
