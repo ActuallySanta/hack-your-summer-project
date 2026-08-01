@@ -14,6 +14,7 @@ size = Vector2(135, 125)
 
 [node name="Boss" type="Node2D" unique_id=475289835]
 script = ExtResource("1_o1nrd")
+eyeSpawnArea = Rect2(10, 10, 500, 500)
 
 [node name="BossVisual" parent="." unique_id=587305981 instance=ExtResource("1_b1kuf")]
 
@@ -27,6 +28,7 @@ metadata/_custom_type_script = "uid://dhgcprjrtfobr"
 shape = SubResource("RectangleShape2D_o1nrd")
 
 [node name="Hurtbox Visualization" type="Sprite2D" parent="BossVisual/Hurtbox" unique_id=1685119355]
+visible = false
 scale = Vector2(4.068537, 4.068537)
 texture = ExtResource("3_b1kuf")
 

@@ -1,3 +1,5 @@
+#@tool
+
 extends Node2D
 class_name BossEnemy
 @export var maxHealth : float = 150
@@ -15,6 +17,10 @@ class_name BossEnemy
 @onready var hurtbox: Hurtbox = $BossVisual/Hurtbox
 @onready var attack_point: Node2D = $BossVisual/Hurtbox/AttackPoint
 
+@export var eyeSpawnArea : Rect2:
+	set(value):
+		eyeSpawnArea = value
+		queue_redraw()
 
 var minEyeCount := 3
 
@@ -34,10 +40,8 @@ func _ready() -> void:
 	_environmentalAttack()
 
 func _process(delta: float) -> void:
-	
 	if(PlayerManager.player != null):
 		position.x = lerp(position.x,PlayerManager.player.position.x,0.01)
-
 
 func _environmentalAttack():
 	enviromental_attack_duration_timer.wait_time = envAttackDuration * envAttackAggressionModifiers[aggroLevel]
@@ -83,3 +87,6 @@ func _takeDamage(_hitInfo : HitInfo):
 		queue_free()
 	
 	pass
+
+#func _draw() -> void:
+#	draw_rect(eyeSpawnArea,Color(0.024, 0.502, 1.0, 1.0),20, true)
