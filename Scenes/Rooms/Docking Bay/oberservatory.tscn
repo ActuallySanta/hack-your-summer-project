@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://q5q152xvydxb" path="res://Scripts/brightness_oscillator.gd" id="3_io01w"]
 [ext_resource type="PackedScene" uid="uid://cdsjsvuyovomn" path="res://Scenes/tile_map_for_rooms.tscn" id="3_xaksc"]
 [ext_resource type="TileSet" uid="uid://hkvfy5by8aqr" path="res://Tileset/Main_Level.tres" id="4_xaksc"]
+[ext_resource type="PackedScene" uid="uid://c57qdtweo2yu6" path="res://Scenes/Components/up_vertical_room_transition_tool.tscn" id="7_vwqq8"]
 
 [node name="Oberservatory" type="Node2D" unique_id=791660570]
 
@@ -54,3 +55,10 @@ script = ExtResource("3_io01w")
 start_brightness = 0.6
 end_brightness = 0.45
 cycle_seconds = 6.0
+
+[node name="UpVerticalRoomTransitionTool" parent="." unique_id=1520149205 instance=ExtResource("7_vwqq8")]
+position = Vector2(816, 112)
+
+[node name="Marker2D" type="Marker2D" parent="." unique_id=325689493]
+position = Vector2(115.00006, 460)
+scale = Vector2(9.6, 7.2)

@@ -6,9 +6,71 @@
 [ext_resource type="TileSet" uid="uid://c0dbvnpaoeomc" path="res://Tileset/TransitionTileSet.tres" id="4_006sv"]
 [ext_resource type="PackedScene" uid="uid://cy2osx3ogepds" path="res://Scenes/Rooms/Tutorial Area/locked_door.tscn" id="5_006sv"]
 [ext_resource type="PackedScene" uid="uid://bfdxh46jtantj" path="res://Scenes/Enemies/fallen_cyborg.tscn" id="5_af1yr"]
+[ext_resource type="Script" uid="uid://eqg7uo4ghlul" path="res://Scripts/Level Elements/cyborg_push_trigger.gd" id="7_p8bte"]
+[ext_resource type="Texture2D" uid="uid://8gyuvkigb1yk" path="res://Sprites/Characters/Enemy SpriteSheets/Faulty_Android.png" id="8_s6x7r"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_006sv"]
 size = Vector2(41, 93)
+
+[sub_resource type="Animation" id="Animation_s6x7r"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1065, 1151)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_cw6um"]
+resource_name = "fall"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.06666667, 0.13333334, 0.16666667, 0.56666666),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(1065, 1151), Vector2(1024, 1137), Vector2(983, 1151), Vector2(959.06, 1170.03), Vector2(951.00006, 1584)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_bwu83"]
+_data = {
+&"RESET": SubResource("Animation_s6x7r"),
+&"fall": SubResource("Animation_cw6um")
+}
 
 [node name="ServiceCrossroads" type="Node2D" unique_id=1037229723]
 
@@ -38,6 +100,8 @@ tile_map_data = PackedByteArray("AAAAAA4AAgABAAEAAAAAAAoAAAABAAEAAAAAAAsAAAABAAE
 tile_set = ExtResource("2_dcofc")
 
 [node name="Fallen_Cyborg" parent="." unique_id=2020790701 instance=ExtResource("5_af1yr")]
+process_mode = 4
+visible = false
 position = Vector2(1065, 1199)
 start_flipped = true
 
@@ -52,8 +116,26 @@ start_flipped = true
 position = Vector2(129, 1800)
 
 [node name="CyborgPushTrigger" type="Area2D" parent="." unique_id=525811341]
+visible = false
 position = Vector2(1136, 1163)
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("7_p8bte")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CyborgPushTrigger" unique_id=68320557]
 position = Vector2(-3.5, -10.5)
 shape = SubResource("RectangleShape2D_006sv")
+
+[node name="PushedCyborgVisual" type="Sprite2D" parent="." unique_id=635440192]
+visible = false
+position = Vector2(1065, 1151)
+scale = Vector2(-3, 3)
+texture = ExtResource("8_s6x7r")
+hframes = 7
+vframes = 4
+frame = 22
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="PushedCyborgVisual" unique_id=1134751380]
+libraries/ = SubResource("AnimationLibrary_bwu83")
+
+[connection signal="body_entered" from="CyborgPushTrigger" to="CyborgPushTrigger" method="_on_body_entered"]

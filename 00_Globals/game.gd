@@ -123,6 +123,7 @@ func _new_game():
 	_hud.show_load_screen()
 	MetSys.set_save_data()
 	save = SaveManager.new()
+	_player.disable_gun()
 	_player.disable_jetpack()
 	await load_room(START_ROOM_UID)
 	await get_tree().create_timer(artificial_load_time).timeout
@@ -180,6 +181,9 @@ func _on_pickup_collected(pickup: Pickup) -> void:
 		_:
 			print("No action defined for pickup " + pickup.get_type_as_str())
 
+func _push_blocking_cyborg() -> void:
+	save.set_value("cyborg_pushed", true)
+
 func _restore_station_power() -> void:
 	save.set_value("station_powered", true)
 
@@ -213,6 +217,12 @@ static func is_object_collected(name : String) -> bool:
 		print("No save data found, cannot determine object collection status.")
 		return false
 	return MetSys.save_data.stored_objects.get(name, false)
+
+static func is_cyborg_pushed() -> bool:
+	if !instance or !instance.save:
+		print("No save data found, cannot determine push status.")
+		return false
+	return instance.save.get_value("cyborg_pushed")
 
 static func is_station_powered() -> bool:
 	if !instance or !instance.save:
