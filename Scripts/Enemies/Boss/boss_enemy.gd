@@ -16,6 +16,7 @@ class_name BossEnemy
 
 @onready var hurtbox: Hurtbox = $BossVisual/Hurtbox
 @onready var attack_point: Node2D = $BossVisual/Hurtbox/AttackPoint
+@onready var health_bar: ProgressBar = $"CanvasLayer/Health Bar"
 
 @export var eyeSpawnArea : Rect2:
 	set(value):
@@ -30,7 +31,8 @@ var envAttackAggressionModifiers : Array = [1.0,.75,.5]
 
 func _ready() -> void:
 	hurtbox.hit.connect(_takeDamage)
-	
+	health_bar.max_value = maxHealth
+	health_bar.value = currHealth
 	lower_teeth_attack.reparent(get_tree().current_scene)
 	upper_teeth_attack.reparent(get_tree().current_scene)
 	disableEnvAttacks()
@@ -75,7 +77,7 @@ func disableEnvAttacks():
 
 func _takeDamage(_hitInfo : HitInfo):
 	currHealth -= _hitInfo.damage
-	
+	health_bar.value = currHealth
 	if(currHealth > (maxHealth *(1/3)) and currHealth < (maxHealth*(2/3))):
 		#Phase 2
 		aggroLevel = 2
