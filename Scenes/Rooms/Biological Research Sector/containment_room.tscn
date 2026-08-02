@@ -122,7 +122,7 @@ position = Vector2(576, 600)
 
 [node name="Boss" parent="." unique_id=475289835 instance=ExtResource("10")]
 position = Vector2(826, 323)
-eyeSpawnArea = Rect2(-675, -174, 1000, 375)
+eyeSpawnArea = Rect2(-650, -150, 950, 325)
 
 [node name="Lower Teeth Attack" parent="Boss" index="4" unique_id=424263396]
 position = Vector2(-685, -374)

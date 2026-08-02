@@ -50,3 +50,15 @@ tile_map_data = PackedByteArray("AAAIAAkAAQAAAAAAAQAJAAkAAQAAAAAAAQAKAAkAAQAAAAA
 [node name="BTPlayer" type="BTPlayer" parent="." unique_id=5900899]
 behavior_tree = ExtResource("6_wbur8")
 blackboard_plan = SubResource("BlackboardPlan_o1nrd")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1582535483]
+
+[node name="ProgressBar" type="ProgressBar" parent="CanvasLayer" unique_id=1595769096]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -222.5
+offset_right = 222.5
+offset_bottom = 27.0
+grow_horizontal = 2
+size_flags_horizontal = 3
