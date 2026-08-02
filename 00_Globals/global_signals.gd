@@ -8,3 +8,5 @@ signal health_extended_by_one()
 
 signal OnGamePause
 signal OnGameResume
+
+signal RestoreStationPower

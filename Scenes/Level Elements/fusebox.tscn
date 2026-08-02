@@ -1,9 +1,22 @@
 [gd_scene format=3 uid="uid://b3d6cwvyjev0s"]
 
+[ext_resource type="Script" uid="uid://c4wa4an3btgh3" path="res://Scripts/Level Elements/fusebox.gd" id="1_glsis"]
 [ext_resource type="Texture2D" uid="uid://80elibwbcv6m" path="res://Sprites/Fusebox_Empty.png" id="1_pxli5"]
+[ext_resource type="Texture2D" uid="uid://da70bp7v75t8g" path="res://Sprites/Fusebox_Filled.png" id="2_wnqpu"]
 
-[node name="Fusebox" type="Node2D" unique_id=1487914227]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wnqpu"]
+size = Vector2(60, 72)
+
+[node name="Fusebox" type="Area2D" unique_id=364980564]
+collision_mask = 2
+script = ExtResource("1_glsis")
+powered_texture = ExtResource("2_wnqpu")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1395764608]
 scale = Vector2(3, 3)
 texture = ExtResource("1_pxli5")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=318070606]
+visible = false
+position = Vector2(0, 12)
+shape = SubResource("RectangleShape2D_wnqpu")

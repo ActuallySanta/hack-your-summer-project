@@ -7,6 +7,9 @@
 [ext_resource type="PackedScene" uid="uid://cy2osx3ogepds" path="res://Scenes/Rooms/Tutorial Area/locked_door.tscn" id="5_006sv"]
 [ext_resource type="PackedScene" uid="uid://bfdxh46jtantj" path="res://Scenes/Enemies/fallen_cyborg.tscn" id="5_af1yr"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_006sv"]
+size = Vector2(41, 93)
+
 [node name="ServiceCrossroads" type="Node2D" unique_id=1037229723]
 
 [node name="RoomInstance" parent="." unique_id=1062442311 instance=ExtResource("1_5emhe")]
@@ -47,3 +50,10 @@ start_flipped = true
 
 [node name="LockedDoor" parent="." unique_id=1290327451 instance=ExtResource("5_006sv")]
 position = Vector2(129, 1800)
+
+[node name="CyborgPushTrigger" type="Area2D" parent="." unique_id=525811341]
+position = Vector2(1136, 1163)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CyborgPushTrigger" unique_id=68320557]
+position = Vector2(-3.5, -10.5)
+shape = SubResource("RectangleShape2D_006sv")

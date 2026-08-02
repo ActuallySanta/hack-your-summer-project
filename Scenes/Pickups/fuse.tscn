@@ -21,7 +21,6 @@ metadata/_custom_type_script = "uid://cnrub5aht5y2k"
 scale = Vector2(3, 3)
 texture = ExtResource("2_ejgmn")
 script = ExtResource("3_ejgmn")
-vertical_shift = 6.0
 occilations_per_second = 0.25
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1498740582]

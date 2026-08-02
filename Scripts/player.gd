@@ -73,6 +73,7 @@ var _currentHealth : int
 var _attackCooldownTimer : float
 var _attackBufferTimer : float
 # Shooting
+var _hasGun : bool
 var _shootCooldownTimer : float
 var _shootBufferTimer : float
 # Knockback
@@ -253,7 +254,7 @@ func handle_inputs() -> void:
 		set_jump_input()
 	if Input.is_action_just_pressed("Attack"):
 		set_attack_input()
-	if Input.is_action_just_pressed("Shoot"):
+	if Input.is_action_just_pressed("Shoot") and _hasGun:
 		set_shoot_input()
 	if not Input.is_action_pressed("Jump"):
 		_holdingDownSpaceForSpace = false
@@ -435,7 +436,13 @@ func disable_jetpack() -> void:
 func enable_jetpack() -> void:
 	jetpack.process_mode = Node.PROCESS_MODE_INHERIT
 #endregion
-	
+
+func disable_gun() -> void:
+	_hasGun = false
+
+func enable_gun() -> void:
+	_hasGun = true
+
 #region Mantle
 func try_mantle() -> bool:
 	if not is_on_floor():

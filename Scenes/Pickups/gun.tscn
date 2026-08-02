@@ -11,10 +11,10 @@ size = Vector2(36, 36)
 collision_layer = 16
 collision_mask = 2
 script = ExtResource("1_1y2p7")
-type = 4
+type = 5
 destroy_on_pickup = true
 use_custom_id = true
-custom_id = &"Fuse"
+custom_id = &"Gun"
 metadata/_custom_type_script = "uid://cnrub5aht5y2k"
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1295625606]
@@ -22,8 +22,7 @@ rotation = -1.5707964
 scale = Vector2(3, 3)
 texture = ExtResource("2_1y2p7")
 script = ExtResource("3_1y2p7")
-vertical_shift = 6.0
-occilations_per_second = 5.0
+occilations_per_second = 0.25
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1498740582]
 shape = SubResource("RectangleShape2D_dclox")
