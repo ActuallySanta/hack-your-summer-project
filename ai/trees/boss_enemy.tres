@@ -51,13 +51,15 @@ metadata/_weight_ = 2.0
 
 [sub_resource type="BTAction" id="BTAction_0njd2"]
 script = ExtResource("3_b0xag")
+currAttackType = 2
 
 [sub_resource type="BTSequence" id="BTSequence_b0xag"]
-custom_name = "Spray Attack"
+custom_name = "Random Attack"
 children = [SubResource("BTAction_0njd2")]
 
 [sub_resource type="BTAction" id="BTAction_54iha"]
 script = ExtResource("3_b0xag")
+currAttackType = 1
 
 [sub_resource type="BTSequence" id="BTSequence_kh3r6"]
 custom_name = "Corner Attack"
