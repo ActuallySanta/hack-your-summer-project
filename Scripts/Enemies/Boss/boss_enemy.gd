@@ -1,4 +1,4 @@
-#@tool
+@tool
 
 extends Node2D
 class_name BossEnemy
@@ -24,7 +24,7 @@ class_name BossEnemy
 
 var minEyeCount := 3
 
-var minEnvironmentalAttackCooldown :float = 10.0
+@export var minEnvironmentalAttackCooldown :float = 5.0
 var envAttackDuration : float = 2.5
 var envAttackAggressionModifiers : Array = [1.0,.75,.5]
 
@@ -88,5 +88,5 @@ func _takeDamage(_hitInfo : HitInfo):
 	
 	pass
 
-#func _draw() -> void:
-#	draw_rect(eyeSpawnArea,Color(0.024, 0.502, 1.0, 1.0),20, true)
+func _draw() -> void:
+	draw_rect(eyeSpawnArea,Color(0.024, 0.502, 1.0, 1.0),20, true)
