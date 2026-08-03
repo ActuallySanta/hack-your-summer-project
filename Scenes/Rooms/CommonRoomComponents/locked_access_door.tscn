@@ -53,7 +53,7 @@ autoplay = "SoundingRight"
 flip_v = true
 
 [node name="AlarmBL" type="AnimatedSprite2D" parent="." unique_id=1027280027]
-position = Vector2(-64, 48)
+position = Vector2(-96, 48)
 sprite_frames = ExtResource("3_uvl7b")
 animation = &"Sounding"
 autoplay = "Sounding"
@@ -69,7 +69,7 @@ frame = 1
 frame_progress = 0.28608134
 
 [node name="AlarmTL" type="AnimatedSprite2D" parent="." unique_id=713336594]
-position = Vector2(-64, -48)
+position = Vector2(-96, -48)
 sprite_frames = ExtResource("3_uvl7b")
 animation = &"Sounding"
 autoplay = "Sounding"

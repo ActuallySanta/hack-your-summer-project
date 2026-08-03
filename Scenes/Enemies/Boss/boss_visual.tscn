@@ -3,13 +3,19 @@
 [ext_resource type="Shader" uid="uid://seo748jwlhmd" path="res://Shaders/quantizer.gdshader" id="1_hyctl"]
 [ext_resource type="PackedScene" uid="uid://djcmvws6qeiof" path="res://Scenes/3D/test_cube.tscn" id="1_wadox"]
 [ext_resource type="Texture2D" uid="uid://fk20cnv3ce3g" path="res://Textures/Palettes/6_bit_pallet.png" id="2_hyctl"]
-[ext_resource type="PackedScene" uid="uid://w5nmhx6yk6g" path="res://Models/Matrix.glb" id="4_7hv6g"]
+[ext_resource type="Script" uid="uid://c3iqkrbn08m6y" path="res://Scripts/Animation/3D/matrix_bone_positioner.gd" id="3_4buiu"]
+[ext_resource type="PackedScene" uid="uid://eja71qfkvm6t" path="res://Scenes/Components/matrix.tscn" id="4_7hv6g"]
+[ext_resource type="Script" uid="uid://bd3lodspb7tum" path="res://Scripts/Animation/3D/cam_height_width_getter.gd" id="5_yxg17"]
+[ext_resource type="Script" uid="uid://clpci8vxpbap5" path="res://Scripts/Animation/3D/matrix_colliders_pos_setter.gd" id="6_we6uw"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7hv6g"]
 shader = ExtResource("1_hyctl")
 shader_parameter/palette = ExtResource("2_hyctl")
 
 [sub_resource type="SphereMesh" id="SphereMesh_hyctl"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7hv6g"]
+radius = 57.00877
 
 [node name="Matrix" type="SubViewportContainer" unique_id=587305981]
 texture_filter = 1
@@ -24,6 +30,7 @@ grow_vertical = 2
 stretch = true
 stretch_shrink = 3
 mouse_target = true
+script = ExtResource("3_4buiu")
 
 [node name="SubViewport" type="SubViewport" parent="." unique_id=627918124]
 transparent_bg = true
@@ -60,6 +67,7 @@ keep_aspect = 0
 projection = 1
 fov = 69.5
 size = 2.0517473
+script = ExtResource("5_yxg17")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="SubViewport" unique_id=2008891008]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8660599, -0.42681587, 0.23289692)
