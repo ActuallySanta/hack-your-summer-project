@@ -39,10 +39,10 @@ func iterate(delta: float) -> int:
 		time = 0
 	elif state == 4 and time >= respawnTime:
 		state = 5
-	elif state > 4 and state < 7 and time >= TIME_ANIM:
+	elif state > 4 and state < 9 and time >= TIME_ANIM:
 		state += 1
 		time = 0
-	elif state == 7:
+	elif state == 9:
 		state = -2
 	else:
 		return -1

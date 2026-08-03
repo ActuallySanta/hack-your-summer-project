@@ -70,6 +70,7 @@ const IDLESTATEPARAM := "parameters/StandardMovement/Idle/MoveState/transition_r
 const MOVESTATEPARAM := "parameters/StandardMovement/Move/MoveState/transition_request"
 const FIRESTATEPARAM := "parameters/RangedFire/MoveState/transition_request"
 const TILE_SIZE := 48
+const GUN_MODES : Array[ StringName ]= [ "stun", "plasma" ]
 # Input
 var _moveInput : float
 var _vertMoveInput :float
@@ -92,6 +93,7 @@ var _attackBufferTimer : float
 # Shooting
 var _shootCooldownTimer : float
 var _shootBufferTimer : float
+var _gunMode : StringName
 # Knockback
 var _knockbackTimer : float
 var _knockbackForce : float
@@ -186,22 +188,6 @@ func attack() -> void:
 	_shootCooldownTimer = attackCooldown
 	_attackBufferTimer = 0
 	anim_swing = true
-
-func shoot() -> void:
-	var newBullet := bulletScene.instantiate() as PlayerBullet
-	var bulletX := bulletOffset
-	# The tuned offsets are relative to the sprite, so they follow it while airborne.
-	var bulletY := bullet_y_offset[ playerMoveState ] + _visual_offset
-	if !_facingRight:
-		bulletX *= -1
-		newBullet.scale.x = -1
-	newBullet.position = position + Vector2(bulletX, bulletY)
-	newBullet.direction = Vector2.RIGHT if _facingRight else Vector2.LEFT
-	get_tree().root.add_child(newBullet)
-	_shootCooldownTimer = shootCooldown
-	_attackCooldownTimer = shootCooldown
-	_shootBufferTimer = 0
-	anim_fire = true
 
 #region Handlers
 func handle_vertical_speed() -> void:
@@ -355,8 +341,6 @@ func translate_state() -> CollisionManager.State:
 	
 	return CollisionManager.State.WALK
 
-
-
 func _physics_process(delta: float) -> void:
 	if _is_vaulting:
 		return
@@ -389,8 +373,7 @@ func _physics_process(delta: float) -> void:
 	
 	sprite.flip_h = false if _facingRight else true
 	
-	refresh_cell_group_music()
-	
+	refresh_cell_group_music()	
 
 func refresh_cell_group_music(force := false) -> void:
 	var groups := MetSys.get_cell_groups(MetSys.get_current_coords())
@@ -462,7 +445,31 @@ func disable_jetpack() -> void:
 func enable_jetpack() -> void:
 	jetpack.process_mode = Node.PROCESS_MODE_INHERIT
 #endregion
-	
+
+#region Gun
+func set_gun(mode: StringName) -> void:
+	if not mode in GUN_MODES:
+		return
+	_gunMode = mode
+
+func shoot() -> void:
+	var newBullet := bulletScene.instantiate() as PlayerBullet
+	var bulletX := bulletOffset
+	# The tuned offsets are relative to the sprite, so they follow it while airborne.
+	var bulletY := bullet_y_offset[ playerMoveState ] + _visual_offset
+	if !_facingRight:
+		bulletX *= -1
+		newBullet.scale.x = -1
+	newBullet.position = position + Vector2(bulletX, bulletY)
+	newBullet.direction = Vector2.RIGHT if _facingRight else Vector2.LEFT
+	newBullet.set_mode(_gunMode)
+	get_tree().root.add_child(newBullet)
+	_shootCooldownTimer = shootCooldown
+	_attackCooldownTimer = shootCooldown
+	_shootBufferTimer = 0
+	anim_fire = true
+#endregion
+
 #region Mantle
 func try_mantle() -> bool:
 	if not is_on_floor():
@@ -602,6 +609,9 @@ func get_map_position(foreground: TileMapLayer, relative_to_player: Vector2i = V
 	return map_pos
 
 func get_map_cordinates(foreground: TileMapLayer, position: Vector2 ) -> Vector2i:
+	if foreground == null:
+		printerr("No Geo group in scene")
+		return Vector2i.MIN
 	return foreground.local_to_map(foreground.to_local( position ))
 
 func get_map_position_player_bounds(foreground: TileMapLayer) -> Array[Vector2i]:

@@ -19,6 +19,7 @@ const READABLE :Dictionary[ int, StringName ] = {
 }
 
 @export var destroy_neighbors : bool = false
+@export var respawn : bool = true
 @export var destruction_offset_seconds : float = 0.1
 var list_of_broken_cords : Array[ BreakableTileData ]
 
@@ -49,6 +50,7 @@ func _process(delta: float) -> void:
 		
 		if iteration_result == -1:
 			continue
+		print(iteration_result)
 		var index : int = -1
 		if iteration_result == -2: # If should regen, make it so and remove
 			if PlayerOverlap.with_rect( cell_rect( tile_data.coord ), global_transform ):
@@ -57,12 +59,13 @@ func _process(delta: float) -> void:
 				tile_data.reset()
 				index = 1
 			else:
-				index = 0
+				if respawn:
+					index = 0
 				to_remove.append( i )
-		elif iteration_result < 6:
+		elif iteration_result < 4:
 			index =  iteration_result + 1
-		elif iteration_result > 6:
-			index = 5 - (iteration_result - 8)
+		elif iteration_result > 4:
+			index = 3 - (iteration_result - 6)
 		
 		set_cell_with( tile_data.coord, Vector2i( index, tile_data.break_type ) )
 	

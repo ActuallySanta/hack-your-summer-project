@@ -17,6 +17,7 @@ const SaveManager = preload("res://addons/MetroidvaniaSystem/Template/Scripts/Sa
 @export_file var save_room := START_ROOM_UID
 @export var save_pos := Vector2(3000, 483)
 @export var save_has_jetpack : bool
+@export var save_has_plasma_gun : bool
 
 ## Player speeds above this (pixels/second) are teleports (room change, respawn),
 ## not travel, so they never claim a camera region.
@@ -87,6 +88,10 @@ func _load_game() -> void:
 		_player.enable_jetpack()
 	else:
 		_player.disable_jetpack()
+	
+	_player.set_gun(
+		"plasma" if save.get_value("plasma_gun_collected") else "stun"
+	)
 	var room_id = save.get_value("current_room", START_ROOM_UID)
 	await load_room(room_id)
 	await get_tree().create_timer(artificial_load_time).timeout
@@ -120,6 +125,7 @@ func _load_custom_save() -> void:
 		save.set_value("current_room", save_room)
 	save.set_value("player_pos", save_pos)
 	save.set_value("jetpack_collected", save_has_jetpack)
+	save.set_value("plasma_gun_collected", save_has_plasma_gun)
 
 func get_save_path(save_index: int) -> StringName:
 	return "user://save" + str(save_index) +".sav"
@@ -149,6 +155,9 @@ func _on_pickup_collected(pickup: Pickup) -> void:
 			var checkpoint := get_tree().get_first_node_in_group(&"jetpack_checkpoint") as Node2D
 			if checkpoint:
 				LevelManager.set_checkpoint(MetSys.get_current_room_name(), checkpoint.global_position, true)
+		Pickup.PickupType.PlasmaGun:
+			save.set_value("plasma_gun_collected", true)
+			PlayerManager.player.set_gun("plasma")
 		_:
 			print("No action defined for pickup " + pickup.get_type_as_str())
 
