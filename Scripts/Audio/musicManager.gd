@@ -70,6 +70,8 @@ func play_background_track(track: AudioStream) -> void:
 	play()
 
 func get_current_room_instance_groups() -> PackedInt32Array:
+	if MetSys.current_room == null:
+		return []
 	var current_cells := MetSys.current_room.cells
 	if current_cells.is_empty():
 		return []

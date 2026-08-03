@@ -41,7 +41,7 @@ metadata/_custom_type_script = "uid://d3d1sfke7spoo"
 script = ExtResource("10_tfsr7")
 point_a = Vector2(585, 144)
 point_b = Vector2(798, 144)
-length = 477.39103498496115
+length = 477.3910349849611
 wind_speed = 1.22
 wind_phase = 0.45
 metadata/_custom_type_script = "uid://d3d1sfke7spoo"
@@ -99,7 +99,7 @@ metadata/_custom_type_script = "uid://d3d1sfke7spoo"
 script = ExtResource("10_tfsr7")
 point_a = Vector2(765, 528)
 point_b = Vector2(909, 144)
-length = 497.53906409107276
+length = 497.5390640910728
 wind_speed = 1.5
 metadata/_custom_type_script = "uid://d3d1sfke7spoo"
 
