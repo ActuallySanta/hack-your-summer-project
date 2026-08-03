@@ -1,7 +1,7 @@
 extends SubViewportContainer
 
 @onready var sub_viewport := $SubViewport
-@onready var matrix_model_skeleton := $SubViewport/Matrix/Armature/Skeleton3D
+@onready var matrix_model_skeleton := $SubViewport/Head/Matrix/Armature/Skeleton3D
 @onready var colliders := $Colliders
 @onready var camera : Camera3D = $SubViewport/Camera3D
 

@@ -14,7 +14,7 @@ shader_parameter/palette = ExtResource("2_hyctl")
 
 [sub_resource type="SphereMesh" id="SphereMesh_hyctl"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_7hv6g"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_ggynu"]
 radius = 57.00877
 
 [node name="Matrix" type="SubViewportContainer" unique_id=587305981]
@@ -71,3 +71,122 @@ script = ExtResource("5_yxg17")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="SubViewport" unique_id=2008891008]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8660599, -0.42681587, 0.23289692)
+
+[node name="Colliders" type="Area2D" parent="." unique_id=2072170075]
+script = ExtResource("6_we6uw")
+
+[node name="Head" type="CollisionShape2D" parent="Colliders" unique_id=1232098747]
+position = Vector2(993, 337)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint1" type="CollisionShape2D" parent="Colliders" unique_id=1472992057]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint2" type="CollisionShape2D" parent="Colliders" unique_id=1753562862]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint3" type="CollisionShape2D" parent="Colliders" unique_id=110817624]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint4" type="CollisionShape2D" parent="Colliders" unique_id=35884060]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint5" type="CollisionShape2D" parent="Colliders" unique_id=214374784]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint6" type="CollisionShape2D" parent="Colliders" unique_id=1172033896]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint7" type="CollisionShape2D" parent="Colliders" unique_id=793977921]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint8" type="CollisionShape2D" parent="Colliders" unique_id=873745779]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint9" type="CollisionShape2D" parent="Colliders" unique_id=268500502]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint10" type="CollisionShape2D" parent="Colliders" unique_id=259402053]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint11" type="CollisionShape2D" parent="Colliders" unique_id=1938043959]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint12" type="CollisionShape2D" parent="Colliders" unique_id=557132856]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint13" type="CollisionShape2D" parent="Colliders" unique_id=1400441306]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint14" type="CollisionShape2D" parent="Colliders" unique_id=1067036376]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint15" type="CollisionShape2D" parent="Colliders" unique_id=1861171394]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint16" type="CollisionShape2D" parent="Colliders" unique_id=617861633]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint17" type="CollisionShape2D" parent="Colliders" unique_id=337919131]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint18" type="CollisionShape2D" parent="Colliders" unique_id=1011761237]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint19" type="CollisionShape2D" parent="Colliders" unique_id=1349947178]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint20" type="CollisionShape2D" parent="Colliders" unique_id=271783256]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint21" type="CollisionShape2D" parent="Colliders" unique_id=1027814026]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint22" type="CollisionShape2D" parent="Colliders" unique_id=393002842]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint23" type="CollisionShape2D" parent="Colliders" unique_id=943969985]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint24" type="CollisionShape2D" parent="Colliders" unique_id=1763365398]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint25" type="CollisionShape2D" parent="Colliders" unique_id=2136504976]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint26" type="CollisionShape2D" parent="Colliders" unique_id=1266215588]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint27" type="CollisionShape2D" parent="Colliders" unique_id=145346654]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint28" type="CollisionShape2D" parent="Colliders" unique_id=969679499]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
