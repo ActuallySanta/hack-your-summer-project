@@ -22,17 +22,16 @@ func _on_hit(_hitbox: Hitbox, _target: Hurtbox) -> void:
 	queue_free()
 
 func _on_environment_hit(target: Node2D) -> void:
+	queue_free()
 	if "BreakAbles" in target.name:
 		var tile_target := target as TileMapLayer
 		if tile_target == null:
-			queue_free()
 			return
 		
 		var foreground : TileMapLayer = get_tree().get_first_node_in_group("Geometry")
 		var coordinates = tile_target.local_to_map(tile_target.to_local( global_position ) )
-		tile_target.destroy_tile( coordinates, foreground )
+		tile_target.destroy_tile( coordinates, "stun_bullet", foreground )
 		
-		queue_free()
 		return
 	
-	queue_free()
+	
