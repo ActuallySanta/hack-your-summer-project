@@ -36,10 +36,11 @@ func get_damage_type() -> StringName:
 		"plasma":
 			return "plasma_bullet"
 	
-	return "Null"
+	return "NULL"
 
 func _on_environment_hit(target: Node2D) -> void:
-	queue_free()
+	if mode != "plasma":
+		queue_free()
 	if "BreakAbles" in target.name:
 		var tile_target := target as TileMapLayer
 		if tile_target == null:
@@ -48,7 +49,6 @@ func _on_environment_hit(target: Node2D) -> void:
 		var foreground : TileMapLayer = get_tree().get_first_node_in_group("Geometry")
 		var coordinates = tile_target.local_to_map(tile_target.to_local( global_position ) )
 		tile_target.destroy_tile( coordinates, get_damage_type(), foreground )
-		
 		return
 	
 	
