@@ -1,35 +1,31 @@
 extends SubViewportContainer
 
+@onready var sub_viewport := $SubViewport
 @onready var matrix_model_skeleton := $SubViewport/Matrix/Armature/Skeleton3D
 @onready var colliders := $Colliders
-@onready var camera := $SubViewport/Camera3D
+@onready var camera : Camera3D = $SubViewport/Camera3D
 
 var size_of_cam : Vector2
-var num_bones : int = 29
 
 func _ready() -> void:
-	print("== Begin test ==")
 	size_of_cam = camera.get_camera_size_in_world()
-	# -- THIS IS A TEST RUN --
-	for i in num_bones:
-		print("  Update: ", i)
+
+func _process(_delta: float) -> void:
+	for i in matrix_model_skeleton.get_bone_count():
 		update_bone( i )
-	
-	print("Done test!")
 
 func update_bone(index: int) -> void:
-	print("    Getting 3d...")
-	var bone_pos_3d = matrix_model_skeleton.get_bone_pos_from_index(index)
-	print("    Convert to 2d...")
-	var bone_pos_2d = convert_2D_to_3D( bone_pos_3d )
-	print("    Setting pos...")
-	colliders.set_bone_pos( index, bone_pos_2d )
+	var bone_pos_3d : Vector3 = matrix_model_skeleton.get_bone_pos_from_index(index)
+	colliders.set_bone_pos(index, convert_3D_to_2D(bone_pos_3d, size_of_cam))
 
-## Using the dimensions of the camera and the dimensions of the viewport,
-## combined with the knowledge that the topleft of both should be (0,0),
-## we can transform the position of a bone relative to the camera
-## into the 2D space of the subviewportContainer
-func convert_2D_to_3D(position3D: Vector3) -> Vector2:
-	var pos_as_raw_2D : Vector2 = Vector2(position3D.x, position3D.y)
-	var adjusted_for_camera_size = pos_as_raw_2D / size_of_cam
-	return pos_as_raw_2D * size
+## Since camera will never change dimenstions, 
+## and SubViewportContainer will also never change dimensions,
+## and we know for an absolute fact that they are supposed to represent
+## sane area of space,we can just transform the coordinates of position 
+## in the camera
+func convert_3D_to_2D(position3D: Vector3, cam_size: Vector2) -> Vector2:
+	# Into camera space, so the camera's position and rotation are accounted for.
+	var local := camera.global_transform.affine_inverse() * position3D
+	# Normalise to -0.5..0.5, flipping Y because 3D is Y-up and 2D is Y-down.
+	var ndc := Vector2(local.x / cam_size.x, -local.y / cam_size.y)
+	return (ndc + Vector2(0.5, 0.5)) * size

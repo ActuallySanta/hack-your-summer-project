@@ -190,7 +190,3 @@ shape = SubResource("CircleShape2D_7hv6g")
 [node name="BoneJoint28" type="CollisionShape2D" parent="Colliders" unique_id=898810428]
 scale = Vector2(0.35, 0.35)
 shape = SubResource("CircleShape2D_7hv6g")
-
-[node name="BoneJoint29" type="CollisionShape2D" parent="Colliders" unique_id=82152801]
-scale = Vector2(0.35, 0.35)
-shape = SubResource("CircleShape2D_7hv6g")

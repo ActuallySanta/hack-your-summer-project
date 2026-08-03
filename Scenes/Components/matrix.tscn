@@ -6,4 +6,15 @@
 [node name="Matrix" unique_id=875937365 instance=ExtResource("1_hotda")]
 
 [node name="Skeleton3D" parent="Armature" parent_id_path=PackedInt32Array(1403862177) index="0" unique_id=1240524153]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, 0, 0)
+bones/19/rotation = Quaternion(0.135, 0, 0, 1)
+bones/20/rotation = Quaternion(0.21, 0, 0, 1)
+bones/21/rotation = Quaternion(0.21, 0, 0, 1)
+bones/22/rotation = Quaternion(0.15, 0, 0, 1)
+bones/23/rotation = Quaternion(0.1, 0, 0, 1)
+bones/24/rotation = Quaternion(-0.285, 0, 0, 1)
+bones/25/rotation = Quaternion(-0.18, 0, 0, 1)
+bones/26/rotation = Quaternion(-0.195, 0, 0, 1)
+bones/27/rotation = Quaternion(-0.14, 0, 0, 1)
+bones/28/rotation = Quaternion(-0.375, 0, 0, 1)
 script = ExtResource("2_37l25")

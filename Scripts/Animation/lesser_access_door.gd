@@ -52,6 +52,8 @@ func set_all_open() -> void:
 		collider.queue_free()
 
 func _is_button_pressed(id: String) -> bool:
+	if MetSys.save_data == null:
+		return false
 	return MetSys.save_data.stored_objects.get(id, false)
 
 func get_children_with_name(identifier: String) -> Array[ Node ]:
