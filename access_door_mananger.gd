@@ -7,7 +7,7 @@ extends Node2D
 @onready var door_controls = [
 	[ $TopDoor1, $BottomDoor1 ],
 	[ $TopDoor2, $BottomDoor2 ],
-	[ $TopDoor3, $BottomDoor3 ]
+	[ $TopDoor3, $BottomDoor3 ],
 ]
 
 @onready var sound_players = [ $DoorSFX, $DoorSFX2, $DoorSFX3 ]

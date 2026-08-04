@@ -42,6 +42,7 @@ tile_map_data = PackedByteArray("AADo/wAAAgABAAcAAADo/wEAAAACAAEAAADo/wIAAAACAAE
 tile_set = ExtResource("3_807yj")
 
 [node name="DialogueTrigger" parent="." unique_id=1367779263 instance=ExtResource("4_506i1")]
+process_mode = 4
 position = Vector2(158, 834)
 loadedConversation = ExtResource("5_26x51")
 

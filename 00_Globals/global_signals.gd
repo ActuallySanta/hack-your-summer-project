@@ -11,3 +11,8 @@ signal OnGameResume
 
 signal PushBlockingCyborg
 signal RestoreStationPower
+## Emitted right after the player has been teleported to a spawn point (level
+## load or checkpoint respawn). Nodes that react to the player's presence should
+## re-check it here: a teleport produces no enter/exit signals until the physics
+## server has stepped, which is several frames after the room is in the tree.
+signal player_spawned

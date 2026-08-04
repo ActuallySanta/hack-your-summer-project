@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://dpls5hv23md53"]
+
+[ext_resource type="Script" uid="uid://dp3benl68enib" path="res://Scripts/Animation/lesser_access_door.gd" id="1_atwtd"]
+[ext_resource type="AudioStream" uid="uid://dfgxi3itva0lt" path="res://Sounds/DoorAndTransition/HeavyDoorDepressurize.wav" id="2_pre0y"]
+
+[node name="SmallAccessDoor" type="Node2D" unique_id=1984866545]
+script = ExtResource("1_atwtd")
+
+[node name="SFX" type="AudioStreamPlayer2D" parent="." unique_id=867105735]
+stream = ExtResource("2_pre0y")
+attenuation = 1e-05

@@ -8,6 +8,11 @@
 [ext_resource type="PackedScene" uid="uid://b3d6cwvyjev0s" path="res://Scenes/Level Elements/fusebox.tscn" id="6_x1qgj"]
 [ext_resource type="PackedScene" uid="uid://cy2osx3ogepds" path="res://Scenes/Rooms/Tutorial Area/locked_door.tscn" id="6_yp3rd"]
 [ext_resource type="PackedScene" uid="uid://cvo6nu4jnyud4" path="res://Scenes/Pickups/gun.tscn" id="7_absri"]
+[ext_resource type="PackedScene" uid="uid://k8xepgfoggiq" path="res://Scenes/Dialogue System/dialogue_trigger.tscn" id="4_x1qgj"]
+[ext_resource type="PackedScene" uid="uid://b1ujnmnbsxx87" path="res://Scenes/Rooms/CommonRoomComponents/access_button_right.tscn" id="5_2fcpq"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_x1qgj"]
+size = Vector2(20, 344)
 
 [node name="MaintenenceRoom" type="Node2D" unique_id=1690497050]
 script = ExtResource("1_yp3rd")

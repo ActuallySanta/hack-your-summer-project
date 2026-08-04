@@ -14,17 +14,6 @@ const PICKUP_JETPACK_ID = "Jetpack"
 @onready var _hud : GameHUD = $HUD
 
 @export var cameraDeadzone := Vector2(0, 0)
-## How quickly the camera eases out of soft (non-rectangular) boundaries.
-## Higher is snappier, lower is smoother. This is the "soft" end of the scale;
-## each boundary's own [member SoftCameraBoundary.resistance] blends between this
-## smoothing (0.0) and an instant, uncrossable push-out (1.0).
-@export var cameraSoftSmoothing := 10.0
-## When a camera-path projection jumps farther than this (pixels) in one frame,
-## ease across it over [member cameraPathSmoothTime] instead of snapping. Below it,
-## normal following stays crisp; jumps bigger than a screen (room changes) snap.
-@export var cameraPathJumpThreshold := 48.0
-## Seconds to ease across a detected camera-path corner jump.
-@export var cameraPathSmoothTime := 0.5
 @export var death_respawn_delay := 2.0
 @export var artificial_load_time := 0.0
 @export var allow_save_anywhere := false
@@ -34,16 +23,28 @@ const PICKUP_JETPACK_ID = "Jetpack"
 @export_enum("Uncollected", "Collected", "Powered") var save_fuse_state : int
 @export var save_has_gun : bool
 @export var save_has_jetpack : bool
+@export var save_has_plasma_gun : bool
+
+## Player speeds above this (pixels/second) are teleports (room change, respawn),
+## not travel, so they never claim a camera region.
+const CAMERA_TELEPORT_SPEED := 4000.0
 
 var save : SaveManager
 var isInGame : bool = false
 var paused : bool = false
-# Camera-path jump smoothing state (see _smooth_path_jump).
-var _path_pos: Vector2
-var _path_from: Vector2
-var _path_active := false
-var _path_elapsed := 0.0
-var _path_initialized := false
+# Camera axis region state (see _apply_camera_axis_regions).
+var _axis_region: CameraAxisRegion = null
+var _axis_locked := 1
+var _axis_start := 0.0
+var _axis_progress := 0.0
+var _axis_rate := 1.0
+# Hand-back of a locked axis to normal following. -1 when nothing is releasing.
+var _release_axis := -1
+var _release_start := 0.0
+var _release_progress := 0.0
+var _release_rate := 1.0
+var _prev_player_pos := Vector2.ZERO
+var _prev_player_valid := false
 
 # I know this is just replicating the global script feature, but 
 # this way allows us to still easily use the custom save system
@@ -54,6 +55,9 @@ func _ready() -> void:
 		instance = self
 	else:
 		printerr("Multiple GameManager instances detected")
+	# Regions loaded inside a room find us through this to claim the camera on
+	# arrival, before the first frame in the room is drawn.
+	add_to_group(CameraAxisRegion.CONTROLLER_GROUP)
 	_hud.start_new_game.connect(_new_game)
 	_hud.load_game.connect(_load_game)
 	_hud.quit_game.connect(get_tree().quit)
@@ -106,10 +110,15 @@ func _load_game() -> void:
 	else:
 		player.disable_gun()
 	
+	
+	_player.set_gun(
+		"plasma" if save.get_value("plasma_gun_collected") else "stun"
+	)
 	var room_id = save.get_value("current_room", START_ROOM_UID)
 	await load_room(room_id)
 	await get_tree().create_timer(artificial_load_time).timeout
 	_player.global_position = save.get_value("player_pos", START_POS)
+	GlobalSignals.player_spawned.emit()
 	LevelManager.set_checkpoint(room_id, _player.position, false)
 	_player.process_mode = Node.PROCESS_MODE_INHERIT
 	isInGame = true
@@ -128,6 +137,7 @@ func _new_game():
 	await load_room(START_ROOM_UID)
 	await get_tree().create_timer(artificial_load_time).timeout
 	_player.global_position = START_POS
+	GlobalSignals.player_spawned.emit()
 	_player.process_mode = Node.PROCESS_MODE_INHERIT
 	isInGame = true
 	_hud.hide_load_screen()
@@ -146,6 +156,7 @@ func _load_custom_save() -> void:
 	if save_has_jetpack:
 		MetSys.save_data.stored_objects[PICKUP_JETPACK_ID] = true
 	
+	save.set_value("plasma_gun_collected", save_has_plasma_gun)
 
 func get_save_path(save_index: int) -> StringName:
 	return "user://save" + str(save_index) +".sav"
@@ -162,9 +173,9 @@ func resume_game() -> void:
 
 func _on_room_changed(new_room: String) -> void:
 	save.set_value("current_room", new_room)
-	# Force the camera-path smoother to snap on the next frame instead of sliding
-	# across the room boundary during a transition.
-	_path_initialized = false
+	# The old room's regions are about to be freed, and the player teleports across
+	# the boundary, so drop all camera state instead of easing across the seam.
+	reset_camera_axis_state()
 	#print("Entering room " + new_room)
 
 func _on_pickup_collected(pickup: Pickup) -> void:
@@ -178,6 +189,9 @@ func _on_pickup_collected(pickup: Pickup) -> void:
 			pass
 		Pickup.PickupType.StunGun:
 			_player.enable_gun()
+		Pickup.PickupType.PlasmaGun:
+			save.set_value("plasma_gun_collected", true)
+			PlayerManager.player.set_gun("plasma")
 		_:
 			print("No action defined for pickup " + pickup.get_type_as_str())
 
@@ -199,8 +213,7 @@ func _process(_delta: float) -> void:
 		camPos.x = playerPos.x + (cameraDeadzone.x * sign(posDiff.x))
 	if abs(posDiff.y) > cameraDeadzone.y:
 		camPos.y = playerPos.y + (cameraDeadzone.y * sign(posDiff.y))
-	camPos = _apply_soft_camera_bounds(camPos, _delta)
-	camPos = _apply_camera_path_bounds(camPos, _delta)
+	camPos = _apply_camera_axis_regions(camPos, _delta)
 	_camera.position = camPos
 	
 	if allow_save_anywhere and Input.is_action_just_pressed(&"debug_save"):
@@ -230,97 +243,157 @@ static func is_station_powered() -> bool:
 		return false
 	return instance.save.get_value("station_powered")
 
-#region Soft camera bounds
-## Pushes the camera centre out of any registered non-rectangular soft boundaries,
-## while keeping the visible rectangle inside the room's hard (rectangular) limits.
-## The hard limits always win, so a soft bound can never expose out-of-room space.
+#region Camera axis regions
+## Applies whichever [CameraAxisRegion] currently holds the camera, then re-applies
+## the room's rectangular hard bounds so they stay the final authority.
 ##
-## Each boundary owns its own smoothing and blends it with the instant push-out by
-## its [member SoftCameraBoundary.resistance], so a rigid boundary keeps the camera
-## out for any reason while soft ones ease in and out of corners. Corrections are
-## measured from the hard-clamped baseline, so they stay stateless and jitter-free.
-func _apply_soft_camera_bounds(cam_center: Vector2, delta: float) -> Vector2:
-	var boundaries := get_tree().get_nodes_in_group(SoftCameraBoundary.GROUP)
+## A region is a candidate while the player stands inside its polygon, and takes
+## control when the player is also moving in one of its claim directions. Control
+## then persists until the player leaves the polygon or another region claims. On
+## every change of hands the blend restarts from the camera's current position, so
+## a hand-over behaves exactly like a fresh entry (see [CameraAxisRegion]).
+func _apply_camera_axis_regions(cam_center: Vector2, delta: float) -> Vector2:
+	var movement := _player_movement(PlayerManager.player, delta)
+
+	# A region freed under us (room unloaded) just stops holding the camera.
+	if _axis_region != null and not is_instance_valid(_axis_region):
+		_axis_region = null
+
+	# One pass: does the active region still hold the player, and does anything
+	# inside the player's polygons want to claim the camera this frame?
+	var claimant: CameraAxisRegion = null
+	var active_holds := false
+	for node in get_tree().get_nodes_in_group(CameraAxisRegion.GROUP):
+		var region := node as CameraAxisRegion
+		if not region.contains_player():
+			continue
+		if region == _axis_region:
+			active_holds = true
+		if region.accepts_movement(movement) and (claimant == null or region.claim_priority > claimant.claim_priority):
+			claimant = region
+
+	if claimant != null and claimant != _axis_region:
+		_begin_axis_region(claimant)
+	elif _axis_region != null and not active_holds:
+		_end_axis_region()
+
+	var result := cam_center
+	if _axis_region != null:
+		_axis_progress = minf(_axis_progress + _axis_rate * delta, 1.0)
+		result[_axis_locked] = lerpf(_axis_start, _axis_region.get_center_value(),
+			smoothstep(0.0, 1.0, _axis_progress))
+	if _release_axis >= 0:
+		# Ease from where the axis was parked back onto normal following, which is
+		# what cam_center already holds for that axis.
+		_release_progress = minf(_release_progress + _release_rate * delta, 1.0)
+		result[_release_axis] = lerpf(_release_start, cam_center[_release_axis],
+			smoothstep(0.0, 1.0, _release_progress))
+		if _release_progress >= 1.0:
+			_release_axis = -1
+
 	# adjust_camera_limits() was already called this frame, so the limits are current.
 	var hard_rect := Rect2(
 		_camera.limit_left, _camera.limit_top,
 		_camera.limit_right - _camera.limit_left,
 		_camera.limit_bottom - _camera.limit_top)
 	var half_view := _camera.get_viewport_rect().size * 0.5 / _camera.zoom
+	return _clamp_view_to_rect(result, half_view, hard_rect)
 
-	# Crisp hard clamp is the baseline every boundary's correction is measured against.
-	var hard := _clamp_view_to_rect(cam_center, half_view, hard_rect)
+## Takes camera control for [param region] with the locked axis already sitting on
+## its centre line, and moves the camera there immediately.
+##
+## Called by a region that finds the player inside it as its room resolves, which
+## happens before the first frame in that room is drawn. There is no previous shot
+## to ease out of in that situation, so easing would just look like the camera
+## drifting into place after the room appears.
+func snap_to_camera_axis_region(region: CameraAxisRegion) -> void:
+	if not is_instance_valid(_camera):
+		return
+	_begin_axis_region(region)
+	# Nothing to travel: the shot starts at its destination.
+	_axis_progress = 1.0
+	_release_axis = -1
 
-	var correction := Vector2.ZERO
-	for boundary in boundaries:
-		correction += (boundary as SoftCameraBoundary).get_correction(hard, half_view, delta, cameraSoftSmoothing)
-
-	# Final hard clamp is instant, so no boundary's correction can expose a hard bound.
-	return _clamp_view_to_rect(hard + correction, half_view, hard_rect)
-
-## Confines the camera centre to any registered camera-path boundaries (the
-## alternative approach: the polygon dictates where the centre may go), then
-## re-applies the rectangular hard bounds so they remain the final authority.
-func _apply_camera_path_bounds(cam_center: Vector2, delta: float) -> Vector2:
-	var boundaries := get_tree().get_nodes_in_group(CameraPathBoundary.GROUP)
-	if boundaries.is_empty():
-		# Re-arm so re-entering a path room snaps rather than smoothing from a stale pos.
-		_path_initialized = false
-		return cam_center
-
-	var result := cam_center
-	for boundary in boundaries:
-		result = (boundary as CameraPathBoundary).constrain_center(result)
-
+	var room := MetSys.get_current_room_instance()
+	if not room:
+		return
+	# The room may not have been measured yet this frame, and the hard bounds have
+	# to win here too, so refresh the limits before clamping to them.
+	room.adjust_camera_limits(_camera)
+	var pos := _camera.position
+	pos[_axis_locked] = region.get_center_value()
 	var hard_rect := Rect2(
 		_camera.limit_left, _camera.limit_top,
 		_camera.limit_right - _camera.limit_left,
 		_camera.limit_bottom - _camera.limit_top)
 	var half_view := _camera.get_viewport_rect().size * 0.5 / _camera.zoom
-	var target := _clamp_view_to_rect(result, half_view, hard_rect)
-	return _smooth_path_jump(target, half_view, delta)
+	_camera.position = _clamp_view_to_rect(pos, half_view, hard_rect)
 
-## Band-aid smoothing for the camera-path projection: normal following passes
-## through untouched, but a jump larger than [member cameraPathJumpThreshold]
-## (yet smaller than a screen — i.e. not a room-change teleport) is eased across
-## over [member cameraPathSmoothTime] seconds so corners don't snap.
-func _smooth_path_jump(target: Vector2, half_view: Vector2, delta: float) -> Vector2:
-	# Jumps bigger than roughly half a screen are teleports (room change / respawn) -> snap.
-	var snap_limit := half_view.length()
+## Hands the camera to [param region], measuring its slide from where the camera
+## actually is right now.
+func _begin_axis_region(region: CameraAxisRegion) -> void:
+	var previous := _axis_region
+	_axis_region = region
+	_axis_locked = region.get_locked_axis()
+	_axis_start = _camera.position[_axis_locked]
+	_axis_progress = 0.0
+	_axis_rate = region.centering_rate
 
-	if not _path_initialized:
-		_path_pos = target
-		_path_initialized = true
-		_path_active = false
-		return _path_pos
+	if previous != null and previous.get_locked_axis() != _axis_locked:
+		# Swapping preserved axis (e.g. rounding the corner of an L-shaped shaft):
+		# ease the axis we just freed back into normal following.
+		_start_axis_release(previous.get_locked_axis(), previous.get_release_rate())
+	elif _release_axis == _axis_locked:
+		# We are driving that axis again, so an in-flight hand-back is moot.
+		_release_axis = -1
 
-	var jump := target.distance_to(_path_pos)
+## Drops camera control and eases the locked axis back into normal following.
+func _end_axis_region() -> void:
+	var region := _axis_region
+	_axis_region = null
+	_start_axis_release(_axis_locked, region.get_release_rate())
 
-	if _path_active:
-		if jump > snap_limit:
-			_path_active = false
-			_path_pos = target
-			return _path_pos
-		_path_elapsed += delta
-		var t := 1.0 if cameraPathSmoothTime <= 0.0 else clampf(_path_elapsed / cameraPathSmoothTime, 0.0, 1.0)
-		_path_pos = _path_from.lerp(target, smoothstep(0.0, 1.0, t))
-		if t >= 1.0:
-			_path_active = false
-			_path_pos = target
-		return _path_pos
+func _start_axis_release(axis: int, rate: float) -> void:
+	_release_axis = axis
+	_release_start = _camera.position[axis]
+	_release_progress = 0.0
+	_release_rate = rate
 
-	if jump > cameraPathJumpThreshold and jump <= snap_limit:
-		# Begin easing across this corner jump (and take the first step now).
-		_path_active = true
-		_path_from = _path_pos
-		_path_elapsed = delta
-		var t := 1.0 if cameraPathSmoothTime <= 0.0 else clampf(_path_elapsed / cameraPathSmoothTime, 0.0, 1.0)
-		_path_pos = _path_from.lerp(target, smoothstep(0.0, 1.0, t))
-		return _path_pos
+## The player's travel this frame in global pixels/second. Teleports (room change,
+## respawn) are reported as no movement so they can't claim a region.
+func _player_movement(player: Node2D, delta: float) -> Vector2:
+	var pos := player.global_position
+	var movement := Vector2.ZERO
+	if _prev_player_valid and delta > 0.0:
+		movement = (pos - _prev_player_pos) / delta
+		if movement.length() > CAMERA_TELEPORT_SPEED:
+			movement = Vector2.ZERO
+	_prev_player_pos = pos
+	_prev_player_valid = true
+	return movement
 
-	# Small everyday follow, or an outright teleport -> track exactly.
-	_path_pos = target
-	return _path_pos
+## Forgets all camera region state, so the next frame starts from scratch. Used on
+## room changes, where the old regions are freed and the player teleports.
+func reset_camera_axis_state() -> void:
+	_axis_region = null
+	_release_axis = -1
+	_prev_player_valid = false
+	# MetSys can report the room change after the new room's regions have already
+	# resolved, so re-resolve rather than leaving the camera unclaimed until the
+	# player next moves. Deferred, because on a transition the room this belongs
+	# to is still being loaded.
+	_resolve_camera_arrival.call_deferred()
+
+## Gives the camera to whichever loaded region the player is already standing in,
+## centred and without easing. A no-op when they aren't in one.
+func _resolve_camera_arrival() -> void:
+	var best: CameraAxisRegion = null
+	for node in get_tree().get_nodes_in_group(CameraAxisRegion.GROUP):
+		var region := node as CameraAxisRegion
+		if region.contains_player() and (best == null or region.claim_priority > best.claim_priority):
+			best = region
+	if best != null:
+		snap_to_camera_axis_region(best)
 
 ## Clamps a camera centre so its view rectangle stays within [param rect].
 ## If the room is smaller than the view on an axis, the view is centred there.
@@ -358,6 +431,7 @@ func respawn_player_at_checkpoint() -> void:
 	PlayerManager.player.global_position = LevelManager.checkpoint_pos
 	PlayerManager.player._facingRight = !LevelManager.checkpoint_facing_left
 	PlayerManager.player.respawn()
+	GlobalSignals.player_spawned.emit()
 
 func _on_player_death(_anim_duration: float) -> void:
 	await get_tree().create_timer(death_respawn_delay).timeout

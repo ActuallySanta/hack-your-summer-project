@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bo3gn3a58ss5g"]
 
 [ext_resource type="PackedScene" uid="uid://dwi7xjover0a6" path="res://Scenes/Rooms/Biological Research Sector/containment_room.tscn" id="1_hdue2"]
+[ext_resource type="Script" uid="uid://cphcuqed0ttgm" path="res://WorldMaps/world_map_viewer.gd" id="1_viofv"]
 [ext_resource type="PackedScene" uid="uid://n5oo0nvaktcg" path="res://Scenes/Rooms/Biological Research Sector/analysis_room_brs.tscn" id="2_nml2s"]
 [ext_resource type="PackedScene" uid="uid://bhqmc68ruopmr" path="res://Scenes/Rooms/Biological Research Sector/central_save_brs.tscn" id="3_xjf2l"]
 [ext_resource type="PackedScene" uid="uid://g1108rirj0rn" path="res://Scenes/Rooms/Biological Research Sector/communications_bay_brs.tscn" id="4_bhayh"]
@@ -23,6 +24,9 @@
 [ext_resource type="PackedScene" uid="uid://dosodgrjxvkn1" path="res://Scenes/Rooms/Biological Research Sector/specimen_storage_brs.tscn" id="21_6c30w"]
 
 [node name="WorldMapBRS" type="Node2D" unique_id=740908366]
+script = ExtResource("1_viofv")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=451296804]
 
 [node name="Upper BRS" type="Node2D" parent="." unique_id=1811147956]
 
