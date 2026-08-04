@@ -50,7 +50,6 @@ func _process(delta: float) -> void:
 		
 		if iteration_result == -1:
 			continue
-		print(iteration_result)
 		var index : int = -1
 		if iteration_result == -2: # If should regen, make it so and remove
 			if PlayerOverlap.with_rect( cell_rect( tile_data.coord ), global_transform ):

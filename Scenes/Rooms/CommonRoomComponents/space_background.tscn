@@ -8,6 +8,6 @@ texture_filter = 1
 texture_repeat = 3
 texture = ExtResource("1_okp4d")
 region_enabled = true
-region_rect = Rect2(0, 0, 2400, 864)
+region_rect = Rect2(0, 0, 1152, 672)
 script = ExtResource("2_t15nn")
 tiles_per_second = Vector2(2, -0.66)

@@ -18,6 +18,8 @@ const MAP = preload("res://Sounds/Music/Uncertainty.ogg")
 const SAVE = preload("res://Sounds/Music/Uncertainty.ogg")
 const PICKUP = preload("res://Sounds/Music/Uncertainty.ogg")
 
+const NONE = preload("res://Sounds/Music/issue.wav")
+
 @onready var ui_ost := {
 	"Main Menu": DEBUG,
 }
@@ -124,6 +126,8 @@ func _get_current_cell_group_music(groups: PackedInt32Array) -> AudioStream:
 		var group_name = MetSys.get_group_name(group)
 		if group_name.begins_with( "_" ):
 			var type = group_name.split("_", false, 1)
+			if type[ 0 ] == "NONE":
+				return NONE
 			return _parse_special_room(type[ 0 ], type[ 1 ])
 		else:
 			best_guess = location_ost.get(group_name)

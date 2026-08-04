@@ -15,8 +15,6 @@ func _ready() -> void:
 	_home = global_position
 	GlobalSignals.player_spawned.connect(_take_new_origin)
 
-## The camera is placed by Game's _process, which runs ahead of us in tree order,
-## so the origin is taken on the next frame rather than immediately.
 func _take_new_origin() -> void:
 	_needs_origin = true
 
