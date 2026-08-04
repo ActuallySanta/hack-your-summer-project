@@ -143,7 +143,7 @@ radius = 20.0
 size = Vector2(45, 51)
 
 [node name="Fallen_Cyborg" type="CharacterBody2D" unique_id=2020790701]
-collision_layer = 4
+collision_layer = 5
 script = ExtResource("1_65w47")
 bullet_spawn_offset = Vector2(60, -20.5)
 attackCooldown = 0.1

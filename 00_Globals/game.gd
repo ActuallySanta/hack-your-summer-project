@@ -5,6 +5,10 @@ const START_ROOM_UID = "uid://esk4fom87pxl" #Cryo Room
 const START_POS = Vector2(1000, 483)
 const SaveManager = preload("res://addons/MetroidvaniaSystem/Template/Scripts/SaveManager.gd")
 
+const PICKUP_FUSE_ID = "Fuse"
+const PICKUP_GUN_ID = "Gun"
+const PICKUP_JETPACK_ID = "Jetpack"
+
 @onready var _player : Player = $Player
 @onready var _camera : Camera2D = $Camera2D
 @onready var _hud : GameHUD = $HUD
@@ -16,6 +20,8 @@ const SaveManager = preload("res://addons/MetroidvaniaSystem/Template/Scripts/Sa
 @export var use_custom_save := false
 @export_file var save_room := START_ROOM_UID
 @export var save_pos := Vector2(3000, 483)
+@export_enum("Uncollected", "Collected", "Powered") var save_fuse_state : int
+@export var save_has_gun : bool
 @export var save_has_jetpack : bool
 @export var save_has_plasma_gun : bool
 
@@ -23,7 +29,7 @@ const SaveManager = preload("res://addons/MetroidvaniaSystem/Template/Scripts/Sa
 ## not travel, so they never claim a camera region.
 const CAMERA_TELEPORT_SPEED := 4000.0
 
-var save
+var save : SaveManager
 var isInGame : bool = false
 var paused : bool = false
 # Camera axis region state (see _apply_camera_axis_regions).
@@ -40,7 +46,15 @@ var _release_rate := 1.0
 var _prev_player_pos := Vector2.ZERO
 var _prev_player_valid := false
 
+# I know this is just replicating the global script feature, but 
+# this way allows us to still easily use the custom save system
+static var instance : GameManager
+
 func _ready() -> void:
+	if !instance:
+		instance = self
+	else:
+		printerr("Multiple GameManager instances detected")
 	# Regions loaded inside a room find us through this to claim the camera on
 	# arrival, before the first frame in the room is drawn.
 	add_to_group(CameraAxisRegion.CONTROLLER_GROUP)
@@ -68,6 +82,8 @@ func _init_metsys_and_objects() -> void:
 	#prevent player from acting while game is loading
 	_player.process_mode = Node.PROCESS_MODE_DISABLED
 	_player.reset_all_inputs()
+	
+	GlobalSignals.RestoreStationPower.connect(_restore_station_power)
 
 func _load_game() -> void:
 	get_tree().paused = false
@@ -84,10 +100,16 @@ func _load_game() -> void:
 		save = SaveManager.new()
 		save.load_from_text(get_save_path(0))
 		
-	if save.get_value("jetpack_collected", false):
+	if is_object_collected(PICKUP_JETPACK_ID):
 		_player.enable_jetpack()
 	else:
 		_player.disable_jetpack()
+		
+	if is_object_collected(PICKUP_GUN_ID):
+		player.enable_gun()
+	else:
+		player.disable_gun()
+	
 	
 	_player.set_gun(
 		"plasma" if save.get_value("plasma_gun_collected") else "stun"
@@ -110,6 +132,7 @@ func _new_game():
 	_hud.show_load_screen()
 	MetSys.set_save_data()
 	save = SaveManager.new()
+	_player.disable_gun()
 	_player.disable_jetpack()
 	await load_room(START_ROOM_UID)
 	await get_tree().create_timer(artificial_load_time).timeout
@@ -121,10 +144,18 @@ func _new_game():
 
 func _load_custom_save() -> void:
 	save = SaveManager.new()
-	if save_room:
-		save.set_value("current_room", save_room)
+	save.set_value("current_room", save_room)
 	save.set_value("player_pos", save_pos)
-	save.set_value("jetpack_collected", save_has_jetpack)
+	print(save_fuse_state)
+	save.set_value("station_powered", save_fuse_state == 2)
+	
+	if save_fuse_state > 0:
+		MetSys.save_data.stored_objects[PICKUP_FUSE_ID] = true
+	if save_has_gun:
+		MetSys.save_data.stored_objects[PICKUP_GUN_ID] = true
+	if save_has_jetpack:
+		MetSys.save_data.stored_objects[PICKUP_JETPACK_ID] = true
+	
 	save.set_value("plasma_gun_collected", save_has_plasma_gun)
 
 func get_save_path(save_index: int) -> StringName:
@@ -150,16 +181,25 @@ func _on_room_changed(new_room: String) -> void:
 func _on_pickup_collected(pickup: Pickup) -> void:
 	match pickup.type:
 		Pickup.PickupType.Jetpack:
-			save.set_value("jetpack_collected", true)
-			PlayerManager.player.enable_jetpack()
+			_player.enable_jetpack()
 			var checkpoint := get_tree().get_first_node_in_group(&"jetpack_checkpoint") as Node2D
 			if checkpoint:
 				LevelManager.set_checkpoint(MetSys.get_current_room_name(), checkpoint.global_position, true)
+		Pickup.PickupType.Fuse:
+			pass
+		Pickup.PickupType.StunGun:
+			_player.enable_gun()
 		Pickup.PickupType.PlasmaGun:
 			save.set_value("plasma_gun_collected", true)
 			PlayerManager.player.set_gun("plasma")
 		_:
 			print("No action defined for pickup " + pickup.get_type_as_str())
+
+func _push_blocking_cyborg() -> void:
+	save.set_value("cyborg_pushed", true)
+
+func _restore_station_power() -> void:
+	save.set_value("station_powered", true)
 
 func _process(_delta: float) -> void:
 	
@@ -167,7 +207,7 @@ func _process(_delta: float) -> void:
 		return
 	MetSys.get_current_room_instance().adjust_camera_limits(_camera)
 	var camPos := _camera.position
-	var playerPos := PlayerManager.player.position
+	var playerPos := _player.position
 	var posDiff := camPos - playerPos
 	if abs(posDiff.x) > cameraDeadzone.x:
 		camPos.x = playerPos.x + (cameraDeadzone.x * sign(posDiff.x))
@@ -184,6 +224,24 @@ func _process(_delta: float) -> void:
 		else:
 			pause_game()
 		
+
+static func is_object_collected(name : String) -> bool:
+	if !MetSys.save_data:
+		print("No save data found, cannot determine object collection status.")
+		return false
+	return MetSys.save_data.stored_objects.get(name, false)
+
+static func is_cyborg_pushed() -> bool:
+	if !instance or !instance.save:
+		print("No save data found, cannot determine push status.")
+		return false
+	return true
+
+static func is_station_powered() -> bool:
+	if !instance or !instance.save:
+		print("No save data found, cannot determine power status.")
+		return false
+	return instance.save.get_value("station_powered")
 
 #region Camera axis regions
 ## Applies whichever [CameraAxisRegion] currently holds the camera, then re-applies
