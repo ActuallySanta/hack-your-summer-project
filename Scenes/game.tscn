@@ -9,7 +9,6 @@ script = ExtResource("1_wrm1d")
 use_custom_save = true
 save_room = "uid://dog7lxsiy4s6a"
 save_pos = Vector2(115.00006, 460)
-save_fuse_state = 2
 
 [node name="Player" parent="." unique_id=862395343 instance=ExtResource("2_qxrlw")]
 position = Vector2(2493, 399)

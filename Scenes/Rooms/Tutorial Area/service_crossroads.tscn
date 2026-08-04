@@ -115,12 +115,13 @@ start_flipped = true
 [node name="LockedDoor" parent="." unique_id=1290327451 instance=ExtResource("5_006sv")]
 position = Vector2(129, 1800)
 
-[node name="CyborgPushTrigger" type="Area2D" parent="." unique_id=525811341]
+[node name="CyborgPushTrigger" type="Area2D" parent="." unique_id=525811341 node_paths=PackedStringArray("target_cyborg")]
 visible = false
 position = Vector2(1136, 1163)
 collision_layer = 0
 collision_mask = 0
 script = ExtResource("7_p8bte")
+target_cyborg = NodePath("../Fallen_Cyborg")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CyborgPushTrigger" unique_id=68320557]
 position = Vector2(-3.5, -10.5)

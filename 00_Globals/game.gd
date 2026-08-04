@@ -222,7 +222,7 @@ static func is_cyborg_pushed() -> bool:
 	if !instance or !instance.save:
 		print("No save data found, cannot determine push status.")
 		return false
-	return instance.save.get_value("cyborg_pushed")
+	return true
 
 static func is_station_powered() -> bool:
 	if !instance or !instance.save:
