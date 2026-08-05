@@ -20,6 +20,17 @@ enum CarryMode {
 	OVERLAP,
 }
 
+enum MomentumMode {
+	## Riders leave the platform with nothing.
+	NONE,
+	## Riders keep the platform's horizontal speed, and its vertical speed only
+	## while it is rising. Stepping off a descending platform will not yank
+	## anyone downward.
+	ADD_UPWARD_VELOCITY,
+	## Riders keep the platform's full velocity, downward included.
+	ADD_VELOCITY,
+}
+
 @export_category("Riders")
 ## Physics layers scanned for riders. Defaults to "player" (2) and "enemies" (3).
 @export_flags_2d_physics var rider_mask : int = 0b110:
@@ -47,14 +58,27 @@ enum CarryMode {
 ## point. Set to 0 to always carry.
 @export var teleport_threshold : float = 64.0
 
-## Distance moved during the last physics frame, for anything that wants to
-## inherit the platform's momentum (a jump off a rising platform, say).
+@export_category("Momentum")
+## What a rider takes with it when it leaves the platform, so jumping off a
+## moving platform throws you rather than dropping you straight down.
+@export var momentum_mode : MomentumMode = MomentumMode.ADD_UPWARD_VELOCITY
+## How long inherited momentum lasts. It falls off to nothing across this time,
+## the same way the player's wall jump bonus bleeds off.
+@export_range(0.0, 2.0, 0.05, "or_greater") var momentum_duration : float = 0.4
+## Scales inherited momentum. Above 1.0 for a launcher, below for a gentler toss.
+@export_range(0.0, 3.0, 0.05, "or_greater") var momentum_scale : float = 1.0
+
+## Distance moved during the last physics frame.
 var last_motion : Vector2
 
 var _detector : Area2D
 var _committed_position : Vector2
 var _pending_position : Vector2
 var _last_global_position : Vector2
+## instance id -> Node2D, everything riding as of the last physics frame.
+var _riding : Dictionary = {}
+## instance id -> { node, velocity, remaining }, riders coasting after leaving.
+var _momentum : Dictionary = {}
 
 func _ready() -> void:
 	_committed_position = position
@@ -75,7 +99,7 @@ func _process(_delta: float) -> void:
 	_pending_position = position
 	position = _committed_position
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint():
 		return
 
@@ -85,13 +109,17 @@ func _physics_process(_delta: float) -> void:
 
 	var motion := global_position - _last_global_position
 	_last_global_position = global_position
+
+	# A teleport is not movement, so it neither carries nor throws anyone.
+	if teleport_threshold > 0.0 and motion.length() > teleport_threshold:
+		motion = Vector2.ZERO
 	last_motion = motion
 
-	if not carry_enabled or motion.is_zero_approx():
-		return
-	if teleport_threshold > 0.0 and motion.length() > teleport_threshold:
-		return
-	_carry_riders(motion)
+	if carry_enabled:
+		_update_riders(motion)
+	else:
+		_riding.clear()
+	_apply_momentum(delta)
 
 ## Velocity of the platform in pixels/second, based on the last physics frame.
 func get_platform_velocity() -> Vector2:
@@ -101,6 +129,8 @@ func get_platform_velocity() -> Vector2:
 ## Regenerates the rider detection area. Call this if the painted tiles change
 ## at runtime.
 func rebuild_detector() -> void:
+	_riding.clear()
+	_momentum.clear()
 	if is_instance_valid(_detector):
 		remove_child(_detector)
 		_detector.queue_free()
@@ -120,24 +150,84 @@ func rebuild_detector() -> void:
 		shape.position = rect.get_center()
 		_detector.add_child(shape)
 
-func _carry_riders(motion: Vector2) -> void:
+func _update_riders(motion: Vector2) -> void:
 	if not is_instance_valid(_detector):
 		return
 
 	# Collect first, then move. Moving a body can change what the others are
 	# touching, and we want every rider judged against the same frame.
-	var riders : Array[Node2D] = []
+	var riders : Dictionary = {}
 	for body in _detector.get_overlapping_bodies():
-		if body == self or not body is Node2D:
+		if body == self:
 			continue
 		if _is_riding(body):
-			riders.append(body)
+			riders[body.get_instance_id()] = body
 
-	for rider in riders:
-		if sweep_riders and rider is PhysicsBody2D:
-			(rider as PhysicsBody2D).move_and_collide(motion)
-		else:
-			rider.global_position += motion
+	# Anything riding last frame but not this one just left, and takes the
+	# platform's velocity with it.
+	for id in _riding:
+		if not riders.has(id):
+			_start_momentum(_riding[id])
+	_riding = riders
+
+	for id in riders:
+		# Still attached, so there is nothing to coast on.
+		_momentum.erase(id)
+		if motion.is_zero_approx():
+			continue
+		_push(riders[id], motion)
+
+## Coasting after leaving the platform. This is applied as displacement rather
+## than as a one-shot add to the rider's velocity because the controllers here
+## rewrite velocity.x from input every physics frame, which would erase an added
+## velocity before it ever moved anyone.
+func _apply_momentum(delta: float) -> void:
+	for id in _momentum.keys():
+		var entry : Dictionary = _momentum[id]
+		# Left untyped: a rider freed since last frame would fail a Node2D type
+		# check before is_instance_valid ever got to reject it.
+		var rider = entry["node"]
+		if not is_instance_valid(rider) or _riding.has(id):
+			_momentum.erase(id)
+			continue
+
+		# Landing spends it, so stepping off onto solid ground does not skate.
+		if rider is CharacterBody2D and (rider as CharacterBody2D).is_on_floor():
+			_momentum.erase(id)
+			continue
+
+		var falloff : float = entry["remaining"] / maxf(momentum_duration, 0.001)
+		_push(rider, entry["velocity"] * falloff * delta)
+
+		entry["remaining"] -= delta
+		if entry["remaining"] <= 0.0:
+			_momentum.erase(id)
+
+## [param rider] is untyped for the same reason as in [method _apply_momentum]:
+## it may have been freed since the frame it was collected on.
+func _start_momentum(rider) -> void:
+	if momentum_mode == MomentumMode.NONE or momentum_duration <= 0.0:
+		return
+	if not is_instance_valid(rider):
+		return
+
+	var inherited := get_platform_velocity() * momentum_scale
+	if momentum_mode == MomentumMode.ADD_UPWARD_VELOCITY and inherited.y > 0.0:
+		inherited.y = 0.0
+	if inherited.is_zero_approx():
+		return
+
+	_momentum[rider.get_instance_id()] = {
+		"node": rider,
+		"velocity": inherited,
+		"remaining": momentum_duration,
+	}
+
+func _push(rider: Node2D, motion: Vector2) -> void:
+	if sweep_riders and rider is PhysicsBody2D:
+		(rider as PhysicsBody2D).move_and_collide(motion)
+	else:
+		rider.global_position += motion
 
 func _is_riding(body: Node2D) -> bool:
 	if carry_mode == CarryMode.OVERLAP:
