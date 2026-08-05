@@ -94,5 +94,5 @@ func _draw() -> void:
 		var b = points[ i + 1]
 		draw_dashed_line( a, b, Color.CORNFLOWER_BLUE, 1.0 )
 	
-	if loop_mode == "Closed Loop":
+	if loop_mode == "Closed Loop" and points.size() > 1:
 		draw_dashed_line( points[ points.size() - 1 ], points[ 0 ], Color.CORNFLOWER_BLUE, 1.0 )
