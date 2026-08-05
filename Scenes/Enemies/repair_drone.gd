@@ -128,3 +128,5 @@ func set_sprite(thrust_dir: State) -> void:
 
 func _on_area_2d_area_entered(area: Area2D) -> void:
 	disable_thrusters()
+	if area is PlayerBullet:
+		area._on_hit(null, null)

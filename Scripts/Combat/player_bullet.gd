@@ -20,7 +20,8 @@ func _physics_process(delta: float) -> void:
 		queue_free()
 
 func _on_hit(_hitbox: Hitbox, _target: Hurtbox) -> void:
-	queue_free()
+	if mode != "plasma":
+		queue_free()
 
 func set_mode(mode_name: StringName) -> void:
 	mode = mode_name
