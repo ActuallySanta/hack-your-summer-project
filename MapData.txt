@@ -145,7 +145,7 @@ $ln;Demo Level;NewMap
 [16,4,0]
 0,0,1,-1|ff0000,,,,||Scenes/Rooms/Biological Research Sector/lower_entryway_brs.tscn
 [18,3,0]
-0,0,-1,0|ff0000,,,,||Scenes/Rooms/Biological Research Sector/lower_entryway_brs.tscn
+1,0,-1,0|ff0000,,,,||Scenes/Rooms/Biological Research Sector/lower_entryway_brs.tscn
 [15,-1,0]
 1,0,1,0|ad0000,,,,||Scenes/Rooms/Biological Research Sector/management_brs.tscn
 [15,0,0]
@@ -410,3 +410,29 @@ $ln;Demo Level;NewMap
 -1,0,0,0|0017a2,,,,|2|Scenes/Rooms/Crew Quaters/recycling_center.tscn
 [13,5,0]
 0,-1,-1,0|0017a2,,,,||Scenes/Rooms/Crew Quaters/recycling_center.tscn
+[19,3,0]
+0,1,0,-1|00ff91,,,,||Scenes/Rooms/Research Sector/entrance_rs.tscn
+[20,2,0]
+-1,-1,1,0|00ff91,,,,||Scenes/Rooms/Research Sector/operations_rs.tscn
+[21,2,0]
+-1,-1,-1,0|00ff91,,,,||Scenes/Rooms/Research Sector/operations_rs.tscn
+[22,2,0]
+0,-1,-1,0|00ff91,,,,||Scenes/Rooms/Research Sector/operations_rs.tscn
+[20,3,0]
+-1,0,0,-1|00ff91,,,,||Scenes/Rooms/Research Sector/operations_rs.tscn
+[21,3,0]
+-1,1,-1,-1|00ff91,,,,||Scenes/Rooms/Research Sector/operations_rs.tscn
+[22,3,0]
+0,0,-1,-1|00ff91,,,,||Scenes/Rooms/Research Sector/operations_rs.tscn
+[19,4,0]
+-1,0,0,0|00ff91,,,,||Scenes/Rooms/Research Sector/labs_rs.tscn
+[20,4,0]
+-1,1,-1,0|00ff91,,,,||Scenes/Rooms/Research Sector/labs_rs.tscn
+[21,4,0]
+1,0,-1,1|00ff91,,,,||Scenes/Rooms/Research Sector/labs_rs.tscn
+[20,5,0]
+0,0,0,0|00ff91,,,,||Scenes/Rooms/Research Sector/jetpack_development_rs.tscn
+[19,2,0]
+1,-1,0,0|00ff91,,,,||Scenes/Rooms/Research Sector/entrance_rs.tscn
+[22,4,0]
+0,0,1,0|00ff91,,,,||Scenes/Rooms/Research Sector/save_room_rs.tscn
