@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://bnpsyl86ggbjm" path="res://Scenes/Pickups/health_extender.tscn" id="6_xqc8a"]
 [ext_resource type="PackedScene" uid="uid://41tgjv6lxsko" path="res://Scenes/Enemies/melee_enemy.tscn" id="7_ekkf3"]
 [ext_resource type="PackedScene" uid="uid://b2ibnxde1hrva" path="res://Scenes/Enemies/ranged_enemy.tscn" id="8_41i2u"]
+[ext_resource type="PackedScene" uid="uid://b0fyg7kdjcyou" path="res://Scenes/Enemies/repair_drone.tscn" id="9_41i2u"]
 
 [node name="ManagersOfficeCQ" type="Node2D" unique_id=636334686]
 
@@ -46,3 +47,9 @@ position = Vector2(742, 573)
 
 [node name="Ranged Enemy2" parent="." unique_id=1243088768 instance=ExtResource("8_41i2u")]
 position = Vector2(695, 386)
+
+[node name="RepairDrone" parent="." unique_id=1318393645 instance=ExtResource("9_41i2u")]
+position = Vector2(417, 341)
+start_direction = "UL"
+speed = 300.0
+stun_time = 10.0

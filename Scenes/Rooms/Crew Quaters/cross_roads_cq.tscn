@@ -9,6 +9,9 @@
 [ext_resource type="PackedScene" uid="uid://bnpsyl86ggbjm" path="res://Scenes/Pickups/health_extender.tscn" id="6_0l0s8"]
 [ext_resource type="Script" uid="uid://b3xkq7wnva8y" path="res://Scripts/BehaviorAdjustments/camera_axis_region.gd" id="8_cb5li"]
 [ext_resource type="PackedScene" uid="uid://scnrv60doh5o" path="res://Scenes/Components/down_vertical_room_transistion_tool.tscn" id="9_cjk41"]
+[ext_resource type="PackedScene" uid="uid://usl0ryav6sdi" path="res://Scenes/Components/door_blocker.tscn" id="10_pl51a"]
+[ext_resource type="PackedScene" uid="uid://b0fyg7kdjcyou" path="res://Scenes/Enemies/repair_drone.tscn" id="11_a2d5l"]
+[ext_resource type="PackedScene" uid="uid://41tgjv6lxsko" path="res://Scenes/Enemies/melee_enemy.tscn" id="12_jaggr"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_jaggr"]
 
@@ -66,3 +69,39 @@ polygon = PackedVector2Array(0, 672, 0, 0, 2304, 0, 1347, 480, 1152, 672)
 
 [node name="DownVerticalRoomTransistionTool" parent="." unique_id=847027462 instance=ExtResource("9_cjk41")]
 position = Vector2(1440, 3960)
+
+[node name="DoorBlocker" parent="." unique_id=1139906443 instance=ExtResource("10_pl51a")]
+position = Vector2(2278, 2466)
+
+[node name="DoorBlocker2" parent="." unique_id=961243744 instance=ExtResource("10_pl51a")]
+position = Vector2(1183, 3144)
+
+[node name="DoorBlocker3" parent="." unique_id=518495732 instance=ExtResource("10_pl51a")]
+position = Vector2(1443, 4024)
+rotation = 1.5707964
+scale = Vector2(1.2, 1.2)
+
+[node name="DoorBlocker4" parent="." unique_id=846370948 instance=ExtResource("10_pl51a")]
+position = Vector2(2271, 3142)
+
+[node name="DoorBlocker5" parent="." unique_id=2074985781 instance=ExtResource("10_pl51a")]
+position = Vector2(1169, 1127)
+
+[node name="RepairDrone" parent="." unique_id=1318393645 instance=ExtResource("11_a2d5l")]
+position = Vector2(894, 435)
+speed = 200.0
+
+[node name="RepairDrone2" parent="." unique_id=610717040 instance=ExtResource("11_a2d5l")]
+position = Vector2(1576, 1051)
+speed = 200.0
+
+[node name="RepairDrone3" parent="." unique_id=1717602780 instance=ExtResource("11_a2d5l")]
+position = Vector2(1375, 2401)
+speed = 200.0
+
+[node name="RepairDrone4" parent="." unique_id=1508047590 instance=ExtResource("11_a2d5l")]
+position = Vector2(1971, 3556)
+speed = 200.0
+
+[node name="Melee Enemy" parent="." unique_id=1835408748 instance=ExtResource("12_jaggr")]
+position = Vector2(1711, 3301)

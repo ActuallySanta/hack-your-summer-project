@@ -16,6 +16,7 @@ radius = 17.507141
 
 [node name="RepairDrone" type="RigidBody2D" unique_id=1318393645]
 collision_layer = 64
+collision_mask = 257
 physics_material_override = ExtResource("1_vjkby")
 lock_rotation = true
 script = ExtResource("2_420ha")
@@ -27,10 +28,12 @@ hframes = 2
 vframes = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=728415125]
+visible = false
 position = Vector2(-1.5, 1.5)
 shape = SubResource("CircleShape2D_420ha")
 
 [node name="Area2D" type="Area2D" parent="." unique_id=307065976]
+visible = false
 collision_layer = 4
 collision_mask = 8
 
@@ -39,9 +42,12 @@ position = Vector2(-1.5, 1.5)
 shape = SubResource("CircleShape2D_vjkby")
 
 [node name="Hitbox" type="Area2D" parent="." unique_id=1768830159]
+visible = false
 collision_layer = 4
 collision_mask = 2
 script = ExtResource("4_jc8ds")
+knockback_strength = 100.0
+knockback_duration = 1.0
 metadata/_custom_type_script = "uid://ctc17oyja7fup"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=184156446]

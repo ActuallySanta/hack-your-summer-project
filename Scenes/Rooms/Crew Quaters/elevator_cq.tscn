@@ -5,6 +5,8 @@
 [ext_resource type="PackedScene" uid="uid://sjty08w4065m" path="res://Scenes/Rooms/CommonRoomComponents/space_background.tscn" id="2_01tj1"]
 [ext_resource type="PackedScene" uid="uid://c23c0urqh5mm5" path="res://Scenes/Components/ScaledTileMap.tscn" id="3_b1bxj"]
 [ext_resource type="TileSet" uid="uid://b0n86hn6rv2od" path="res://Tileset/CrewQuarters.tres" id="4_b1bxj"]
+[ext_resource type="PackedScene" uid="uid://b0fyg7kdjcyou" path="res://Scenes/Enemies/repair_drone.tscn" id="6_m38nr"]
+[ext_resource type="PackedScene" uid="uid://usl0ryav6sdi" path="res://Scenes/Components/door_blocker.tscn" id="7_ajpp0"]
 
 [node name="ElevatorCQ" type="Node2D" unique_id=2144255681]
 
@@ -27,3 +29,25 @@ tile_set = ExtResource("4_b1bxj")
 
 [node name="DoorTileMapLayer2" parent="." unique_id=1165241577 instance=ExtResource("2_1lh8s")]
 tile_map_data = PackedByteArray("AAABAA0AAQAEAAAAABAAAA0AAQAFAAAAABABAA4AAQAEAAEAABAAAA4AAQAFAAEAABABAA8AAQAEAAIAABAAAA8AAQAFAAIAABAWABYAAQAEAAAAAAAWABcAAQAEAAEAAAAWABgAAQAEAAIAAAAXABYAAQAFAAAAAAAXABcAAQAFAAEAAAAXABgAAQAFAAIAAAABACQAAQAEAAAAABAAACQAAQAFAAAAABABACUAAQAEAAEAABAAACUAAQAFAAEAABABACYAAQAEAAIAABAAACYAAQAFAAIAABA=")
+
+[node name="RepairDrone" parent="." unique_id=1318393645 instance=ExtResource("6_m38nr")]
+position = Vector2(383, 1203)
+start_direction = "UL"
+
+[node name="RepairDrone2" parent="." unique_id=233724549 instance=ExtResource("6_m38nr")]
+position = Vector2(739, 1168)
+start_direction = "UL"
+speed = 200.0
+
+[node name="DoorBlocker" parent="." unique_id=1139906443 instance=ExtResource("7_ajpp0")]
+position = Vector2(1128, 1128)
+
+[node name="DoorBlocker2" parent="." unique_id=1913720976 instance=ExtResource("7_ajpp0")]
+position = Vector2(24, 1798)
+
+[node name="DoorBlocker3" parent="." unique_id=1532003493 instance=ExtResource("7_ajpp0")]
+position = Vector2(18, 697)
+
+[node name="RepairDrone3" parent="." unique_id=209444947 instance=ExtResource("6_m38nr")]
+position = Vector2(587, 1820)
+start_direction = "DL"

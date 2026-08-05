@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://cdgswdrfivuin" path="res://Scripts/EnvironmentalHazards/moving_platform.gd" id="8_13w6l"]
 [ext_resource type="TileSet" uid="uid://c5sbhtb73awsk" path="res://Tileset/EvironmentalNoneDamage.tres" id="8_gtvbs"]
 [ext_resource type="PackedScene" uid="uid://b0fyg7kdjcyou" path="res://Scenes/Enemies/repair_drone.tscn" id="10_gtvbs"]
+[ext_resource type="PackedScene" uid="uid://usl0ryav6sdi" path="res://Scenes/Components/door_blocker.tscn" id="11_2sd5a"]
 
 [node name="ShowerAccessCQ" type="Node2D" unique_id=443880543]
 
@@ -82,5 +83,8 @@ script = ExtResource("8_13w6l")
 position = Vector2(828, 287)
 mass = 0.001
 start_direction = "UL"
-speed = 100.0
+speed = 200.0
 stun_time = 1.0
+
+[node name="DoorBlocker" parent="." unique_id=1139906443 instance=ExtResource("11_2sd5a")]
+position = Vector2(29, 455)

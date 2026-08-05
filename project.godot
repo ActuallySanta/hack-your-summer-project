@@ -149,6 +149,7 @@ OpenMap={
 2d_physics/layer_4="bullets"
 2d_physics/layer_5="pickups"
 2d_physics/layer_6="BreakableBlocks"
+2d_physics/layer_9="Enemy Only Geometry"
 
 [physics]
 

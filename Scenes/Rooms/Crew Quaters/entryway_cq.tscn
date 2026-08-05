@@ -6,6 +6,10 @@
 [ext_resource type="PackedScene" uid="uid://c23c0urqh5mm5" path="res://Scenes/Components/ScaledTileMap.tscn" id="3_6l5sl"]
 [ext_resource type="TileSet" uid="uid://b0n86hn6rv2od" path="res://Tileset/CrewQuarters.tres" id="4_6l5sl"]
 [ext_resource type="Script" uid="uid://b3xkq7wnva8y" path="res://Scripts/BehaviorAdjustments/camera_axis_region.gd" id="6_qism0"]
+[ext_resource type="PackedScene" uid="uid://c57qdtweo2yu6" path="res://Scenes/Components/up_vertical_room_transition_tool.tscn" id="7_uxajg"]
+[ext_resource type="PackedScene" uid="uid://41tgjv6lxsko" path="res://Scenes/Enemies/melee_enemy.tscn" id="8_qmrms"]
+[ext_resource type="PackedScene" uid="uid://b0fyg7kdjcyou" path="res://Scenes/Enemies/repair_drone.tscn" id="9_ijw3g"]
+[ext_resource type="PackedScene" uid="uid://usl0ryav6sdi" path="res://Scenes/Components/door_blocker.tscn" id="10_clkw6"]
 
 [node name="EntrywayCQ" type="Node2D" unique_id=1502829557]
 
@@ -16,6 +20,7 @@ position = Vector2(2304, 672)
 region_rect = Rect2(0, 0, 4608, 1344)
 
 [node name="DoorTileMapLayer" parent="." unique_id=197313074 instance=ExtResource("2_bhiu6")]
+tile_map_data = PackedByteArray("AAA6AAAAAQAEAAUAAAA6AAEAAQAEAAYAAAA7AAAAAQAFAAUAAAA7AAEAAQAFAAYAAAA8AAAAAQAGAAUAAAA8AAEAAQAGAAYAAAA9AAAAAQAHAAUAAAA9AAEAAQAHAAYAAAA=")
 
 [node name="Background" parent="." unique_id=2101826522 instance=ExtResource("3_6l5sl")]
 modulate = Color(0.78431374, 0.78431374, 0.78431374, 1)
@@ -57,3 +62,30 @@ center_override = 1000.0
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="CameraBoundsHorizontal" unique_id=230133667]
 position = Vector2(583, -34)
 polygon = PackedVector2Array(137, 34, 137, 706, 4025, 706, 4025, 34)
+
+[node name="UpVerticalRoomTransitionTool" parent="." unique_id=1520149205 instance=ExtResource("7_uxajg")]
+position = Vector2(2880, 72)
+
+[node name="Melee Enemy" parent="." unique_id=1835408748 instance=ExtResource("8_qmrms")]
+position = Vector2(1817, 476)
+
+[node name="Melee Enemy2" parent="." unique_id=1697638582 instance=ExtResource("8_qmrms")]
+position = Vector2(4005, 474)
+
+[node name="RepairDrone" parent="." unique_id=1318393645 instance=ExtResource("9_ijw3g")]
+position = Vector2(2325, 364)
+
+[node name="RepairDrone2" parent="." unique_id=1307360633 instance=ExtResource("9_ijw3g")]
+position = Vector2(3646, 476)
+start_direction = "UR"
+
+[node name="DoorBlocker" parent="." unique_id=1139906443 instance=ExtResource("10_clkw6")]
+position = Vector2(4594, 450)
+
+[node name="DoorBlocker2" parent="." unique_id=1856339300 instance=ExtResource("10_clkw6")]
+position = Vector2(1129, 1126)
+
+[node name="DoorBlocker3" parent="." unique_id=1508830815 instance=ExtResource("10_clkw6")]
+position = Vector2(2877.9998, 6)
+rotation = 1.5707964
+scale = Vector2(1.1, 1.1)
