@@ -64,6 +64,7 @@ var bullet_y_offset : Dictionary[ MoveState, float ] = {
 @onready var jetpack: Sprite2D = $JetpackAsset
 @onready var sprite : Sprite2D = $Character
 @onready var collisionManager: Node = $CollisionManager
+@onready var hurtbox : Hurtbox = $Hurtbox
 
 # Consts
 const IDLESTATEPARAM := "parameters/StandardMovement/Idle/MoveState/transition_request"
@@ -369,6 +370,8 @@ func _physics_process(delta: float) -> void:
 	
 	if _invulnTimer > 0:
 		_invulnTimer -= delta
+		if _invulnTimer <= 0:
+			hurtbox.process_mode = Node.PROCESS_MODE_INHERIT
 	
 	move_and_slide()
 	
@@ -405,11 +408,11 @@ func die() -> void:
 	anim_death = true
 	reset_all_inputs()
 	_moveInput = 0
-	$Hurtbox.process_mode = Node.PROCESS_MODE_DISABLED
+	hurtbox.process_mode = Node.PROCESS_MODE_DISABLED
 	death_start.emit($AnimationPlayer.get_animation(&"death").length)
 
 func respawn() -> void:
-	$Hurtbox.process_mode = Node.PROCESS_MODE_INHERIT
+	hurtbox.process_mode = Node.PROCESS_MODE_INHERIT
 	_currentHealth = baseHealth
 	GlobalSignals.health_changed.emit(_currentHealth, baseHealth)
 	anim_death = false
@@ -423,6 +426,7 @@ func _on_hit(_hurtBox: Hurtbox, hit_info: HitInfo, _source: Hitbox) -> void:
 	_knockbackForce = hit_info.knockback_strength / _knockbackTimer
 	_invulnTimer = hitInvulnTime
 	_invulnBlinkTimer = invulnBlinkInterval
+	hurtbox.process_mode = Node.PROCESS_MODE_DISABLED
 	anim_hurt = true
 	if _currentHealth <= 0:
 		die()
