@@ -41,9 +41,6 @@ enum MomentumMode {
 @export var carry_mode : CarryMode = CarryMode.GROUNDED_ON_PLATFORM
 ## How far past the painted tiles a body still counts as riding the platform.
 @export_range(0.0, 32.0, 0.5, "or_greater") var surface_margin : float = 3.0
-## Sweep riders with move_and_collide instead of teleporting them, so the
-## platform cannot shove them through walls.
-@export var sweep_riders : bool = true
 
 @export_category("Motion")
 ## Whether riders are carried. Independent of TileMapLayer's own [member
@@ -53,10 +50,15 @@ enum MomentumMode {
 ## When on, we hold that position back and commit it during the physics step so
 ## the two stay in lockstep instead of visibly sliding against each other.
 @export var sync_to_physics : bool = true
-## Movement larger than this in a single physics frame is treated as a teleport
-## and riders are left behind. Covers the path's initial snap onto its first
-## point. Set to 0 to always carry.
-@export var teleport_threshold : float = 64.0
+## Movement faster than this, in pixels per second, is a teleport rather than
+## travel, and riders are left behind. Exists for Path's "Jump" loop mode, which
+## snaps the platform from the last point back to the first; without this that
+## snap would fling everyone across the level. Set to 0 to always carry.
+##
+## This is deliberately far above any speed a platform would really travel at.
+## Do not lower it to near your platform speeds or fast platforms will silently
+## stop carrying their riders.
+@export var teleport_speed : float = 4000.0
 
 @export_category("Momentum")
 ## What a rider takes with it when it leaves the platform, so jumping off a
@@ -79,6 +81,9 @@ var _last_global_position : Vector2
 var _riding : Dictionary = {}
 ## instance id -> { node, velocity, remaining }, riders coasting after leaving.
 var _momentum : Dictionary = {}
+## Physics frames to sit out at startup. The path snaps us onto its first point
+## on its first _process, and that jump is not something to carry anyone through.
+var _warmup_frames : int = 2
 
 func _ready() -> void:
 	_committed_position = position
@@ -111,7 +116,10 @@ func _physics_process(delta: float) -> void:
 	_last_global_position = global_position
 
 	# A teleport is not movement, so it neither carries nor throws anyone.
-	if teleport_threshold > 0.0 and motion.length() > teleport_threshold:
+	if _warmup_frames > 0:
+		_warmup_frames -= 1
+		motion = Vector2.ZERO
+	elif teleport_speed > 0.0 and delta > 0.0 and motion.length() > teleport_speed * delta:
 		motion = Vector2.ZERO
 	last_motion = motion
 
@@ -175,7 +183,16 @@ func _update_riders(motion: Vector2) -> void:
 		_momentum.erase(id)
 		if motion.is_zero_approx():
 			continue
-		_push(riders[id], motion)
+		# Rigid attachment: set the position outright rather than sweeping with
+		# move_and_collide. A sweep runs from a state where we have already
+		# committed our own position, so a platform moving *toward* its rider has
+		# swallowed them by the time they are swept out, and the engine's
+		# depenetration then fights us. That shows up as a shimmy on the way up,
+		# and at speed the rider is buried deep enough that the sweep is blocked
+		# outright and gets left behind. Preserving the offset exactly has neither
+		# problem, and the rider's own move_and_slide runs immediately after us to
+		# resolve anything it was pushed into.
+		riders[id].global_position += motion
 
 ## Coasting after leaving the platform. This is applied as displacement rather
 ## than as a one-shot add to the rider's velocity because the controllers here
@@ -197,7 +214,13 @@ func _apply_momentum(delta: float) -> void:
 			continue
 
 		var falloff : float = entry["remaining"] / maxf(momentum_duration, 0.001)
-		_push(rider, entry["velocity"] * falloff * delta)
+		var step : Vector2 = entry["velocity"] * falloff * delta
+		# Coasting is free travel through the world rather than an attachment, so
+		# unlike the carry above it does get swept, and cannot cross a wall.
+		if rider is PhysicsBody2D:
+			(rider as PhysicsBody2D).move_and_collide(step)
+		else:
+			rider.global_position += step
 
 		entry["remaining"] -= delta
 		if entry["remaining"] <= 0.0:
@@ -222,12 +245,6 @@ func _start_momentum(rider) -> void:
 		"velocity": inherited,
 		"remaining": momentum_duration,
 	}
-
-func _push(rider: Node2D, motion: Vector2) -> void:
-	if sweep_riders and rider is PhysicsBody2D:
-		(rider as PhysicsBody2D).move_and_collide(motion)
-	else:
-		rider.global_position += motion
 
 func _is_riding(body: Node2D) -> bool:
 	if carry_mode == CarryMode.OVERLAP:
