@@ -7,8 +7,9 @@
 [node name="Game" type="Node" unique_id=651801150]
 script = ExtResource("1_wrm1d")
 use_custom_save = true
-save_room = "uid://mctfp5srksup"
-save_pos = Vector2(600, 200)
+save_room = "uid://cr134jyuk05o2"
+save_pos = Vector2(400, 400)
+save_has_gun = true
 
 [node name="Player" parent="." unique_id=862395343 instance=ExtResource("2_qxrlw")]
 position = Vector2(2493, 399)

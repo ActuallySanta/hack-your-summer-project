@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://dr1wufsiu214j"]
+
+[ext_resource type="Script" uid="uid://6f15nb6r34b0" path="res://Scripts/EnvironmentalHazards/path.gd" id="1_pda8w"]
+
+[node name="Path" type="Node2D" unique_id=1324718817]
+script = ExtResource("1_pda8w")
+loop_mode = "Closed Loop"

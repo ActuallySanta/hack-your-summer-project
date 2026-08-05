@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://usl0ryav6sdi"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dxqny"]
+
+[node name="DoorBlocker" type="StaticBody2D" unique_id=1139906443]
+collision_layer = 256
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1003724234]
+scale = Vector2(3, 9)
+shape = SubResource("RectangleShape2D_dxqny")

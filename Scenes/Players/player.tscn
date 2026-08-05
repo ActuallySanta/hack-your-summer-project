@@ -1248,7 +1248,7 @@ _data = {
 size = Vector2(42.007813, 90)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gymyn"]
-size = Vector2(51, 20)
+size = Vector2(42, 20)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_j8xm3"]
 size = Vector2(42, 48)
@@ -1258,7 +1258,7 @@ z_index = 5
 collision_layer = 2
 collision_mask = 17
 script = ExtResource("1_gfkdj")
-moveSpeed = 1000.0
+moveSpeed = 350.0
 crouchSpeedMult = 0.35
 climbingSpeed = 250
 jumpForce = 800.0
@@ -1309,7 +1309,7 @@ script = ExtResource("9_k8qpn")
 shape = SubResource("RectangleShape2D_xxqkx")
 
 [node name="CrouchCollision" type="CollisionShape2D" parent="." unique_id=684077052]
-position = Vector2(-1.5, 35)
+position = Vector2(0, 35)
 shape = SubResource("RectangleShape2D_gymyn")
 disabled = true
 

@@ -27,68 +27,74 @@
 [node name="WorldMapCQ" type="Node2D" unique_id=1768770900]
 script = ExtResource("1_dj6y7")
 
-[node name="EntrywayCQ" parent="." unique_id=1502829557 instance=ExtResource("13_5y183")]
+[node name="Upper Crew Quarters" type="Node2D" parent="." unique_id=1014586448]
+
+[node name="EntrywayCQ" parent="Upper Crew Quarters" unique_id=1502829557 instance=ExtResource("13_5y183")]
 position = Vector2(-2152, 56)
 
-[node name="Cafeteria" parent="." unique_id=1977178993 instance=ExtResource("21_pcu82")]
+[node name="Cafeteria" parent="Upper Crew Quarters" unique_id=1977178993 instance=ExtResource("21_pcu82")]
 position = Vector2(-1000, 728)
 
-[node name="StairwayCQ" parent="." unique_id=1891401530 instance=ExtResource("3_eumge")]
+[node name="StairwayCQ" parent="Upper Crew Quarters" unique_id=1891401530 instance=ExtResource("3_eumge")]
 position = Vector2(1304, 1400)
 
-[node name="TheaterCQ" parent="." unique_id=552063030 instance=ExtResource("1_jeskr")]
+[node name="TheaterCQ" parent="Upper Crew Quarters" unique_id=552063030 instance=ExtResource("1_jeskr")]
 position = Vector2(1304, 728)
 
-[node name="StorageCQ" parent="." unique_id=77115801 instance=ExtResource("2_dj6y7")]
+[node name="StorageCQ" parent="Upper Crew Quarters" unique_id=77115801 instance=ExtResource("2_dj6y7")]
 position = Vector2(-2152, 2744)
 
-[node name="ShowerAccessCQ" parent="." unique_id=443880543 instance=ExtResource("4_xl40u")]
-position = Vector2(3608, 2744)
-
-[node name="ShowersCQ" parent="." unique_id=966531628 instance=ExtResource("5_njnml")]
-position = Vector2(5912, 2744)
-
-[node name="ShipOperationsRoomCQ" parent="." unique_id=1021361495 instance=ExtResource("6_aav37")]
-position = Vector2(-1000, 3416)
-
-[node name="SewageTreatmentPlantCQ" parent="." unique_id=411595504 instance=ExtResource("7_wfr6p")]
-position = Vector2(-2152, 3416)
-
-[node name="SewageAccess" parent="." unique_id=1013651690 instance=ExtResource("8_vrbdf")]
-position = Vector2(-3304, 4088)
-
-[node name="RecyclingCenter" parent="." unique_id=1345596271 instance=ExtResource("9_ia21h")]
-position = Vector2(2456, 3416)
-
-[node name="ManagersOfficeCQ" parent="." unique_id=636334686 instance=ExtResource("10_h73o8")]
-position = Vector2(-4456, 3416)
-
-[node name="KitchenCQ" parent="." unique_id=147937442 instance=ExtResource("11_w8hl5")]
+[node name="KitchenCQ" parent="Upper Crew Quarters" unique_id=147937442 instance=ExtResource("11_w8hl5")]
 position = Vector2(-2152, 1400)
 
-[node name="GreenRoomCQ" parent="." unique_id=681238763 instance=ExtResource("12_d5rmc")]
-position = Vector2(-4456, 728)
-
-[node name="EngineRoomCQ" parent="." unique_id=493751648 instance=ExtResource("14_g3mcs")]
-position = Vector2(-5608, 2072)
-
-[node name="ElevatorCQ" parent="." unique_id=2144255681 instance=ExtResource("15_irc5g")]
-position = Vector2(2456, 2072)
-
-[node name="CryoRoom" parent="." unique_id=1425201056 instance=ExtResource("16_fggib")]
+[node name="CryoRoom" parent="Upper Crew Quarters" unique_id=1425201056 instance=ExtResource("16_fggib")]
 position = Vector2(-2153, 2072)
 
-[node name="CrossRoadsCQ" parent="." unique_id=1384880636 instance=ExtResource("17_buh42")]
-position = Vector2(-4456, 56)
-
-[node name="CrewQuartersWestSaveCQ" parent="." unique_id=2132983156 instance=ExtResource("18_y1vh7")]
-position = Vector2(-4456, 2744)
-
-[node name="CrewQuartersMap" parent="." unique_id=1214311834 instance=ExtResource("19_c40xy")]
-position = Vector2(152, 2744)
-
-[node name="CrewQuartersEastSaveCQ" parent="." unique_id=1827097843 instance=ExtResource("20_gokox")]
+[node name="CrewQuartersEastSaveCQ" parent="Upper Crew Quarters" unique_id=1827097843 instance=ExtResource("20_gokox")]
 position = Vector2(2456, 56)
 
-[node name="ArmoryCQ" parent="." unique_id=1922806432 instance=ExtResource("22_cmww0")]
+[node name="CrewQuartersMap" parent="Upper Crew Quarters" unique_id=1214311834 instance=ExtResource("19_c40xy")]
+position = Vector2(152, 2744)
+
+[node name="Lower Crew Quarters" type="Node2D" parent="." unique_id=724030621]
+
+[node name="ShowerAccessCQ" parent="Lower Crew Quarters" unique_id=443880543 instance=ExtResource("4_xl40u")]
+position = Vector2(3608, 2744)
+
+[node name="ShowersCQ" parent="Lower Crew Quarters" unique_id=966531628 instance=ExtResource("5_njnml")]
+position = Vector2(5912, 2744)
+
+[node name="SewageTreatmentPlantCQ" parent="Lower Crew Quarters" unique_id=411595504 instance=ExtResource("7_wfr6p")]
+position = Vector2(-2152, 3416)
+
+[node name="ShipOperationsRoomCQ" parent="Lower Crew Quarters" unique_id=1021361495 instance=ExtResource("6_aav37")]
+position = Vector2(-1000, 3416)
+
+[node name="SewageAccess" parent="Lower Crew Quarters" unique_id=1013651690 instance=ExtResource("8_vrbdf")]
+position = Vector2(-3304, 4088)
+
+[node name="RecyclingCenter" parent="Lower Crew Quarters" unique_id=1345596271 instance=ExtResource("9_ia21h")]
+position = Vector2(2456, 3416)
+
+[node name="ElevatorCQ" parent="Lower Crew Quarters" unique_id=2144255681 instance=ExtResource("15_irc5g")]
+position = Vector2(2456, 2072)
+
+[node name="Overgrown" type="Node2D" parent="." unique_id=1704417097]
+
+[node name="ManagersOfficeCQ" parent="Overgrown" unique_id=636334686 instance=ExtResource("10_h73o8")]
+position = Vector2(-4456, 3416)
+
+[node name="EngineRoomCQ" parent="Overgrown" unique_id=493751648 instance=ExtResource("14_g3mcs")]
+position = Vector2(-5608, 2072)
+
+[node name="CrossRoadsCQ" parent="Overgrown" unique_id=1384880636 instance=ExtResource("17_buh42")]
+position = Vector2(-4456, 56)
+
+[node name="CrewQuartersWestSaveCQ" parent="Overgrown" unique_id=2132983156 instance=ExtResource("18_y1vh7")]
+position = Vector2(-4456, 2744)
+
+[node name="ArmoryCQ" parent="Overgrown" unique_id=1922806432 instance=ExtResource("22_cmww0")]
 position = Vector2(-6760, 1401)
+
+[node name="GreenRoomCQ" parent="Overgrown" unique_id=681238763 instance=ExtResource("12_d5rmc")]
+position = Vector2(-4456, 728)
