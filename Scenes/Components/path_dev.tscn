@@ -4,5 +4,4 @@
 
 [node name="Path" type="Node2D" unique_id=1324718817]
 script = ExtResource("1_pda8w")
-loop_mode = "Jump"
-points = Array[Vector2]([Vector2(0, 0), Vector2(100, 100), Vector2(67.645, 0)])
+loop_mode = "Closed Loop"
