@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://d1irxkv8rmbly" path="res://Sprites/SpaceStation_Character_Sheet.png" id="5_7vh4w"]
 [ext_resource type="Texture2D" uid="uid://bqj73yi85o2dx" path="res://Sprites/Main Character Climb.png" id="6_npdhm"]
 [ext_resource type="Texture2D" uid="uid://c8km3q4omapxt" path="res://Sprites/Main Character Crawl.png" id="7_fuwcu"]
-[ext_resource type="AudioStream" uid="uid://bg3vo2hq1pcrm" path="res://Sounds/Entities/Player/PlayerWalk_1.wav" id="8_k8qpn"]
+[ext_resource type="AudioStream" uid="uid://bpy8ofln286r3" path="res://Sounds/Entities/Player/PlayerWalk.wav" id="8_fuwcu"]
 [ext_resource type="Texture2D" uid="uid://btpjpn1y6y23a" path="res://Sprites/character_swing.png" id="8_m3db5"]
 [ext_resource type="Script" uid="uid://crhoj1q6iw1an" path="res://Scripts/Player/player_collision_manager.gd" id="9_k8qpn"]
 [ext_resource type="PackedScene" uid="uid://cfpoti64f7omn" path="res://Scenes/Entities/jetpack_asset.tscn" id="10_13iwc"]
@@ -1111,11 +1111,11 @@ tracks/4/keys = {
 "clips": [{
 "end_offset": 0.0,
 "start_offset": 0.0,
-"stream": ExtResource("8_k8qpn")
+"stream": ExtResource("8_fuwcu")
 }, {
 "end_offset": 0.0,
 "start_offset": 0.0,
-"stream": ExtResource("8_k8qpn")
+"stream": ExtResource("8_fuwcu")
 }],
 "times": PackedFloat32Array(0, 0.5)
 }
@@ -1343,6 +1343,10 @@ volume_db = 15.0
 stream = ExtResource("14_7vh4w")
 
 [node name="WalkSFX" type="AudioStreamPlayer2D" parent="SFX" unique_id=658475621]
+volume_db = 10.0
+max_distance = 4096.0
+attenuation = 1e-05
+panning_strength = 0.0
 
 [node name="MeleeSwingSFX" type="AudioStreamPlayer2D" parent="SFX" unique_id=1120454804]
 stream = ExtResource("15_npdhm")
