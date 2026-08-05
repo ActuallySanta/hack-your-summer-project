@@ -1334,23 +1334,35 @@ animation = &"Small Climb"
 
 [node name="ShootSFX" type="AudioStreamPlayer2D" parent="SFX" unique_id=2111788026]
 stream = ExtResource("12_j8xm3")
+volume_db = 4.0
+max_distance = 100000.0
+attenuation = 1e-05
+panning_strength = 0.0
 
 [node name="JumpSFX" type="AudioStreamPlayer2D" parent="SFX" unique_id=615055935]
 stream = ExtResource("13_r5bcf")
-volume_db = 15.0
+max_distance = 100000.0
+attenuation = 1e-05
+panning_strength = 0.0
 
 [node name="HurtSFX" type="AudioStreamPlayer2D" parent="SFX" unique_id=1227211473]
 stream = ExtResource("14_7vh4w")
+max_distance = 100000.0
+attenuation = 1e-05
+panning_strength = 0.0
 
 [node name="WalkSFX" type="AudioStreamPlayer2D" parent="SFX" unique_id=658475621]
 volume_db = 10.0
-max_distance = 4096.0
+max_distance = 100000.0
 attenuation = 1e-05
 panning_strength = 0.0
 
 [node name="MeleeSwingSFX" type="AudioStreamPlayer2D" parent="SFX" unique_id=1120454804]
 stream = ExtResource("15_npdhm")
 volume_db = 24.0
+max_distance = 100000.0
+attenuation = 1e-05
+panning_strength = 0.0
 
 [connection signal="hit" from="Hurtbox" to="." method="_on_hit"]
 [connection signal="animation_finished" from="TempClimberSinceZachIsStupid" to="." method="_on_mantle_complete"]

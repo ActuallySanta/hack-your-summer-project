@@ -32,3 +32,6 @@ position = Vector2(624, 288)
 
 [node name="DoorTileMapLayer2" parent="." unique_id=1203862474 instance=ExtResource("2_0ty5b")]
 tile_map_data = PackedByteArray("AAABAAgAAQAGAAAAABABAAkAAQAGAAEAABABAAoAAQAGAAIAABAAAAoAAQAHAAIAABAAAAkAAQAHAAEAABAAAAgAAQAHAAAAABA=")
+
+[node name="Checkpoint" type="Marker2D" parent="." unique_id=228122974 groups=["save_checkpoint"]]
+position = Vector2(696, 492)

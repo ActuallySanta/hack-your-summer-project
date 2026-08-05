@@ -41,3 +41,6 @@ position = Vector2(288, 600)
 
 [node name="SaveStation" parent="." unique_id=250103184 instance=ExtResource("6_11yly")]
 position = Vector2(864, 96)
+
+[node name="Checkpoint" type="Marker2D" parent="." unique_id=80139791 groups=["save_checkpoint"]]
+position = Vector2(936, 293)
