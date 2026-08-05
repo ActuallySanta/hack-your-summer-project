@@ -28,6 +28,7 @@ tile_map_data = PackedByteArray("AAAVAAgAAQALAAkAAAAVAAkAAQALAAkAAAAVAAoAAQALAAk
 tile_set = ExtResource("4_x6a2k")
 
 [node name="Door" type="TileMapLayer" parent="." unique_id=2125381732]
+z_index = 20
 scale = Vector2(3, 3)
 tile_map_data = PackedByteArray("AAAWAAgAAQAAAAAAAAAWAAkAAQAAAAEAAAAWAAoAAQAAAAIAAAAXAAgAAQABAAAAAAAXAAkAAQABAAEAAAAXAAoAAQABAAIAAAA=")
 tile_set = ExtResource("4_nipiv")

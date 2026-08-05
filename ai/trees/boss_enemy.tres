@@ -1,0 +1,77 @@
+[gd_resource type="BehaviorTree" format=3 uid="uid://cajvvw5y6sphn"]
+
+[ext_resource type="Script" uid="uid://q3siycoeq6oo" path="res://ai/tasks/get_hurt.gd" id="1_x2qe4"]
+
+[sub_resource type="BlackboardPlan" id="BlackboardPlan_6jjlm"]
+var/state/name = &"state"
+var/state/type = 4
+var/state/value = ""
+var/state/hint = 0
+var/state/hint_string = ""
+var/aggroLevel/name = &"aggroLevel"
+var/aggroLevel/type = 2
+var/aggroLevel/value = 1
+var/aggroLevel/hint = 0
+var/aggroLevel/hint_string = ""
+binding/aggroLevel = NodePath(".:aggroLevel")
+
+[sub_resource type="BBVariant" id="BBVariant_6jjlm"]
+type = 4
+saved_value = "stunned"
+resource_name = "stunned"
+
+[sub_resource type="BTCheckVar" id="BTCheckVar_x2qe4"]
+variable = &"state"
+value = SubResource("BBVariant_6jjlm")
+
+[sub_resource type="BBNode" id="BBNode_6jjlm"]
+saved_value = NodePath("AnimationPlayer")
+resource_name = "AnimationPlayer"
+
+[sub_resource type="BTPlayAnimation" id="BTPlayAnimation_x2qe4"]
+animation_player = SubResource("BBNode_6jjlm")
+animation_name = &"stunned"
+
+[sub_resource type="BTAction" id="BTAction_eo33s"]
+script = ExtResource("1_x2qe4")
+
+[sub_resource type="BTSequence" id="BTSequence_6jjlm"]
+custom_name = "Stunned"
+children = [SubResource("BTCheckVar_x2qe4"), SubResource("BTPlayAnimation_x2qe4"), SubResource("BTAction_eo33s")]
+
+[sub_resource type="BTAction" id="BTAction_kh3r6"]
+
+[sub_resource type="BTSequence" id="BTSequence_wxsuy"]
+custom_name = "Basic Attack"
+children = [SubResource("BTAction_kh3r6")]
+metadata/_weight_ = 2.0
+
+[sub_resource type="BTAction" id="BTAction_0njd2"]
+
+[sub_resource type="BTSequence" id="BTSequence_b0xag"]
+custom_name = "Random Attack"
+children = [SubResource("BTAction_0njd2")]
+
+[sub_resource type="BTAction" id="BTAction_54iha"]
+
+[sub_resource type="BTSequence" id="BTSequence_kh3r6"]
+custom_name = "Corner Attack"
+children = [SubResource("BTAction_54iha")]
+
+[sub_resource type="BTProbabilitySelector" id="BTProbabilitySelector_wxsuy"]
+abort_on_failure = true
+custom_name = "Attack Player"
+children = [SubResource("BTSequence_wxsuy"), SubResource("BTSequence_b0xag"), SubResource("BTSequence_kh3r6")]
+
+[sub_resource type="BTWait" id="BTWait_kh3r6"]
+duration = 2.5
+
+[sub_resource type="BTSequence" id="BTSequence_0njd2"]
+children = [SubResource("BTProbabilitySelector_wxsuy"), SubResource("BTWait_kh3r6")]
+
+[sub_resource type="BTSelector" id="BTSelector_x2qe4"]
+children = [SubResource("BTSequence_6jjlm"), SubResource("BTSequence_0njd2")]
+
+[resource]
+blackboard_plan = SubResource("BlackboardPlan_6jjlm")
+root_task = SubResource("BTSelector_x2qe4")

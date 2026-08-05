@@ -1,0 +1,15 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://bsnbcgiskburv" path="res://Scripts/UI/full_map.gd" id="1_fullmap"]
+
+[node name="FullMap" type="Control"]
+clip_contents = true
+layout_mode = 3
+anchors_preset = 0
+offset_right = 960.0
+offset_bottom = 576.0
+mouse_filter = 2
+script = ExtResource("1_fullmap")
+
+[node name="Drawer" type="Node2D" parent="."]
+scale = Vector2(2, 2)

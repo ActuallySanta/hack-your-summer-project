@@ -7,6 +7,5 @@
 script = ExtResource("1_atwtd")
 
 [node name="SFX" type="AudioStreamPlayer2D" parent="." unique_id=867105735]
-position = Vector2(-32, 0)
 stream = ExtResource("2_pre0y")
 attenuation = 1e-05

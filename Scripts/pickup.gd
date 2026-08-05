@@ -1,7 +1,7 @@
 class_name Pickup
 extends Area2D
 
-enum PickupType { Coin, HealthRune, GunAdvancement, Jetpack }
+enum PickupType { Coin, HealthRune, PlasmaGun, Jetpack, Fuse, StunGun }
 
 @export var type : PickupType
 @export var destroy_on_pickup := false
@@ -14,7 +14,7 @@ enum PickupType { Coin, HealthRune, GunAdvancement, Jetpack }
 @export var custom_id : StringName
 
 ## Index for the icon to use, leave at -1 for no icon
-@export var use_icon := -1
+@export var use_icon := 0
 
 func _ready() -> void:
 	body_entered.connect(_on_body_entered)

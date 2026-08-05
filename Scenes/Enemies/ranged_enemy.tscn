@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://ji4q20pb7lkf" path="res://Scripts/Enemies/ranged_enemy.gd" id="1_yfht6"]
 [ext_resource type="BehaviorTree" uid="uid://bk3pchousfnbu" path="res://ai/trees/ranged_enemy.tres" id="2_qj8iq"]
 [ext_resource type="Texture2D" uid="uid://du0akvrhemp8c" path="res://Sprites/Characters/Enemy SpriteSheets/Ranged_Andriod.png" id="3_8o70e"]
+[ext_resource type="Script" uid="uid://ctc17oyja7fup" path="res://Scripts/Combat/hitbox.gd" id="5_sy4jm"]
 [ext_resource type="PackedScene" uid="uid://djmeyycufny61" path="res://Scenes/Components/Hurtbox.tscn" id="18_6j4xf"]
 
 [sub_resource type="BlackboardPlan" id="BlackboardPlan_be0ij"]
@@ -210,3 +211,11 @@ collide_with_areas = true
 [node name="FiringPoint" type="Node2D" parent="." unique_id=956708712]
 visible = false
 position = Vector2(44, -8)
+
+[node name="Contact Damage Hitbox" type="Area2D" parent="." unique_id=1261742805]
+script = ExtResource("5_sy4jm")
+metadata/_custom_type_script = "uid://ctc17oyja7fup"
+
+[node name="Shape" type="CollisionShape2D" parent="Contact Damage Hitbox" unique_id=786773970]
+position = Vector2(8, 3)
+shape = SubResource("CapsuleShape2D_mgs6e")

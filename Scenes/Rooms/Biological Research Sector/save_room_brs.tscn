@@ -31,6 +31,7 @@ tile_set = ExtResource("6_rqtqf")
 position = Vector2(432, 192)
 
 [node name="Doors" type="TileMapLayer" parent="." unique_id=858125078]
+z_index = 20
 scale = Vector2(3, 3)
 tile_map_data = PackedByteArray("AAAWAAgAAQAKAAAAAAAWAAkAAQAKAAEAAAAWAAoAAQAKAAIAAAAXAAgAAQALAAAAAAAXAAkAAQALAAEAAAAXAAoAAQALAAIAAAABAAUAAQAKAAAAABAAAAUAAQALAAAAABABAAYAAQAKAAEAABAAAAYAAQALAAEAABABAAcAAQAKAAIAABAAAAcAAQALAAIAABA=")
 tile_set = ExtResource("6_0vmqr")

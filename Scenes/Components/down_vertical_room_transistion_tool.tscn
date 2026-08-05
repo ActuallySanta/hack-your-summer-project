@@ -135,8 +135,8 @@ collision_layer = 3
 collision_mask = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BalanceQuadrant" unique_id=983930812]
-position = Vector2(0, 24.000002)
-scale = Vector2(1, 13)
+position = Vector2(0, -6)
+scale = Vector2(1, 16)
 shape = SubResource("RectangleShape2D_pj83k")
 
 [node name="Door" type="AnimatedSprite2D" parent="." unique_id=2022558742]

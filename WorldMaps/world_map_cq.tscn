@@ -1,0 +1,100 @@
+[gd_scene format=3 uid="uid://cx11mafvqsiv0"]
+
+[ext_resource type="Script" uid="uid://cphcuqed0ttgm" path="res://WorldMaps/world_map_viewer.gd" id="1_dj6y7"]
+[ext_resource type="PackedScene" uid="uid://mctfp5srksup" path="res://Scenes/Rooms/Crew Quaters/theater_cq.tscn" id="1_jeskr"]
+[ext_resource type="PackedScene" uid="uid://c6xbrg5l3x11l" path="res://Scenes/Rooms/Crew Quaters/storage_cq.tscn" id="2_dj6y7"]
+[ext_resource type="PackedScene" uid="uid://2i77irrthpt8" path="res://Scenes/Rooms/Crew Quaters/stairway_cq.tscn" id="3_eumge"]
+[ext_resource type="PackedScene" uid="uid://cr134jyuk05o2" path="res://Scenes/Rooms/Crew Quaters/shower_access_cq.tscn" id="4_xl40u"]
+[ext_resource type="PackedScene" uid="uid://f0rw0gpuh15i" path="res://Scenes/Rooms/Crew Quaters/showers_cq.tscn" id="5_njnml"]
+[ext_resource type="PackedScene" uid="uid://bcfltd2gc0620" path="res://Scenes/Rooms/Crew Quaters/ship_operations_room_cq.tscn" id="6_aav37"]
+[ext_resource type="PackedScene" uid="uid://c2tpgh46jvi85" path="res://Scenes/Rooms/Crew Quaters/sewage_treatment_plant_cq.tscn" id="7_wfr6p"]
+[ext_resource type="PackedScene" uid="uid://drvylqtpv31t0" path="res://Scenes/Rooms/Crew Quaters/sewage_access.tscn" id="8_vrbdf"]
+[ext_resource type="PackedScene" uid="uid://cf2jqeb7lbumu" path="res://Scenes/Rooms/Crew Quaters/recycling_center.tscn" id="9_ia21h"]
+[ext_resource type="PackedScene" uid="uid://cn6bhcs1t3bvm" path="res://Scenes/Rooms/Crew Quaters/managers_office_cq.tscn" id="10_h73o8"]
+[ext_resource type="PackedScene" uid="uid://7m55x442q7pu" path="res://Scenes/Rooms/Crew Quaters/kitchen_cq.tscn" id="11_w8hl5"]
+[ext_resource type="PackedScene" uid="uid://c1fqqr3dkej6i" path="res://Scenes/Rooms/Crew Quaters/green_room_cq.tscn" id="12_d5rmc"]
+[ext_resource type="PackedScene" uid="uid://qv7ay1j4dm6r" path="res://Scenes/Rooms/Crew Quaters/entryway_cq.tscn" id="13_5y183"]
+[ext_resource type="PackedScene" uid="uid://da7wxukc5k5gj" path="res://Scenes/Rooms/Crew Quaters/engine_room_cq.tscn" id="14_g3mcs"]
+[ext_resource type="PackedScene" uid="uid://dhy8n2b7uytgk" path="res://Scenes/Rooms/Crew Quaters/elevator_cq.tscn" id="15_irc5g"]
+[ext_resource type="PackedScene" uid="uid://esk4fom87pxl" path="res://Scenes/Rooms/Crew Quaters/cryo_room.tscn" id="16_fggib"]
+[ext_resource type="PackedScene" uid="uid://ddtoh2hkoddaf" path="res://Scenes/Rooms/Crew Quaters/cross_roads_cq.tscn" id="17_buh42"]
+[ext_resource type="PackedScene" uid="uid://cuyhsu805mvjl" path="res://Scenes/Rooms/Crew Quaters/crew_quarters_west_save_cq.tscn" id="18_y1vh7"]
+[ext_resource type="PackedScene" uid="uid://c5neak4j352xp" path="res://Scenes/Rooms/Crew Quaters/crew_quarters_map.tscn" id="19_c40xy"]
+[ext_resource type="PackedScene" uid="uid://cj5egdgddtqx4" path="res://Scenes/Rooms/Crew Quaters/crew_quarters_east_save_cq.tscn" id="20_gokox"]
+[ext_resource type="PackedScene" uid="uid://u7ajbu6u0hv1" path="res://Scenes/Rooms/Crew Quaters/cafeteria.tscn" id="21_pcu82"]
+[ext_resource type="PackedScene" uid="uid://w30a3semhw2i" path="res://Scenes/Rooms/Crew Quaters/armory_cq.tscn" id="22_cmww0"]
+
+[node name="WorldMapCQ" type="Node2D" unique_id=1768770900]
+script = ExtResource("1_dj6y7")
+
+[node name="Upper Crew Quarters" type="Node2D" parent="." unique_id=1014586448]
+
+[node name="EntrywayCQ" parent="Upper Crew Quarters" unique_id=1502829557 instance=ExtResource("13_5y183")]
+position = Vector2(-2152, 56)
+
+[node name="Cafeteria" parent="Upper Crew Quarters" unique_id=1977178993 instance=ExtResource("21_pcu82")]
+position = Vector2(-1000, 728)
+
+[node name="StairwayCQ" parent="Upper Crew Quarters" unique_id=1891401530 instance=ExtResource("3_eumge")]
+position = Vector2(1304, 1400)
+
+[node name="TheaterCQ" parent="Upper Crew Quarters" unique_id=552063030 instance=ExtResource("1_jeskr")]
+position = Vector2(1304, 728)
+
+[node name="StorageCQ" parent="Upper Crew Quarters" unique_id=77115801 instance=ExtResource("2_dj6y7")]
+position = Vector2(-2152, 2744)
+
+[node name="KitchenCQ" parent="Upper Crew Quarters" unique_id=147937442 instance=ExtResource("11_w8hl5")]
+position = Vector2(-2152, 1400)
+
+[node name="CryoRoom" parent="Upper Crew Quarters" unique_id=1425201056 instance=ExtResource("16_fggib")]
+position = Vector2(-2153, 2072)
+
+[node name="CrewQuartersEastSaveCQ" parent="Upper Crew Quarters" unique_id=1827097843 instance=ExtResource("20_gokox")]
+position = Vector2(2456, 56)
+
+[node name="CrewQuartersMap" parent="Upper Crew Quarters" unique_id=1214311834 instance=ExtResource("19_c40xy")]
+position = Vector2(152, 2744)
+
+[node name="Lower Crew Quarters" type="Node2D" parent="." unique_id=724030621]
+
+[node name="ShowerAccessCQ" parent="Lower Crew Quarters" unique_id=443880543 instance=ExtResource("4_xl40u")]
+position = Vector2(3608, 2744)
+
+[node name="ShowersCQ" parent="Lower Crew Quarters" unique_id=966531628 instance=ExtResource("5_njnml")]
+position = Vector2(5912, 2744)
+
+[node name="SewageTreatmentPlantCQ" parent="Lower Crew Quarters" unique_id=411595504 instance=ExtResource("7_wfr6p")]
+position = Vector2(-2152, 3416)
+
+[node name="ShipOperationsRoomCQ" parent="Lower Crew Quarters" unique_id=1021361495 instance=ExtResource("6_aav37")]
+position = Vector2(-1000, 3416)
+
+[node name="SewageAccess" parent="Lower Crew Quarters" unique_id=1013651690 instance=ExtResource("8_vrbdf")]
+position = Vector2(-3304, 4088)
+
+[node name="RecyclingCenter" parent="Lower Crew Quarters" unique_id=1345596271 instance=ExtResource("9_ia21h")]
+position = Vector2(2456, 3416)
+
+[node name="ElevatorCQ" parent="Lower Crew Quarters" unique_id=2144255681 instance=ExtResource("15_irc5g")]
+position = Vector2(2456, 2072)
+
+[node name="Overgrown" type="Node2D" parent="." unique_id=1704417097]
+
+[node name="ManagersOfficeCQ" parent="Overgrown" unique_id=636334686 instance=ExtResource("10_h73o8")]
+position = Vector2(-4456, 3416)
+
+[node name="EngineRoomCQ" parent="Overgrown" unique_id=493751648 instance=ExtResource("14_g3mcs")]
+position = Vector2(-5608, 2072)
+
+[node name="CrossRoadsCQ" parent="Overgrown" unique_id=1384880636 instance=ExtResource("17_buh42")]
+position = Vector2(-4456, 56)
+
+[node name="CrewQuartersWestSaveCQ" parent="Overgrown" unique_id=2132983156 instance=ExtResource("18_y1vh7")]
+position = Vector2(-4456, 2744)
+
+[node name="ArmoryCQ" parent="Overgrown" unique_id=1922806432 instance=ExtResource("22_cmww0")]
+position = Vector2(-6760, 1401)
+
+[node name="GreenRoomCQ" parent="Overgrown" unique_id=681238763 instance=ExtResource("12_d5rmc")]
+position = Vector2(-4456, 728)

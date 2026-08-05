@@ -93,6 +93,8 @@ scenes/1/scene = ExtResource("4_yoxij")
 [resource]
 physics_layer_0/collision_layer = 0
 physics_layer_0/collision_mask = 2
+physics_layer_1/collision_layer = 64
+physics_layer_1/collision_mask = 2
 sources/0 = SubResource("TileSetAtlasSource_kecdv")
 sources/1 = SubResource("TileSetAtlasSource_yoxij")
 sources/2 = SubResource("TileSetAtlasSource_01dbe")

@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" uid="uid://ba3e0lvqyqywi" path="res://Scripts/Level Elements/hanging_wire_rig.gd" id="1_rig"]
+[ext_resource type="Script" uid="uid://d3d1sfke7spoo" path="res://Scripts/Level Elements/hanging_wire.gd" id="2_wire"]
+
+[sub_resource type="Resource" id="Resource_wire_0"]
+resource_local_to_scene = true
+script = ExtResource("2_wire")
+point_a = Vector2(-96, -48)
+point_b = Vector2(96, -48)
+length = 240.0
+wind_strength = Vector2(3, 1.5)
+wind_speed = 0.12
+wind_phase = 0.0
+swing_auto_frequency = true
+swing_frequency = 0.8
+swing_damping = 0.18
+swing_max = 24.0
+metadata/_custom_type_script = "uid://d3d1sfke7spoo"
+
+[node name="HangingWireRig" type="Node2D"]
+script = ExtResource("1_rig")
+wires = Array[ExtResource("2_wire")]([SubResource("Resource_wire_0")])
+color = Color(0.239216, 0.290196, 0.360784, 1)
+thickness = 1
+shadow_offset = Vector2i(0, 1)
+shadow_darkening = 0.5
+metadata/_custom_type_script = "uid://ba3e0lvqyqywi"

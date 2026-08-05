@@ -1,18 +1,10 @@
 [gd_scene format=3 uid="uid://ba6450qhwuqee"]
 
-[ext_resource type="Texture2D" uid="uid://5tufpjiltsyd" path="res://Textures/Tiles/MVPSprites/Visuals.png" id="1_mar3l"]
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_juyxd"]
-texture = ExtResource("1_mar3l")
-0:0/0 = 0
-0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
-
-[sub_resource type="TileSet" id="TileSet_xxoxe"]
-physics_layer_0/collision_layer = 8
-physics_layer_0/collision_mask = 32
-sources/0 = SubResource("TileSetAtlasSource_juyxd")
+[ext_resource type="TileSet" uid="uid://br5esnmcj21yj" path="res://Tileset/Breakable.tres" id="1_juyxd"]
+[ext_resource type="Script" uid="uid://cy4e0p8pj7dp6" path="res://Scripts/Animation/break_ables.gd" id="2_xxoxe"]
 
 [node name="BreakAbles" type="TileMapLayer" unique_id=1463144321]
 scale = Vector2(3, 3)
-tile_set = SubResource("TileSet_xxoxe")
+tile_set = ExtResource("1_juyxd")
 navigation_enabled = false
+script = ExtResource("2_xxoxe")

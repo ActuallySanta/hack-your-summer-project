@@ -16,6 +16,9 @@ signal death_end()
 @export var jumpBufferTime := 0.25
 @export var coyoteTime := 0.2
 @export var wallJumpBufferTime := 0.2
+## How close the active collider's leading edge must be to the wall face, in pixels,
+## before a mantle is allowed. Keeps the vault from starting across the player's tile.
+@export var mantleWallDistance := 6.0
 
 @export_group("Combat")
 @export var baseHealth := 5
@@ -32,6 +35,12 @@ signal death_end()
 @export var knockbackDI := 300.0
 @export var canClimb : bool = false
 
+@export_group("Visuals")
+## How far down the visuals are shifted while the shorter air collider is active.
+## Should match JumpCollision's offset from WalkingCollision in the player scene,
+## so the collider bottoms and the sprite's feet all stay at the same height.
+@export var airVisualOffset := 21.0
+
 # Enums
 enum MoveState{
 	Standing,
@@ -39,6 +48,14 @@ enum MoveState{
 	Climbing,
 	Jumping,
 	Knockback,
+}
+
+var bullet_y_offset : Dictionary[ MoveState, float ] = {
+	MoveState.Standing: -20,
+	MoveState.Crouching: 4,
+	MoveState.Climbing: -20,
+	MoveState.Jumping: 0,
+	MoveState.Knockback: 0,
 }
 
 # Onreadys
@@ -54,6 +71,7 @@ const IDLESTATEPARAM := "parameters/StandardMovement/Idle/MoveState/transition_r
 const MOVESTATEPARAM := "parameters/StandardMovement/Move/MoveState/transition_request"
 const FIRESTATEPARAM := "parameters/RangedFire/MoveState/transition_request"
 const TILE_SIZE := 48
+const GUN_MODES : Array[ StringName ]= [ "stun", "plasma" ]
 # Input
 var _moveInput : float
 var _vertMoveInput :float
@@ -74,8 +92,10 @@ var _currentHealth : int
 var _attackCooldownTimer : float
 var _attackBufferTimer : float
 # Shooting
+var _hasGun : bool
 var _shootCooldownTimer : float
 var _shootBufferTimer : float
+var _gunMode : StringName
 # Knockback
 var _knockbackTimer : float
 var _knockbackForce : float
@@ -85,6 +105,11 @@ var _invulnBlinkTimer : float
 var _deathRespawnTimer : float
 # Mantling and Vaulting
 var _is_vaulting : bool
+var _mantle_dir : int = 1
+# Visual alignment
+var _visual_offset_nodes : Array[Node2D]
+var _visual_offset_bases : PackedVector2Array
+var _visual_offset : float
 # Camera offset
 var _camera_offset : Vector2
 var _need_to_move_camera : bool
@@ -112,6 +137,7 @@ func _ready() -> void:
 	jetpack.jetpack_updated.connect(do_jetpack_logic)
 	disable_jetpack()
 	playerMoveState = MoveState.Standing
+	cache_visual_offset_nodes()
 	GlobalSignals.health_extended_by_one.connect(increment_health_amount_by_one)
 
 func _move_player_pos(pos: Vector2) -> void:
@@ -164,20 +190,6 @@ func attack() -> void:
 	_shootCooldownTimer = attackCooldown
 	_attackBufferTimer = 0
 	anim_swing = true
-
-func shoot() -> void:
-	var newBullet := bulletScene.instantiate() as PlayerBullet
-	var bulletX := bulletOffset
-	if !_facingRight:
-		bulletX *= -1
-		newBullet.scale.x = -1
-	newBullet.position = position + Vector2(bulletX, 0)
-	newBullet.direction = Vector2.RIGHT if _facingRight else Vector2.LEFT
-	get_tree().root.add_child(newBullet)
-	_shootCooldownTimer = shootCooldown
-	_attackCooldownTimer = shootCooldown
-	_shootBufferTimer = 0
-	anim_fire = true
 
 #region Handlers
 func handle_vertical_speed() -> void:
@@ -254,7 +266,7 @@ func handle_inputs() -> void:
 		set_jump_input()
 	if Input.is_action_just_pressed("Attack"):
 		set_attack_input()
-	if Input.is_action_just_pressed("Shoot"):
+	if Input.is_action_just_pressed("Shoot") and _hasGun:
 		set_shoot_input()
 	if not Input.is_action_pressed("Jump"):
 		_holdingDownSpaceForSpace = false
@@ -331,8 +343,6 @@ func translate_state() -> CollisionManager.State:
 	
 	return CollisionManager.State.WALK
 
-
-
 func _physics_process(delta: float) -> void:
 	if _is_vaulting:
 		return
@@ -341,8 +351,10 @@ func _physics_process(delta: float) -> void:
 	playerMoveState = determine_move_state()
 	
 	if previousMoveState != playerMoveState:
-		collisionManager.swap_active_collision( translate_state() )
-	
+		var collisionState := translate_state()
+		collisionManager.swap_active_collision( collisionState )
+		align_visuals_to_collider( collisionState )
+
 	handle_wall_jumping(delta)
 	handle_jump_and_gravity(delta)
 	
@@ -365,8 +377,7 @@ func _physics_process(delta: float) -> void:
 	
 	sprite.flip_h = false if _facingRight else true
 	
-	refresh_cell_group_music()
-	
+	refresh_cell_group_music()	
 
 func refresh_cell_group_music(force := false) -> void:
 	var groups := MetSys.get_cell_groups(MetSys.get_current_coords())
@@ -439,43 +450,129 @@ func disable_jetpack() -> void:
 func enable_jetpack() -> void:
 	jetpack.process_mode = Node.PROCESS_MODE_INHERIT
 #endregion
-	
+
+#region Gun
+func set_gun(mode: StringName) -> void:
+	if not mode in GUN_MODES:
+		return
+	_gunMode = mode
+  
+func disable_gun() -> void:
+	_hasGun = false
+
+func enable_gun() -> void:
+	_hasGun = true
+
+func shoot() -> void:
+	var newBullet := bulletScene.instantiate() as PlayerBullet
+	var bulletX := bulletOffset
+	# The tuned offsets are relative to the sprite, so they follow it while airborne.
+	var bulletY := bullet_y_offset[ playerMoveState ] + _visual_offset
+	if !_facingRight:
+		bulletX *= -1
+		newBullet.scale.x = -1
+	newBullet.position = position + Vector2(bulletX, bulletY)
+	newBullet.direction = Vector2.RIGHT if _facingRight else Vector2.LEFT
+	newBullet.set_mode(_gunMode)
+	get_tree().root.add_child(newBullet)
+	_shootCooldownTimer = shootCooldown
+	_attackCooldownTimer = shootCooldown
+	_shootBufferTimer = 0
+	anim_fire = true
+#endregion
+
 #region Mantle
 func try_mantle() -> bool:
 	if not is_on_floor():
 		return false
 	
+	# Vault the way the player is pushing, not just the way they happen to face, so
+	# standing still against a ledge and tapping jump is an ordinary jump.
+	if is_zero_approx(_moveInput):
+		return false
+
+	var dir := 1 if _moveInput > 0 else -1
 	var foreground = get_foreground()
 	var mantle_block = get_map_position( foreground )
-	mantle_block.x += -1 if sprite.flip_h else 1
+	mantle_block.x += dir
 	if is_tile_air(foreground, mantle_block):
 		return false
-	
+
 	var air_check = Vector2i(mantle_block.x, mantle_block.y - 1)
 	if not is_tile_air(foreground, air_check):
 		return false
-	
+
+	if not is_against_wall( foreground, mantle_block, dir ):
+		return false
+
+	_mantle_dir = dir
 	mantle()
 	return true
+
+## True when the active collider's leading edge is within [member mantleWallDistance]
+## of the near face of [param block]. Without this the mantle triggers from anywhere
+## inside the player's own tile, so vaulting from the far edge floats them across it.
+func is_against_wall(foreground: TileMapLayer, block: Vector2i, dir: int) -> bool:
+	var bounds = collisionManager.get_bounds()
+	var right_edge : float = maxf( bounds[0].x, bounds[1].x )
+	var left_edge : float = minf( bounds[0].x, bounds[1].x )
+	var lead_edge := right_edge if dir > 0 else left_edge
+
+	var block_center := foreground.to_global( foreground.map_to_local( block ) )
+	var wall_face := block_center.x - (TILE_SIZE * 0.5 * dir)
+	return absf( wall_face - lead_edge ) <= mantleWallDistance
 
 #TODO Replace both of these functions (As well as the tempClimber) with things in the animtree
 func mantle() -> void:
 	_is_vaulting = true
-	$TempClimberSinceZachIsStupid.flip_h = sprite.flip_h
-	$TempClimberSinceZachIsStupid.position.x = -15 if sprite.flip_h else 15
+	$TempClimberSinceZachIsStupid.flip_h = _mantle_dir < 0
+	$TempClimberSinceZachIsStupid.position.x = 15 * _mantle_dir
 	$TempClimberSinceZachIsStupid.visible = true
 	$Character.modulate = Color(1,1,1,0)
 	$TempClimberSinceZachIsStupid.play("Small Climb")
-	var camera_pos = Vector2(-TILE_SIZE,-TILE_SIZE) if sprite.flip_h else Vector2(TILE_SIZE, -TILE_SIZE)
+	var camera_pos = Vector2(TILE_SIZE * _mantle_dir, -TILE_SIZE)
 	anim_camera_start(camera_pos.x, camera_pos.y, 0.25)
 
 func _on_mantle_complete() -> void:
 	_is_vaulting = false
-	set_anim_move_state(MoveState.Crouching, false)
 	$TempClimberSinceZachIsStupid.visible = false
 	$Character.modulate = Color(1,1,1,1)
-	position += Vector2(-TILE_SIZE,-TILE_SIZE) if sprite.flip_h else Vector2(TILE_SIZE, -TILE_SIZE)
+	position += Vector2(TILE_SIZE * _mantle_dir, -TILE_SIZE)
 	reset_camera()
+
+	# Come out of the vault crouched. determine_move_state()'s ceiling check only runs
+	# when the previous state was Crouching, so this is what lets a 1-tile-tall gap hold
+	# the player down; where there is headroom they stand up on the next frame anyway.
+	playerMoveState = MoveState.Crouching
+	var collisionState := translate_state()
+	collisionManager.swap_active_collision( collisionState )
+	align_visuals_to_collider( collisionState )
+	set_anim_move_state(MoveState.Crouching, false)
+#endregion
+
+#region Visual alignment
+## The air collider is shorter than the walking one and is pushed down in the editor
+## so every collider shares the same bottom edge, which keeps the body origin (and so
+## the camera) at one height through a jump and landing. The visuals have to make the
+## same trip or the sprite hops up when the jump starts and drops when it ends.
+##
+## Only the children that read as "the player" move: the sprite, the worn jetpack and
+## the Hurtbox. The *Collision shapes belong to CollisionManager, the mantle stand-in
+## is only ever visible while grounded, and the rest carry no transform.
+func cache_visual_offset_nodes() -> void:
+	_visual_offset_nodes = [ sprite, jetpack, $Hurtbox ]
+	_visual_offset_bases = PackedVector2Array()
+	for node in _visual_offset_nodes:
+		_visual_offset_bases.append( node.position )
+
+func align_visuals_to_collider( state: CollisionManager.State ) -> void:
+	var offset := airVisualOffset if state == CollisionManager.State.AIR else 0.0
+	if is_equal_approx( offset, _visual_offset ):
+		return
+
+	_visual_offset = offset
+	for i in _visual_offset_nodes.size():
+		_visual_offset_nodes[ i ].position = _visual_offset_bases[ i ] + Vector2( 0, offset )
 #endregion
 
 #region Camera stuffs
@@ -523,6 +620,9 @@ func get_map_position(foreground: TileMapLayer, relative_to_player: Vector2i = V
 	return map_pos
 
 func get_map_cordinates(foreground: TileMapLayer, position: Vector2 ) -> Vector2i:
+	if foreground == null:
+		printerr("No Geo group in scene")
+		return Vector2i.MIN
 	return foreground.local_to_map(foreground.to_local( position ))
 
 func get_map_position_player_bounds(foreground: TileMapLayer) -> Array[Vector2i]:

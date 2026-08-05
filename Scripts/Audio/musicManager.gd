@@ -7,7 +7,7 @@ const CREW_QUARTERS = preload("res://Sounds/Music/A surprise infusion.ogg")
 const INTERNALS = DEBUG
 const LABS = preload("res://Sounds/Music/Jetpack Joyride DEMO.ogg")
 const BRS = preload("res://Sounds/Music/BRS.ogg")
-const LOWER_BRS = preload("res://Sounds/Music/BRS.ogg")
+const LOWER_BRS = preload("res://Sounds/Music/Lower Biological Zone.ogg")
 
 const MAIN_MENU = DEBUG
 
@@ -17,6 +17,8 @@ const MATRIX = preload("res://Sounds/Music/Uncertainty.ogg")
 const MAP = preload("res://Sounds/Music/Uncertainty.ogg")
 const SAVE = preload("res://Sounds/Music/Uncertainty.ogg")
 const PICKUP = preload("res://Sounds/Music/Uncertainty.ogg")
+
+const NONE = preload("res://Sounds/Music/issue.wav")
 
 @onready var ui_ost := {
 	"Main Menu": DEBUG,
@@ -29,8 +31,8 @@ const PICKUP = preload("res://Sounds/Music/Uncertainty.ogg")
 	"Internals Hidden": INTERNALS,
 	"Maintainence": LABS,
 	"Maintainence Hidden": LABS,
-	"BRS": BRS,
-	"BRS Hidden": LOWER_BRS,
+	"BRS": LOWER_BRS,
+	"BRS Hidden": BRS,
 }
 
 @onready var boss_ost := {
@@ -70,6 +72,8 @@ func play_background_track(track: AudioStream) -> void:
 	play()
 
 func get_current_room_instance_groups() -> PackedInt32Array:
+	if MetSys.current_room == null:
+		return []
 	var current_cells := MetSys.current_room.cells
 	if current_cells.is_empty():
 		return []
@@ -122,15 +126,14 @@ func _get_current_cell_group_music(groups: PackedInt32Array) -> AudioStream:
 		var group_name = MetSys.get_group_name(group)
 		if group_name.begins_with( "_" ):
 			var type = group_name.split("_", false, 1)
-			print("Playing Music for: [ ", type[0], ": ", type[1], " ]")
+			if type[ 0 ] == "NONE":
+				return NONE
 			return _parse_special_room(type[ 0 ], type[ 1 ])
 		else:
 			best_guess = location_ost.get(group_name)
-	
 	
 	return best_guess
 
 func _parse_special_room(type: String, special_name: String) -> AudioStream:
 	var dictionary = osts[type]
-	print(dictionary)
 	return dictionary.get(special_name)
