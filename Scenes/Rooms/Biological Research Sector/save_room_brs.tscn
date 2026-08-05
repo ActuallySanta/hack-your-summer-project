@@ -44,3 +44,6 @@ script = ExtResource("6_t8uhg")
 horizontal_shift = 2.0
 vertical_shift = 2.0
 occilations_per_second = 0.25
+
+[node name="Checkpoint" type="Marker2D" parent="." unique_id=785127092 groups=["save_checkpoint"]]
+position = Vector2(501, 401)

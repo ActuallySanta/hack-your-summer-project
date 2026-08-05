@@ -7,11 +7,15 @@
 [ext_resource type="Texture2D" uid="uid://d1irxkv8rmbly" path="res://Sprites/SpaceStation_Character_Sheet.png" id="5_7vh4w"]
 [ext_resource type="Texture2D" uid="uid://bqj73yi85o2dx" path="res://Sprites/Main Character Climb.png" id="6_npdhm"]
 [ext_resource type="Texture2D" uid="uid://c8km3q4omapxt" path="res://Sprites/Main Character Crawl.png" id="7_fuwcu"]
+[ext_resource type="AudioStream" uid="uid://bpy8ofln286r3" path="res://Sounds/Entities/Player/PlayerWalk.wav" id="8_fuwcu"]
 [ext_resource type="Texture2D" uid="uid://btpjpn1y6y23a" path="res://Sprites/character_swing.png" id="8_m3db5"]
 [ext_resource type="Script" uid="uid://crhoj1q6iw1an" path="res://Scripts/Player/player_collision_manager.gd" id="9_k8qpn"]
 [ext_resource type="PackedScene" uid="uid://cfpoti64f7omn" path="res://Scenes/Entities/jetpack_asset.tscn" id="10_13iwc"]
 [ext_resource type="SpriteFrames" uid="uid://bpguk1hi3u5j6" path="res://Sprites/Character_Small_Climb_Sprites.tres" id="11_xxqkx"]
 [ext_resource type="AudioStream" uid="uid://cuesku8232hdq" path="res://Sounds/Entities/Player/Gun Fire.wav" id="12_j8xm3"]
+[ext_resource type="AudioStream" uid="uid://8jtcqp1gbmcq" path="res://Sounds/Entities/Player/PlayerJump.wav" id="13_r5bcf"]
+[ext_resource type="AudioStream" uid="uid://y4se7p08x45o" path="res://Sounds/Entities/Player/PlayerHurt.ogg" id="14_7vh4w"]
+[ext_resource type="AudioStream" uid="uid://cgvbfwlbptv4w" path="res://Sounds/Entities/Player/PlayerMeleeSwing.wav" id="15_npdhm"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_f1ek2"]
 radius = 24.0
@@ -222,14 +226,14 @@ states/MeleeSwing/position = Vector2(489.66666, -14.482391)
 states/RangedFire/node = SubResource("AnimationNodeBlendTree_f1ek2")
 states/RangedFire/position = Vector2(214.33331, -7.8404236)
 states/StandardMovement/node = SubResource("AnimationNodeStateMachine_olqyp")
-states/StandardMovement/position = Vector2(354.3333, 101.00107)
+states/StandardMovement/position = Vector2(354.3333, 101.15924)
 states/Start/position = Vector2(162.66669, 101.15924)
 states/death/node = SubResource("AnimationNodeAnimation_pu2lt")
 states/death/position = Vector2(665.6666, 99.51996)
 states/knockback/node = SubResource("AnimationNodeAnimation_gymyn")
 states/knockback/position = Vector2(569.3334, 187.82626)
 transitions = ["knockback", "death", SubResource("AnimationNodeStateMachineTransition_vfarp"), "Start", "StandardMovement", SubResource("AnimationNodeStateMachineTransition_wpjfl"), "StandardMovement", "RangedFire", SubResource("AnimationNodeStateMachineTransition_bi64h"), "StandardMovement", "MeleeSwing", SubResource("AnimationNodeStateMachineTransition_2ijsl"), "StandardMovement", "knockback", SubResource("AnimationNodeStateMachineTransition_p1odr"), "knockback", "StandardMovement", SubResource("AnimationNodeStateMachineTransition_0gysh"), "MeleeSwing", "StandardMovement", SubResource("AnimationNodeStateMachineTransition_83xs0"), "RangedFire", "StandardMovement", SubResource("AnimationNodeStateMachineTransition_ypfnu"), "death", "StandardMovement", SubResource("AnimationNodeStateMachineTransition_f1ek2")]
-graph_offset = Vector2(14, -24.889816)
+graph_offset = Vector2(-88, -45.889816)
 
 [sub_resource type="Animation" id="Animation_j8xm3"]
 resource_name = "Mantle"
@@ -1056,10 +1060,10 @@ tracks/0/path = NodePath("Character:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [8, 15]
+"times": PackedFloat32Array(0, 0.13333334, 0.26666668, 0.4, 0.53333336, 0.6666667, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [8, 9, 10, 11, 12, 13, 14]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -1097,6 +1101,25 @@ tracks/3/keys = {
 "update": 1,
 "values": [9]
 }
+tracks/4/type = "audio"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SFX/WalkSFX")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("8_fuwcu")
+}, {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("8_fuwcu")
+}],
+"times": PackedFloat32Array(0, 0.5)
+}
+tracks/4/use_blend = true
 
 [sub_resource type="Animation" id="Animation_x3vf3"]
 resource_name = "stand_shoot"
@@ -1307,8 +1330,39 @@ scale = Vector2(3, 3)
 sprite_frames = ExtResource("11_xxqkx")
 animation = &"Small Climb"
 
-[node name="ShootSFX" type="AudioStreamPlayer2D" parent="." unique_id=2111788026]
+[node name="SFX" type="Node" parent="." unique_id=2019288501]
+
+[node name="ShootSFX" type="AudioStreamPlayer2D" parent="SFX" unique_id=2111788026]
 stream = ExtResource("12_j8xm3")
+volume_db = 4.0
+max_distance = 100000.0
+attenuation = 1e-05
+panning_strength = 0.0
+
+[node name="JumpSFX" type="AudioStreamPlayer2D" parent="SFX" unique_id=615055935]
+stream = ExtResource("13_r5bcf")
+max_distance = 100000.0
+attenuation = 1e-05
+panning_strength = 0.0
+
+[node name="HurtSFX" type="AudioStreamPlayer2D" parent="SFX" unique_id=1227211473]
+stream = ExtResource("14_7vh4w")
+max_distance = 100000.0
+attenuation = 1e-05
+panning_strength = 0.0
+
+[node name="WalkSFX" type="AudioStreamPlayer2D" parent="SFX" unique_id=658475621]
+volume_db = 10.0
+max_distance = 100000.0
+attenuation = 1e-05
+panning_strength = 0.0
+
+[node name="MeleeSwingSFX" type="AudioStreamPlayer2D" parent="SFX" unique_id=1120454804]
+stream = ExtResource("15_npdhm")
+volume_db = 24.0
+max_distance = 100000.0
+attenuation = 1e-05
+panning_strength = 0.0
 
 [connection signal="hit" from="Hurtbox" to="." method="_on_hit"]
 [connection signal="animation_finished" from="TempClimberSinceZachIsStupid" to="." method="_on_mantle_complete"]

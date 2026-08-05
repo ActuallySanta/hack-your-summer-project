@@ -65,6 +65,11 @@ var bullet_y_offset : Dictionary[ MoveState, float ] = {
 @onready var sprite : Sprite2D = $Character
 @onready var collisionManager: Node = $CollisionManager
 @onready var hurtbox : Hurtbox = $Hurtbox
+@onready var jump_sfx: AudioStreamPlayer2D = $SFX/JumpSFX
+@onready var hurt_sfx: AudioStreamPlayer2D = $SFX/HurtSFX
+@onready var melee_swing_sfx: AudioStreamPlayer2D = $SFX/MeleeSwingSFX
+@onready var shoot_sfx: AudioStreamPlayer2D = $SFX/ShootSFX
+
 
 # Consts
 const IDLESTATEPARAM := "parameters/StandardMovement/Idle/MoveState/transition_request"
@@ -150,6 +155,7 @@ func jump() -> void:
 	if try_mantle():
 		return
 	
+	jump_sfx.play()
 	velocity.y = -jumpForce
 
 func wall_jump() -> void:
@@ -159,6 +165,7 @@ func wall_jump() -> void:
 	
 	_wall_jump_speed_bonus = 700
 	_wall_jump_dir = _moveInput
+	jump_sfx.play()
 	velocity.y = -1000
 
 func validate_wall_jump() -> bool:
@@ -189,6 +196,7 @@ func attack() -> void:
 	_attackCooldownTimer = attackCooldown
 	_shootCooldownTimer = attackCooldown
 	_attackBufferTimer = 0
+	melee_swing_sfx.play()
 	anim_swing = true
 
 #region Handlers
@@ -421,6 +429,7 @@ func _on_hit(_hurtBox: Hurtbox, hit_info: HitInfo, _source: Hitbox) -> void:
 	if _invulnTimer > 0 or _currentHealth <= 0:
 		return
 	_currentHealth -= hit_info.damage
+	hurt_sfx.play()
 	GlobalSignals.health_changed.emit(_currentHealth, baseHealth)
 	_knockbackTimer = hit_info.knockback_duration
 	_knockbackForce = hit_info.knockback_strength / _knockbackTimer
@@ -475,6 +484,7 @@ func shoot() -> void:
 	newBullet.direction = Vector2.RIGHT if _facingRight else Vector2.LEFT
 	newBullet.set_mode(_gunMode)
 	get_tree().root.add_child(newBullet)
+	shoot_sfx.play()
 	_shootCooldownTimer = shootCooldown
 	_attackCooldownTimer = shootCooldown
 	_shootBufferTimer = 0
