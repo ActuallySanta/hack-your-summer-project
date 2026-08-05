@@ -7,7 +7,6 @@
 [ext_resource type="Script" uid="uid://b3xkq7wnva8y" path="res://Scripts/BehaviorAdjustments/camera_axis_region.gd" id="5_tplv0"]
 [ext_resource type="PackedScene" uid="uid://dfqqikkhf2oeu" path="res://Scenes/Environmental Hazards/teeth_grab_animator.tscn" id="6_7t5db"]
 [ext_resource type="PackedScene" uid="uid://dklylswmcw1pk" path="res://Scenes/Environmental Hazards/teeth_persistant.tscn" id="7_ooh2a"]
-[ext_resource type="PackedScene" uid="uid://dydfka6mw2bm2" path="res://Scenes/Pickups/jetpack_pickup.tscn" id="8_qysch"]
 
 [node name="LowerEntrywayBRS" type="Node2D" unique_id=322927179]
 
@@ -572,6 +571,3 @@ startWaiting = true
 
 [node name="TeethPersistant" parent="." unique_id=424263396 instance=ExtResource("7_ooh2a")]
 tile_map_data = PackedByteArray("AAANABYAAQAAAAAAAAANABcAAQAAAAEAAAAOABYAAQAAAAAAAAAOABcAAQAAAAEAAAAKAAwAAQAAAAAAAFAJAAwAAQAAAAEAAFAKAA4AAQAAAAAAAFAJAA4AAQAAAAEAAFAKAA8AAQAAAAAAAFAJAA8AAQAAAAEAADANAAsAAQAAAAAAAFAMAAsAAQAAAAEAAFANAAoAAQAAAAAAAFAMAAoAAQAAAAEAAFANAAkAAQAAAAAAAFAMAAkAAQAAAAEAAFAEAAQAAQAAAAAAAFADAAQAAQAAAAEAAFAEAAUAAQAAAAAAAFADAAUAAQAAAAEAAFAJAAMAAQAAAAEAADAJAAQAAQAAAAAAADAKAAMAAQAAAAEAADAKAAQAAQAAAAAAADAMAAQAAQAAAAAAADAMAAMAAQAAAAEAADAJABAAAQAAAAAAADAGABIAAQAAAAEAADAGABMAAQAAAAAAADA+AAcAAQAAAAEAADA+AAgAAQAAAAAAADA/AAcAAQAAAAEAADA/AAgAAQAAAAAAADBAAAcAAQAAAAEAADBAAAgAAQAAAAAAADA+AAoAAQAAAAAAAAA+AAsAAQAAAAEAAAA/AAoAAQAAAAAAAAA/AAsAAQAAAAEAAABAAAoAAQAAAAAAAABAAAsAAQAAAAEAAABDAAQAAQAAAAAAAGBEAAQAAQAAAAEAAGBDAAUAAQAAAAAAAGBEAAUAAQAAAAEAAGA=")
-
-[node name="JetpackPickup" parent="." unique_id=1708906721 instance=ExtResource("8_qysch")]
-position = Vector2(3244, 470)
