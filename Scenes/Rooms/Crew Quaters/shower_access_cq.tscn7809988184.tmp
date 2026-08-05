@@ -80,7 +80,6 @@ script = ExtResource("8_13w6l")
 
 [node name="RepairDrone" parent="." unique_id=1318393645 instance=ExtResource("10_gtvbs")]
 position = Vector2(828, 287)
-mass = 0.001
 start_direction = "UL"
 speed = 100.0
 stun_time = 1.0

@@ -16,6 +16,14 @@ class_name Path extends Node2D
 var objects : Array[ PathFollowerData ]
 var path : Array [ PathPoint ]
 
+## Set by the Path Point Editor plugin while it is drawing drag handles for this
+## path, so the two don't mark the same points twice. Not exported, so it never
+## ends up saved in a scene.
+var editor_handles_active := false:
+	set(value):
+		editor_handles_active = value
+		queue_redraw()
+
 func _ready() -> void:
 	if points.size() <= 1:
 		return
@@ -69,12 +77,14 @@ func assign_path():
 		path.append(PathPoint.new(points[ inverse_point ], points[ inverse_point - 1 ]))
 
 func _process(delta: float) -> void:
-	if points.size() <= 1:
-		return
+	# Checked before the point count, so a path being built up from its first
+	# point still redraws while its handles are dragged around.
 	if Engine.is_editor_hint():
 		queue_redraw()
 		return
-	
+	if points.size() <= 1:
+		return
+
 	for rider in objects:
 		update_path_follower(rider, delta)
 
@@ -82,13 +92,18 @@ func update_path_follower(follower: PathFollowerData, delta: float) -> void:
 	var need_to_update = follower.iterate(delta, path.size(), node_speed)
 	if need_to_update:
 		follower.current_point = path[ follower.point_index ]
-		follower.wait_time = wait_time_seconds
+		if wait_time_seconds > 0:
+			follower.wait_time = wait_time_seconds
+			follower.travelled_distance = 0
 	follower.move_node()
 
 func _draw() -> void:
-	for point in points:
-		draw_circle( point, 10, Color.CORNFLOWER_BLUE, false )
-		draw_circle( point, 10, Color(Color.CORNFLOWER_BLUE, 0.5), true )
+	if not Engine.is_editor_hint():
+		return
+	if not editor_handles_active:
+		for point in points:
+			draw_circle( point, 10, Color.CORNFLOWER_BLUE, false )
+			draw_circle( point, 10, Color(Color.CORNFLOWER_BLUE, 0.5), true )
 	for i in points.size() - 1:
 		var a = points[ i ]
 		var b = points[ i + 1]
