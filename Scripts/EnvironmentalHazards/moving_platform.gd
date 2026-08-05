@@ -50,15 +50,19 @@ enum MomentumMode {
 ## When on, we hold that position back and commit it during the physics step so
 ## the two stay in lockstep instead of visibly sliding against each other.
 @export var sync_to_physics : bool = true
-## Movement faster than this, in pixels per second, is a teleport rather than
-## travel, and riders are left behind. Exists for Path's "Jump" loop mode, which
-## snaps the platform from the last point back to the first; without this that
-## snap would fling everyone across the level. Set to 0 to always carry.
+## Off by default. When set above 0, movement faster than this many pixels per
+## second counts as a teleport rather than travel and riders are left behind.
 ##
-## This is deliberately far above any speed a platform would really travel at.
-## Do not lower it to near your platform speeds or fast platforms will silently
-## stop carrying their riders.
-@export var teleport_speed : float = 4000.0
+## The only thing this is for is Path's "Jump" loop mode, which snaps the
+## platform from the last point back to the first; without it that snap drags
+## everyone across the level. It is off by default because the cost of guessing
+## wrong is silent and confusing: any platform faster than the limit stops
+## carrying anyone at all, with no other symptom. If you need it, set it to
+## several times your path's Node Speed, not just above it.
+##
+## The path's initial snap onto its first point is handled separately by
+## [member _warmup_frames] and needs nothing here.
+@export var teleport_speed : float = 0.0
 
 @export_category("Momentum")
 ## What a rider takes with it when it leaves the platform, so jumping off a
@@ -84,6 +88,12 @@ var _momentum : Dictionary = {}
 ## Physics frames to sit out at startup. The path snaps us onto its first point
 ## on its first _process, and that jump is not something to carry anyone through.
 var _warmup_frames : int = 2
+## Real time the path has had to move us since we last committed a position.
+## Not the same as the physics delta: the path moves us on render frames, so a
+## stutter piles several frames of honest travel into one commit. Measuring
+## speed against the physics delta instead would read that as a teleport.
+var _time_since_commit : float
+var _last_window : float
 
 func _ready() -> void:
 	_committed_position = position
@@ -97,8 +107,11 @@ func _ready() -> void:
 	process_physics_priority = -1000
 	rebuild_detector()
 
-func _process(_delta: float) -> void:
-	if Engine.is_editor_hint() or not sync_to_physics:
+func _process(delta: float) -> void:
+	if Engine.is_editor_hint():
+		return
+	_time_since_commit += delta
+	if not sync_to_physics:
 		return
 	# Stash whatever the path just wrote and rewind to the last committed step.
 	_pending_position = position
@@ -115,11 +128,16 @@ func _physics_process(delta: float) -> void:
 	var motion := global_position - _last_global_position
 	_last_global_position = global_position
 
+	# Two physics steps can run back to back with no render frame between them,
+	# leaving no accumulated time to measure against.
+	_last_window = maxf(_time_since_commit, delta)
+	_time_since_commit = 0.0
+
 	# A teleport is not movement, so it neither carries nor throws anyone.
 	if _warmup_frames > 0:
 		_warmup_frames -= 1
 		motion = Vector2.ZERO
-	elif teleport_speed > 0.0 and delta > 0.0 and motion.length() > teleport_speed * delta:
+	elif teleport_speed > 0.0 and motion.length() > teleport_speed * _last_window:
 		motion = Vector2.ZERO
 	last_motion = motion
 
@@ -129,10 +147,9 @@ func _physics_process(delta: float) -> void:
 		_riding.clear()
 	_apply_momentum(delta)
 
-## Velocity of the platform in pixels/second, based on the last physics frame.
+## Velocity of the platform in pixels/second, over the last commit.
 func get_platform_velocity() -> Vector2:
-	var step := get_physics_process_delta_time()
-	return last_motion / step if step > 0.0 else Vector2.ZERO
+	return last_motion / _last_window if _last_window > 0.0 else Vector2.ZERO
 
 ## Regenerates the rider detection area. Call this if the painted tiles change
 ## at runtime.

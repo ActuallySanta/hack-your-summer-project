@@ -93,6 +93,7 @@ scale = Vector2(3, 3)
 tile_map_data = PackedByteArray("AAABAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAANAAAAAAACAAAAAAAYAAAAAAAAAAAAAAAZAAAAAAACAAAAAAA=")
 tile_set = ExtResource("12_wqrdn")
 script = ExtResource("13_5d38x")
+teleport_speed = 25000.0
 
 [node name="Path2" type="Node2D" parent="." unique_id=363212146]
 script = ExtResource("11_id4x0")
@@ -107,6 +108,7 @@ scale = Vector2(3, 3)
 tile_map_data = PackedByteArray("AAABAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAANAAAAAAACAAAAAAAYAAAAAAAAAAAAAAAZAAAAAAACAAAAAAA=")
 tile_set = ExtResource("12_wqrdn")
 script = ExtResource("13_5d38x")
+teleport_speed = 25000.0
 
 [node name="Path3" type="Node2D" parent="." unique_id=2032352931]
 script = ExtResource("11_id4x0")
@@ -121,3 +123,4 @@ scale = Vector2(3, 3)
 tile_map_data = PackedByteArray("AAAAAAAAAAAAAAAAAAABAAAAAAABAAAAAAACAAAAAAACAAAAAAA=")
 tile_set = ExtResource("12_wqrdn")
 script = ExtResource("13_5d38x")
+teleport_speed = 4000.0
