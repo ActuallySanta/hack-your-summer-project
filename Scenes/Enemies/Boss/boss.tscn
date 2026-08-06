@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://dklylswmcw1pk" path="res://Scenes/Environmental Hazards/teeth_persistant.tscn" id="1_ytkdc"]
 [ext_resource type="Script" uid="uid://dhgcprjrtfobr" path="res://Scripts/Combat/hurtbox.gd" id="2_gi0e2"]
 [ext_resource type="Texture2D" uid="uid://ckncltgk5di6p" path="res://Textures/MapTextures/AreaTile.png" id="3_b1kuf"]
+[ext_resource type="PackedScene" uid="uid://liprjmtialrh" path="res://Scenes/Components/Hitbox.tscn" id="5_1jqxt"]
 [ext_resource type="BehaviorTree" uid="uid://bw8myafit8doo" path="res://ai/trees/boss_enemy.tres" id="6_wbur8"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o1nrd"]
@@ -34,6 +35,12 @@ texture = ExtResource("3_b1kuf")
 
 [node name="AttackPoint" type="Node2D" parent="BossVisual/Hurtbox" unique_id=763619416]
 position = Vector2(-576, -335)
+
+[node name="Hitbox" parent="BossVisual" unique_id=125498642 instance=ExtResource("5_1jqxt")]
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BossVisual/Hitbox" unique_id=255779573]
+shape = SubResource("RectangleShape2D_o1nrd")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=816862754]
 

@@ -119,6 +119,7 @@ tile_set = ExtResource("7")
 modulate = Color(0.5882353, 0.5882353, 0.5882353, 1)
 self_modulate = Color(0.5882353, 0.5882353, 0.5882353, 1)
 position = Vector2(576, 600)
+lockOnEnter = true
 
 [node name="Boss" parent="." unique_id=475289835 instance=ExtResource("10")]
 position = Vector2(826, 323)

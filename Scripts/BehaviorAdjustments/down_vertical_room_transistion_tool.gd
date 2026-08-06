@@ -11,6 +11,8 @@ var _apply_helpful_force = false
 var _door_closed = false
 var _player_node : CharacterBody2D
 
+@export var lockOnEnter : bool = false
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	doorLockCollider.set_deferred("disabled", true)
@@ -61,10 +63,12 @@ func _on_balance_quadrant_body_exited(body: Node2D) -> void:
 	await get_tree().physics_frame
 	if verify_player_location( BalanceQuad ) or not _player_started_through_here or _player_exited:
 		return
-	if body.is_in_group("player") and _door_closed:
+	if body.is_in_group("player") and _door_closed and !lockOnEnter:
 		doorLockCollider.set_deferred("disabled", true)
 		var curr_frame = door.frame
 		door.play("DoorClose")
 		_door_closed = false
 		door.frame = 5-curr_frame
 		_player_exited = true
+			
+			

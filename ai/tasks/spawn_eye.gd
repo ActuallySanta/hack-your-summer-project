@@ -49,6 +49,7 @@ func _tick(delta: float) -> Status:
 			var instances : Array[BossBullet] = [TLCornerInstance,BRCornerInstance,BLCornerInstance,TRCornerInstance]
 			
 			for i in instances.size():
+				agent.add_child(instances[i])
 				instances[i].reparent(agent.get_tree().current_scene)
 				instances[i].linear_velocity = instances[i].global_position.direction_to(user.eyeSpawnArea.get_center())*projectileSpeed
 			return Status.SUCCESS
