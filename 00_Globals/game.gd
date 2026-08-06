@@ -1,8 +1,8 @@
 class_name GameManager
 extends "res://addons/MetroidvaniaSystem/Template/Scripts/MetSysGame.gd"
 
-const START_ROOM_UID = "uid://esk4fom87pxl" #Cryo Room
-const START_POS = Vector2(1000, 483)
+const START_ROOM_UID = "uid://77ql1xom04cr" #Docking Station
+const START_POS = Vector2(158, 834)
 const SaveManager = preload("res://addons/MetroidvaniaSystem/Template/Scripts/SaveManager.gd")
 
 const PICKUP_FUSE_ID = "Fuse"
@@ -240,7 +240,7 @@ static func is_station_powered() -> bool:
 	if !instance or !instance.save:
 		print("No save data found, cannot determine power status.")
 		return false
-	return instance.save.get_value("station_powered")
+	return instance.save.get_value("station_powered", false)
 
 #region Camera axis regions
 ## Applies whichever [CameraAxisRegion] currently holds the camera, then re-applies

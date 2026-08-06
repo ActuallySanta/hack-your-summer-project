@@ -610,7 +610,7 @@ func reset_camera() -> void:
 
 #region Getters and Setters
 func is_tile_air(foreground: TileMapLayer, pos: Vector2i) -> bool:
-	return foreground.get_cell_source_id(pos) == -1
+	return foreground and foreground.get_cell_source_id(pos) == -1
 
 func get_camera() -> Camera2D:
 	return get_viewport().get_camera_2d()
