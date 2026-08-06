@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://1ysa7uo7e1kp"]
+
+[ext_resource type="PackedScene" uid="uid://bds7s2mooat77" path="res://Scenes/Rooms/Research Sector/jetpack_development_rs.tscn" id="1_5gnp2"]
+[ext_resource type="PackedScene" uid="uid://cqpfyrclnskvv" path="res://Scenes/Rooms/Research Sector/entrance_rs.tscn" id="2_bq0af"]
+[ext_resource type="PackedScene" uid="uid://euism3m73ce2" path="res://Scenes/Rooms/Research Sector/operations_rs.tscn" id="3_6f58x"]
+[ext_resource type="PackedScene" uid="uid://b0nn5vano5iv0" path="res://Scenes/Rooms/Research Sector/labs_rs.tscn" id="4_htech"]
+[ext_resource type="PackedScene" uid="uid://4sacacgt25hd" path="res://Scenes/Rooms/Research Sector/save_room_rs.tscn" id="5_hcoau"]
+
+[node name="WorldMapRS" type="Node2D" unique_id=1107164827]
+
+[node name="JetpackDevelopmentRS" parent="." unique_id=1791462896 instance=ExtResource("1_5gnp2")]
+position = Vector2(2473, 1991)
+
+[node name="EntranceRS" parent="." unique_id=1957354651 instance=ExtResource("2_bq0af")]
+position = Vector2(1321, -25)
+
+[node name="OperationsRS" parent="." unique_id=525828636 instance=ExtResource("3_6f58x")]
+position = Vector2(2473, -25)
+
+[node name="LabsRS" parent="." unique_id=1113987352 instance=ExtResource("4_htech")]
+position = Vector2(1321, 1319)
+
+[node name="SaveRoomRS" parent="." unique_id=2007880890 instance=ExtResource("5_hcoau")]
+position = Vector2(4777, 1319)

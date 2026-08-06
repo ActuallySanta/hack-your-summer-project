@@ -110,7 +110,6 @@ func _load_game() -> void:
 	else:
 		player.disable_gun()
 	
-	
 	_player.set_gun(
 		"plasma" if save.get_value("plasma_gun_collected") else "stun"
 	)

@@ -17,27 +17,27 @@ $ln;Demo Level;NewMap
 [0,5,1]
 2,1,2,0|ffb400,,,,||
 [1,3,1]
-0,-1,1,0|ffb400,,,,||Scenes/Rooms/Tutorial Area/service_crossroads.tscn
+0,-1,1,0|ffb400,,,,||
 [1,4,1]
-4,-1,1,-1|ffb400,,,,||Scenes/Rooms/Tutorial Area/service_crossroads.tscn
+4,-1,1,-1|ffb400,,,,||
 [1,5,1]
-1,0,2,-1|ffb400,,,,||Scenes/Rooms/Tutorial Area/service_crossroads.tscn
+1,0,2,-1|ffb400,,,,||
 [2,5,1]
--1,0,1,1|ffb400,,,,||Scenes/Rooms/Docking Bay/oberservatory.tscn
+-1,0,1,1|ffb400,,,,||
 [3,5,1]
-0,0,-1,0|ffb400,,,,||Scenes/Rooms/Docking Bay/oberservatory.tscn
+0,0,-1,0|ffb400,,,,||
 [-1,5,1]
-2,0,0,-1|ffb400,,,,||Scenes/Rooms/Tutorial Area/docking_station.tscn
+2,0,0,-1|ffb400,,,,||
 [-1,4,1]
-1,-1,0,0|ffb400,,,,||Scenes/Rooms/Tutorial Area/docking_station.tscn
+1,-1,0,0|ffb400,,,,||
 [0,4,1]
-1,0,1,0|ffb400,,,,||Scenes/Rooms/Tutorial Area/service_hall.tscn
+1,0,1,0|ffb400,,,,||
 [0,3,1]
-1,0,0,0|ffb400,,,,||Scenes/Rooms/Tutorial Area/maintenence_room.tscn
+1,0,0,0|ffb400,,,,||
 [3,4,1]
-0,0,-1,0|ffb400,,,,||Scenes/Rooms/Tutorial Area/storage_room.tscn
+0,0,-1,0|ffb400,,,,||
 [2,4,1]
--1,1,1,0|ffb400,,,,||Scenes/Rooms/Tutorial Area/storage_room.tscn
+-1,1,1,0|ffb400,,,,||
 [13,-2,0]
 1,0,2,0|ad0000,,,,|3|Scenes/Rooms/Biological Research Sector/save_room_brs.tscn
 [14,-2,0]
@@ -307,25 +307,25 @@ $ln;Demo Level;NewMap
 [10,0,0]
 1,0,-1,0|0023ff,,,,||Scenes/Rooms/Crew Quaters/entryway_cq.tscn
 [11,-1,0]
-0,0,1,1|ffb400,,,,||
+0,0,1,1|ffb400,,,,||Scenes/Rooms/Docking Bay/oberservatory.tscn
 [11,-2,0]
-0,1,0,0|ffb400,,,,||
+0,1,1,0|ffb400,,,,||Scenes/Rooms/Tutorial Area/storage_room.tscn
 [10,-3,0]
-0,-1,0,0|ffb400,,,,||
+0,-1,1,0|ffb400,,,,||Scenes/Rooms/Tutorial Area/service_crossroads.tscn
 [10,-2,0]
-0,-1,1,-1|ffb400,,,,||
+1,-1,1,-1|ffb400,,,,||Scenes/Rooms/Tutorial Area/service_crossroads.tscn
 [10,-1,0]
-0,0,1,-1|ffb400,,,,||
+1,0,1,-1|ffb400,,,,||Scenes/Rooms/Tutorial Area/service_crossroads.tscn
 [9,-2,0]
-0,0,1,0|ffb400,,,,||
+0,0,1,0|ffb400,,,,||Scenes/Rooms/Tutorial Area/service_hall.tscn
 [9,-1,0]
-1,1,1,0|ffb400,,,,||
+1,1,1,0|ffb400,,,,||Scenes/Rooms/Docking Bay/waiting_room_db.tscn
 [9,-3,0]
-1,0,0,0|ffb400,,,,||
+1,0,0,0|ffb400,,,,||Scenes/Rooms/Tutorial Area/maintenence_room.tscn
 [8,-2,0]
-0,-1,0,0|ffb400,,,,||
+0,-1,0,0|ffb400,,,,||Scenes/Rooms/Tutorial Area/docking_station.tscn
 [8,-1,0]
-0,0,0,-1|ffb400,,,,||
+0,0,0,-1|ffb400,,,,||Scenes/Rooms/Tutorial Area/docking_station.tscn
 [7,3,0]
 -1,0,1,0|0023ff,,,,||Scenes/Rooms/Crew Quaters/cryo_room.tscn
 [8,3,0]

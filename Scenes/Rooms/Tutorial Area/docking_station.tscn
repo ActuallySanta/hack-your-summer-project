@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="1_yh3xi"]
 [ext_resource type="PackedScene" uid="uid://cdsjsvuyovomn" path="res://Scenes/tile_map_for_rooms.tscn" id="2_506i1"]
+[ext_resource type="PackedScene" uid="uid://sjty08w4065m" path="res://Scenes/Rooms/CommonRoomComponents/space_background.tscn" id="2_nn55x"]
 [ext_resource type="TileSet" uid="uid://chq502fexv5m" path="res://Tileset/DockingBay.tres" id="3_807yj"]
 [ext_resource type="PackedScene" uid="uid://k8xepgfoggiq" path="res://Scenes/Dialogue System/dialogue_trigger.tscn" id="4_506i1"]
 [ext_resource type="TileSet" uid="uid://c0dbvnpaoeomc" path="res://Tileset/TransitionTileSet.tres" id="4_nn55x"]
@@ -11,9 +12,16 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_26x51"]
 size = Vector2(223, 153)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xf5gq"]
+size = Vector2(22, 659)
+
 [node name="DockingStation" type="Node2D" unique_id=2103613452]
 
 [node name="RoomInstance" parent="." unique_id=1322002225 instance=ExtResource("1_yh3xi")]
+
+[node name="Background" parent="." unique_id=1411061257 instance=ExtResource("2_nn55x")]
+position = Vector2(576, 672)
+region_rect = Rect2(0, 0, 1152, 1344)
 
 [node name="VisualAssets" parent="." unique_id=1359070375 instance=ExtResource("2_506i1")]
 position = Vector2(1152, 0)
@@ -34,7 +42,7 @@ tile_map_data = PackedByteArray("AADo/xMAAQAMAAQAAADp/xMAAQAMAAQAAADq/xMAAQAMAAQ
 tile_set = ExtResource("3_807yj")
 
 [node name="Doors" type="TileMapLayer" parent="VisualAssets" unique_id=1435896670]
-tile_map_data = PackedByteArray("AAD+/wUAAQACAAAAAAD+/wYAAQACAAEAAAD+/wcAAQACAAIAAAD//wUAAQADAAAAAAD//wYAAQADAAEAAAD//wcAAQADAAIAAAD+/xcAAQACAAAAAAD+/xgAAQACAAEAAAD+/xkAAQACAAIAAAD//xcAAQADAAAAAAD//xgAAQADAAEAAAD//xkAAQADAAIAAAA=")
+tile_map_data = PackedByteArray("AAD+/wUAAQAAAAAAAAD+/wYAAQAAAAEAAAD+/wcAAQAAAAIAAAD//wUAAQABAAAAAAD//wYAAQABAAEAAAD//wcAAQABAAIAAAD+/xcAAQAAAAAAAAD+/xgAAQAAAAEAAAD+/xkAAQAAAAIAAAD//xcAAQABAAAAAAD//xgAAQABAAEAAAD//xkAAQABAAIAAAA=")
 tile_set = ExtResource("4_nn55x")
 
 [node name="Foreground" type="TileMapLayer" parent="VisualAssets" unique_id=1272904740]
@@ -51,3 +59,10 @@ shape = SubResource("RectangleShape2D_26x51")
 
 [node name="LockedDoor" parent="." unique_id=1290327451 instance=ExtResource("6_kpjmh")]
 position = Vector2(1120, 1176)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=513462292]
+collision_mask = 6
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1436091780]
+position = Vector2(2, 687)
+shape = SubResource("RectangleShape2D_xf5gq")
