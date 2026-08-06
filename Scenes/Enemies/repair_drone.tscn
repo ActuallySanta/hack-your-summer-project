@@ -1,0 +1,57 @@
+[gd_scene format=3 uid="uid://b0fyg7kdjcyou"]
+
+[ext_resource type="Texture2D" uid="uid://dr27a447as1vc" path="res://Sprites/Characters/Enemy SpriteSheets/Repair_Drone.png" id="1_cbna3"]
+[ext_resource type="PhysicsMaterial" uid="uid://bfliktwattx4t" path="res://Materials/PhysicsMaterials/bounce.tres" id="1_vjkby"]
+[ext_resource type="Script" uid="uid://wof50l8kqh6" path="res://Scenes/Enemies/repair_drone.gd" id="2_420ha"]
+[ext_resource type="Script" uid="uid://ctc17oyja7fup" path="res://Scripts/Combat/hitbox.gd" id="4_jc8ds"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_420ha"]
+radius = 20.506096
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_vjkby"]
+radius = 21.505814
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_jc8ds"]
+radius = 17.507141
+
+[node name="RepairDrone" type="RigidBody2D" unique_id=1318393645]
+collision_layer = 64
+collision_mask = 257
+physics_material_override = ExtResource("1_vjkby")
+lock_rotation = true
+script = ExtResource("2_420ha")
+
+[node name="RepairDroneImage" type="Sprite2D" parent="." unique_id=1054687302]
+scale = Vector2(3, 3)
+texture = ExtResource("1_cbna3")
+hframes = 2
+vframes = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=728415125]
+visible = false
+position = Vector2(-1.5, 1.5)
+shape = SubResource("CircleShape2D_420ha")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=307065976]
+visible = false
+collision_layer = 4
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1131624557]
+position = Vector2(-1.5, 1.5)
+shape = SubResource("CircleShape2D_vjkby")
+
+[node name="Hitbox" type="Area2D" parent="." unique_id=1768830159]
+visible = false
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("4_jc8ds")
+knockback_strength = 100.0
+knockback_duration = 1.0
+metadata/_custom_type_script = "uid://ctc17oyja7fup"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=184156446]
+position = Vector2(-1.5, 1.5)
+shape = SubResource("CircleShape2D_jc8ds")
+
+[connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]

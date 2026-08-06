@@ -1,0 +1,339 @@
+@tool
+class_name MovingPlatform extends TileMapLayer
+
+## A TileMapLayer that carries whatever is riding it.
+##
+## This node does not move itself: parent it to a [Path] (or drop it into that
+## path's [member Path.nodes_to_move]) and the path drives it from A to B.
+## All this script does is make players and enemies stick to it, for any
+## movement direction the path produces.
+##
+## The tiles painted here need a physics layer on the TileSet, same as any
+## other piece of level geometry -- that is what entities actually stand on.
+
+enum CarryMode {
+	## Only carry a body whose floor is this platform. The usual choice.
+	GROUNDED_ON_PLATFORM,
+	## Carry a body touching any face of this platform, floor/wall/ceiling.
+	ANY_CONTACT,
+	## Carry every body inside the detection area, contact or not.
+	OVERLAP,
+}
+
+enum MomentumMode {
+	## Riders leave the platform with nothing.
+	NONE,
+	## Riders keep the platform's horizontal speed, and its vertical speed only
+	## while it is rising. Stepping off a descending platform will not yank
+	## anyone downward.
+	ADD_UPWARD_VELOCITY,
+	## Riders keep the platform's full velocity, downward included.
+	ADD_VELOCITY,
+}
+
+@export_category("Riders")
+## Physics layers scanned for riders. Defaults to "player" (2) and "enemies" (3).
+@export_flags_2d_physics var rider_mask : int = 0b110:
+	set(value):
+		rider_mask = value
+		if is_instance_valid(_detector):
+			_detector.collision_mask = value
+@export var carry_mode : CarryMode = CarryMode.GROUNDED_ON_PLATFORM
+## How far past the painted tiles a body still counts as riding the platform.
+@export_range(0.0, 32.0, 0.5, "or_greater") var surface_margin : float = 3.0
+
+@export_category("Motion")
+## Whether riders are carried. Independent of TileMapLayer's own [member
+## TileMapLayer.enabled], which turns the whole layer off.
+@export var carry_enabled : bool = true
+## The path writes our position on render frames, riders move on physics frames.
+## When on, we hold that position back and commit it during the physics step so
+## the two stay in lockstep instead of visibly sliding against each other.
+@export var sync_to_physics : bool = true
+## Off by default. When set above 0, movement faster than this many pixels per
+## second counts as a teleport rather than travel and riders are left behind.
+##
+## The only thing this is for is Path's "Jump" loop mode, which snaps the
+## platform from the last point back to the first; without it that snap drags
+## everyone across the level. It is off by default because the cost of guessing
+## wrong is silent and confusing: any platform faster than the limit stops
+## carrying anyone at all, with no other symptom. If you need it, set it to
+## several times your path's Node Speed, not just above it.
+##
+## The path's initial snap onto its first point is handled separately by
+## [member _warmup_frames] and needs nothing here.
+@export var teleport_speed : float = 0.0
+
+@export_category("Momentum")
+## What a rider takes with it when it leaves the platform, so jumping off a
+## moving platform throws you rather than dropping you straight down.
+@export var momentum_mode : MomentumMode = MomentumMode.ADD_UPWARD_VELOCITY
+## How long inherited momentum lasts. It falls off to nothing across this time,
+## the same way the player's wall jump bonus bleeds off.
+@export_range(0.0, 2.0, 0.05, "or_greater") var momentum_duration : float = 0.4
+## Scales inherited momentum. Above 1.0 for a launcher, below for a gentler toss.
+@export_range(0.0, 3.0, 0.05, "or_greater") var momentum_scale : float = 1.0
+
+## Distance moved during the last physics frame.
+var last_motion : Vector2
+
+var _detector : Area2D
+var _committed_position : Vector2
+var _pending_position : Vector2
+var _last_global_position : Vector2
+## instance id -> Node2D, everything riding as of the last physics frame.
+var _riding : Dictionary = {}
+## instance id -> { node, velocity, remaining }, riders coasting after leaving.
+var _momentum : Dictionary = {}
+## Physics frames to sit out at startup. The path snaps us onto its first point
+## on its first _process, and that jump is not something to carry anyone through.
+var _warmup_frames : int = 2
+## Real time the path has had to move us since we last committed a position.
+## Not the same as the physics delta: the path moves us on render frames, so a
+## stutter piles several frames of honest travel into one commit. Measuring
+## speed against the physics delta instead would read that as a teleport.
+var _time_since_commit : float
+var _last_window : float
+
+func _ready() -> void:
+	_committed_position = position
+	_pending_position = position
+	_last_global_position = global_position
+	if Engine.is_editor_hint():
+		return
+	# Run _process after the path has written our position for this frame, and
+	# _physics_process before riders run their own movement for this step.
+	process_priority = 1000
+	process_physics_priority = -1000
+	rebuild_detector()
+
+func _process(delta: float) -> void:
+	if Engine.is_editor_hint():
+		return
+	_time_since_commit += delta
+	if not sync_to_physics:
+		return
+	# Stash whatever the path just wrote and rewind to the last committed step.
+	_pending_position = position
+	position = _committed_position
+
+func _physics_process(delta: float) -> void:
+	if Engine.is_editor_hint():
+		return
+
+	if sync_to_physics:
+		position = _pending_position
+	_committed_position = position
+
+	var motion := global_position - _last_global_position
+	_last_global_position = global_position
+
+	# Two physics steps can run back to back with no render frame between them,
+	# leaving no accumulated time to measure against.
+	_last_window = maxf(_time_since_commit, delta)
+	_time_since_commit = 0.0
+
+	# A teleport is not movement, so it neither carries nor throws anyone.
+	if _warmup_frames > 0:
+		_warmup_frames -= 1
+		motion = Vector2.ZERO
+	elif teleport_speed > 0.0 and motion.length() > teleport_speed * _last_window:
+		motion = Vector2.ZERO
+	last_motion = motion
+
+	if carry_enabled:
+		_update_riders(motion)
+	else:
+		_riding.clear()
+	_apply_momentum(delta)
+
+## Velocity of the platform in pixels/second, over the last commit.
+func get_platform_velocity() -> Vector2:
+	return last_motion / _last_window if _last_window > 0.0 else Vector2.ZERO
+
+## Regenerates the rider detection area. Call this if the painted tiles change
+## at runtime.
+func rebuild_detector() -> void:
+	_riding.clear()
+	_momentum.clear()
+	if is_instance_valid(_detector):
+		remove_child(_detector)
+		_detector.queue_free()
+
+	_detector = Area2D.new()
+	_detector.name = "RiderDetector"
+	_detector.collision_layer = 0
+	_detector.collision_mask = rider_mask
+	_detector.monitorable = false
+	add_child(_detector)
+
+	for rect in _collect_detection_rects():
+		var shape := CollisionShape2D.new()
+		var rectangle := RectangleShape2D.new()
+		rectangle.size = rect.size
+		shape.shape = rectangle
+		shape.position = rect.get_center()
+		_detector.add_child(shape)
+
+func _update_riders(motion: Vector2) -> void:
+	if not is_instance_valid(_detector):
+		return
+
+	# Collect first, then move. Moving a body can change what the others are
+	# touching, and we want every rider judged against the same frame.
+	var riders : Dictionary = {}
+	for body in _detector.get_overlapping_bodies():
+		if body == self:
+			continue
+		if _is_riding(body):
+			riders[body.get_instance_id()] = body
+
+	# Anything riding last frame but not this one just left, and takes the
+	# platform's velocity with it.
+	for id in _riding:
+		if not riders.has(id):
+			_start_momentum(_riding[id])
+	_riding = riders
+
+	for id in riders:
+		# Still attached, so there is nothing to coast on.
+		_momentum.erase(id)
+		if motion.is_zero_approx():
+			continue
+		# Rigid attachment: set the position outright rather than sweeping with
+		# move_and_collide. A sweep runs from a state where we have already
+		# committed our own position, so a platform moving *toward* its rider has
+		# swallowed them by the time they are swept out, and the engine's
+		# depenetration then fights us. That shows up as a shimmy on the way up,
+		# and at speed the rider is buried deep enough that the sweep is blocked
+		# outright and gets left behind. Preserving the offset exactly has neither
+		# problem, and the rider's own move_and_slide runs immediately after us to
+		# resolve anything it was pushed into.
+		riders[id].global_position += motion
+
+## Coasting after leaving the platform. This is applied as displacement rather
+## than as a one-shot add to the rider's velocity because the controllers here
+## rewrite velocity.x from input every physics frame, which would erase an added
+## velocity before it ever moved anyone.
+func _apply_momentum(delta: float) -> void:
+	for id in _momentum.keys():
+		var entry : Dictionary = _momentum[id]
+		# Left untyped: a rider freed since last frame would fail a Node2D type
+		# check before is_instance_valid ever got to reject it.
+		var rider = entry["node"]
+		if not is_instance_valid(rider) or _riding.has(id):
+			_momentum.erase(id)
+			continue
+
+		# Landing spends it, so stepping off onto solid ground does not skate.
+		if rider is CharacterBody2D and (rider as CharacterBody2D).is_on_floor():
+			_momentum.erase(id)
+			continue
+
+		var falloff : float = entry["remaining"] / maxf(momentum_duration, 0.001)
+		var step : Vector2 = entry["velocity"] * falloff * delta
+		# Coasting is free travel through the world rather than an attachment, so
+		# unlike the carry above it does get swept, and cannot cross a wall.
+		if rider is PhysicsBody2D:
+			(rider as PhysicsBody2D).move_and_collide(step)
+		else:
+			rider.global_position += step
+
+		entry["remaining"] -= delta
+		if entry["remaining"] <= 0.0:
+			_momentum.erase(id)
+
+## [param rider] is untyped for the same reason as in [method _apply_momentum]:
+## it may have been freed since the frame it was collected on.
+func _start_momentum(rider) -> void:
+	if momentum_mode == MomentumMode.NONE or momentum_duration <= 0.0:
+		return
+	if not is_instance_valid(rider):
+		return
+
+	var inherited := get_platform_velocity() * momentum_scale
+	if momentum_mode == MomentumMode.ADD_UPWARD_VELOCITY and inherited.y > 0.0:
+		inherited.y = 0.0
+	if inherited.is_zero_approx():
+		return
+
+	_momentum[rider.get_instance_id()] = {
+		"node": rider,
+		"velocity": inherited,
+		"remaining": momentum_duration,
+	}
+
+func _is_riding(body: Node2D) -> bool:
+	if carry_mode == CarryMode.OVERLAP:
+		return true
+
+	# Anything without slide data to inspect falls back to plain overlap.
+	if not body is CharacterBody2D:
+		return true
+
+	var character := body as CharacterBody2D
+	if carry_mode == CarryMode.GROUNDED_ON_PLATFORM and not character.is_on_floor():
+		return false
+
+	# Slide collisions are from the rider's last move_and_slide, which already
+	# ran before we did this frame.
+	for i in character.get_slide_collision_count():
+		var collision := character.get_slide_collision(i)
+		var collider := collision.get_collider()
+		var collider_node := collider as Node
+		# Also accept a collision body parented under us, in case the collision
+		# lives on a child node rather than on the tiles themselves.
+		if collider != self and (collider_node == null or not is_ancestor_of(collider_node)):
+			continue
+		if carry_mode == CarryMode.ANY_CONTACT:
+			return true
+		if collision.get_normal().dot(character.up_direction) > 0.0:
+			return true
+	return false
+
+## Builds a rectangle per horizontal run of painted cells, grown by the surface
+## margin, so an arbitrarily shaped platform is covered with few shapes.
+func _collect_detection_rects() -> Array[Rect2]:
+	var rects : Array[Rect2] = []
+	if tile_set == null:
+		return rects
+
+	var cell_size := Vector2(tile_set.tile_size)
+	var square := tile_set.tile_shape == TileSet.TILE_SHAPE_SQUARE
+
+	var rows : Dictionary = {}
+	for cell in get_used_cells():
+		if not rows.has(cell.y):
+			rows[cell.y] = []
+		rows[cell.y].append(cell.x)
+
+	for key in rows:
+		var row : int = key
+		var columns : Array = rows[key]
+		columns.sort()
+		var run_start : int = columns[0]
+		var run_end : int = columns[0]
+		# One extra iteration so the final run gets flushed.
+		for i in range(1, columns.size() + 1):
+			var at_end := i >= columns.size()
+			if not at_end and square and columns[i] == run_end + 1:
+				run_end = columns[i]
+				continue
+			var first := map_to_local(Vector2i(run_start, row))
+			var last := map_to_local(Vector2i(run_end, row))
+			var rect := Rect2(first - cell_size * 0.5, last - first + cell_size)
+			rects.append(rect.grow(surface_margin))
+			if not at_end:
+				run_start = columns[i]
+				run_end = columns[i]
+	return rects
+
+func _get_configuration_warnings() -> PackedStringArray:
+	var warnings : PackedStringArray = []
+	if tile_set == null:
+		warnings.append("Assign a TileSet, otherwise there is nothing to ride.")
+	elif tile_set.get_physics_layers_count() == 0:
+		warnings.append("This TileSet has no physics layer, so entities will fall straight through the platform. Add one under TileSet > Physics Layers and give the tiles a collision polygon.")
+	if not get_parent() is Path:
+		warnings.append("Not a child of a Path. The platform will not move unless a Path drives it (parent it to one, or add it to that path's Nodes To Move).")
+	return warnings

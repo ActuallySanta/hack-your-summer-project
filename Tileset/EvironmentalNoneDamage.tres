@@ -1,0 +1,35 @@
+[gd_resource type="TileSet" format=3 uid="uid://c5sbhtb73awsk"]
+
+[ext_resource type="Texture2D" uid="uid://bwug2cb85v0ph" path="res://Textures/Tiles/MVPSprites/Moving Platform.png" id="1_sxhiv"]
+
+[sub_resource type="TileMapPattern" id="TileMapPattern_sxhiv"]
+tile_data = PackedInt32Array(0, 0, 0, 1, 131072, 0)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7qpbf"]
+texture = ExtResource("1_sxhiv")
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, -2, -8, -2)
+0:0/0/physics_layer_0/polygon_0/one_way = true
+0:0/0/physics_layer_0/polygon_0/one_way_margin = 5.0
+1:0/0 = 0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, -2, -8, -2)
+1:0/0/physics_layer_0/polygon_0/one_way = true
+1:0/0/physics_layer_0/polygon_0/one_way_margin = 5.0
+2:0/0 = 0
+2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, -2, -8, -2)
+2:0/0/physics_layer_0/polygon_0/one_way = true
+2:0/0/physics_layer_0/polygon_0/one_way_margin = 5.0
+0:1/size_in_atlas = Vector2i(1, 2)
+0:1/animation_speed = 10.0
+0:1/animation_frame_0/duration = 1.0
+0:1/animation_frame_1/duration = 1.0
+0:1/animation_frame_2/duration = 1.0
+0:1/animation_frame_3/duration = 1.0
+0:1/0 = 0
+0:1/0/texture_origin = Vector2i(0, -8)
+
+[resource]
+physics_layer_0/collision_layer = 1
+physics_layer_0/collision_mask = 6
+sources/0 = SubResource("TileSetAtlasSource_7qpbf")
+pattern_0 = SubResource("TileMapPattern_sxhiv")
