@@ -14,7 +14,7 @@
 [ext_resource type="SpriteFrames" uid="uid://bpguk1hi3u5j6" path="res://Sprites/Character_Small_Climb_Sprites.tres" id="11_xxqkx"]
 [ext_resource type="AudioStream" uid="uid://cuesku8232hdq" path="res://Sounds/Entities/Player/Gun Fire.wav" id="12_j8xm3"]
 [ext_resource type="AudioStream" uid="uid://8jtcqp1gbmcq" path="res://Sounds/Entities/Player/PlayerJump.wav" id="13_r5bcf"]
-[ext_resource type="AudioStream" uid="uid://y4se7p08x45o" path="res://Sounds/Entities/Player/PlayerHurt.ogg" id="14_7vh4w"]
+[ext_resource type="AudioStream" uid="uid://b31hbamf4i0ff" path="res://Sounds/Entities/Player/PlayerHit.wav" id="15_fuwcu"]
 [ext_resource type="AudioStream" uid="uid://cgvbfwlbptv4w" path="res://Sounds/Entities/Player/PlayerMeleeSwing.wav" id="15_npdhm"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_f1ek2"]
@@ -1346,7 +1346,8 @@ attenuation = 1e-05
 panning_strength = 0.0
 
 [node name="HurtSFX" type="AudioStreamPlayer2D" parent="SFX" unique_id=1227211473]
-stream = ExtResource("14_7vh4w")
+stream = ExtResource("15_fuwcu")
+volume_db = -5.0
 max_distance = 100000.0
 attenuation = 1e-05
 panning_strength = 0.0

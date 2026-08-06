@@ -83,7 +83,7 @@ position = Vector2(2336, 1145)
 [node name="Path" type="Node2D" parent="." unique_id=581228035]
 script = ExtResource("11_id4x0")
 wait_time_seconds = 0.5
-node_speed = 6000.0
+node_speed = 4000.0
 points = Array[Vector2]([Vector2(480, 1104), Vector2(672, 1104)])
 metadata/_custom_type_script = "uid://6f15nb6r34b0"
 
@@ -98,7 +98,7 @@ teleport_speed = 25000.0
 [node name="Path2" type="Node2D" parent="." unique_id=363212146]
 script = ExtResource("11_id4x0")
 wait_time_seconds = 0.5
-node_speed = 6000.0
+node_speed = 4000.0
 points = Array[Vector2]([Vector2(960, 1104), Vector2(768, 1104)])
 metadata/_custom_type_script = "uid://6f15nb6r34b0"
 
