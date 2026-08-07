@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://liprjmtialrh" path="res://Scenes/Components/Hitbox.tscn" id="5_1jqxt"]
 [ext_resource type="BehaviorTree" uid="uid://bw8myafit8doo" path="res://ai/trees/boss_enemy.tres" id="6_wbur8"]
 [ext_resource type="Texture2D" uid="uid://c3of0r64w28s2" path="res://Textures/MapTextures/IconTiles/Icons5.png" id="8_rimqy"]
+[ext_resource type="AudioStream" uid="uid://y4se7p08x45o" path="res://Sounds/Entities/Player/PlayerHurt.ogg" id="9_q64dy"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o1nrd"]
 size = Vector2(135, 125)
@@ -16,7 +17,7 @@ size = Vector2(135, 125)
 
 [node name="Boss" type="Node2D" unique_id=475289835]
 script = ExtResource("1_o1nrd")
-maxHealth = 2.0
+maxHealth = 50.0
 eyeSpawnArea = Rect2(10, 10, 500, 500)
 
 [node name="BossVisual" parent="." unique_id=587305981 instance=ExtResource("1_b1kuf")]
@@ -81,5 +82,12 @@ texture = ExtResource("8_rimqy")
 [node name="Lower Environmental Attack Warning" type="Sprite2D" parent="." unique_id=318713405]
 scale = Vector2(3.515539, 3.515539)
 texture = ExtResource("8_rimqy")
+
+[node name="SFX" type="Node2D" parent="." unique_id=1967970933]
+
+[node name="HurtSFX" type="AudioStreamPlayer" parent="SFX" unique_id=127575359]
+stream = ExtResource("9_q64dy")
+volume_db = 5.0
+pitch_scale = 0.25
 
 [connection signal="hit" from="BossVisual/Hurtbox" to="." method="_on_hurtbox_hit"]

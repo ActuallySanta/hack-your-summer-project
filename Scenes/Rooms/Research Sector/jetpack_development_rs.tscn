@@ -5,10 +5,12 @@
 [ext_resource type="TileSet" uid="uid://hkvfy5by8aqr" path="res://Tileset/Main_Level.tres" id="3_qsgqy"]
 [ext_resource type="PackedScene" uid="uid://dydfka6mw2bm2" path="res://Scenes/Pickups/jetpack_pickup.tscn" id="4_qsgqy"]
 [ext_resource type="PackedScene" uid="uid://c57qdtweo2yu6" path="res://Scenes/Components/up_vertical_room_transition_tool.tscn" id="5_knvik"]
+[ext_resource type="PackedScene" uid="uid://bca0ty75ytv76" path="res://Scenes/Dialogue System/sign_npc.tscn" id="6_dytyv"]
 
 [node name="JetpackDevelopmentRS" type="Node2D" unique_id=1791462896]
 
 [node name="RoomInstance" parent="." unique_id=1520061775 instance=ExtResource("1_nyt6p")]
+position = Vector2(0, 1)
 
 [node name="TileMapForRooms" parent="." unique_id=1359070375 instance=ExtResource("2_1n4jw")]
 
@@ -38,3 +40,6 @@ position = Vector2(577, 502)
 
 [node name="UpVerticalRoomTransitionTool" parent="." unique_id=1520149205 instance=ExtResource("5_knvik")]
 position = Vector2(576, 72)
+
+[node name="Sign NPC" parent="." unique_id=1942218757 instance=ExtResource("6_dytyv")]
+position = Vector2(278, 450)

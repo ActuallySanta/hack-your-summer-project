@@ -22,6 +22,8 @@ class_name BossEnemy
 @onready var attack_point: Node2D = $BossVisual/Hurtbox/AttackPoint
 @onready var health_bar: ProgressBar = $"CanvasLayer/Health Bar"
 
+@onready var hurt_sfx: AudioStreamPlayer = $SFX/HurtSFX
+
 @export var eyeSpawnArea : Rect2:
 	set(value):
 		eyeSpawnArea = value
@@ -96,6 +98,7 @@ func _draw() -> void:
 
 func _on_hurtbox_hit(hurtBox: Hurtbox, hit_info: HitInfo, source: Hitbox) -> void:
 	currHealth -= hit_info.damage
+	hurt_sfx.play()
 	health_bar.value = currHealth
 	if(currHealth > (maxHealth *(1/3)) and currHealth < (maxHealth*(2/3))):
 		#Phase 2

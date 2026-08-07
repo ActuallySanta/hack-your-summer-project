@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="Dialogue_Conversation" format=3 uid="uid://b7gevqoan4fb7"]
+
+[ext_resource type="Script" uid="uid://bdh437kih1wx8" path="res://Scripts/Resources/Dialogue/dialogue_entry.gd" id="1_7shnb"]
+[ext_resource type="Resource" uid="uid://dqx60eyssrhnl" path="res://Dialogue/Speakers/tutorialSign_speaker.tres" id="2_5gdyv"]
+[ext_resource type="Script" uid="uid://bf316n5tk84lf" path="res://Scripts/Resources/Dialogue/dialogue_conversation.gd" id="2_ylusm"]
+
+[sub_resource type="Resource" id="Resource_0lekl"]
+script = ExtResource("1_7shnb")
+entryText = "JETPACK INSTRUCTIONS: To fly press SPACE"
+speaker = ExtResource("2_5gdyv")
+metadata/_custom_type_script = "uid://bdh437kih1wx8"
+
+[sub_resource type="Resource" id="Resource_yq2l1"]
+script = ExtResource("1_7shnb")
+entryText = "The jetpack has unlimited fuel, so don't be afraid to use it!"
+speaker = ExtResource("2_5gdyv")
+metadata/_custom_type_script = "uid://bdh437kih1wx8"
+
+[sub_resource type="Resource" id="Resource_dj2nr"]
+script = ExtResource("1_7shnb")
+entryText = "There is a training course to the right of the area to practice using the jetpack!"
+speakerEmotion = 1
+speaker = ExtResource("2_5gdyv")
+metadata/_custom_type_script = "uid://bdh437kih1wx8"
+
+[resource]
+script = ExtResource("2_ylusm")
+conversationContents = Array[ExtResource("1_7shnb")]([SubResource("Resource_0lekl"), SubResource("Resource_yq2l1"), SubResource("Resource_dj2nr")])
+metadata/_custom_type_script = "uid://bf316n5tk84lf"
