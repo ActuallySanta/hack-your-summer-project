@@ -37,7 +37,7 @@ project/assembly_name="Hack Your Summer Project"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/MetroidvaniaSystem/EditorExtension/plugin.cfg", "res://addons/MetroidvaniaSystem/plugin.cfg", "res://addons/rect_tile_painter/plugin.cfg", "res://addons/pipe_path_painter/plugin.cfg", "res://addons/hanging_wire_editor/plugin.cfg")
+enabled=PackedStringArray("res://addons/MetroidvaniaSystem/EditorExtension/plugin.cfg", "res://addons/MetroidvaniaSystem/plugin.cfg", "res://addons/rect_tile_painter/plugin.cfg", "res://addons/pipe_path_painter/plugin.cfg", "res://addons/hanging_wire_editor/plugin.cfg", "res://addons/path_point_editor/plugin.cfg")
 
 [global_group]
 
@@ -149,6 +149,7 @@ OpenMap={
 2d_physics/layer_4="bullets"
 2d_physics/layer_5="pickups"
 2d_physics/layer_6="BreakableBlocks"
+2d_physics/layer_9="Enemy Only Geometry"
 
 [physics]
 

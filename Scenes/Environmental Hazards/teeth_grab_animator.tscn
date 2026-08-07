@@ -2,103 +2,139 @@
 
 [ext_resource type="Texture2D" uid="uid://dthceys0n1k5a" path="res://Sprites/EnvironmentalDamages/TeethGrab.png" id="1_41lnf"]
 [ext_resource type="Script" uid="uid://bkmhqrn0opt6q" path="res://Scripts/EnvironmentalHazards/teeth_grab_animator.gd" id="2_e1dqu"]
-[ext_resource type="Script" uid="uid://ctc17oyja7fup" path="res://Scripts/Combat/hitbox.gd" id="3_fk5gu"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_fk5gu"]
-atlas = ExtResource("1_41lnf")
-region = Rect2(16, 0, 16, 48)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_1mn30"]
-atlas = ExtResource("1_41lnf")
-region = Rect2(32, 0, 16, 48)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_xknnr"]
-atlas = ExtResource("1_41lnf")
-region = Rect2(48, 0, 16, 48)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_5jh7l"]
-atlas = ExtResource("1_41lnf")
-region = Rect2(64, 0, 16, 48)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_fpokq"]
-atlas = ExtResource("1_41lnf")
-region = Rect2(80, 0, 16, 48)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_asbjh"]
-atlas = ExtResource("1_41lnf")
-region = Rect2(96, 0, 16, 48)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_fahd2"]
-atlas = ExtResource("1_41lnf")
-region = Rect2(112, 0, 16, 48)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_67v38"]
-atlas = ExtResource("1_41lnf")
-region = Rect2(128, 0, 16, 48)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_57jse"]
-atlas = ExtResource("1_41lnf")
-region = Rect2(144, 0, 16, 48)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_e1dqu"]
-atlas = ExtResource("1_41lnf")
-region = Rect2(0, 0, 16, 48)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_a67xf"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_fk5gu")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_1mn30")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_xknnr")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_5jh7l")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_fpokq")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_asbjh")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_fahd2")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_67v38")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_57jse")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_e1dqu")
-}],
-"loop": false,
-"name": &"Bite",
-"speed": 10.0
-}]
+[ext_resource type="Script" uid="uid://xsw7bjwjsoj5" path="res://Scripts/Level Elements/damage_area.gd" id="3_j8vek"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1mn30"]
-size = Vector2(14, 28)
+size = Vector2(14, 5.666666)
 
-[node name="TeethGrab" type="AnimatedSprite2D" unique_id=656100795]
+[sub_resource type="Animation" id="Animation_j8vek"]
+resource_name = "Bite"
+length = 1.00001
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Hitbox:process_mode")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 4]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9019663),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Hitbox/CollisionShape2D:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2(0, 7.3333335), Vector2(0, -0.4166673), Vector2(0, -4.916667), Vector2(0, -3.2500007), Vector2(0, -1.0833337), Vector2(0, 0.4166665)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Hitbox/CollisionShape2D:shape:size")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2(14, 5.666666), Vector2(14, 21.166668), Vector2(14, 30.166666), Vector2(14, 26.833334), Vector2(14, 22.5), Vector2(14, 19.5)]
+}
+
+[sub_resource type="Animation" id="Animation_wkqec"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Hitbox:process_mode")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [4]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Hitbox/CollisionShape2D:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 7.3333335)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Hitbox/CollisionShape2D:shape:size")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(14, 5.666666)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_1b3dk"]
+_data = {
+&"Bite": SubResource("Animation_j8vek"),
+&"RESET": SubResource("Animation_wkqec")
+}
+
+[node name="TeethGrab" type="Sprite2D" unique_id=364292449]
 scale = Vector2(3, 3)
-sprite_frames = SubResource("SpriteFrames_a67xf")
-animation = &"Bite"
-frame_progress = 0.7785712
+texture = ExtResource("1_41lnf")
+hframes = 10
 script = ExtResource("2_e1dqu")
-queueTimeSeconds = null
-loopTimeSeconds = null
-startWaiting = null
 
 [node name="Hitbox" type="Area2D" parent="." unique_id=760373872]
-script = ExtResource("3_fk5gu")
+process_mode = 4
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("3_j8vek")
+knockback_strength = 100.0
+knockback_duration = 0.2
 metadata/_custom_type_script = "uid://ctc17oyja7fup"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=2086488917]
-position = Vector2(0, -6)
+position = Vector2(0, 7.3333335)
 shape = SubResource("RectangleShape2D_1mn30")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1097877680]
+libraries/ = SubResource("AnimationLibrary_1b3dk")

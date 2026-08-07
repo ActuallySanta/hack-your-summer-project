@@ -64,12 +64,19 @@ var bullet_y_offset : Dictionary[ MoveState, float ] = {
 @onready var jetpack: Sprite2D = $JetpackAsset
 @onready var sprite : Sprite2D = $Character
 @onready var collisionManager: Node = $CollisionManager
+@onready var hurtbox : Hurtbox = $Hurtbox
+@onready var jump_sfx: AudioStreamPlayer2D = $SFX/JumpSFX
+@onready var hurt_sfx: AudioStreamPlayer2D = $SFX/HurtSFX
+@onready var melee_swing_sfx: AudioStreamPlayer2D = $SFX/MeleeSwingSFX
+@onready var shoot_sfx: AudioStreamPlayer2D = $SFX/ShootSFX
+
 
 # Consts
 const IDLESTATEPARAM := "parameters/StandardMovement/Idle/MoveState/transition_request"
 const MOVESTATEPARAM := "parameters/StandardMovement/Move/MoveState/transition_request"
 const FIRESTATEPARAM := "parameters/RangedFire/MoveState/transition_request"
 const TILE_SIZE := 48
+const GUN_MODES : Array[ StringName ]= [ "stun", "plasma" ]
 # Input
 var _moveInput : float
 var _vertMoveInput :float
@@ -90,8 +97,10 @@ var _currentHealth : int
 var _attackCooldownTimer : float
 var _attackBufferTimer : float
 # Shooting
+var _hasGun : bool
 var _shootCooldownTimer : float
 var _shootBufferTimer : float
+var _gunMode : StringName
 # Knockback
 var _knockbackTimer : float
 var _knockbackForce : float
@@ -146,6 +155,7 @@ func jump() -> void:
 	if try_mantle():
 		return
 	
+	jump_sfx.play()
 	velocity.y = -jumpForce
 
 func wall_jump() -> void:
@@ -155,6 +165,7 @@ func wall_jump() -> void:
 	
 	_wall_jump_speed_bonus = 700
 	_wall_jump_dir = _moveInput
+	jump_sfx.play()
 	velocity.y = -1000
 
 func validate_wall_jump() -> bool:
@@ -185,23 +196,8 @@ func attack() -> void:
 	_attackCooldownTimer = attackCooldown
 	_shootCooldownTimer = attackCooldown
 	_attackBufferTimer = 0
+	melee_swing_sfx.play()
 	anim_swing = true
-
-func shoot() -> void:
-	var newBullet := bulletScene.instantiate() as PlayerBullet
-	var bulletX := bulletOffset
-	# The tuned offsets are relative to the sprite, so they follow it while airborne.
-	var bulletY := bullet_y_offset[ playerMoveState ] + _visual_offset
-	if !_facingRight:
-		bulletX *= -1
-		newBullet.scale.x = -1
-	newBullet.position = position + Vector2(bulletX, bulletY)
-	newBullet.direction = Vector2.RIGHT if _facingRight else Vector2.LEFT
-	get_tree().root.add_child(newBullet)
-	_shootCooldownTimer = shootCooldown
-	_attackCooldownTimer = shootCooldown
-	_shootBufferTimer = 0
-	anim_fire = true
 
 #region Handlers
 func handle_vertical_speed() -> void:
@@ -278,7 +274,7 @@ func handle_inputs() -> void:
 		set_jump_input()
 	if Input.is_action_just_pressed("Attack"):
 		set_attack_input()
-	if Input.is_action_just_pressed("Shoot"):
+	if Input.is_action_just_pressed("Shoot") and _hasGun:
 		set_shoot_input()
 	if not Input.is_action_pressed("Jump"):
 		_holdingDownSpaceForSpace = false
@@ -355,8 +351,6 @@ func translate_state() -> CollisionManager.State:
 	
 	return CollisionManager.State.WALK
 
-
-
 func _physics_process(delta: float) -> void:
 	if _is_vaulting:
 		return
@@ -384,13 +378,14 @@ func _physics_process(delta: float) -> void:
 	
 	if _invulnTimer > 0:
 		_invulnTimer -= delta
+		if _invulnTimer <= 0:
+			hurtbox.process_mode = Node.PROCESS_MODE_INHERIT
 	
 	move_and_slide()
 	
 	sprite.flip_h = false if _facingRight else true
 	
-	refresh_cell_group_music()
-	
+	refresh_cell_group_music()	
 
 func refresh_cell_group_music(force := false) -> void:
 	var groups := MetSys.get_cell_groups(MetSys.get_current_coords())
@@ -421,11 +416,11 @@ func die() -> void:
 	anim_death = true
 	reset_all_inputs()
 	_moveInput = 0
-	$Hurtbox.process_mode = Node.PROCESS_MODE_DISABLED
+	hurtbox.process_mode = Node.PROCESS_MODE_DISABLED
 	death_start.emit($AnimationPlayer.get_animation(&"death").length)
 
 func respawn() -> void:
-	$Hurtbox.process_mode = Node.PROCESS_MODE_INHERIT
+	hurtbox.process_mode = Node.PROCESS_MODE_INHERIT
 	_currentHealth = baseHealth
 	GlobalSignals.health_changed.emit(_currentHealth, baseHealth)
 	anim_death = false
@@ -434,11 +429,13 @@ func _on_hit(_hurtBox: Hurtbox, hit_info: HitInfo, _source: Hitbox) -> void:
 	if _invulnTimer > 0 or _currentHealth <= 0:
 		return
 	_currentHealth -= hit_info.damage
+	hurt_sfx.play()
 	GlobalSignals.health_changed.emit(_currentHealth, baseHealth)
 	_knockbackTimer = hit_info.knockback_duration
 	_knockbackForce = hit_info.knockback_strength / _knockbackTimer
 	_invulnTimer = hitInvulnTime
 	_invulnBlinkTimer = invulnBlinkInterval
+	hurtbox.process_mode = Node.PROCESS_MODE_DISABLED
 	anim_hurt = true
 	if _currentHealth <= 0:
 		die()
@@ -462,7 +459,38 @@ func disable_jetpack() -> void:
 func enable_jetpack() -> void:
 	jetpack.process_mode = Node.PROCESS_MODE_INHERIT
 #endregion
-	
+
+#region Gun
+func set_gun(mode: StringName) -> void:
+	if not mode in GUN_MODES:
+		return
+	_gunMode = mode
+  
+func disable_gun() -> void:
+	_hasGun = false
+
+func enable_gun() -> void:
+	_hasGun = true
+
+func shoot() -> void:
+	var newBullet := bulletScene.instantiate() as PlayerBullet
+	var bulletX := bulletOffset
+	# The tuned offsets are relative to the sprite, so they follow it while airborne.
+	var bulletY := bullet_y_offset[ playerMoveState ] + _visual_offset
+	if !_facingRight:
+		bulletX *= -1
+		newBullet.scale.x = -1
+	newBullet.position = position + Vector2(bulletX, bulletY)
+	newBullet.direction = Vector2.RIGHT if _facingRight else Vector2.LEFT
+	newBullet.set_mode(_gunMode)
+	get_tree().root.add_child(newBullet)
+	shoot_sfx.play()
+	_shootCooldownTimer = shootCooldown
+	_attackCooldownTimer = shootCooldown
+	_shootBufferTimer = 0
+	anim_fire = true
+#endregion
+
 #region Mantle
 func try_mantle() -> bool:
 	if not is_on_floor():
@@ -582,7 +610,7 @@ func reset_camera() -> void:
 
 #region Getters and Setters
 func is_tile_air(foreground: TileMapLayer, pos: Vector2i) -> bool:
-	return foreground.get_cell_source_id(pos) == -1
+	return foreground and foreground.get_cell_source_id(pos) == -1
 
 func get_camera() -> Camera2D:
 	return get_viewport().get_camera_2d()
@@ -602,6 +630,9 @@ func get_map_position(foreground: TileMapLayer, relative_to_player: Vector2i = V
 	return map_pos
 
 func get_map_cordinates(foreground: TileMapLayer, position: Vector2 ) -> Vector2i:
+	if foreground == null:
+		printerr("No Geo group in scene")
+		return Vector2i.MIN
 	return foreground.local_to_map(foreground.to_local( position ))
 
 func get_map_position_player_bounds(foreground: TileMapLayer) -> Array[Vector2i]:

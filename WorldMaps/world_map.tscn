@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://cphcuqed0ttgm" path="res://WorldMaps/world_map_viewer.gd" id="1_v4sft"]
 [ext_resource type="PackedScene" uid="uid://bgwc4emcqyj3l" path="res://WorldMaps/world_map_db.tscn" id="2_boi75"]
 [ext_resource type="PackedScene" uid="uid://cx11mafvqsiv0" path="res://WorldMaps/world_map_cq.tscn" id="3_boi75"]
+[ext_resource type="PackedScene" uid="uid://1ysa7uo7e1kp" path="res://WorldMaps/world_map_rs.tscn" id="5_bj1wo"]
 
 [node name="WorldMap" type="Node2D" unique_id=1287662466]
 script = ExtResource("1_v4sft")
@@ -16,3 +17,6 @@ position = Vector2(-4454, 2054)
 
 [node name="WorldMapBRS" parent="." unique_id=740908366 instance=ExtResource("1_jv6wm")]
 position = Vector2(1149, 456)
+
+[node name="WorldMapRS" parent="." unique_id=1107164827 instance=ExtResource("5_bj1wo")]
+position = Vector2(5897, 3479)

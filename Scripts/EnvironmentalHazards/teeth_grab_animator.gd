@@ -1,5 +1,5 @@
 @tool
-extends AnimatedSprite2D
+extends Sprite2D
 
 ## Whether or not these Teeth animate themselves, or are triggered by a third party
 @export var loop : bool = true:
@@ -21,6 +21,8 @@ extends AnimatedSprite2D
 var _is_queued : bool
 var _timer : float
 
+@onready var animator : AnimationPlayer = $AnimationPlayer
+
 func _validate_property(property: Dictionary) -> void:
 	if property.name == "queueTimeSeconds" and loop == true:
 		property["usage"] = PROPERTY_USAGE_NO_EDITOR
@@ -33,7 +35,7 @@ func _ready() -> void:
 	_timer = offsetTime if startWaiting else 0.0
 
 func _process(delta: float) -> void:
-	if loop == false or cannot_play() or Engine.is_editor_hint():
+	if Engine.is_editor_hint() or loop == false or cannot_play():
 		return
 	
 	_timer -= delta
@@ -44,7 +46,7 @@ func _process(delta: float) -> void:
 	grab()
 
 func cannot_play() -> bool:
-	return is_playing() or _is_queued
+	return animator.is_playing() or _is_queued
 
 ## Called when a loop needs to occur OR when another script wants the teeth to grab
 func grab() -> void:
@@ -52,9 +54,9 @@ func grab() -> void:
 		return
 	
 	if loop == true:
-		play("Bite")
+		animator.play("Bite")
 	else:
 		_is_queued = true
 		await get_tree().create_timer(queueTimeSeconds).timeout
 		_is_queued = false
-		play("Bite")
+		animator.play("Bite")

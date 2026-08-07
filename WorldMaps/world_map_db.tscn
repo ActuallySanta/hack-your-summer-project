@@ -6,8 +6,12 @@
 [ext_resource type="PackedScene" uid="uid://dtkowilv386lj" path="res://Scenes/Rooms/Tutorial Area/service_crossroads.tscn" id="4_0giw4"]
 [ext_resource type="PackedScene" uid="uid://domh0f8q1n87x" path="res://Scenes/Rooms/Tutorial Area/service_hall.tscn" id="5_rf76t"]
 [ext_resource type="PackedScene" uid="uid://4uwct0k53alw" path="res://Scenes/Rooms/Tutorial Area/storage_room.tscn" id="6_5jwjo"]
+[ext_resource type="PackedScene" uid="uid://bpkobrts5eemu" path="res://Scenes/Rooms/Docking Bay/waiting_room_db.tscn" id="7_bewut"]
 
 [node name="WorldMapDB" type="Node2D" unique_id=19893736]
+
+[node name="WaitingRoomDB" parent="." unique_id=295914285 instance=ExtResource("7_bewut")]
+position = Vector2(1263, 1184)
 
 [node name="DockingStation" parent="." unique_id=2103613452 instance=ExtResource("1_s1s0b")]
 position = Vector2(111, 512)
