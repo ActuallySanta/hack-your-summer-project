@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://ckncltgk5di6p" path="res://Textures/MapTextures/AreaTile.png" id="3_b1kuf"]
 [ext_resource type="PackedScene" uid="uid://liprjmtialrh" path="res://Scenes/Components/Hitbox.tscn" id="5_1jqxt"]
 [ext_resource type="BehaviorTree" uid="uid://bw8myafit8doo" path="res://ai/trees/boss_enemy.tres" id="6_wbur8"]
+[ext_resource type="Texture2D" uid="uid://c3of0r64w28s2" path="res://Textures/MapTextures/IconTiles/Icons5.png" id="8_rimqy"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o1nrd"]
 size = Vector2(135, 125)
@@ -70,3 +71,11 @@ offset_bottom = 27.0
 grow_horizontal = 2
 size_flags_horizontal = 3
 show_percentage = false
+
+[node name="Upper Environmental Attack Warning" type="Sprite2D" parent="." unique_id=1618583269]
+scale = Vector2(3.515539, 3.515539)
+texture = ExtResource("8_rimqy")
+
+[node name="Lower Environmental Attack Warning" type="Sprite2D" parent="." unique_id=318713405]
+scale = Vector2(3.515539, 3.515539)
+texture = ExtResource("8_rimqy")

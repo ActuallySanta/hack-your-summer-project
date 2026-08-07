@@ -7,9 +7,13 @@ class_name BossEnemy
 
 @export var aggroLevel : int = 1
 @export var lowerEnvAttackChance : float = 50.0
+@export var envAttackWarningDuration : float = 0.5
 
 @onready var environmental_attack_cooldown_timer: Timer = $"Enviromental Attack Cooldown Timer"
 @onready var enviromental_attack_duration_timer: Timer = $"Enviromental Attack Duration Timer"
+
+@onready var upper_environmental_attack_warning: Sprite2D = $"Upper Environmental Attack Warning"
+@onready var lower_environmental_attack_warning: Sprite2D = $"Lower Environmental Attack Warning"
 
 @onready var lower_teeth_attack: TileMapLayer = $"Lower Teeth Attack"
 @onready var upper_teeth_attack: TileMapLayer = $"Upper Teeth Attack"
@@ -35,6 +39,13 @@ func _ready() -> void:
 	health_bar.value = currHealth
 	lower_teeth_attack.reparent(get_tree().current_scene)
 	upper_teeth_attack.reparent(get_tree().current_scene)
+	
+	lower_environmental_attack_warning.reparent(get_tree().current_scene)
+	upper_environmental_attack_warning.reparent(get_tree().current_scene)
+	
+	upper_environmental_attack_warning.visible = false
+	lower_environmental_attack_warning.visible = false
+	
 	disableEnvAttacks()
 	environmental_attack_cooldown_timer.wait_time = minEnvironmentalAttackCooldown
 	environmental_attack_cooldown_timer.start()
@@ -50,11 +61,18 @@ func _environmentalAttack():
 	
 	var attackChoice : float = randf_range(0,1)
 	if(attackChoice < (lowerEnvAttackChance/100.0)):
+		lower_environmental_attack_warning.visible = true
+		await get_tree().create_timer(envAttackWarningDuration).timeout
+		lower_environmental_attack_warning.visible = false
+		
 		#Do the lower teeth attack
 		lower_teeth_attack.visible = true
 		lower_teeth_attack.process_mode = Node.PROCESS_MODE_INHERIT
 		pass
 	else:
+		upper_environmental_attack_warning.visible = true
+		await get_tree().create_timer(envAttackWarningDuration).timeout
+		upper_environmental_attack_warning.visible = false
 		#Do the upper tentacle attack
 		upper_teeth_attack.visible = true
 		upper_teeth_attack.process_mode = Node.PROCESS_MODE_INHERIT
