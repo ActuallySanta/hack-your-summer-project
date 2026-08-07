@@ -41,6 +41,8 @@ script = ExtResource("1_2w8h5")
 
 [node name="DialogueTrigger" parent="." unique_id=1367779263 instance=ExtResource("2_m8qdf")]
 loadedConversation = SubResource("Resource_hpuli")
+chooseToStart = true
+canReRead = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DialogueTrigger" unique_id=1312127664]
 shape = SubResource("CircleShape2D_su5eh")

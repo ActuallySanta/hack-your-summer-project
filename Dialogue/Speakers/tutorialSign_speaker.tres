@@ -1,18 +1,14 @@
 [gd_resource type="Resource" script_class="DialogueSpeaker" format=3 uid="uid://dqx60eyssrhnl"]
 
-[ext_resource type="Texture2D" uid="uid://cyqgcy81m3upq" path="res://Sprites/Dialogue Portraits/Crewmate1 expressions/Crewmate1 3quarter neutral.png" id="1_0ia80"]
 [ext_resource type="Script" uid="uid://58h5b48tp7ij" path="res://Scripts/Resources/Dialogue/dialogue_speaker.gd" id="1_8sr2b"]
-[ext_resource type="Texture2D" uid="uid://bpnfc2ekwd055" path="res://Sprites/Dialogue Portraits/Crewmate1 expressions/Crewmate1 3quarter happy2.png" id="2_im38p"]
-[ext_resource type="Texture2D" uid="uid://duygmj3g12msb" path="res://Sprites/Dialogue Portraits/Crewmate1 expressions/Crewmate1 3quarter angry2.png" id="3_a7fed"]
-[ext_resource type="Texture2D" uid="uid://da0o3hu1p7wtr" path="res://Sprites/Dialogue Portraits/Crewmate1 expressions/Crewmate1 3quarter sad.png" id="4_ajafj"]
 
 [resource]
 script = ExtResource("1_8sr2b")
 characterPortraits = Dictionary[int, Texture2D]({
-0: ExtResource("1_0ia80"),
-1: ExtResource("2_im38p"),
-2: ExtResource("3_a7fed"),
-3: ExtResource("4_ajafj")
+0: null,
+1: null,
+2: null,
+3: null
 })
 speakerName = "Data Panel"
 metadata/_custom_type_script = "uid://58h5b48tp7ij"

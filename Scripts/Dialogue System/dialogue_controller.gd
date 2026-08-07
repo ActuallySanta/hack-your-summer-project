@@ -2,7 +2,7 @@ extends Control
 
 @onready var dialogue_box: Control = $"Dialogue Box"
 @onready var speaker_portait: TextureRect = $"Dialogue Box/Speaker Portait"
-@onready var dialogue_text: Label = $"Dialogue Box/Dialogue Text"
+@onready var dialogue_text: RichTextLabel = $"Dialogue Box/Dialogue Text"
 @onready var speaker_name: Label = $"Dialogue Box/Background/Speaker Name"
 
 
@@ -21,6 +21,7 @@ func _ready() -> void:
 	dialogue_box.visible = false
 
 func BeginDialogue(_conversation : Dialogue_Conversation):
+	await get_tree().process_frame
 	dialogue_box.visible = true
 	isSpeaking = true
 	PlayerManager.inDialogue = true

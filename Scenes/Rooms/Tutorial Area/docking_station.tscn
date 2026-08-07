@@ -8,12 +8,27 @@
 [ext_resource type="TileSet" uid="uid://c0dbvnpaoeomc" path="res://Tileset/TransitionTileSet.tres" id="4_nn55x"]
 [ext_resource type="Resource" uid="uid://cau5m12a4go6c" path="res://Dialogue/Conversations/Tutorial Area/intro_dialogue.tres" id="5_26x51"]
 [ext_resource type="PackedScene" uid="uid://cy2osx3ogepds" path="res://Scenes/Rooms/Tutorial Area/locked_door.tscn" id="6_kpjmh"]
+[ext_resource type="PackedScene" uid="uid://bca0ty75ytv76" path="res://Scenes/Dialogue System/sign_npc.tscn" id="9_08gv4"]
+[ext_resource type="Script" uid="uid://bdh437kih1wx8" path="res://Scripts/Resources/Dialogue/dialogue_entry.gd" id="10_4gwjg"]
+[ext_resource type="Resource" uid="uid://dqx60eyssrhnl" path="res://Dialogue/Speakers/tutorialSign_speaker.tres" id="11_lreay"]
+[ext_resource type="Script" uid="uid://bf316n5tk84lf" path="res://Scripts/Resources/Dialogue/dialogue_conversation.gd" id="13_qegwn"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_26x51"]
 size = Vector2(223, 153)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xf5gq"]
 size = Vector2(22, 659)
+
+[sub_resource type="Resource" id="Resource_45wsq"]
+script = ExtResource("10_4gwjg")
+entryText = "[font_size=24][color=black][p]Controls:[/p][p]A/D - Move left/right[/p][p]Space - Jump[/p][p]Left Click - Attack[/p]"
+speaker = ExtResource("11_lreay")
+metadata/_custom_type_script = "uid://bdh437kih1wx8"
+
+[sub_resource type="Resource" id="Resource_w1ate"]
+script = ExtResource("13_qegwn")
+conversationContents = Array[ExtResource("10_4gwjg")]([SubResource("Resource_45wsq")])
+metadata/_custom_type_script = "uid://bf316n5tk84lf"
 
 [node name="DockingStation" type="Node2D" unique_id=2103613452]
 
@@ -66,3 +81,13 @@ collision_mask = 6
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1436091780]
 position = Vector2(2, 687)
 shape = SubResource("RectangleShape2D_xf5gq")
+
+[node name="Sign NPC" parent="." unique_id=1942218757 instance=ExtResource("9_08gv4")]
+position = Vector2(200, 844)
+
+[node name="DialogueTrigger" parent="Sign NPC" index="0" unique_id=1367779263]
+loadedConversation = SubResource("Resource_w1ate")
+chooseToStart = true
+canReRead = true
+
+[editable path="Sign NPC"]
