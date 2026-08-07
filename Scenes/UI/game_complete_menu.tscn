@@ -50,25 +50,10 @@ vertical_alignment = 1
 [node name="Subtitle Text" type="Label" parent="Background/VBoxContainer" unique_id=597364801]
 layout_mode = 2
 text = "Thank you for trying our game! 
-Please consider filling out our feedback form,
-we would really appreciate your input"
+We hope you enjoyed."
 label_settings = SubResource("LabelSettings_1d3b0")
 horizontal_alignment = 1
 vertical_alignment = 1
-
-[node name="CenterContainer" type="CenterContainer" parent="Background/VBoxContainer" unique_id=766013572]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="Main Menu Button" type="LinkButton" parent="Background/VBoxContainer/CenterContainer" unique_id=1814485153]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_font_sizes/font_size = 16
-text = "FEEDBACK FORM"
-underline = 1
-uri = "https://docs.google.com/forms/d/e/1FAIpQLScmOtYmFp_Vxhhe9ylyNEi1FR3lww1bRCD2YETw95PYG1Na9g/viewform?usp=publish-editor"
-
-[node name="Menu Click SFX" type="AudioStreamPlayer" parent="Background/VBoxContainer/CenterContainer/Main Menu Button" unique_id=1602644803]
 
 [node name="Button Container" type="VBoxContainer" parent="Background" unique_id=1644742629]
 layout_mode = 1
