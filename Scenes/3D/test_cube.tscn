@@ -2,18 +2,10 @@
 
 [ext_resource type="PackedScene" uid="uid://cahae1ieu7pbv" path="res://Models/TestCube.glb" id="1_y54ss"]
 [ext_resource type="Script" uid="uid://bssot8ixi1qbk" path="res://Scripts/Animation/test_3D_rotations.gd" id="2_bea15"]
-[ext_resource type="Texture2D" uid="uid://bp1qv2dhalftv" path="res://icon.svg" id="3_mhrel"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_y54ss"]
-albedo_color = Color(1, 0, 1, 1)
-albedo_texture = ExtResource("3_mhrel")
-uv1_scale = Vector3(0.5, 0.5, 0.5)
-uv1_offset = Vector3(0.5, 0.5, 0.5)
-uv1_triplanar = true
-uv2_offset = Vector3(3, 0, 0)
+[ext_resource type="Material" uid="uid://cm44jcp3rwse1" path="res://Textures/Boss Texture.tres" id="3_mhrel"]
 
 [node name="TestCube" unique_id=327573373 instance=ExtResource("1_y54ss")]
 script = ExtResource("2_bea15")
 
-[node name="Cube" parent="." index="0" unique_id=1224344760]
-material_override = SubResource("StandardMaterial3D_y54ss")
+[node name="Cube" parent="." index="0" unique_id=1432137179]
+material_override = ExtResource("3_mhrel")

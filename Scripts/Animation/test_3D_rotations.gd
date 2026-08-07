@@ -21,4 +21,7 @@ func _process(delta: float) -> void:
 	
 	top_arm_target.position.y = -moveAmpY*sin(moveTimer/moveFreq)
 	top_arm_target.position.x = moveAmpX*sin(moveTimer/moveFreq)
+	
+	rotation.x+=delta*randf_range(1,2.5)
+	rotation.z += delta*randf_range(1,2.5)
 	pass

@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://cm44jcp3rwse1"]
+
+[ext_resource type="Texture2D" uid="uid://bu60fnslj7mj3" path="res://Sprites/Boss/BoingBoingEye.png" id="1_4qkrt"]
+
+[resource]
+albedo_color = Color(1, 0, 1, 1)
+albedo_texture = ExtResource("1_4qkrt")
+uv1_scale = Vector3(0.5, 0.5, 0.5)
+uv1_offset = Vector3(0.5, 0.5, 0.5)
+uv1_triplanar = true
+uv2_offset = Vector3(3, 0, 0)

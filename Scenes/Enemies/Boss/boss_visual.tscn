@@ -12,8 +12,6 @@
 shader = ExtResource("1_hyctl")
 shader_parameter/palette = ExtResource("2_hyctl")
 
-[sub_resource type="SphereMesh" id="SphereMesh_hyctl"]
-
 [sub_resource type="CircleShape2D" id="CircleShape2D_ggynu"]
 radius = 57.00877
 
@@ -121,22 +119,6 @@ settings/0/joints/12/rotation_axis = 3
 settings/0/joints/12/limitation = null
 settings/0/joints/13/rotation_axis = 3
 settings/0/joints/13/limitation = null
-
-[node name="Top Foot" type="MeshInstance3D" parent="SubViewport/Head" unique_id=1448299761]
-transform = Transform3D(1.4064062, 0, 0, 0, 1.5526348, 0, 0, 0, 2.9723716, 2.137823, 3.7474308, 0)
-mesh = SubResource("SphereMesh_hyctl")
-
-[node name="Bottom Foot" type="MeshInstance3D" parent="SubViewport/Head" unique_id=1667207126]
-transform = Transform3D(1.4064062, 0, 0, 0, 1.5526348, 0, 0, 0, 2.9723716, 2.137823, -3.7632194, 0)
-mesh = SubResource("SphereMesh_hyctl")
-
-[node name="Top Leg Joint" type="MeshInstance3D" parent="SubViewport/Head" unique_id=129013677]
-transform = Transform3D(0.5543994, 0, 0, 0, 0.73953414, 0, 0, 0, 1.0136266, 0.3466282, 2.3053863, -0.657078)
-mesh = SubResource("SphereMesh_hyctl")
-
-[node name="Bottom Leg Joint" type="MeshInstance3D" parent="SubViewport/Head" unique_id=1644600526]
-transform = Transform3D(0.5543994, 0, 0, 0, 0.73953414, 0, 0, 0, 1.0136266, 0.3466282, -2.0810997, -0.657078)
-mesh = SubResource("SphereMesh_hyctl")
 
 [node name="Camera3D" type="Camera3D" parent="SubViewport" unique_id=786003809]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.894)

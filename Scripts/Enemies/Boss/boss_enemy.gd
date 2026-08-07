@@ -92,8 +92,8 @@ func disableEnvAttacks():
 	lower_teeth_attack.process_mode = Node.PROCESS_MODE_DISABLED
 
 
-func _draw() -> void:
-	draw_rect(eyeSpawnArea,Color(0.024, 0.502, 1.0, 1.0),20, true)
+#func _draw() -> void:
+#	draw_rect(eyeSpawnArea,Color(0.024, 0.502, 1.0, 1.0),20, true)
 
 
 func _on_hurtbox_hit(hurtBox: Hurtbox, hit_info: HitInfo, source: Hitbox) -> void:

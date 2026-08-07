@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://w5nmhx6yk6g" path="res://Models/Matrix.glb" id="1_hotda"]
 [ext_resource type="Script" uid="uid://yuj3myoqcf88" path="res://Scripts/Animation/3D/matrix_skeleton.gd" id="2_37l25"]
+[ext_resource type="Material" uid="uid://cm44jcp3rwse1" path="res://Textures/Boss Texture.tres" id="3_1qfui"]
 
 [node name="Matrix" unique_id=875937365 instance=ExtResource("1_hotda")]
 
@@ -18,3 +19,6 @@ bones/26/rotation = Quaternion(-0.195, 0, 0, 1)
 bones/27/rotation = Quaternion(-0.14, 0, 0, 1)
 bones/28/rotation = Quaternion(-0.375, 0, 0, 1)
 script = ExtResource("2_37l25")
+
+[node name="Mball_037" parent="Armature/Skeleton3D" index="0" unique_id=648317221]
+material_override = ExtResource("3_1qfui")
