@@ -5,7 +5,7 @@ enum MenuType { MainMenu, GameOver, GameComplete, Pause }
 
 signal death_screen_fade_complete(fade_in : bool)
 signal start_new_game()
-signal load_game()
+signal load_game(ignore_custom_save : bool)
 signal resume_game()
 signal quit_game()
 
@@ -31,7 +31,7 @@ func _ready() -> void:
 	main_menu.start_game_pressed.connect(start_new_game.emit)
 	main_menu.load_game_pressed.connect(load_game.emit)
 	main_menu.quit_game_pressed.connect(quit_game.emit)
-	game_over_menu.load_game_pressed.connect(load_game.emit)
+	game_over_menu.load_game_pressed.connect(load_game.emit.bind(true))
 	game_over_menu.quit_game_pressed.connect(quit_game.emit)
 	game_complete_menu.load_game_pressed.connect(load_game.emit)
 	game_complete_menu.quit_game_pressed.connect(quit_game.emit)

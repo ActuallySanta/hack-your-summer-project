@@ -85,7 +85,7 @@ func _init_metsys_and_objects() -> void:
 	
 	GlobalSignals.RestoreStationPower.connect(_restore_station_power)
 
-func _load_game() -> void:
+func _load_game(ignore_custom_save := false) -> void:
 	get_tree().paused = false
 	paused = false
 	_hud.hide_menus()
@@ -94,7 +94,7 @@ func _load_game() -> void:
 	# but if there's no save data (i.e. it's a fresh save), that won't happen
 	# so set empty save data first to make sure there's at least something
 	MetSys.set_save_data()
-	if use_custom_save:
+	if use_custom_save and !ignore_custom_save:
 		_load_custom_save()
 	else:
 		save = SaveManager.new()
@@ -117,8 +117,11 @@ func _load_game() -> void:
 	await load_room(room_id)
 	await get_tree().create_timer(artificial_load_time).timeout
 	_player.global_position = save.get_value("player_pos", START_POS)
+	_player.respawn()
 	GlobalSignals.player_spawned.emit()
 	LevelManager.set_checkpoint(room_id, _player.position, false)
+	if use_custom_save:
+		save_game(0, false)
 	_player.process_mode = Node.PROCESS_MODE_INHERIT
 	isInGame = true
 	_hud.hide_load_screen()
@@ -136,7 +139,9 @@ func _new_game():
 	await load_room(START_ROOM_UID)
 	await get_tree().create_timer(artificial_load_time).timeout
 	_player.global_position = START_POS
+	_player.respawn()
 	GlobalSignals.player_spawned.emit()
+	save_game(0, false)
 	_player.process_mode = Node.PROCESS_MODE_INHERIT
 	isInGame = true
 	_hud.hide_load_screen()
@@ -181,13 +186,13 @@ func _on_pickup_collected(pickup: Pickup) -> void:
 	match pickup.type:
 		Pickup.PickupType.Jetpack:
 			_player.enable_jetpack()
-			var checkpoint := get_tree().get_first_node_in_group(&"jetpack_checkpoint") as Node2D
-			if checkpoint:
-				LevelManager.set_checkpoint(MetSys.get_current_room_name(), checkpoint.global_position, true)
+			call_deferred("save_game")
 		Pickup.PickupType.Fuse:
+			#call_deferred("save_game")
 			pass
 		Pickup.PickupType.StunGun:
 			_player.enable_gun()
+			call_deferred("save_game")
 		Pickup.PickupType.PlasmaGun:
 			save.set_value("plasma_gun_collected", true)
 			PlayerManager.player.set_gun("plasma")
@@ -199,6 +204,7 @@ func _push_blocking_cyborg() -> void:
 
 func _restore_station_power() -> void:
 	save.set_value("station_powered", true)
+	save_game()
 
 func _process(_delta: float) -> void:
 	
@@ -216,7 +222,7 @@ func _process(_delta: float) -> void:
 	_camera.position = camPos
 	
 	if allow_save_anywhere and Input.is_action_just_pressed(&"debug_save"):
-		save_game(0)
+		save_game(0, false)
 	if Input.is_action_just_pressed("pause"):
 		if paused:
 			resume_game()
@@ -412,18 +418,20 @@ func _clamp_view_to_rect(center: Vector2, half_view: Vector2, rect: Rect2) -> Ve
 #endregion
 
 #Add any other variables you need as you save them, they will be saved as a dictionary
-func save_game(save_index: int, set_checkpoint := true) -> void:
+func save_game(save_index: int = 0, set_checkpoint := true) -> void:
 	print("Saving")
-	save.set_value("player_pos", PlayerManager.player.global_position)
-	save.save_as_text("user://save" + str(save_index) +".sav")
-	if not set_checkpoint:
-		return
+	save.set_value("player_pos", _player.global_position)
+	save.set_value("current_room", MetSys.get_current_room_name())
+	if set_checkpoint:
+		var checkpoint := get_tree().get_first_node_in_group(&"save_checkpoint") as Node2D
+		if not checkpoint:
+			printerr("Checkpoint not found in save room. Using current player position instead.")
+			LevelManager.set_checkpoint(MetSys.get_current_room_name(), _player.global_position, false)
+		else:
+			LevelManager.set_checkpoint(MetSys.get_current_room_name(), checkpoint.global_position, false)
+			save.set_value("player_pos", checkpoint.global_position)
 		
-	var checkpoint := get_tree().get_first_node_in_group(&"save_checkpoint") as Node2D
-	if not checkpoint:
-		printerr("Checkpoint not found in save room. Player will not return here on death.")
-		return
-	LevelManager.set_checkpoint(MetSys.get_current_room_name(), checkpoint.global_position, false)
+	save.save_as_text("user://save" + str(save_index) +".sav")
 
 func respawn_player_at_checkpoint() -> void:
 	await load_room(LevelManager.checkpoint_room)
@@ -434,10 +442,7 @@ func respawn_player_at_checkpoint() -> void:
 
 func _on_player_death(_anim_duration: float) -> void:
 	await get_tree().create_timer(death_respawn_delay).timeout
-	_hud.fade_in_death_screen()
-	await _hud.death_screen_fade_complete
-	await respawn_player_at_checkpoint()
-	_hud.fade_out_death_screen()
+	_hud.show_menu(GameHUD.MenuType.GameOver)
 	
 
 func end_game():
