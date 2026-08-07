@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://n4jqhgpueq7f"]
+[gd_scene format=3 uid="uid://wwhif4pjj6c2"]
 
 [ext_resource type="Shader" uid="uid://seo748jwlhmd" path="res://Shaders/quantizer.gdshader" id="1_hyctl"]
 [ext_resource type="PackedScene" uid="uid://djcmvws6qeiof" path="res://Scenes/3D/test_cube.tscn" id="1_wadox"]

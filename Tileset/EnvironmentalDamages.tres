@@ -59,12 +59,15 @@ texture = ExtResource("1_807im")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yoxij"]
 texture = ExtResource("2_kecdv")
+0:0/next_alternative_id = 3
 0:0/animation_frame_0/duration = 0.1
 0:0/animation_frame_1/duration = 0.1
 0:0/animation_frame_2/duration = 0.1
 0:0/animation_frame_3/duration = 0.1
 0:0/0 = 0
 0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 8, 8, 8, 8, -8, -8, -8)
+0:0/1 = 1
+0:0/1/flip_v = true
 0:1/animation_frame_0/duration = 0.1
 0:1/animation_frame_1/duration = 0.1
 0:1/animation_frame_2/duration = 0.1

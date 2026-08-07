@@ -1,0 +1,85 @@
+[gd_scene format=4 uid="uid://t7xa1qi5ihdo"]
+
+[ext_resource type="PackedScene" uid="uid://n4jqhgpueq7f" path="res://Scenes/Enemies/Boss/boss_visual.tscn" id="1_b1kuf"]
+[ext_resource type="Script" uid="uid://sk5kxrvm5piu" path="res://Scripts/Enemies/Boss/boss_enemy.gd" id="1_o1nrd"]
+[ext_resource type="PackedScene" uid="uid://dklylswmcw1pk" path="res://Scenes/Environmental Hazards/teeth_persistant.tscn" id="1_ytkdc"]
+[ext_resource type="Script" uid="uid://dhgcprjrtfobr" path="res://Scripts/Combat/hurtbox.gd" id="2_gi0e2"]
+[ext_resource type="Texture2D" uid="uid://ckncltgk5di6p" path="res://Textures/MapTextures/AreaTile.png" id="3_b1kuf"]
+[ext_resource type="PackedScene" uid="uid://liprjmtialrh" path="res://Scenes/Components/Hitbox.tscn" id="5_1jqxt"]
+[ext_resource type="BehaviorTree" uid="uid://bw8myafit8doo" path="res://ai/trees/boss_enemy.tres" id="6_wbur8"]
+[ext_resource type="Texture2D" uid="uid://c3of0r64w28s2" path="res://Textures/MapTextures/IconTiles/Icons5.png" id="8_rimqy"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_o1nrd"]
+size = Vector2(135, 125)
+
+[sub_resource type="BlackboardPlan" id="BlackboardPlan_o1nrd"]
+
+[node name="Boss" type="Node2D" unique_id=475289835]
+script = ExtResource("1_o1nrd")
+maxHealth = 2.0
+eyeSpawnArea = Rect2(10, 10, 500, 500)
+
+[node name="BossVisual" parent="." unique_id=587305981 instance=ExtResource("1_b1kuf")]
+
+[node name="Hurtbox" type="Area2D" parent="BossVisual" unique_id=31647197]
+position = Vector2(576, 335)
+collision_layer = 4
+collision_mask = 3
+script = ExtResource("2_gi0e2")
+metadata/_custom_type_script = "uid://dhgcprjrtfobr"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BossVisual/Hurtbox" unique_id=1147828753]
+shape = SubResource("RectangleShape2D_o1nrd")
+
+[node name="Hurtbox Visualization" type="Sprite2D" parent="BossVisual/Hurtbox" unique_id=1685119355]
+visible = false
+scale = Vector2(4.068537, 4.068537)
+texture = ExtResource("3_b1kuf")
+
+[node name="AttackPoint" type="Node2D" parent="BossVisual/Hurtbox" unique_id=763619416]
+position = Vector2(-576, -335)
+
+[node name="Hitbox" parent="BossVisual" unique_id=125498642 instance=ExtResource("5_1jqxt")]
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BossVisual/Hitbox" unique_id=255779573]
+shape = SubResource("RectangleShape2D_o1nrd")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=816862754]
+
+[node name="Enviromental Attack Cooldown Timer" type="Timer" parent="." unique_id=381613794]
+
+[node name="Enviromental Attack Duration Timer" type="Timer" parent="." unique_id=1873260620]
+
+[node name="Lower Teeth Attack" parent="." unique_id=424263396 instance=ExtResource("1_ytkdc")]
+tile_map_data = PackedByteArray("AAAAACMAAgAAAAAAAAABACMAAgAAAAAAAAACACMAAgAAAAAAAAADACMAAgAAAAAAAAAEACMAAgAAAAAAAAAFACMAAgAAAAAAAAAGACMAAgAAAAAAAAAHACMAAgAAAAAAAAAIACMAAgAAAAAAAAAJACMAAgAAAAAAAAAKACMAAgAAAAAAAAALACMAAgAAAAAAAAAMACMAAgAAAAAAAAANACMAAgAAAAAAAAAOACMAAgAAAAAAAAAPACMAAgAAAAAAAAAQACMAAgAAAAAAAAARACMAAgAAAAAAAAASACMAAgAAAAAAAAATACMAAgAAAAAAAAAUACMAAgAAAAAAAAAVACMAAgAAAAAAAAAWACMAAgAAAAAAAAAXACMAAgAAAAAAAAAYACMAAgAAAAAAAAAZACMAAgAAAAAAAAAaACMAAgAAAAAAAAAbACMAAgAAAAAAAAAcACMAAgAAAAAAAAAdACMAAgAAAAAAAAAeACMAAgAAAAAAAAAfACMAAgAAAAAAAAAgACMAAgAAAAAAAAAhACMAAgAAAAAAAAAiACMAAgAAAAAAAAAjACMAAgAAAAAAAAAkACMAAgAAAAAAAAAlACMAAgAAAAAAAAAmACMAAgAAAAAAAAAnACMAAgAAAAAAAAAoACMAAgAAAAAAAAApACMAAgAAAAAAAAAqACMAAgAAAAAAAAArACMAAgAAAAAAAAAsACMAAgAAAAAAAAAtACMAAgAAAAAAAAAuACMAAgAAAAAAAAAvACMAAgAAAAAAAAAwACMAAgAAAAAAAAAxACMAAgAAAAAAAAAyACMAAgAAAAAAAAAzACMAAgAAAAAAAAA0ACMAAgAAAAAAAAA1ACMAAgAAAAAAAAA2ACMAAgAAAAAAAAA3ACMAAgAAAAAAAAA4ACMAAgAAAAAAAAA5ACMAAgAAAAAAAAA6ACMAAgAAAAAAAAA7ACMAAgAAAAAAAAA8ACMAAgAAAAAAAAA9ACMAAgAAAAAAAAA+ACMAAgAAAAAAAAA/ACMAAgAAAAAAAABAACMAAgAAAAAAAABBACMAAgAAAAAAAABCACMAAgAAAAAAAABDACMAAgAAAAAAAABEACMAAgAAAAAAAABFACMAAgAAAAAAAABGACMAAgAAAAAAAABHACMAAgAAAAAAAAA=")
+
+[node name="Upper Teeth Attack" parent="." unique_id=1814386097 instance=ExtResource("1_ytkdc")]
+tile_map_data = PackedByteArray("AAAIAAkAAQAAAAAAAQAJAAkAAQAAAAAAAQAKAAkAAQAAAAAAAQALAAkAAQAAAAAAAQAMAAkAAQAAAAAAAQANAAkAAQAAAAAAAQAOAAkAAQAAAAAAAQAPAAkAAQAAAAAAAQAQAAkAAQAAAAAAAQARAAkAAQAAAAAAAQASAAkAAQAAAAAAAQATAAkAAQAAAAAAAQAUAAkAAQAAAAAAAQAVAAkAAQAAAAAAAQAWAAkAAQAAAAAAAQAXAAkAAQAAAAAAAQAYAAkAAQAAAAAAAQAZAAkAAQAAAAAAAQAaAAkAAQAAAAAAAQAbAAkAAQAAAAAAAQAcAAkAAQAAAAAAAQAdAAkAAQAAAAAAAQAeAAkAAQAAAAAAAQAfAAkAAQAAAAAAAQAgAAkAAQAAAAAAAQAhAAkAAQAAAAAAAQAiAAkAAQAAAAAAAQAjAAkAAQAAAAAAAQAkAAkAAQAAAAAAAQAlAAkAAQAAAAAAAQAmAAkAAQAAAAAAAQAnAAkAAQAAAAAAAQAoAAkAAQAAAAAAAQApAAkAAQAAAAAAAQAqAAkAAQAAAAAAAQArAAkAAQAAAAAAAQAsAAkAAQAAAAAAAQAtAAkAAQAAAAAAAQAuAAkAAQAAAAAAAQAvAAkAAQAAAAAAAQAwAAkAAQAAAAAAAQAxAAkAAQAAAAAAAQAyAAkAAQAAAAAAAQAzAAkAAQAAAAAAAQA0AAkAAQAAAAAAAQA1AAkAAQAAAAAAAQA2AAkAAQAAAAAAAQA3AAkAAQAAAAAAAQA4AAkAAQAAAAAAAQA5AAkAAQAAAAAAAQA6AAkAAQAAAAAAAQA7AAkAAQAAAAAAAQA8AAkAAQAAAAAAAQA9AAkAAQAAAAAAAQA+AAkAAQAAAAAAAQA/AAkAAQAAAAAAAQBAAAkAAQAAAAAAAQBBAAkAAQAAAAAAAQBCAAkAAQAAAAAAAQBDAAkAAQAAAAAAAQBEAAkAAQAAAAAAAQBFAAkAAQAAAAAAAQBGAAkAAQAAAAAAAQBHAAkAAQAAAAAAAQBIAAkAAQAAAAAAAQBJAAkAAQAAAAAAAQBKAAkAAQAAAAAAAQBLAAkAAQAAAAAAAQBMAAkAAQAAAAAAAQBNAAkAAQAAAAAAAQBOAAkAAQAAAAAAAQBPAAkAAQAAAAAAAQA=")
+
+[node name="BTPlayer" type="BTPlayer" parent="." unique_id=5900899]
+behavior_tree = ExtResource("6_wbur8")
+blackboard_plan = SubResource("BlackboardPlan_o1nrd")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1582535483]
+
+[node name="Health Bar" type="ProgressBar" parent="CanvasLayer" unique_id=1595769096]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -222.5
+offset_right = 222.5
+offset_bottom = 27.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+show_percentage = false
+
+[node name="Upper Environmental Attack Warning" type="Sprite2D" parent="." unique_id=1618583269]
+scale = Vector2(3.515539, 3.515539)
+texture = ExtResource("8_rimqy")
+
+[node name="Lower Environmental Attack Warning" type="Sprite2D" parent="." unique_id=318713405]
+scale = Vector2(3.515539, 3.515539)
+texture = ExtResource("8_rimqy")
+
+[connection signal="hit" from="BossVisual/Hurtbox" to="." method="_on_hurtbox_hit"]

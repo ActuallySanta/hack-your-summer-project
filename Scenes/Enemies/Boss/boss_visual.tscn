@@ -1,0 +1,277 @@
+[gd_scene format=3 uid="uid://n4jqhgpueq7f"]
+
+[ext_resource type="Shader" uid="uid://seo748jwlhmd" path="res://Shaders/quantizer.gdshader" id="1_hyctl"]
+[ext_resource type="PackedScene" uid="uid://djcmvws6qeiof" path="res://Scenes/3D/test_cube.tscn" id="1_wadox"]
+[ext_resource type="Texture2D" uid="uid://fk20cnv3ce3g" path="res://Textures/Palettes/6_bit_pallet.png" id="2_hyctl"]
+[ext_resource type="Script" uid="uid://c3iqkrbn08m6y" path="res://Scripts/Animation/3D/matrix_bone_positioner.gd" id="3_4buiu"]
+[ext_resource type="PackedScene" uid="uid://eja71qfkvm6t" path="res://Scenes/Components/matrix.tscn" id="4_7hv6g"]
+[ext_resource type="Script" uid="uid://bd3lodspb7tum" path="res://Scripts/Animation/3D/cam_height_width_getter.gd" id="5_yxg17"]
+[ext_resource type="Script" uid="uid://clpci8vxpbap5" path="res://Scripts/Animation/3D/matrix_colliders_pos_setter.gd" id="6_we6uw"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7hv6g"]
+shader = ExtResource("1_hyctl")
+shader_parameter/palette = ExtResource("2_hyctl")
+
+[sub_resource type="SphereMesh" id="SphereMesh_hyctl"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ggynu"]
+radius = 57.00877
+
+[node name="Matrix" type="SubViewportContainer" unique_id=587305981]
+texture_filter = 1
+texture_repeat = 1
+material = SubResource("ShaderMaterial_7hv6g")
+custom_minimum_size = Vector2(1152, 672)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+stretch_shrink = 3
+mouse_target = true
+script = ExtResource("3_4buiu")
+
+[node name="SubViewport" type="SubViewport" parent="." unique_id=627918124]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(384, 224)
+size_2d_override = Vector2i(48, 48)
+render_target_update_mode = 4
+
+[node name="Head" parent="SubViewport" unique_id=327573373 instance=ExtResource("1_wadox")]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
+moveFreq = 0.7
+
+[node name="Matrix" parent="SubViewport/Head" unique_id=114388929 instance=ExtResource("4_7hv6g")]
+transform = Transform3D(0.19999999, 0, 0, 0, 0.19999999, 0, 0, 0, 0.19999999, 0, 0, 0)
+
+[node name="JacobianIK3D" type="JacobianIK3D" parent="SubViewport/Head/Matrix/Armature/Skeleton3D" parent_id_path=PackedInt32Array(114388929, 1547211508) index="1" unique_id=1712555452]
+setting_count = 1
+settings/0/target_node = NodePath("../../../../../Top Arm Target")
+settings/0/root_bone_name = "ShoulderTop"
+settings/0/root_bone = 15
+settings/0/end_bone_name = "TopTip"
+settings/0/end_bone = 28
+settings/0/extend_end_bone = false
+settings/0/joint_count = 14
+settings/0/joints/0/rotation_axis = 3
+settings/0/joints/0/limitation = null
+settings/0/joints/1/rotation_axis = 3
+settings/0/joints/1/limitation = null
+settings/0/joints/2/rotation_axis = 3
+settings/0/joints/2/limitation = null
+settings/0/joints/3/rotation_axis = 3
+settings/0/joints/3/limitation = null
+settings/0/joints/4/rotation_axis = 3
+settings/0/joints/4/limitation = null
+settings/0/joints/5/rotation_axis = 3
+settings/0/joints/5/limitation = null
+settings/0/joints/6/rotation_axis = 3
+settings/0/joints/6/limitation = null
+settings/0/joints/7/rotation_axis = 3
+settings/0/joints/7/limitation = null
+settings/0/joints/8/rotation_axis = 3
+settings/0/joints/8/limitation = null
+settings/0/joints/9/rotation_axis = 3
+settings/0/joints/9/limitation = null
+settings/0/joints/10/rotation_axis = 3
+settings/0/joints/10/limitation = null
+settings/0/joints/11/rotation_axis = 3
+settings/0/joints/11/limitation = null
+settings/0/joints/12/rotation_axis = 3
+settings/0/joints/12/limitation = null
+settings/0/joints/13/rotation_axis = 3
+settings/0/joints/13/limitation = null
+
+[node name="JacobianIK3D2" type="JacobianIK3D" parent="SubViewport/Head/Matrix/Armature/Skeleton3D" parent_id_path=PackedInt32Array(114388929, 1547211508) index="2" unique_id=1930891755]
+setting_count = 1
+settings/0/target_node = NodePath("../../../../../Bottom Arm Target")
+settings/0/root_bone_name = "ShoulderBottom"
+settings/0/root_bone = 1
+settings/0/end_bone_name = "BottomTip"
+settings/0/end_bone = 14
+settings/0/extend_end_bone = false
+settings/0/joint_count = 14
+settings/0/joints/0/rotation_axis = 3
+settings/0/joints/0/limitation = null
+settings/0/joints/1/rotation_axis = 3
+settings/0/joints/1/limitation = null
+settings/0/joints/2/rotation_axis = 3
+settings/0/joints/2/limitation = null
+settings/0/joints/3/rotation_axis = 3
+settings/0/joints/3/limitation = null
+settings/0/joints/4/rotation_axis = 3
+settings/0/joints/4/limitation = null
+settings/0/joints/5/rotation_axis = 3
+settings/0/joints/5/limitation = null
+settings/0/joints/6/rotation_axis = 3
+settings/0/joints/6/limitation = null
+settings/0/joints/7/rotation_axis = 3
+settings/0/joints/7/limitation = null
+settings/0/joints/8/rotation_axis = 3
+settings/0/joints/8/limitation = null
+settings/0/joints/9/rotation_axis = 3
+settings/0/joints/9/limitation = null
+settings/0/joints/10/rotation_axis = 3
+settings/0/joints/10/limitation = null
+settings/0/joints/11/rotation_axis = 3
+settings/0/joints/11/limitation = null
+settings/0/joints/12/rotation_axis = 3
+settings/0/joints/12/limitation = null
+settings/0/joints/13/rotation_axis = 3
+settings/0/joints/13/limitation = null
+
+[node name="Top Foot" type="MeshInstance3D" parent="SubViewport/Head" unique_id=1448299761]
+transform = Transform3D(1.4064062, 0, 0, 0, 1.5526348, 0, 0, 0, 2.9723716, 2.137823, 3.7474308, 0)
+mesh = SubResource("SphereMesh_hyctl")
+
+[node name="Bottom Foot" type="MeshInstance3D" parent="SubViewport/Head" unique_id=1667207126]
+transform = Transform3D(1.4064062, 0, 0, 0, 1.5526348, 0, 0, 0, 2.9723716, 2.137823, -3.7632194, 0)
+mesh = SubResource("SphereMesh_hyctl")
+
+[node name="Top Leg Joint" type="MeshInstance3D" parent="SubViewport/Head" unique_id=129013677]
+transform = Transform3D(0.5543994, 0, 0, 0, 0.73953414, 0, 0, 0, 1.0136266, 0.3466282, 2.3053863, -0.657078)
+mesh = SubResource("SphereMesh_hyctl")
+
+[node name="Bottom Leg Joint" type="MeshInstance3D" parent="SubViewport/Head" unique_id=1644600526]
+transform = Transform3D(0.5543994, 0, 0, 0, 0.73953414, 0, 0, 0, 1.0136266, 0.3466282, -2.0810997, -0.657078)
+mesh = SubResource("SphereMesh_hyctl")
+
+[node name="Camera3D" type="Camera3D" parent="SubViewport" unique_id=786003809]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.894)
+keep_aspect = 0
+projection = 1
+fov = 69.5
+size = 2.0517473
+script = ExtResource("5_yxg17")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="SubViewport" unique_id=2008891008]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8660599, -0.42681587, 0.23289692)
+
+[node name="Top Arm Target" type="Node3D" parent="SubViewport" unique_id=837068192]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.26663345, 0.3428359, 0)
+
+[node name="Bottom Arm Target" type="Node3D" parent="SubViewport" unique_id=111279016]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.26354676, -0.515907, 0)
+
+[node name="Colliders" type="Area2D" parent="." unique_id=2072170075]
+script = ExtResource("6_we6uw")
+
+[node name="Head" type="CollisionShape2D" parent="Colliders" unique_id=1232098747]
+position = Vector2(993, 337)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint1" type="CollisionShape2D" parent="Colliders" unique_id=1472992057]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint2" type="CollisionShape2D" parent="Colliders" unique_id=1753562862]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint3" type="CollisionShape2D" parent="Colliders" unique_id=110817624]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint4" type="CollisionShape2D" parent="Colliders" unique_id=35884060]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint5" type="CollisionShape2D" parent="Colliders" unique_id=214374784]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint6" type="CollisionShape2D" parent="Colliders" unique_id=1172033896]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint7" type="CollisionShape2D" parent="Colliders" unique_id=793977921]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint8" type="CollisionShape2D" parent="Colliders" unique_id=873745779]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint9" type="CollisionShape2D" parent="Colliders" unique_id=268500502]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint10" type="CollisionShape2D" parent="Colliders" unique_id=259402053]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint11" type="CollisionShape2D" parent="Colliders" unique_id=1938043959]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint12" type="CollisionShape2D" parent="Colliders" unique_id=557132856]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint13" type="CollisionShape2D" parent="Colliders" unique_id=1400441306]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint14" type="CollisionShape2D" parent="Colliders" unique_id=1067036376]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint15" type="CollisionShape2D" parent="Colliders" unique_id=1861171394]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint16" type="CollisionShape2D" parent="Colliders" unique_id=617861633]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint17" type="CollisionShape2D" parent="Colliders" unique_id=337919131]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint18" type="CollisionShape2D" parent="Colliders" unique_id=1011761237]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint19" type="CollisionShape2D" parent="Colliders" unique_id=1349947178]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint20" type="CollisionShape2D" parent="Colliders" unique_id=271783256]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint21" type="CollisionShape2D" parent="Colliders" unique_id=1027814026]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint22" type="CollisionShape2D" parent="Colliders" unique_id=393002842]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint23" type="CollisionShape2D" parent="Colliders" unique_id=943969985]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint24" type="CollisionShape2D" parent="Colliders" unique_id=1763365398]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint25" type="CollisionShape2D" parent="Colliders" unique_id=2136504976]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint26" type="CollisionShape2D" parent="Colliders" unique_id=1266215588]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint27" type="CollisionShape2D" parent="Colliders" unique_id=145346654]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[node name="BoneJoint28" type="CollisionShape2D" parent="Colliders" unique_id=969679499]
+scale = Vector2(0.35, 0.35)
+shape = SubResource("CircleShape2D_ggynu")
+
+[editable path="SubViewport/Head/Matrix"]
