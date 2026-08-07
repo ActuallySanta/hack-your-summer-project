@@ -34,7 +34,6 @@ var envAttackDuration : float = 2.5
 var envAttackAggressionModifiers : Array = [1.0,.75,.5]
 
 func _ready() -> void:
-	hurtbox.hit.connect(_takeDamage)
 	health_bar.max_value = maxHealth
 	health_bar.value = currHealth
 	lower_teeth_attack.reparent(get_tree().current_scene)
@@ -52,9 +51,6 @@ func _ready() -> void:
 	await environmental_attack_cooldown_timer.timeout
 	_environmentalAttack()
 
-func _process(delta: float) -> void:
-	if(PlayerManager.player != null):
-		position.x = lerp(position.x,PlayerManager.player.position.x,0.01)
 
 func _environmentalAttack():
 	enviromental_attack_duration_timer.wait_time = envAttackDuration * envAttackAggressionModifiers[aggroLevel]
@@ -93,8 +89,13 @@ func disableEnvAttacks():
 	lower_teeth_attack.visible = false
 	lower_teeth_attack.process_mode = Node.PROCESS_MODE_DISABLED
 
-func _takeDamage(_hitInfo : HitInfo):
-	currHealth -= _hitInfo.damage
+
+func _draw() -> void:
+	draw_rect(eyeSpawnArea,Color(0.024, 0.502, 1.0, 1.0),20, true)
+
+
+func _on_hurtbox_hit(hurtBox: Hurtbox, hit_info: HitInfo, source: Hitbox) -> void:
+	currHealth -= hit_info.damage
 	health_bar.value = currHealth
 	if(currHealth > (maxHealth *(1/3)) and currHealth < (maxHealth*(2/3))):
 		#Phase 2
@@ -102,11 +103,9 @@ func _takeDamage(_hitInfo : HitInfo):
 	elif(currHealth > 0 and currHealth < (maxHealth*(1/3))):
 		#Phase 3
 		aggroLevel = 3
-	else:
+	elif(currHealth <= 0):
 		#Boss Die
+		GlobalSignals.OnBossDie.emit()
 		queue_free()
 	
 	pass
-
-func _draw() -> void:
-	draw_rect(eyeSpawnArea,Color(0.024, 0.502, 1.0, 1.0),20, true)

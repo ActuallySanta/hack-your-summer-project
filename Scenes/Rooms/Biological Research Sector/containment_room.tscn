@@ -126,9 +126,9 @@ position = Vector2(826, 323)
 eyeSpawnArea = Rect2(-650, -150, 950, 325)
 
 [node name="BossVisual" parent="Boss" index="0" unique_id=587305981]
-offset_left = -823.0
+offset_left = -779.0
 offset_top = -374.0
-offset_right = 329.0
+offset_right = 373.0
 offset_bottom = 298.0
 
 [node name="Hitbox" parent="Boss/BossVisual" index="3" unique_id=125498642]
@@ -143,10 +143,10 @@ position = Vector2(-826.00006, -324)
 tile_map_data = PackedByteArray("AAADAAAAAQAAAAAAAQAEAAAAAQAAAAAAAQAFAAAAAQAAAAAAAQAGAAAAAQAAAAAAAQAHAAAAAQAAAAAAAQAIAAAAAQAAAAAAAQAJAAAAAQAAAAAAAQAKAAAAAQAAAAAAAQALAAAAAQAAAAAAAQAMAAAAAQAAAAAAAQANAAAAAQAAAAAAAQAOAAAAAQAAAAAAAQAPAAAAAQAAAAAAAQAQAAAAAQAAAAAAAQARAAAAAQAAAAAAAQASAAAAAQAAAAAAAQATAAAAAQAAAAAAAQAUAAAAAQAAAAAAAQAVAAAAAQAAAAAAAQAWAAAAAQAAAAAAAQAXAAAAAQAAAAAAAQA=")
 
 [node name="Upper Environmental Attack Warning" parent="Boss" index="8" unique_id=1618583269]
-position = Vector2(-250, -228)
+position = Vector2(-211.75134, -227.75137)
 
 [node name="Lower Environmental Attack Warning" parent="Boss" index="9" unique_id=318713405]
-position = Vector2(-250.00003, 106.000015)
+position = Vector2(-211.75137, 106.24864)
 
 [node name="WallForeground" parent="." unique_id=1433383468 instance=ExtResource("6")]
 modulate = Color(0.5882353, 0.5882353, 0.5882353, 1)

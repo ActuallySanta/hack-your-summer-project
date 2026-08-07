@@ -62,6 +62,7 @@ func _ready() -> void:
 	_hud.load_game.connect(_load_game)
 	_hud.quit_game.connect(get_tree().quit)
 	_hud.resume_game.connect(resume_game)
+	GlobalSignals.OnBossDie.connect(end_game)
 	_init_metsys_and_objects()
 	isInGame = false
 	#if using a custom save, skip the main menu and head straight to the game
@@ -447,6 +448,7 @@ func _on_player_death(_anim_duration: float) -> void:
 
 func end_game():
 	PlayerManager.player.process_mode = Node.PROCESS_MODE_DISABLED
+	
 	_hud.show_load_screen()
 	_hud.show_menu(GameHUD.MenuType.GameComplete)
 	_hud.hide_load_screen()
