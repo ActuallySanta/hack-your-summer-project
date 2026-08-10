@@ -57,8 +57,10 @@ const NONE = preload("res://Sounds/Music/issue.wav")
 }
 
 var default := DEBUG
+var music_volume : float
 
 func _ready() -> void:
+	music_volume = volume_db
 	await get_tree().process_frame
 	set_background_track_from_room_instance()
 
