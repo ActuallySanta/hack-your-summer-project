@@ -127,4 +127,5 @@ func set_sprite(thrust_dir: State) -> void:
 			icon.frame_coords = Vector2i(1,2)
 
 func _on_area_2d_area_entered(area: Area2D) -> void:
+	area.queue_free()
 	disable_thrusters()
