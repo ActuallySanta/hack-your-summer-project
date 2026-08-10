@@ -42,6 +42,7 @@ tile_map_data = PackedByteArray("AAAHAAkAAQAMAAQAAAAIAAkAAQAMAAQAAAAJAAkAAQAMAAQ
 tile_set = ExtResource("2_d0xhl")
 
 [node name="Door" type="TileMapLayer" parent="VisualAssets" unique_id=46306657]
+z_index = 20
 tile_map_data = PackedByteArray("AAAWAAYAAQAAAAAAAAAWAAcAAQAAAAEAAAAWAAgAAQAAAAIAAAAXAAYAAQABAAAAAAAXAAcAAQABAAEAAAAXAAgAAQABAAIAAAA=")
 tile_set = ExtResource("5_yrnhe")
 

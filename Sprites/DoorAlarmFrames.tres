@@ -27,7 +27,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_mypag")
 }],
-"loop": true,
+"loop": 1,
 "name": &"Sounding",
 "speed": 5.0
 }, {
@@ -38,7 +38,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_o8jdw")
 }],
-"loop": true,
+"loop": 1,
 "name": &"SoundingRight",
 "speed": 5.0
 }]

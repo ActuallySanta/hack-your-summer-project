@@ -2,7 +2,8 @@ extends AudioStreamPlayer2D
 
 const DEBUG = preload("res://Sounds/DebugAndTemp/ChargeFire.wav")
 
-const DOCKING_BAY = DEBUG
+const DOCKING_BAY_UNPOWERED = preload("res://Sounds/Music/Docking Bay Ruined.ogg")
+const DOCKING_BAY = preload("res://Sounds/Music/Docking Bay Powered.ogg")
 const CREW_QUARTERS = preload("res://Sounds/Music/A surprise infusion.ogg")
 const INTERNALS = DEBUG
 const LABS = preload("res://Sounds/Music/Jetpack Joyride DEMO.ogg")
@@ -25,6 +26,8 @@ const NONE = preload("res://Sounds/Music/issue.wav")
 }
 
 @onready var location_ost := {
+	"Docking Bay": DOCKING_BAY,
+	"Docking Bay Hidden": DOCKING_BAY,
 	"Crew Quarters": CREW_QUARTERS,
 	"Crew Quarters Hidden": CREW_QUARTERS,
 	"Internals": INTERNALS,
@@ -67,7 +70,7 @@ func play_background_track(track: AudioStream) -> void:
 		
 	if stream == track and playing:
 		return
-		
+	
 	stream = track
 	play()
 
@@ -92,7 +95,7 @@ func _DEBUG_set_background_track_ost_name(ost_name: String) -> void:
 		if not track == null:
 			play_background_track( track )
 			return
-	print("No track in game with name: ", ost_name)
+	printerr("No track in game with name: ", ost_name)
 	play_background_track( DEBUG )
 
 func set_background_track_from_name(type: String, ost_name: String) -> void:
@@ -131,9 +134,19 @@ func _get_current_cell_group_music(groups: PackedInt32Array) -> AudioStream:
 			return _parse_special_room(type[ 0 ], type[ 1 ])
 		else:
 			best_guess = location_ost.get(group_name)
+			if best_guess == null:
+				printerr("Music Manager (_get_current_cell_group_music) cannot find an ost for this zone, there is probably no entry in the regions dictionary.")
 	
 	return best_guess
 
+func _parse_music_effect(condition: String) -> AudioStream:
+	if condition == "DockPower":
+		return DOCKING_BAY if GameManager.is_station_powered() else DOCKING_BAY_UNPOWERED
+	return NONE
+
 func _parse_special_room(type: String, special_name: String) -> AudioStream:
+	if type == "MUSEFFECT":
+		return _parse_music_effect(special_name)
+		
 	var dictionary = osts[type]
 	return dictionary.get(special_name)

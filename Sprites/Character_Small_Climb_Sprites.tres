@@ -26,7 +26,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_m2vbd")
 }],
-"loop": false,
+"loop": 0,
 "name": &"Small Climb",
 "speed": 12.0
 }]
