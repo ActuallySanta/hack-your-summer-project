@@ -63,7 +63,7 @@ tile_map_data = PackedByteArray("AAATAB4AAwAFAAcAAAATAB0AAwAFAAoAAAATABwAAwAFAAo
 tile_set = ExtResource("6_1wnec")
 
 [node name="BreakAbles" parent="." unique_id=1463144321 instance=ExtResource("8_6ghpp")]
-tile_map_data = PackedByteArray("AAARAB0AAAAAAAAAAAAQAB0AAAAAAAAAAAAQABwAAAAAAAAAAAARABwAAAAAAAAAAAA=")
+tile_map_data = PackedByteArray("AAARAB0AAAAAAAAAAAAQAB0AAAAAAAAAAAAQABwAAAAAAAAAAAARABwAAAAAAAAAAAAIAA0AAAAAAAMAAAAJAA0AAAAAAAMAAAAKAA0AAAAAAAMAAAA=")
 
 [node name="DoorBlocker" parent="." unique_id=1139906443 instance=ExtResource("9_daise")]
 position = Vector2(12, 1130)
