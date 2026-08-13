@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://bca0ty75ytv76" path="res://Scenes/Dialogue System/sign_npc.tscn" id="9_08gv4"]
 [ext_resource type="Script" uid="uid://bdh437kih1wx8" path="res://Scripts/Resources/Dialogue/dialogue_entry.gd" id="10_4gwjg"]
 [ext_resource type="Resource" uid="uid://dqx60eyssrhnl" path="res://Dialogue/Speakers/tutorialSign_speaker.tres" id="11_lreay"]
+[ext_resource type="PackedScene" uid="uid://dst5y4sttk4ir" path="res://Scenes/Enemies/security_drone.tscn" id="13_08gv4"]
 [ext_resource type="Script" uid="uid://bf316n5tk84lf" path="res://Scripts/Resources/Dialogue/dialogue_conversation.gd" id="13_qegwn"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_26x51"]
@@ -88,5 +89,8 @@ position = Vector2(200, 844)
 
 [node name="DialogueTrigger" parent="Sign NPC" index="0" unique_id=1367779263]
 loadedConversation = SubResource("Resource_w1ate")
+
+[node name="SecurityDrone" parent="." unique_id=1086733501 instance=ExtResource("13_08gv4")]
+position = Vector2(881, 685)
 
 [editable path="Sign NPC"]

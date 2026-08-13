@@ -7,6 +7,8 @@
 [ext_resource type="TileSet" uid="uid://b0n86hn6rv2od" path="res://Tileset/CrewQuarters.tres" id="4_b1bxj"]
 [ext_resource type="PackedScene" uid="uid://b0fyg7kdjcyou" path="res://Scenes/Enemies/repair_drone.tscn" id="6_m38nr"]
 [ext_resource type="PackedScene" uid="uid://usl0ryav6sdi" path="res://Scenes/Components/door_blocker.tscn" id="7_ajpp0"]
+[ext_resource type="Script" uid="uid://6f15nb6r34b0" path="res://Scripts/EnvironmentalHazards/path.gd" id="7_amibs"]
+[ext_resource type="PackedScene" uid="uid://dst5y4sttk4ir" path="res://Scenes/Enemies/security_drone.tscn" id="8_0npt4"]
 
 [node name="ElevatorCQ" type="Node2D" unique_id=2144255681]
 
@@ -30,15 +32,6 @@ tile_set = ExtResource("4_b1bxj")
 [node name="DoorTileMapLayer2" parent="." unique_id=1165241577 instance=ExtResource("2_1lh8s")]
 tile_map_data = PackedByteArray("AAABAA0AAQAEAAAAABAAAA0AAQAFAAAAABABAA4AAQAEAAEAABAAAA4AAQAFAAEAABABAA8AAQAEAAIAABAAAA8AAQAFAAIAABAWABYAAQAEAAAAAAAWABcAAQAEAAEAAAAWABgAAQAEAAIAAAAXABYAAQAFAAAAAAAXABcAAQAFAAEAAAAXABgAAQAFAAIAAAABACQAAQAEAAAAABAAACQAAQAFAAAAABABACUAAQAEAAEAABAAACUAAQAFAAEAABABACYAAQAEAAIAABAAACYAAQAFAAIAABA=")
 
-[node name="RepairDrone" parent="." unique_id=1318393645 instance=ExtResource("6_m38nr")]
-position = Vector2(383, 1203)
-start_direction = "UL"
-
-[node name="RepairDrone2" parent="." unique_id=233724549 instance=ExtResource("6_m38nr")]
-position = Vector2(739, 1168)
-start_direction = "UL"
-speed = 200.0
-
 [node name="DoorBlocker" parent="." unique_id=1139906443 instance=ExtResource("7_ajpp0")]
 position = Vector2(1128, 1128)
 
@@ -48,6 +41,15 @@ position = Vector2(24, 1798)
 [node name="DoorBlocker3" parent="." unique_id=1532003493 instance=ExtResource("7_ajpp0")]
 position = Vector2(18, 697)
 
-[node name="RepairDrone3" parent="." unique_id=209444947 instance=ExtResource("6_m38nr")]
-position = Vector2(587, 1820)
-start_direction = "DL"
+[node name="Path" type="Node2D" parent="." unique_id=453152640]
+script = ExtResource("7_amibs")
+loop_mode = "Closed Loop"
+node_speed = 200.0
+points = Array[Vector2]([Vector2(599, 1738), Vector2(610, 750), Vector2(495, 1198), Vector2(297, 1221), Vector2(345, 1732)])
+metadata/_custom_type_script = "uid://6f15nb6r34b0"
+
+[node name="SecurityDrone" parent="Path" unique_id=1086733501 instance=ExtResource("8_0npt4")]
+
+[node name="RepairDrone" parent="." unique_id=1318393645 instance=ExtResource("6_m38nr")]
+position = Vector2(677, 1369)
+start_direction = "UL"

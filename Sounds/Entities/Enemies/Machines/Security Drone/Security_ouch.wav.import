@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://bggj2rona36fy"
+path="res://.godot/imported/Security_ouch.wav-7a161d146f40fb1cf96f84cd3b0fe1cc.sample"
+
+[deps]
+
+source_file="res://Sounds/Entities/Enemies/Machines/Security Drone/Security_ouch.wav"
+dest_files=["res://.godot/imported/Security_ouch.wav-7a161d146f40fb1cf96f84cd3b0fe1cc.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

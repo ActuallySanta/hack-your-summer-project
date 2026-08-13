@@ -2,8 +2,8 @@
 
 [ext_resource type="PackedScene" uid="uid://liprjmtialrh" path="res://Scenes/Components/Hitbox.tscn" id="1_3m2mg"]
 [ext_resource type="Script" uid="uid://bkgqdy25cw61r" path="res://Scripts/Combat/player_bullet.gd" id="2_jskx8"]
-[ext_resource type="Texture2D" uid="uid://b04koa87cawka" path="res://Sprites/playerBullet.png" id="3_hgvln"]
-[ext_resource type="Texture2D" uid="uid://bhg3ull8l33ip" path="res://Sprites/plasma_bullet.png" id="4_4x836"]
+[ext_resource type="Texture2D" uid="uid://b04koa87cawka" path="res://Sprites/Bullets/playerBullet.png" id="3_hgvln"]
+[ext_resource type="Texture2D" uid="uid://bhg3ull8l33ip" path="res://Sprites/Bullets/plasma_bullet.png" id="4_4x836"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nocgn"]
 size = Vector2(10, 0)
@@ -13,8 +13,10 @@ collision_layer = 8
 collision_mask = 45
 monitorable = true
 script = ExtResource("2_jskx8")
+plasma_damage = 1
 speed = 1200.0
 lifetime = 10.0
+damage = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." index="0" unique_id=704812034]
 position = Vector2(-5, 0)

@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://dst5y4sttk4ir"]
+
+[ext_resource type="Script" uid="uid://tnioey3ra6xq" path="res://Scripts/Enemies/security_drone.gd" id="1_bgcgs"]
+[ext_resource type="Texture2D" uid="uid://bnp6q4gtivnuy" path="res://Sprites/Characters/Enemy SpriteSheets/SecurityDrone.png" id="1_wvc68"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_bpmhk"]
+
+[node name="SecurityDrone" type="RigidBody2D" unique_id=1086733501]
+script = ExtResource("1_bgcgs")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1084366026]
+position = Vector2(0.5, 0.5)
+texture = ExtResource("1_wvc68")
+hframes = 6
+vframes = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=586316795]
+shape = SubResource("CircleShape2D_bpmhk")

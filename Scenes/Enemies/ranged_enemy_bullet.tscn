@@ -42,6 +42,7 @@ shape = SubResource("RectangleShape2D_k6rrm")
 
 [node name="Bullet Lifetime" type="Timer" parent="." unique_id=1057932148]
 wait_time = 3.0
+one_shot = true
 autostart = true
 
 [node name="Hitbox" parent="." unique_id=125498642 instance=ExtResource("4_06oib")]

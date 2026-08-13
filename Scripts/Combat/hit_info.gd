@@ -1,4 +1,4 @@
-class_name HitInfo
+class_name HitInfo extends RefCounted
 
 var damage : int
 var knockback_strength : float

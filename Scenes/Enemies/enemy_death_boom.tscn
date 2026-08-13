@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://c2phcut25xgs0"]
+
+[ext_resource type="SpriteFrames" uid="uid://bjf811xv2eh73" path="res://Sprites/Explosions/enemy_death_explosion_sprite_frames.tres" id="1_t0rvh"]
+[ext_resource type="Script" uid="uid://bsk5plkw2hoha" path="res://Scenes/Enemies/enemy_death_boom.gd" id="2_nnnfe"]
+
+[node name="EnemyDeathBoom" type="AnimatedSprite2D" unique_id=1239807976]
+scale = Vector2(3, 3)
+sprite_frames = ExtResource("1_t0rvh")
+autoplay = "default"
+frame = 7
+frame_progress = 1.0
+script = ExtResource("2_nnnfe")

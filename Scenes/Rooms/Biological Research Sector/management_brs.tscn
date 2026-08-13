@@ -5,6 +5,8 @@
 [ext_resource type="PackedScene" uid="uid://c23c0urqh5mm5" path="res://Scenes/Components/ScaledTileMap.tscn" id="2_ap26h"]
 [ext_resource type="Script" uid="uid://whdtoijov1so" path="res://Scripts/occilator.gd" id="4_6jiru"]
 [ext_resource type="TileSet" uid="uid://c0dbvnpaoeomc" path="res://Tileset/TransitionTileSet.tres" id="5_eaa0g"]
+[ext_resource type="Script" uid="uid://6f15nb6r34b0" path="res://Scripts/EnvironmentalHazards/path.gd" id="6_4aevn"]
+[ext_resource type="PackedScene" uid="uid://dst5y4sttk4ir" path="res://Scenes/Enemies/security_drone.tscn" id="7_rosxu"]
 
 [node name="ManagementBRS" type="Node2D" unique_id=1192930274]
 
@@ -38,3 +40,17 @@ occilations_per_second = 0.25
 z_index = 20
 tile_map_data = PackedByteArray("AAAWAAQAAQAIAAAAAAAWAAUAAQAIAAEAAAAWAAYAAQAIAAIAAAAXAAQAAQAJAAAAAAAXAAUAAQAJAAEAAAAXAAYAAQAJAAIAAAABAAQAAQAIAAAAABAAAAQAAQAJAAAAABABAAUAAQAIAAEAABAAAAUAAQAJAAEAABABAAYAAQAIAAIAABAAAAYAAQAJAAIAABA=")
 tile_set = ExtResource("5_eaa0g")
+
+[node name="Path" type="Node2D" parent="." unique_id=2143618200]
+script = ExtResource("6_4aevn")
+loop_mode = "Closed Loop"
+node_speed = 200.0
+start_node_offset = 400.0
+points = Array[Vector2]([Vector2(801, 410), Vector2(341, 404), Vector2(575, 237)])
+metadata/_custom_type_script = "uid://6f15nb6r34b0"
+
+[node name="SecurityDrone" parent="Path" unique_id=1086733501 instance=ExtResource("7_rosxu")]
+do_chaos = true
+
+[node name="SecurityDrone2" parent="Path" unique_id=51805803 instance=ExtResource("7_rosxu")]
+do_chaos = true

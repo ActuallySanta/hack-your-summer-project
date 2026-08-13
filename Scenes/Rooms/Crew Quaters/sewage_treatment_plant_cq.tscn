@@ -23,8 +23,8 @@
 
 [node name="Node2D" type="Node2D" parent="." unique_id=31164783]
 script = ExtResource("6_j5lvp")
-start_brightness = 0.3
-end_brightness = 0.1
+start_brightness = 0.5
+end_brightness = 0.3
 cycle_seconds = 2.0
 
 [node name="BackgroundFar" parent="Node2D" unique_id=2101826522 instance=ExtResource("3_oebpa")]

@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://4vjtrvdnleb1"]
+
+[ext_resource type="Script" uid="uid://p46g50v8y7y4" path="res://Scripts/Combat/Healths/robot_health_component.gd" id="1_5etna"]
+
+[node name="RobotHealthComponent" type="Node2D" unique_id=2027675310]
+script = ExtResource("1_5etna")
+max_health = null
+start_health = null

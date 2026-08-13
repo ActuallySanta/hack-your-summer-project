@@ -5,6 +5,8 @@
 [ext_resource type="TileSet" uid="uid://b1y41todkrtnk" path="res://Tileset/BioSector.tres" id="2_vg5lg"]
 [ext_resource type="PackedScene" uid="uid://bnpsyl86ggbjm" path="res://Scenes/Pickups/health_extender.tscn" id="3_vg5lg"]
 [ext_resource type="Script" uid="uid://whdtoijov1so" path="res://Scripts/occilator.gd" id="5_qo23d"]
+[ext_resource type="PackedScene" uid="uid://usl0ryav6sdi" path="res://Scenes/Components/door_blocker.tscn" id="6_m2r20"]
+[ext_resource type="PackedScene" uid="uid://b0fyg7kdjcyou" path="res://Scenes/Enemies/repair_drone.tscn" id="7_xb6l3"]
 
 [node name="SpecimenStorageBRS" type="Node2D" unique_id=1169436027]
 
@@ -35,3 +37,26 @@ tile_set = ExtResource("2_vg5lg")
 script = ExtResource("5_qo23d")
 horizontal_shift = 2.0
 occilations_per_second = 0.25
+
+[node name="DoorBlocker" parent="." unique_id=1139906443 instance=ExtResource("6_m2r20")]
+position = Vector2(938, 455)
+
+[node name="DoorBlocker2" parent="." unique_id=1619090075 instance=ExtResource("6_m2r20")]
+position = Vector2(805, 195)
+
+[node name="RepairDrone" parent="." unique_id=1318393645 instance=ExtResource("7_xb6l3")]
+position = Vector2(362, 348)
+start_direction = "UR"
+speed = 200.0
+stun_time = 1.0
+
+[node name="RepairDrone2" parent="." unique_id=147712145 instance=ExtResource("7_xb6l3")]
+position = Vector2(457, 268)
+start_direction = "DL"
+speed = 200.0
+stun_time = 1.0
+
+[node name="RepairDrone3" parent="." unique_id=858961071 instance=ExtResource("7_xb6l3")]
+position = Vector2(240, 194)
+start_direction = "UR"
+speed = 200.0

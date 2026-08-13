@@ -76,6 +76,13 @@ func assign_path():
 		var inverse_point = max_index - point
 		path.append(PathPoint.new(points[ inverse_point ], points[ inverse_point - 1 ]))
 
+func remove_node(node: Node2D) -> bool:
+	for follower in objects.size():
+		if objects[ follower ].node == node:
+			objects.remove_at( follower )
+			return true
+	return false
+
 func _process(delta: float) -> void:
 	# Checked before the point count, so a path being built up from its first
 	# point still redraws while its handles are dragged around.

@@ -1,6 +1,7 @@
 class_name PlayerBullet
 extends Hitbox
 
+@export var plasma_damage := 1
 @export var speed := 400.0
 @export var lifetime := 3.0
 
@@ -12,6 +13,9 @@ var duration_timer : float
 func _ready() -> void:
 	super._ready()
 	duration_timer = lifetime
+	print(mode)
+	if mode == "plasma":
+		damage = plasma_damage
 
 func _physics_process(delta: float) -> void:
 	position += speed * direction * delta

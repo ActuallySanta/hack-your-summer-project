@@ -16,12 +16,7 @@ func _physics_process(delta: float) -> void:
 func _on_bullet_lifetime_timeout() -> void:
 	queue_free()
 
-
 func _on_area_2d_body_entered(body: Node2D) -> void:
-	if(body is Player):
-		#print("PLAYER TOOK DAMAGE HERE")
-		pass
-	
 	queue_free()
 
 func flip_graphics() -> void:
