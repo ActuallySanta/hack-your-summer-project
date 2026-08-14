@@ -1,6 +1,7 @@
 [gd_resource type="TileSet" format=3 uid="uid://d1o3mxscl6wr5"]
 
 [ext_resource type="Texture2D" uid="uid://b8yx2jrioqo5j" path="res://Textures/PropsAndBackgrounds/CommonRoomAssets.png" id="1_t3sbf"]
+[ext_resource type="Texture2D" uid="uid://c2ai72exthkby" path="res://Textures/CommonRoomAssets/SaveAndMapRoom00.png" id="2_mbao0"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_mbao0"]
 texture = ExtResource("1_t3sbf")
@@ -216,6 +217,44 @@ texture = ExtResource("1_t3sbf")
 2:5/0 = 0
 1:5/0 = 0
 0:5/0 = 0
+10:7/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_iresg"]
+texture = ExtResource("2_mbao0")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+0:5/0 = 0
+1:5/0 = 0
+2:5/0 = 0
+3:5/0 = 0
 
 [resource]
 sources/0 = SubResource("TileSetAtlasSource_mbao0")
+sources/1 = SubResource("TileSetAtlasSource_iresg")

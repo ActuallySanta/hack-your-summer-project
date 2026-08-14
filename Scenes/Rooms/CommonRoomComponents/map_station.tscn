@@ -2,48 +2,393 @@
 
 [ext_resource type="Script" uid="uid://dd5v7egdna7kc" path="res://Scripts/Level Elements/map_station.gd" id="1_2qwwv"]
 [ext_resource type="TileSet" uid="uid://d1o3mxscl6wr5" path="res://Tileset/SaveMapRoom.tres" id="1_hhws6"]
+[ext_resource type="Script" uid="uid://68ul5r4o77f4" path="res://Scripts/BehaviorAdjustments/map_display.gd" id="3_18i1v"]
+[ext_resource type="Texture2D" uid="uid://22cjlsxhca3" path="res://Textures/CommonRoomAssets/SaveAndMapRoom02.png" id="3_ehi4b"]
+[ext_resource type="Texture2D" uid="uid://diohq30h6lmta" path="res://Textures/CommonRoomAssets/SaveAndMapRoom01.png" id="3_lornd"]
+[ext_resource type="Texture2D" uid="uid://bf6aewk16mmkk" path="res://Textures/CommonRoomAssets/SaveAndMapRoom04.png" id="5_n8odw"]
+[ext_resource type="Texture2D" uid="uid://b842tihlawmq1" path="res://Textures/CommonRoomAssets/SaveAndMapRoom09.png" id="6_d23m2"]
+[ext_resource type="Texture2D" uid="uid://vosneon6j8t3" path="res://Textures/CommonRoomAssets/SaveAndMapRoom05.png" id="6_pkwl8"]
+[ext_resource type="Texture2D" uid="uid://d0ha2uyme55ys" path="res://Textures/CommonRoomAssets/SaveAndMapRoom06.png" id="7_kf0vv"]
+[ext_resource type="Texture2D" uid="uid://br165mgdcql3i" path="res://Textures/CommonRoomAssets/SaveAndMapRoom07.png" id="8_18i1v"]
+[ext_resource type="Texture2D" uid="uid://dssj46sqrgsy8" path="res://Textures/CommonRoomAssets/SaveAndMapRoom08.png" id="9_3rly6"]
+
+[sub_resource type="Animation" id="Animation_18i1v"]
+resource_name = "Active"
+length = 1.6
+loop_mode = 2
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ActiveBaseConst:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ActiveBase1:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ActiveBase2:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.43333334, 0.53333336, 0.6333333, 0.73333335, 0.8333333, 0.93333334, 1.0333333, 1.1333333, 1.2, 1.3000001, 1.4000001, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Active1:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.4, 0.5, 0.8, 0.90000004, 1.2, 1.3000001),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [true, false, true, false, true, false, true, false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Active2:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.5, 0.6, 0.9, 1, 1.3, 1.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [false, true, false, true, false, true, false, true, false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Active3:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.3, 0.6, 0.70000005, 1, 1.1, 1.4, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [false, true, false, true, false, true, false, true, false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Active4:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.4, 0.7, 0.8, 1.1, 1.2, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [false, true, false, true, false, true, false, true]
+}
+tracks/7/type = "method"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath(".")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(1.6),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"turn_off"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_fkxrh"]
+resource_name = "Off"
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MapDisplay:z_index")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [-666]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ActiveBaseConst:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ActiveBase1:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ActiveBase2:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Active1:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Active2:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Active3:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Active4:visible")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_3rly6"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ActiveBaseConst:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ActiveBase1:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ActiveBase2:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("MapDisplay:z_index")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_3rly6"]
+_data = {
+&"Active": SubResource("Animation_18i1v"),
+&"Off": SubResource("Animation_fkxrh"),
+&"RESET": SubResource("Animation_3rly6")
+}
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2qwwv"]
-size = Vector2(64, 14.000004)
+size = Vector2(84, 18)
 
 [node name="MapStation" type="Node2D" unique_id=1432104097]
 scale = Vector2(1.5, 1.5)
 script = ExtResource("1_2qwwv")
-region = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2141153301]
+libraries/ = SubResource("AnimationLibrary_3rly6")
+
+[node name="IdleTexture" type="TileMapLayer" parent="." unique_id=1797159545]
+position = Vector2(-24, 0)
+scale = Vector2(3, 3)
+tile_map_data = PackedByteArray("AAABAAYAAAABAAQAAAADAAAAAAABAAAAAAAIAAAAAAACAAAAAAAIAAIAAAACAAIAAAAIAAMAAAACAAMAAAAIAAQAAAACAAQAAAAKAAIAAAACAAAAAAAKAAMAAAACAAEAAAAKAAQAAAACAAIAAAALAPf/AAACAAAAAAALAPj/AAACAAEAAAALAPn/AAACAAIAAAALAPr/AAACAAMAAAALAPv/AAACAAQAAAD0//f/AAABAAAAAAD0//j/AAABAAEAAAD0//n/AAABAAIAAAD9//7/AAAEAAQAAAD+//7/AAAFAAQAAAD///7/AAAGAAQAAAAAAP7/AAAHAAQAAAABAP7/AAAIAAQAAAACAP7/AAAJAAQAAAD/////AQACAAIAAAAAAP//AQADAAIAAAABAP//AQAEAAIAAAA=")
+tile_set = ExtResource("1_hhws6")
+
+[node name="IdlePillars" type="TileMapLayer" parent="." unique_id=597123020]
+scale = Vector2(3, 3)
+tile_map_data = PackedByteArray("AAADAAIAAAABAAIAAAADAAMAAAABAAMAAAADAAQAAAABAAQAAAAIAAAAAAACAAAAAAADAAYAAAAEAAIAAAAEAAYAAAAFAAIAAAAFAAYAAAAGAAIAAAAGAAYAAAAHAAIAAAAHAAYAAAAIAAIAAAAIAAYAAAAJAAIAAADy/wAAAAAKAAUAAAAEAPv/AQABAAAAAAAEAPz/AQABAAEAAAAFAPz/AQABAAAAAAAFAP3/AQABAAEAAAD7//v/AQAAAAAAAAD7//z/AQAAAAEAAAD6//z/AQAAAAAAAAD6//3/AQAAAAEAAAAAAAAAAQADAAEAAAD//wAAAQADAAEAAAD//wEAAQADAAEAAAAAAAEAAQADAAEAAAAAAAIAAQADAAEAAAD//wIAAQADAAEAAAD//wMAAQADAAEAAAAAAAMAAQADAAEAAAAAAAQAAQADAAEAAAD//wQAAQADAAEAAAAEAPr/AQAGAAAAAAAFAPr/AQAGAAAAAAD7//r/AQAFAAAAAAD6//r/AQAFAAAAAAD6//v/AQAFAAAAAAAFAPv/AQAGAAAAAAA=")
+tile_set = ExtResource("1_hhws6")
+
+[node name="ActiveBaseConst" type="TileMapLayer" parent="." unique_id=864697889]
+visible = false
+position = Vector2(-24, 0)
+scale = Vector2(3, 3)
+tile_map_data = PackedByteArray("AAABAAYAAAABAAQAAAADAAAAAAABAAAAAAAIAAAAAAACAAAAAAAIAAIAAAACAAIAAAAIAAMAAAACAAMAAAAIAAQAAAACAAQAAAAKAAIAAAACAAAAAAAKAAMAAAACAAEAAAAKAAQAAAACAAIAAAALAPf/AAACAAAAAAALAPj/AAACAAEAAAALAPn/AAACAAIAAAALAPr/AAACAAMAAAALAPv/AAACAAQAAAD0//f/AAABAAAAAAD0//j/AAABAAEAAAD0//n/AAABAAIAAAD9//7/AAAEAAQAAAD+//7/AAAFAAQAAAD///7/AAAGAAQAAAAAAP7/AAAHAAQAAAABAP7/AAAIAAQAAAACAP7/AAAJAAQAAAAAAP//AQADAAAAAAA=")
+tile_set = ExtResource("1_hhws6")
+
+[node name="ActiveBase1" type="TileMapLayer" parent="." unique_id=1980989147]
+visible = false
+position = Vector2(-24, 0)
+scale = Vector2(3, 3)
+tile_map_data = PackedByteArray("AAABAAYAAAABAAQAAAADAAAAAAABAAAAAAAIAAAAAAACAAAAAAAIAAIAAAACAAIAAAAIAAMAAAACAAMAAAAIAAQAAAACAAQAAAAKAAIAAAACAAAAAAAKAAMAAAACAAEAAAAKAAQAAAACAAIAAAALAPf/AAACAAAAAAALAPj/AAACAAEAAAALAPn/AAACAAIAAAALAPr/AAACAAMAAAALAPv/AAACAAQAAAD0//f/AAABAAAAAAD0//j/AAABAAEAAAD0//n/AAABAAIAAAD9//7/AAAEAAQAAAD+//7/AAAFAAQAAAD///7/AAAGAAQAAAAAAP7/AAAHAAQAAAABAP7/AAAIAAQAAAACAP7/AAAJAAQAAAD/////AQACAAAAAAABAP//AQAEAAAAAAA=")
+tile_set = ExtResource("1_hhws6")
+
+[node name="ActiveBase2" type="TileMapLayer" parent="." unique_id=352586676]
+visible = false
+position = Vector2(-24, 0)
+scale = Vector2(3, 3)
+tile_map_data = PackedByteArray("AAABAAYAAAABAAQAAAADAAAAAAABAAAAAAAIAAAAAAACAAAAAAAIAAIAAAACAAIAAAAIAAMAAAACAAMAAAAIAAQAAAACAAQAAAAKAAIAAAACAAAAAAAKAAMAAAACAAEAAAAKAAQAAAACAAIAAAALAPf/AAACAAAAAAALAPj/AAACAAEAAAALAPn/AAACAAIAAAALAPr/AAACAAMAAAALAPv/AAACAAQAAAD0//f/AAABAAAAAAD0//j/AAABAAEAAAD0//n/AAABAAIAAAD9//7/AAAEAAQAAAD+//7/AAAFAAQAAAD///7/AAAGAAQAAAAAAP7/AAAHAAQAAAABAP7/AAAIAAQAAAACAP7/AAAJAAQAAAD/////AQACAAEAAAABAP//AQAEAAEAAAA=")
+tile_set = ExtResource("1_hhws6")
 
 [node name="Active1" type="TileMapLayer" parent="." unique_id=1339558783]
-tile_map_data = PackedByteArray("AAAAAAIAAAAKAAAAAAAAAAMAAAAKAAEAAAAAAAQAAAAKAAIAAAAAAAUAAAAKAAMAAAAAAAYAAAAKAAQAAAABAAIAAAALAAAAAAABAAMAAAALAAEAAAABAAQAAAALAAIAAAABAAUAAAALAAMAAAABAAYAAAALAAQAAAACAAAAAAAAAAAAAAACAAEAAAAAAAEAAAACAAIAAAAAAAIAAAACAAMAAAAAAAMAAAACAAQAAAAAAAQAAAADAAAAAAABAAAAAAADAAEAAAABAAEAAAADAAIAAAABAAIAAAADAAMAAAABAAMAAAADAAQAAAABAAQAAAAIAAAAAAACAAAAAAAIAAEAAAACAAEAAAAIAAIAAAACAAIAAAAIAAMAAAACAAMAAAAIAAQAAAACAAQAAAAJAAAAAAADAAAAAAAJAAEAAAADAAEAAAAJAAIAAAADAAIAAAAJAAMAAAADAAMAAAAJAAQAAAADAAQAAAAKAAIAAAACAAAAAAAKAAMAAAACAAEAAAAKAAQAAAACAAIAAAAKAAUAAAACAAMAAAAKAAYAAAACAAQAAAALAAIAAAADAAAAAAALAAMAAAADAAEAAAALAAQAAAADAAIAAAALAAUAAAADAAMAAAALAAYAAAADAAQAAAADAAYAAAAEAAIAAAADAAcAAAAEAAMAAAAEAAYAAAAFAAIAAAAEAAcAAAAFAAMAAAAFAAYAAAAGAAIAAAAFAAcAAAAGAAMAAAAGAAYAAAAHAAIAAAAGAAcAAAAHAAMAAAAHAAYAAAAIAAIAAAAHAAcAAAAIAAMAAAAIAAYAAAAJAAIAAAAIAAcAAAAJAAMAAAAAAAcAAAAKAAUAAAABAAcAAAALAAUAAAALAAcAAAANAAUAAAAJAAUAAAANAAUAAAACAAUAAAAKAAUAAAA=")
+visible = false
+scale = Vector2(3, 3)
+tile_map_data = PackedByteArray("AAADAAIAAAABAAIAAAADAAMAAAABAAMAAAADAAQAAAABAAQAAAAIAAAAAAACAAAAAAADAAYAAAAEAAIAAAAEAAYAAAAFAAIAAAAFAAYAAAAGAAIAAAAGAAYAAAAHAAIAAAAHAAYAAAAIAAIAAAAIAAYAAAAJAAIAAADy/wAAAAAKAAUAAAD6//v/AQAFAAAAAAD6//z/AQAFAAEAAAD6//3/AQAFAAIAAAA=")
 tile_set = ExtResource("1_hhws6")
 
 [node name="Active2" type="TileMapLayer" parent="." unique_id=89766862]
-tile_map_data = PackedByteArray("AAAAAAIAAAAAAAAAAAAAAAMAAAAAAAEAAAAAAAQAAAAAAAIAAAAAAAUAAAAAAAMAAAAAAAYAAAAAAAQAAAABAAIAAAABAAAAAAABAAMAAAABAAEAAAABAAQAAAABAAIAAAABAAUAAAABAAMAAAABAAYAAAABAAQAAAACAAAAAAAKAAAAAAACAAEAAAAKAAEAAAACAAIAAAAKAAIAAAACAAMAAAAKAAMAAAACAAQAAAAKAAQAAAADAAAAAAALAAAAAAADAAEAAAALAAEAAAADAAIAAAALAAIAAAADAAMAAAALAAMAAAADAAQAAAALAAQAAAAIAAAAAAACAAAAAAAIAAEAAAACAAEAAAAIAAIAAAACAAIAAAAIAAMAAAACAAMAAAAIAAQAAAACAAQAAAAJAAAAAAADAAAAAAAJAAEAAAADAAEAAAAJAAIAAAADAAIAAAAJAAMAAAADAAMAAAAJAAQAAAADAAQAAAAKAAIAAAACAAAAAAAKAAMAAAACAAEAAAAKAAQAAAACAAIAAAAKAAUAAAACAAMAAAAKAAYAAAACAAQAAAALAAIAAAADAAAAAAALAAMAAAADAAEAAAALAAQAAAADAAIAAAALAAUAAAADAAMAAAALAAYAAAADAAQAAAADAAYAAAAEAAIAAAADAAcAAAAEAAMAAAAEAAYAAAAFAAIAAAAEAAcAAAAFAAMAAAAFAAYAAAAGAAIAAAAFAAcAAAAGAAMAAAAGAAYAAAAHAAIAAAAGAAcAAAAHAAMAAAAHAAYAAAAIAAIAAAAHAAcAAAAIAAMAAAAIAAYAAAAJAAIAAAAIAAcAAAAJAAMAAAAAAAcAAAAKAAUAAAALAAcAAAANAAUAAAAJAAUAAAANAAUAAAACAAUAAAAKAAUAAAADAAUAAAALAAUAAAA=")
+visible = false
+scale = Vector2(3, 3)
+tile_map_data = PackedByteArray("AAABAAIAAAABAAAAAAAIAAEAAAACAAEAAAADAAYAAAAEAAIAAAAEAAYAAAAFAAIAAAAFAAYAAAAGAAIAAAAGAAYAAAAHAAIAAAAHAAYAAAAIAAIAAAAIAAYAAAAJAAIAAAAAAAcAAAAKAAUAAAACAAUAAAAKAAUAAAD7//r/AQAFAAAAAAD7//v/AQAFAAEAAAD7//z/AQAFAAIAAAA=")
 tile_set = ExtResource("1_hhws6")
 
 [node name="Active3" type="TileMapLayer" parent="." unique_id=634050054]
-tile_map_data = PackedByteArray("AAAAAAIAAAAAAAAAAAAAAAMAAAAAAAEAAAAAAAQAAAAAAAIAAAAAAAUAAAAAAAMAAAAAAAYAAAAAAAQAAAABAAIAAAABAAAAAAABAAMAAAABAAEAAAABAAQAAAABAAIAAAABAAUAAAABAAMAAAABAAYAAAABAAQAAAACAAAAAAAAAAAAAAACAAEAAAAAAAEAAAACAAIAAAAAAAIAAAACAAMAAAAAAAMAAAACAAQAAAAAAAQAAAADAAAAAAABAAAAAAADAAEAAAABAAEAAAADAAIAAAABAAIAAAADAAMAAAABAAMAAAADAAQAAAABAAQAAAAIAAAAAAAMAAAAAAAIAAEAAAAMAAEAAAAIAAIAAAAMAAIAAAAIAAMAAAAMAAMAAAAIAAQAAAAMAAQAAAAJAAAAAAANAAAAAAAJAAEAAAANAAEAAAAJAAIAAAANAAIAAAAJAAMAAAANAAMAAAAJAAQAAAANAAQAAAAKAAIAAAACAAAAAAAKAAMAAAACAAEAAAAKAAQAAAACAAIAAAAKAAUAAAACAAMAAAAKAAYAAAACAAQAAAALAAIAAAADAAAAAAALAAMAAAADAAEAAAALAAQAAAADAAIAAAALAAUAAAADAAMAAAALAAYAAAADAAQAAAADAAYAAAAEAAAAAAADAAcAAAAEAAEAAAAEAAYAAAAFAAAAAAAEAAcAAAAFAAEAAAAFAAYAAAAGAAAAAAAFAAcAAAAGAAEAAAAGAAYAAAAHAAAAAAAGAAcAAAAHAAEAAAAHAAYAAAAIAAAAAAAHAAcAAAAIAAEAAAAIAAYAAAAJAAAAAAAIAAcAAAAJAAEAAAAAAAcAAAAKAAUAAAALAAcAAAANAAUAAAAJAAUAAAANAAUAAAACAAUAAAAKAAUAAAAIAAUAAAAMAAUAAAA=")
+visible = false
+scale = Vector2(3, 3)
+tile_map_data = PackedByteArray("AAABAAUAAAABAAMAAAABAAYAAAABAAQAAAADAAAAAAABAAAAAAADAAEAAAABAAEAAAAIAAAAAAAMAAAAAAAKAAQAAAACAAIAAAAKAAUAAAACAAMAAAAKAAYAAAACAAQAAAADAAYAAAAEAAAAAAAEAAYAAAAFAAAAAAAFAAYAAAAGAAAAAAAGAAYAAAAHAAAAAAAHAAYAAAAIAAAAAAAIAAYAAAAJAAAAAAAAAAcAAAAKAAUAAAAJAAUAAAANAAUAAAACAAUAAAAKAAUAAAAMAPz/AAANAAUAAAAEAPr/AQAGAAAAAAAEAPv/AQAGAAEAAAAEAPz/AQAGAAIAAAA=")
 tile_set = ExtResource("1_hhws6")
 
 [node name="Active4" type="TileMapLayer" parent="." unique_id=1102752292]
-tile_map_data = PackedByteArray("AAAAAAIAAAAAAAAAAAAAAAMAAAAAAAEAAAAAAAQAAAAAAAIAAAAAAAUAAAAAAAMAAAAAAAYAAAAAAAQAAAABAAIAAAABAAAAAAABAAMAAAABAAEAAAABAAQAAAABAAIAAAABAAUAAAABAAMAAAABAAYAAAABAAQAAAACAAAAAAAAAAAAAAACAAEAAAAAAAEAAAACAAIAAAAAAAIAAAACAAMAAAAAAAMAAAACAAQAAAAAAAQAAAADAAAAAAABAAAAAAADAAEAAAABAAEAAAADAAIAAAABAAIAAAADAAMAAAABAAMAAAADAAQAAAABAAQAAAAIAAAAAAACAAAAAAAIAAEAAAACAAEAAAAIAAIAAAACAAIAAAAIAAMAAAACAAMAAAAIAAQAAAACAAQAAAAJAAAAAAADAAAAAAAJAAEAAAADAAEAAAAJAAIAAAADAAIAAAAJAAMAAAADAAMAAAAJAAQAAAADAAQAAAAKAAIAAAAMAAAAAAAKAAMAAAAMAAEAAAAKAAQAAAAMAAIAAAAKAAUAAAAMAAMAAAAKAAYAAAAMAAQAAAALAAIAAAANAAAAAAALAAMAAAANAAEAAAALAAQAAAANAAIAAAALAAUAAAANAAMAAAALAAYAAAANAAQAAAADAAYAAAAEAAAAAAADAAcAAAAEAAEAAAAEAAYAAAAFAAAAAAAEAAcAAAAFAAEAAAAFAAYAAAAGAAAAAAAFAAcAAAAGAAEAAAAGAAYAAAAHAAAAAAAGAAcAAAAHAAEAAAAHAAYAAAAIAAAAAAAHAAcAAAAIAAEAAAAIAAYAAAAJAAAAAAAIAAcAAAAJAAEAAAAAAAcAAAAKAAUAAAALAAcAAAANAAUAAAAJAAUAAAANAAUAAAACAAUAAAAKAAUAAAAKAAcAAAAMAAUAAAA=")
-tile_set = ExtResource("1_hhws6")
-
-[node name="ActiveBRS" type="TileMapLayer" parent="." unique_id=1764249523]
-tile_map_data = PackedByteArray("AAABAAIAAAALAAAAAAABAAMAAAALAAEAAAADAAAAAAALAAAAAAAEAAIAAAASAAAAAAAEAAMAAAASAAEAAAAEAAQAAAASAAIAAAAEAAUAAAASAAMAAAAFAAIAAAATAAAAAAAFAAMAAAATAAEAAAAFAAQAAAATAAIAAAAFAAUAAAATAAMAAAAGAAIAAAAUAAAAAAAGAAMAAAAUAAEAAAAGAAQAAAAUAAIAAAAGAAUAAAAUAAMAAAAHAAIAAAAVAAAAAAAHAAMAAAAVAAEAAAAHAAQAAAAVAAIAAAAHAAUAAAAVAAMAAAADAAYAAAAEAAIAAAAEAAYAAAAFAAIAAAAFAAYAAAAGAAIAAAAGAAYAAAAHAAIAAAAHAAYAAAAIAAIAAAAIAAYAAAAJAAIAAAAJAAUAAAANAAUAAAA=")
-tile_set = ExtResource("1_hhws6")
-
-[node name="ActiveCQ" type="TileMapLayer" parent="." unique_id=323519157]
-tile_map_data = PackedByteArray("AAABAAIAAAALAAAAAAADAAAAAAALAAAAAAAEAAIAAAAOAAAAAAAEAAMAAAAOAAEAAAAEAAQAAAAOAAIAAAAEAAUAAAAOAAMAAAAFAAIAAAAPAAAAAAAFAAMAAAAPAAEAAAAFAAQAAAAPAAIAAAAFAAUAAAAPAAMAAAAGAAIAAAAQAAAAAAAGAAMAAAAQAAEAAAAGAAQAAAAQAAIAAAAGAAUAAAAQAAMAAAAHAAIAAAARAAAAAAAHAAMAAAARAAEAAAAHAAQAAAARAAIAAAAHAAUAAAARAAMAAAAIAAAAAAAMAAAAAAAEAAYAAAAFAAIAAAAFAAYAAAAGAAIAAAAGAAYAAAAHAAIAAAA=")
-tile_set = ExtResource("1_hhws6")
-
-[node name="IdleTexture" type="TileMapLayer" parent="." unique_id=1797159545]
-tile_map_data = PackedByteArray("AAAAAAIAAAAAAAAAAAAAAAMAAAAAAAEAAAAAAAQAAAAAAAIAAAAAAAUAAAAAAAMAAAAAAAYAAAAAAAQAAAABAAIAAAABAAAAAAABAAMAAAABAAEAAAABAAQAAAABAAIAAAABAAUAAAABAAMAAAABAAYAAAABAAQAAAACAAAAAAAAAAAAAAACAAEAAAAAAAEAAAACAAIAAAAAAAIAAAACAAMAAAAAAAMAAAACAAQAAAAAAAQAAAADAAAAAAABAAAAAAADAAEAAAABAAEAAAADAAIAAAABAAIAAAAIAAAAAAACAAAAAAAIAAEAAAACAAEAAAAIAAIAAAACAAIAAAAIAAMAAAACAAMAAAAIAAQAAAACAAQAAAAJAAAAAAADAAAAAAAJAAEAAAADAAEAAAAJAAIAAAADAAIAAAAJAAMAAAADAAMAAAAJAAQAAAADAAQAAAAKAAIAAAACAAAAAAAKAAMAAAACAAEAAAAKAAQAAAACAAIAAAAKAAUAAAACAAMAAAAKAAYAAAACAAQAAAALAAIAAAADAAAAAAALAAMAAAADAAEAAAALAAQAAAADAAIAAAALAAUAAAADAAMAAAALAAYAAAADAAQAAAADAAYAAAAEAAQAAAADAAcAAAAEAAUAAAAEAAYAAAAFAAQAAAAEAAcAAAAFAAUAAAAFAAYAAAAGAAQAAAAFAAcAAAAGAAUAAAAGAAYAAAAHAAQAAAAGAAcAAAAHAAUAAAAHAAYAAAAIAAQAAAAHAAcAAAAIAAUAAAAIAAYAAAAJAAQAAAAIAAcAAAAJAAUAAAA=")
+visible = false
+scale = Vector2(3, 3)
+tile_map_data = PackedByteArray("AAABAAUAAAABAAMAAAADAAYAAAAEAAAAAAAEAAYAAAAFAAAAAAAFAAYAAAAGAAAAAAAGAAYAAAAHAAAAAAAHAAYAAAAIAAAAAAAIAAYAAAAJAAAAAAANAAAAAAANAAUAAAAFAPv/AQAGAAAAAAAFAPz/AQAGAAEAAAAFAP3/AQAGAAIAAAA=")
 tile_set = ExtResource("1_hhws6")
 
 [node name="InteractionArea" type="Area2D" parent="." unique_id=771964806]
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea" unique_id=1889218512]
-position = Vector2(96, 121)
+visible = false
+position = Vector2(0, -9)
 shape = SubResource("RectangleShape2D_2qwwv")
+
+[node name="MapDisplay" type="Node2D" parent="." unique_id=978849910]
+script = ExtResource("3_18i1v")
+
+[node name="Background" type="Sprite2D" parent="MapDisplay" unique_id=1025417233]
+position = Vector2(5.9604645e-08, -144.00002)
+scale = Vector2(3, 3)
+texture = ExtResource("3_lornd")
+
+[node name="BackgroundDetailed" type="Sprite2D" parent="MapDisplay" unique_id=330979188]
+position = Vector2(0, -144.00002)
+scale = Vector2(3, 3)
+texture = ExtResource("3_ehi4b")
+
+[node name="DockingBay" type="Sprite2D" parent="MapDisplay" unique_id=900101583]
+position = Vector2(0, -144.00002)
+scale = Vector2(3, 3)
+texture = ExtResource("5_n8odw")
+
+[node name="CrewQuarters" type="Sprite2D" parent="MapDisplay" unique_id=1713564358]
+position = Vector2(0, -144.00002)
+scale = Vector2(3, 3)
+texture = ExtResource("6_pkwl8")
+
+[node name="BRS" type="Sprite2D" parent="MapDisplay" unique_id=1331050172]
+position = Vector2(0, -144.00002)
+scale = Vector2(3, 3)
+texture = ExtResource("7_kf0vv")
+
+[node name="Research Sector" type="Sprite2D" parent="MapDisplay" unique_id=816123967]
+position = Vector2(0, -144.00002)
+scale = Vector2(3, 3)
+texture = ExtResource("8_18i1v")
+
+[node name="Operations" type="Sprite2D" parent="MapDisplay" unique_id=2045036471]
+position = Vector2(0, -144.00002)
+scale = Vector2(3, 3)
+texture = ExtResource("9_3rly6")
+
+[node name="Internals" type="Sprite2D" parent="MapDisplay" unique_id=531569237]
+position = Vector2(0, -144.00002)
+scale = Vector2(3, 3)
+texture = ExtResource("6_d23m2")
 
 [connection signal="body_entered" from="InteractionArea" to="." method="_on_interaction_entered"]
