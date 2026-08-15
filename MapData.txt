@@ -348,7 +348,7 @@ $ln;Demo Level;NewMap
 [8,4,0]
 0,0,-1,0|0023ff,,,,|2|Scenes/Rooms/Crew Quaters/storage_cq.tscn
 [9,4,0]
-0,0,0,0|0023ff,,,,|4|Scenes/Rooms/Crew Quaters/crew_quarters_map.tscn
+1,0,0,0|0023ff,,,,|4|Scenes/Rooms/Crew Quaters/crew_quarters_map.tscn
 [7,5,0]
 4,-1,0,0|0023ff,,,,||Scenes/Rooms/Crew Quaters/sewage_treatment_plant_cq.tscn
 [7,6,0]

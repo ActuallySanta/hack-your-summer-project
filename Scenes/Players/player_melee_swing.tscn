@@ -44,7 +44,8 @@ script = ExtResource("1_66lfr")
 lifetime = 0.2
 
 [node name="Hitbox" parent="." unique_id=125498642 instance=ExtResource("1_pt7ge")]
-collision_mask = 12
+collision_mask = 45
+monitorable = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=1403102374]
 shape = SubResource("RectangleShape2D_66lfr")
@@ -53,3 +54,5 @@ shape = SubResource("RectangleShape2D_66lfr")
 z_index = 777
 scale = Vector2(3, 3)
 sprite_frames = SubResource("SpriteFrames_q2w14")
+
+[connection signal="environment_hit" from="Hitbox" to="." method="_on_environment_hit"]

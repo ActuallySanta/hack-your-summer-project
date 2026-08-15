@@ -38,6 +38,7 @@ shape = SubResource("RectangleShape2D_skq3i")
 debug_color = Color(0.9509389, 0.16812256, 0.3787481, 0.41960785)
 
 [node name="Hurtbox" parent="." unique_id=470143312 instance=ExtResource("3_nm0se")]
+collision_layer = 4
 
 [node name="HurtboxCollider" type="CollisionShape2D" parent="Hurtbox" unique_id=513152900]
 position = Vector2(0, -1)

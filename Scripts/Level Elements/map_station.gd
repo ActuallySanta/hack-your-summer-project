@@ -6,7 +6,7 @@ extends Node2D
 @onready var BRS = $ActiveBRS
 @onready var CQ = $ActiveCQ
 @onready var idle = $IdleTexture
-@onready var _map_image = $MapDisplay
+@onready var _map_image = $Hider/MapDisplay
 
 var _timer_passive = 0
 var _start_pos : Vector2

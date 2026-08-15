@@ -129,3 +129,7 @@ func set_sprite(thrust_dir: State) -> void:
 func _on_area_2d_area_entered(area: Area2D) -> void:
 	area.queue_free()
 	disable_thrusters()
+
+## The drone has no health to lose, so any hit just knocks its thrusters out.
+func _on_hurtbox_hit(_hurtbox: Hurtbox, _hit_info: HitInfo, _source: Hitbox) -> void:
+	disable_thrusters()

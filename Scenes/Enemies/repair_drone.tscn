@@ -4,6 +4,7 @@
 [ext_resource type="PhysicsMaterial" uid="uid://bfliktwattx4t" path="res://Materials/PhysicsMaterials/bounce.tres" id="1_vjkby"]
 [ext_resource type="Script" uid="uid://wof50l8kqh6" path="res://Scenes/Enemies/repair_drone.gd" id="2_420ha"]
 [ext_resource type="Script" uid="uid://ctc17oyja7fup" path="res://Scripts/Combat/hitbox.gd" id="4_jc8ds"]
+[ext_resource type="PackedScene" uid="uid://djmeyycufny61" path="res://Scenes/Components/Hurtbox.tscn" id="5_hrtbx"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_420ha"]
 radius = 20.506096
@@ -54,4 +55,13 @@ metadata/_custom_type_script = "uid://ctc17oyja7fup"
 position = Vector2(-1.5, 1.5)
 shape = SubResource("CircleShape2D_jc8ds")
 
+[node name="Hurtbox" parent="." instance=ExtResource("5_hrtbx")]
+visible = false
+collision_layer = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+position = Vector2(-1.5, 1.5)
+shape = SubResource("CircleShape2D_vjkby")
+
 [connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]
+[connection signal="hit" from="Hurtbox" to="." method="_on_hurtbox_hit"]

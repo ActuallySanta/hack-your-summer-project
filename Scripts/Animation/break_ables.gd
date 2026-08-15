@@ -92,11 +92,14 @@ func destroy_tile(coords: Vector2i, attempt_type: StringName, foreground : TileM
 		if i.coord == coords:
 			return
 	
-	foreground.set_cell(coords, -1)
 	var atlas_coords = get_cell_atlas_coords( coords )
 	if atlas_coords.y != 0 and atlas_coords.y != NAME_TO_ATLAS[ attempt_type ]:
 		print("Can't break a ", READABLE[ atlas_coords.y ], " with a ", attempt_type )
 		return
+	# Only once the attempt is known to land, or the tile would lose its cover
+	# while it is still standing.
+	if foreground:
+		foreground.set_cell(coords, -1)
 	list_of_broken_cords.append( BreakableTileData.new( coords, atlas_coords.y ) )
 	
 	# Handle neighbor destruction

@@ -122,11 +122,11 @@ step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("MapDisplay:z_index")
+tracks/0/path = NodePath("Hider/MapDisplay:z_index")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0),
+"times": PackedFloat32Array(1),
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [-666]
@@ -215,6 +215,18 @@ tracks/7/keys = {
 "update": 1,
 "values": [false]
 }
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Hider:modulate:a")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(3.0112476, 1),
+"update": 0,
+"values": [1.0, 0.0]
+}
 
 [sub_resource type="Animation" id="Animation_3rly6"]
 length = 0.001
@@ -257,7 +269,7 @@ tracks/2/keys = {
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("MapDisplay:z_index")
+tracks/3/path = NodePath("Hider/MapDisplay:z_index")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
@@ -265,6 +277,18 @@ tracks/3/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Hider:modulate:a")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1.0]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_3rly6"]
@@ -348,45 +372,47 @@ visible = false
 position = Vector2(0, -9)
 shape = SubResource("RectangleShape2D_2qwwv")
 
-[node name="MapDisplay" type="Node2D" parent="." unique_id=978849910]
+[node name="Hider" type="Node2D" parent="." unique_id=442512012]
+
+[node name="MapDisplay" type="Node2D" parent="Hider" unique_id=978849910]
 script = ExtResource("3_18i1v")
 
-[node name="Background" type="Sprite2D" parent="MapDisplay" unique_id=1025417233]
+[node name="Background" type="Sprite2D" parent="Hider/MapDisplay" unique_id=1025417233]
 position = Vector2(5.9604645e-08, -144.00002)
 scale = Vector2(3, 3)
 texture = ExtResource("3_lornd")
 
-[node name="BackgroundDetailed" type="Sprite2D" parent="MapDisplay" unique_id=330979188]
+[node name="BackgroundDetailed" type="Sprite2D" parent="Hider/MapDisplay" unique_id=330979188]
 position = Vector2(0, -144.00002)
 scale = Vector2(3, 3)
 texture = ExtResource("3_ehi4b")
 
-[node name="DockingBay" type="Sprite2D" parent="MapDisplay" unique_id=900101583]
+[node name="DockingBay" type="Sprite2D" parent="Hider/MapDisplay" unique_id=900101583]
 position = Vector2(0, -144.00002)
 scale = Vector2(3, 3)
 texture = ExtResource("5_n8odw")
 
-[node name="CrewQuarters" type="Sprite2D" parent="MapDisplay" unique_id=1713564358]
+[node name="CrewQuarters" type="Sprite2D" parent="Hider/MapDisplay" unique_id=1713564358]
 position = Vector2(0, -144.00002)
 scale = Vector2(3, 3)
 texture = ExtResource("6_pkwl8")
 
-[node name="BRS" type="Sprite2D" parent="MapDisplay" unique_id=1331050172]
+[node name="BRS" type="Sprite2D" parent="Hider/MapDisplay" unique_id=1331050172]
 position = Vector2(0, -144.00002)
 scale = Vector2(3, 3)
 texture = ExtResource("7_kf0vv")
 
-[node name="Research Sector" type="Sprite2D" parent="MapDisplay" unique_id=816123967]
+[node name="Research Sector" type="Sprite2D" parent="Hider/MapDisplay" unique_id=816123967]
 position = Vector2(0, -144.00002)
 scale = Vector2(3, 3)
 texture = ExtResource("8_18i1v")
 
-[node name="Operations" type="Sprite2D" parent="MapDisplay" unique_id=2045036471]
+[node name="Operations" type="Sprite2D" parent="Hider/MapDisplay" unique_id=2045036471]
 position = Vector2(0, -144.00002)
 scale = Vector2(3, 3)
 texture = ExtResource("9_3rly6")
 
-[node name="Internals" type="Sprite2D" parent="MapDisplay" unique_id=531569237]
+[node name="Internals" type="Sprite2D" parent="Hider/MapDisplay" unique_id=531569237]
 position = Vector2(0, -144.00002)
 scale = Vector2(3, 3)
 texture = ExtResource("6_d23m2")
