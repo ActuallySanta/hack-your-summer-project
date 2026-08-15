@@ -45,6 +45,9 @@ var _release_progress := 0.0
 var _release_rate := 1.0
 var _prev_player_pos := Vector2.ZERO
 var _prev_player_valid := false
+# False while a room is being swapped in and the player has not been placed in it
+# yet. See _physics_tick().
+var _player_positioned := false
 
 # I know this is just replicating the global script feature, but 
 # this way allows us to still easily use the custom save system
@@ -86,6 +89,19 @@ func _init_metsys_and_objects() -> void:
 	
 	GlobalSignals.RestoreStationPower.connect(_restore_station_power)
 
+## Reports the player's position to MetSys, which explores the cell they are standing
+## in. Skipped until the player has actually been placed in the current room.
+##
+## MetSys picks up a room the instant its scene enters the tree, but load_room() only
+## returns some frames later and the player is positioned after that. Every physics
+## frame in between would otherwise report the position the player still holds from
+## the previous room (or from the editor, on the first load) as a position in the new
+## room's coordinates, exploring a cell they never entered.
+func _physics_tick() -> void:
+	if not _player_positioned:
+		return
+	super()
+
 func _load_game(ignore_custom_save := false) -> void:
 	get_tree().paused = false
 	paused = false
@@ -115,9 +131,11 @@ func _load_game(ignore_custom_save := false) -> void:
 		"plasma" if save.get_value("plasma_gun_collected") else "stun"
 	)
 	var room_id = save.get_value("current_room", START_ROOM_UID)
+	_player_positioned = false
 	await load_room(room_id)
 	await get_tree().create_timer(artificial_load_time).timeout
 	_player.global_position = save.get_value("player_pos", START_POS)
+	_player_positioned = true
 	_player.respawn()
 	GlobalSignals.player_spawned.emit()
 	LevelManager.set_checkpoint(room_id, _player.position, false)
@@ -137,9 +155,11 @@ func _new_game():
 	save = SaveManager.new()
 	_player.disable_gun()
 	_player.disable_jetpack()
+	_player_positioned = false
 	await load_room(START_ROOM_UID)
 	await get_tree().create_timer(artificial_load_time).timeout
 	_player.global_position = START_POS
+	_player_positioned = true
 	_player.respawn()
 	GlobalSignals.player_spawned.emit()
 	save_game(0, false)
@@ -435,8 +455,10 @@ func save_game(save_index: int = 0, set_checkpoint := true) -> void:
 	save.save_as_text("user://save" + str(save_index) +".sav")
 
 func respawn_player_at_checkpoint() -> void:
+	_player_positioned = false
 	await load_room(LevelManager.checkpoint_room)
 	PlayerManager.player.global_position = LevelManager.checkpoint_pos
+	_player_positioned = true
 	PlayerManager.player._facingRight = !LevelManager.checkpoint_facing_left
 	PlayerManager.player.respawn()
 	GlobalSignals.player_spawned.emit()

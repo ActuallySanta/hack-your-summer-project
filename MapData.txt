@@ -414,11 +414,11 @@ $ln;Demo Level;NewMap
 [19,3,0]
 1,1,0,-1|00ff91,,,,||Scenes/Rooms/Research Sector/entrance_rs.tscn
 [22,2,0]
-0,-1,-1,0|00ff91,,,,||Scenes/Rooms/Research Sector/operations_rs.tscn
+0,-1,-1,0|00ff91,,,,||
 [21,3,0]
--1,1,0,0|00ff91,,,,||Scenes/Rooms/Research Sector/operations_rs.tscn
+-1,1,-1,-1|00ff91,,,,||
 [22,3,0]
-0,0,-1,-1|00ff91,,,,||Scenes/Rooms/Research Sector/operations_rs.tscn
+0,0,-1,-1|00ff91,,,,||
 [19,4,0]
 -1,0,0,0|00ff91,,,,||Scenes/Rooms/Research Sector/labs_rs.tscn
 [20,4,0]
@@ -1024,11 +1024,11 @@ $ln;Demo Level;NewMap
 [20,-1,0]
 -1,0,-1,0|00ae63,,,,||
 [20,2,0]
--1,-1,0,0|00ff91,,,,||Scenes/Rooms/Research Sector/operations_rs.tscn
+-1,-1,0,0|00ff91,,,,||
 [21,2,0]
--1,0,-1,0|00ff91,,,,||Scenes/Rooms/Research Sector/operations_rs.tscn
+-1,-1,-1,0|00ff91,,,,||
 [20,3,0]
-0,0,1,-1|00ff91,,,,||Scenes/Rooms/Research Sector/operations_rs.tscn
+-1,0,1,-1|00ff91,,,,||
 [23,0,0]
 0,1,1,0|aeae94,,,,||
 [23,3,0]
