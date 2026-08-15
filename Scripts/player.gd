@@ -15,10 +15,15 @@ signal death_end()
 @export var jumpForce := 600.0
 @export var jumpBufferTime := 0.25
 @export var coyoteTime := 0.2
-@export var wallJumpBufferTime := 0.2
 ## How close the active collider's leading edge must be to the wall face, in pixels,
 ## before a mantle is allowed. Keeps the vault from starting across the player's tile.
 @export var mantleWallDistance := 6.0
+
+@export_subgroup("Wall Jump")
+@export var wallJumpTimeBufferSeconds := 0.1
+@export var wallJumpVerticalBuffer := 24.0
+@export var wallJumpHorizontalBuffer := 10.0
+@export_flags_2d_physics var wallJumpGeometryLayers := 1
 
 @export_group("Combat")
 @export var baseHealth := 5
@@ -90,7 +95,9 @@ var _jumpBufferTimer : float
 var _coyoteTimer : float
 var _wall_jump_speed_bonus : float
 var _wall_jump_dir : float
-var _wall_jump_buffer : float
+var _wall_jump_contact_buffer : float
+var _wall_jump_input_buffer : float
+var _wall_jump_available : bool
 # Health
 var _currentHealth : int
 # Attack
@@ -151,6 +158,7 @@ func _move_player_pos(pos: Vector2) -> void:
 func jump() -> void:
 	_holdingDownSpaceForSpace = true
 	_jumpBufferTimer = 0
+	_wall_jump_input_buffer = 0
 	_coyoteTimer = 0
 	if try_mantle():
 		return
@@ -161,29 +169,30 @@ func jump() -> void:
 func wall_jump() -> void:
 	_jumpBufferTimer = 0
 	_coyoteTimer = 0
-	_wall_jump_buffer = 0
-	
+	_wall_jump_contact_buffer = 0
+	_wall_jump_input_buffer = 0
+
 	_wall_jump_speed_bonus = 700
 	_wall_jump_dir = _moveInput
 	jump_sfx.play()
 	velocity.y = -1000
 
 func validate_wall_jump() -> bool:
-	if not is_on_wall_only():
+	# A wall jump is an air move, and it needs a direction to push away from.
+	if is_on_floor() or is_zero_approx( _moveInput ):
 		return false
 
-	var foreground = get_foreground()
-	var blocks = [
-		get_map_position(foreground, Vector2i(-_moveInput, -1)),
-		get_map_position(foreground, Vector2i(-_moveInput, 0)),
-		#get_map_position(foreground, Vector2i(-_moveInput, 1))
-	]
-	
-	for block in blocks:
-		if not is_tile_air(foreground, block):
-			_wall_jump_buffer = wallJumpBufferTime
+	for point in get_wall_probe_points():
+		if is_point_solid( point ):
+			_wall_jump_contact_buffer = wallJumpTimeBufferSeconds
 			return true
 	return false
+
+func set_wall_jump_anim(_available: bool) -> void:
+	#TODO Point this at the wall cling animation once it is in the AnimationTree, e.g.
+	#animator.set(IDLESTATEPARAM, "WallCling" if _available else "Stand")
+	#animator.set(MOVESTATEPARAM, "WallCling" if _available else "Stand")
+	pass
 
 func attack() -> void:
 	var newAttack := swingScene.instantiate() as PlayerMeleeSwing
@@ -222,20 +231,32 @@ func handle_jump_and_gravity(delta: float) -> void:
 	if _wall_jump_speed_bonus > 0:
 		_wall_jump_speed_bonus -= 50
 	
+	var grounded := is_on_floor() or _coyoteTimer > 0
+
+	# The wall jump runs off its own press window rather than the general jump
+	# buffer, so the slack before reaching the wall matches the slack after
+	# leaving it.
+	if not grounded and _wall_jump_input_buffer > 0 and _wall_jump_contact_buffer > 0:
+		wall_jump()
+		return
+
 	if _jumpBufferTimer <= 0:
 		return
-	
-	if not (is_on_floor() or _coyoteTimer > 0) and _wall_jump_buffer > 0:
-		wall_jump()
-	
-	if (is_on_floor() or _coyoteTimer > 0) and playerMoveState != MoveState.Climbing:
+
+	if grounded and playerMoveState != MoveState.Climbing:
 		jump()
 	else:
 		_jumpBufferTimer -= delta
 
 func handle_wall_jumping(delta: float) -> void:
-	if not validate_wall_jump():
-		_wall_jump_buffer -= delta
+	var available := validate_wall_jump()
+	if not available:
+		_wall_jump_contact_buffer = maxf( _wall_jump_contact_buffer - delta, 0.0 )
+	_wall_jump_input_buffer = maxf( _wall_jump_input_buffer - delta, 0.0 )
+
+	if available != _wall_jump_available:
+		_wall_jump_available = available
+		set_wall_jump_anim( available )
 
 func handle_standard_movement(_delta: float) -> void:
 	# Get the input direction and handle the movement/deceleration.
@@ -609,13 +630,36 @@ func reset_camera() -> void:
 #endregion
 
 #region Getters and Setters
+func get_wall_probe_points() -> PackedVector2Array:
+	# The wall sits opposite the held direction: you push away from it to launch.
+	var dir := -1.0 if _moveInput > 0 else 1.0
+
+	var bounds = collisionManager.get_bounds()
+	var right_edge : float = maxf( bounds[0].x, bounds[1].x )
+	var left_edge : float = minf( bounds[0].x, bounds[1].x )
+	var lead_edge : float = right_edge if dir > 0 else left_edge
+
+	var depths : Array[ float ] = [ 1.0, wallJumpHorizontalBuffer ]
+	var rows : Array[ float ] = [ 0.0, wallJumpVerticalBuffer, -wallJumpVerticalBuffer ]
+	var points := PackedVector2Array()
+	for depth in depths:
+		for row in rows:
+			points.append( Vector2( lead_edge + dir * depth, global_position.y + row ) )
+	return points
+
+func is_point_solid(point: Vector2) -> bool:
+	var query := PhysicsPointQueryParameters2D.new()
+	query.position = point
+	query.collision_mask = wallJumpGeometryLayers
+	query.collide_with_areas = false
+	query.exclude = [ get_rid() ]
+	return not get_world_2d().direct_space_state.intersect_point( query, 1 ).is_empty()
+
 func is_tile_air(foreground: TileMapLayer, pos: Vector2i) -> bool:
 	return foreground and foreground.get_cell_source_id(pos) == -1
 
 func get_camera() -> Camera2D:
 	return get_viewport().get_camera_2d()
-
-	
 
 func get_foreground() -> TileMapLayer:
 	var geoNode = get_tree().get_first_node_in_group("Geometry")
@@ -646,9 +690,11 @@ func get_map_position_player_bounds(foreground: TileMapLayer) -> Array[Vector2i]
 
 func set_jump_input() -> void:
 	_jumpBufferTimer = jumpBufferTime
+	_wall_jump_input_buffer = wallJumpTimeBufferSeconds
 
 func unset_jump_input() -> void:
 	_jumpBufferTimer = 0
+	_wall_jump_input_buffer = 0
 
 func set_attack_input() -> void:
 	_attackBufferTimer = attackBufferTime

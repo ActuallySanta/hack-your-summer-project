@@ -23,12 +23,14 @@ position = Vector2(-5, 0)
 shape = SubResource("RectangleShape2D_nocgn")
 
 [node name="StunBullet" type="Sprite2D" parent="." index="1" unique_id=147981096]
+z_index = 777
 position = Vector2(-10, 0)
 scale = Vector2(2, 2)
 texture = ExtResource("3_hgvln")
 
 [node name="PlasmaBullet" type="Sprite2D" parent="." index="2" unique_id=550202462]
 visible = false
+z_index = 777
 position = Vector2(-10, 0)
 scale = Vector2(2, 2)
 texture = ExtResource("4_4x836")

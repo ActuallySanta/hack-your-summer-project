@@ -19,6 +19,7 @@ script = ExtResource("1_kokbf")
 MOVESPEED = 1000
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1081961624]
+z_index = 666
 scale = Vector2(3, 3)
 texture = ExtResource("2_oyq4w")
 hframes = 2
