@@ -20,7 +20,7 @@ class_name BossEnemy
 
 @onready var hurtbox: Hurtbox = $BossVisual/Hurtbox
 @onready var attack_point: Node2D = $BossVisual/Hurtbox/AttackPoint
-@onready var health_bar: ProgressBar = $"CanvasLayer/Health Bar"
+@onready var health_bar: ProgressBar = $"CanvasLayer/VBoxContainer/Health Bar"
 
 @onready var hurt_sfx: AudioStreamPlayer = $SFX/HurtSFX
 
