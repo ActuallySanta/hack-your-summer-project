@@ -71,7 +71,7 @@ custom_name = "Attack Player"
 children = [SubResource("BTSequence_wxsuy"), SubResource("BTSequence_b0xag"), SubResource("BTSequence_kh3r6")]
 
 [sub_resource type="BTWait" id="BTWait_kh3r6"]
-duration = 2.5
+duration = 5.0
 
 [sub_resource type="BTSequence" id="BTSequence_0njd2"]
 children = [SubResource("BTProbabilitySelector_wxsuy"), SubResource("BTWait_kh3r6")]

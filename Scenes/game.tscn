@@ -7,7 +7,7 @@
 [node name="Game" type="Node" unique_id=651801150]
 script = ExtResource("1_wrm1d")
 use_custom_save = true
-save_room = "uid://2i77irrthpt8"
+save_room = "uid://dwi7xjover0a6"
 save_pos = Vector2(248, 640)
 save_has_gun = true
 save_has_plasma_gun = true
