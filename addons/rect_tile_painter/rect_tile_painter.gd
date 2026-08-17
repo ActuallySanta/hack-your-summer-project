@@ -5,9 +5,21 @@ extends EditorPlugin
 ## TileMapLayer nodes.
 ##
 ## Select any TileMapLayer, flip "Rect Paint" on in the 2D viewport toolbar,
-## then drag a box. The plugin walks every cell in the box, asks
-## RectTileLayout which named piece belongs there, looks that name up in the
-## dictionary, and offsets it by the 4x4 region origin you configured.
+## then drag a box.
+##
+## Two modes share one region origin:
+##
+##   Sum OFF -- the original behaviour. The plugin walks every cell in the box,
+##     asks RectTileLayout which named piece belongs there, looks that name up
+##     in the dictionary, and offsets it by the 4x4 region origin. Each drag
+##     stamps a raw rectangle over whatever was there.
+##
+##   Sum ON -- the box is a boolean op on a shape instead. The plugin reads
+##     back every cell around the drag that already belongs to this region,
+##     unions (LMB) or subtracts (RMB) the box, and re-picks tiles for the
+##     whole affected area out of a 6x6 region whose top-left 4x4 is the same
+##     block basic mode uses. Overlapping drags merge into one chunk of
+##     terrain instead of stacking.
 ##
 ## Toggle it off and the TileMapLayer edits exactly like it always did -- the
 ## plugin stops consuming viewport input entirely.
@@ -41,6 +53,9 @@ func _enter_tree() -> void:
 	_toolbar = RectPaintToolbar.new()
 	_toolbar.enabled_changed.connect(_on_enabled_changed)
 	_toolbar.region_changed.connect(_on_region_changed)
+	_toolbar.mode_changed.connect(_on_mode_changed)
+	_toolbar.preset_save_requested.connect(_on_preset_save_requested)
+	_toolbar.preset_delete_requested.connect(_on_preset_delete_requested)
 	add_control_to_container(CONTAINER_CANVAS_EDITOR_MENU, _toolbar)
 	_toolbar.hide()
 
@@ -64,6 +79,7 @@ func _edit(object: Object) -> void:
 	_cancel_drag()
 	_layer = object as TileMapLayer
 	_load_region_for_layer()
+	_load_presets_for_layer()
 	_refresh_status()
 
 
@@ -127,7 +143,7 @@ func _handle_mouse_button(event: InputEventMouseButton) -> bool:
 	var rect := _current_rect()
 	var was_erasing := _erasing
 	_dragging = false
-	_apply_rect(rect, was_erasing)
+	_apply_drag(rect, was_erasing)
 	update_overlays()
 	return true
 
@@ -154,10 +170,18 @@ func _handle_mouse_motion(event: InputEventMouseMotion) -> bool:
 
 #region Painting
 
-func _apply_rect(rect: Rect2i, erase: bool) -> void:
+func _apply_drag(rect: Rect2i, erase: bool) -> void:
 	if _layer == null or rect.size.x <= 0 or rect.size.y <= 0:
 		return
+	if _toolbar.summation_enabled:
+		_apply_terrain(rect, erase)
+	else:
+		_apply_rect(rect, erase)
 
+
+## Basic mode: stamp the rect, one tile per cell, straight off the shape of
+## the rect itself.
+func _apply_rect(rect: Rect2i, erase: bool) -> void:
 	var before := _layer.tile_map_data
 	var source_id := _toolbar.source_id
 	var origin := _toolbar.region_origin
@@ -176,29 +200,81 @@ func _apply_rect(rect: Rect2i, erase: bool) -> void:
 			if tile_name.is_empty():
 				tile_name = RectTileLayout.tile_name_at(column, row, rect.size.x, rect.size.y)
 
-			var coords := RectTileLayout.atlas_coords(tile_name, origin)
-			if not _tile_exists(source_id, coords):
-				if not missing.has(tile_name):
-					missing.append(tile_name)
+			_paint_cell(cell, tile_name, source_id, origin, missing)
+
+	_commit(before, "Rect Tile Erase" if erase else "Rect Tile Paint", missing)
+
+
+## Summation mode: union or subtract the rect into whatever is already there,
+## then re-pick tiles for everything the change could have moved.
+func _apply_terrain(rect: Rect2i, subtract: bool) -> void:
+	var before := _layer.tile_map_data
+	var source_id := _toolbar.source_id
+	var origin := _toolbar.region_origin
+	var missing: Array[String] = []
+
+	var terrain := RectTerrain.new()
+	terrain.read(
+		_layer,
+		source_id,
+		origin,
+		RectTileLayout.TERRAIN_REGION_SIZE,
+		rect.grow(RectTerrain.READ_MARGIN)
+	)
+	if subtract:
+		terrain.clear_rect(rect)
+	else:
+		terrain.fill_rect(rect)
+
+	var affected := rect.grow(RectTerrain.RETILE_MARGIN)
+	for row in affected.size.y:
+		for column in affected.size.x:
+			var cell := affected.position + Vector2i(column, row)
+
+			if not terrain.is_filled(cell):
+				# Only ever clear cells this region put down. Anything else in
+				# the layer is somebody else's and stays put.
+				if terrain.was_owned(cell):
+					_layer.erase_cell(cell)
 				continue
 
-			_layer.set_cell(cell, source_id, coords, 0)
+			_paint_cell(cell, terrain.tile_name(cell), source_id, origin, missing)
 
+	_commit(before, "Rect Terrain Subtract" if subtract else "Rect Terrain Add", missing)
+
+
+func _paint_cell(
+	cell: Vector2i,
+	tile_name: String,
+	source_id: int,
+	origin: Vector2i,
+	missing: Array[String]
+) -> void:
+	# Walk the piece's fallback chain rather than trusting the first coord, so
+	# a sheet that hasn't been extended with the newest pieces yet still paints
+	# the nearest thing it does have.
+	for candidate in RectTileLayout.name_chain(tile_name):
+		var coords: Vector2i = origin + RectTileLayout.NAME_TO_TILE[candidate]
+		if _tile_exists(source_id, coords):
+			_layer.set_cell(cell, source_id, coords, 0)
+			return
+
+	if not missing.has(tile_name):
+		missing.append(tile_name)
+
+
+## Roll the edit back, then let undo/redo re-apply it so Ctrl+Z works and the
+## scene is marked dirty properly.
+func _commit(before: PackedByteArray, action: String, missing: Array[String]) -> void:
 	var after := _layer.tile_map_data
 	if after == before:
 		_report_missing(missing)
 		return
 
-	# Roll back, then let undo/redo re-apply it so Ctrl+Z works and the scene
-	# is marked dirty properly.
 	_layer.tile_map_data = before
 
 	var undo_redo := get_undo_redo()
-	undo_redo.create_action(
-		"Rect Tile Erase" if erase else "Rect Tile Paint",
-		UndoRedo.MERGE_DISABLE,
-		_layer
-	)
+	undo_redo.create_action(action, UndoRedo.MERGE_DISABLE, _layer)
 	undo_redo.add_do_property(_layer, "tile_map_data", after)
 	undo_redo.add_undo_property(_layer, "tile_map_data", before)
 	undo_redo.commit_action()
@@ -242,7 +318,7 @@ func _forward_canvas_draw_over_viewport(overlay: Control) -> void:
 
 	if _layer.tile_set == null:
 		return
-	
+
 	if not _dragging and not _has_hover:
 		return
 
@@ -262,9 +338,12 @@ func _forward_canvas_draw_over_viewport(overlay: Control) -> void:
 
 	if not _dragging:
 		return
-	
+
 	var font := overlay.get_theme_default_font()
 	var label := "%d x %d" % [rect.size.x, rect.size.y]
+	if _toolbar.summation_enabled:
+		# In sum mode the button means add/subtract, not paint/erase, so say so.
+		label += "  -" if _erasing else "  +"
 	var anchor: Vector2 = points[0] + Vector2(2, -6)
 	overlay.draw_string(font, anchor + Vector2.ONE, label, HORIZONTAL_ALIGNMENT_LEFT, -1, 14, Color(0, 0, 0, 0.8))
 	overlay.draw_string(font, anchor, label, HORIZONTAL_ALIGNMENT_LEFT, -1, 14, color)
@@ -303,6 +382,14 @@ func _cancel_drag() -> void:
 		_dragging = false
 		update_overlays()
 
+
+func _atlas_source() -> TileSetAtlasSource:
+	if _layer == null or _layer.tile_set == null:
+		return null
+	if not _layer.tile_set.has_source(_toolbar.source_id):
+		return null
+	return _layer.tile_set.get_source(_toolbar.source_id) as TileSetAtlasSource
+
 #endregion
 
 
@@ -328,6 +415,53 @@ func _load_region_for_layer() -> void:
 	_toolbar.set_region(source_id, Vector2i(origin_x, origin_y))
 
 
+func _load_presets_for_layer() -> void:
+	if _toolbar == null:
+		return
+	var raw := _raw_presets()
+	var presets: Dictionary[String, Vector3i] = {}
+	for preset_name in raw:
+		var stored: Variant = raw[preset_name]
+		if stored is Vector3i:
+			presets[str(preset_name)] = stored
+	_toolbar.set_presets(presets)
+
+
+## Presets live beside the region in the same per-tileset section, as
+## name -> Vector3i(source_id, origin_x, origin_y).
+func _raw_presets() -> Dictionary:
+	var key := _settings_key()
+	if key.is_empty():
+		return {}
+	return _settings.get_value(key, "presets", {})
+
+
+func _on_preset_save_requested(preset_name: String) -> void:
+	var key := _settings_key()
+	if key.is_empty():
+		_toolbar.set_status("This TileSet has no resource path to save against", true)
+		return
+	var presets := _raw_presets()
+	presets[preset_name] = Vector3i(
+		_toolbar.source_id, _toolbar.region_origin.x, _toolbar.region_origin.y
+	)
+	_settings.set_value(key, "presets", presets)
+	_settings.save(SETTINGS_PATH)
+	_load_presets_for_layer()
+
+
+func _on_preset_delete_requested(preset_name: String) -> void:
+	var key := _settings_key()
+	if key.is_empty():
+		return
+	var presets := _raw_presets()
+	if not presets.erase(preset_name):
+		return
+	_settings.set_value(key, "presets", presets)
+	_settings.save(SETTINGS_PATH)
+	_load_presets_for_layer()
+
+
 func _on_region_changed(source_id: int, region_origin: Vector2i) -> void:
 	var key := _settings_key()
 	if not key.is_empty():
@@ -335,6 +469,11 @@ func _on_region_changed(source_id: int, region_origin: Vector2i) -> void:
 		_settings.set_value(key, "origin_x", region_origin.x)
 		_settings.set_value(key, "origin_y", region_origin.y)
 		_settings.save(SETTINGS_PATH)
+	_refresh_status()
+	update_overlays()
+
+
+func _on_mode_changed(_summation: bool) -> void:
 	_refresh_status()
 	update_overlays()
 
@@ -366,6 +505,9 @@ func _owns_viewport() -> bool:
 func _refresh_status() -> void:
 	if _toolbar == null:
 		return
+
+	_toolbar.set_preview_source(_atlas_source())
+
 	if not _toolbar.paint_enabled:
 		_toolbar.set_status("")
 		return
@@ -384,6 +526,9 @@ func _refresh_status() -> void:
 		_toolbar.set_status("No tile at Fill %s" % fill_coords, true)
 		return
 
-	_toolbar.set_status("4x4 @ %s ... %s" % [origin, origin + RectTileLayout.REGION_SIZE - Vector2i.ONE])
+	var region := RectTileLayout.region_size(_toolbar.summation_enabled)
+	_toolbar.set_status(
+		"%dx%d @ %s ... %s" % [region.x, region.y, origin, origin + region - Vector2i.ONE]
+	)
 
 #endregion

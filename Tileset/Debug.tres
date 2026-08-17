@@ -1,0 +1,50 @@
+[gd_resource type="TileSet" format=3 uid="uid://cgca0f3tq55f"]
+
+[ext_resource type="Texture2D" uid="uid://30e43kew6dve" path="res://DebugRectText/Debug TerrainGen.png" id="1_kin4j"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_qf5gk"]
+texture = ExtResource("1_kin4j")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+7:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+7:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+7:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+0:5/0 = 0
+1:5/0 = 0
+2:5/0 = 0
+3:5/0 = 0
+2:1/0 = 0
+
+[resource]
+sources/0 = SubResource("TileSetAtlasSource_qf5gk")

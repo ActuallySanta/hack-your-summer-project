@@ -1,4 +1,7 @@
 [gd_scene format=3 uid="uid://c23c0urqh5mm5"]
 
+[ext_resource type="TileSet" uid="uid://cgca0f3tq55f" path="res://Tileset/Debug.tres" id="1_guyfk"]
+
 [node name="TileMapLayer" type="TileMapLayer" unique_id=2101826522]
 scale = Vector2(3, 3)
+tile_set = ExtResource("1_guyfk")
