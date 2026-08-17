@@ -18,19 +18,21 @@ extends RefCounted
 ## deliberately read-only about this table: the (i) popover previews what is
 ## being scanned, but nothing in-engine can rebind a name to a coordinate.
 ##
-## The 8x6 terrain block. Columns 0-5 are DebugRectText/Debug TerrainGen.png as
-## drawn; columns 6-7 are the step pieces, which that sheet has no slots for.
+## The 8x6 terrain block, exactly as laid out in
+## DebugRectText/Debug TerrainGen.png. All 47 drawn tiles have a name here; the
+## only empty slot is (7,5).
 ##
-##          x=0          x=1          x=2         x=3          x=4          x=5        x=6         x=7
-##   y=0  Col Top      Corner TL    Edge Top    Corner TR    Inner BR     Inner BL   Step L-T    Step L-B
-##   y=1  Col Mid      Edge Left    Fill        Edge Right   Inner TR     Inner TL   Step R-T    Step R-B
-##   y=2  Col Bot      Corner BL    Edge Bottom Corner BR    Small TL     Small TR   Step T-L    Step T-R
-##   y=3  Single       Bar Left     Bar Mid     Bar Right    Small BL     Small BR   Step B-L    Step B-R
-##   y=4  Big Tee T    Big Tee B    Small Tee R Small Tee L  Small Cross  --         --          --
-##   y=5  Big Tee L    Big Tee R    Small Tee T Small Tee B  --           --         --          --
+##          x=0          x=1          x=2         x=3          x=4         x=5         x=6         x=7
+##   y=0  Col Top      Corner TL    Edge Top    Corner TR    Inner BR    Inner BL    Step L-T    Step L-B
+##   y=1  Col Mid      Edge Left    Fill        Edge Right   Inner TR    Inner TL    Step R-T    Step R-B
+##   y=2  Col Bot      Corner BL    Edge Bottom Corner BR    Small TL    Small TR    Step T-L    Step T-R
+##   y=3  Single       Bar Left     Bar Mid     Bar Right    Small BL    Small BR    Step B-L    Step B-R
+##   y=4  Big Tee T    Big Tee B    Small Tee R Small Tee L  Dbl TL-BR   StepCnr TL  StepCnr TR  Small Cross
+##   y=5  Big Tee L    Big Tee R    Small Tee T Small Tee B  Dbl TR-BL   StepCnr BL  StepCnr BR  --
 ##
 ## Reading the debug sheet: red = big-block walls (4px), yellow = small-block
-## walls (2px, anything 1 tile wide or 1 tile tall), green = the lone 1x1.
+## walls (2px, anything 1 tile wide or 1 tile tall), green = the lone 1x1,
+## blue = interior, i.e. the part of the cell that is inside the shape.
 ## Pieces drawn as a bare corner nub straddling a 2x2 of tiles are four
 ## orientations of one piece, one per tile -- the nub sits in the corner of the
 ## tile it belongs to.
@@ -86,6 +88,13 @@ const NAME_TO_TILE: Dictionary[String, Vector2i] = {
 	"Inner Corner Top Right": Vector2i(4, 1),
 	"Inner Corner Top Left": Vector2i(5, 1),
 
+	# -- Big-block inner corners, opposite pair ----------------------------
+	# Same cell, but BOTH diagonals of one axis are missing -- what the inside
+	# of a filled hashtag looks like. Named for the two corners that are
+	# notched. (These live down at x=4 rather than beside the singles above.)
+	"Double Inner Corner Top Left Bottom Right": Vector2i(4, 4),
+	"Double Inner Corner Top Right Bottom Left": Vector2i(4, 5),
+
 	# -- Small-block corners -----------------------------------------------
 	# A 1-wide run turning 90 degrees. Named like the big corners: "Top Left"
 	# means the walls are on the top and left, so the run enters from the
@@ -112,8 +121,19 @@ const NAME_TO_TILE: Dictionary[String, Vector2i] = {
 	"Small Tee Top": Vector2i(2, 5),
 	"Small Tee Bottom": Vector2i(3, 5),
 
+	# -- Big block corner with an arm off BOTH sides ------------------------
+	# The corner counterpart of the steps below: instead of one 1-wide arm
+	# leaving a block edge, both open sides of a block CORNER carry one, so the
+	# cell reads as a pseudo 4-way. Named for which corner of the block it is,
+	# same as the plain corners: "Top Left" means the arms leave up and left.
+	# Three nubs, one per pair of walls that meet; the inside corner stays open.
+	"Step Corner Top Left": Vector2i(5, 4),
+	"Step Corner Top Right": Vector2i(6, 4),
+	"Step Corner Bottom Left": Vector2i(5, 5),
+	"Step Corner Bottom Right": Vector2i(6, 5),
+
 	# -- Small 4-way --------------------------------------------------------
-	"Small Cross": Vector2i(4, 4),
+	"Small Cross": Vector2i(7, 4),
 
 	# -- Big <-> small steps ------------------------------------------------
 	# A big block's EDGE cell whose perpendicular neighbour is a 1-wide arm,
@@ -152,6 +172,15 @@ const FALLBACK: Dictionary[String, String] = {
 	"Step Top Right": "Edge Top",
 	"Step Bottom Left": "Edge Bottom",
 	"Step Bottom Right": "Edge Bottom",
+	# Both of a corner's sides are open here, so the plain corner piece would
+	# wall the arms off. Blank interior is the honest stand-in.
+	"Step Corner Top Left": "Fill",
+	"Step Corner Top Right": "Fill",
+	"Step Corner Bottom Left": "Fill",
+	"Step Corner Bottom Right": "Fill",
+	# Half the notch beats none of it.
+	"Double Inner Corner Top Left Bottom Right": "Inner Corner Top Left",
+	"Double Inner Corner Top Right Bottom Left": "Inner Corner Top Right",
 }
 
 #endregion
@@ -268,15 +297,31 @@ static func _thick_tile_name(filled: int, thin_sides: int) -> String:
 
 	match _bit_count(open_sides):
 		0:
-			# Boxed in on all four sides. Either an arm branches off (tee), a
-			# diagonal is missing (inner corner), or it is plain interior.
-			if _bit_count(thin_sides) == 1:
+			# Boxed in on all four sides. A 1-wide arm branching off is a real
+			# opening, so it outranks a merely missing diagonal.
+			var arms := _bit_count(thin_sides)
+			if arms == 1:
 				return "Big Tee " + SIDE_NAMES[thin_sides]
+			if arms == 2:
+				if thin_sides == (N | S) or thin_sides == (E | W):
+					# Arms straight through opposite sides: no piece for it.
+					return "Fill"
+				# Arms off both sides of a block corner -- a pseudo 4-way.
+				return "Step Corner " + _corner_name(thin_sides)
+			if arms > 2:
+				# Three or four arms off one cell: no piece for it either.
+				return "Fill"
+
 			var open_diagonals := DIAGONALS & ~filled
 			if open_diagonals == 0:
 				return "Fill"
-			# Only single-notch inner corners exist in the art. With two or
-			# more holes we pick one and accept the seam on the others.
+			# Both diagonals of one axis missing: the inside of a hashtag.
+			if open_diagonals == (NW | SE):
+				return "Double Inner Corner Top Left Bottom Right"
+			if open_diagonals == (NE | SW):
+				return "Double Inner Corner Top Right Bottom Left"
+			# The art has singles and opposite pairs, nothing else. Two
+			# ADJACENT holes, three or four take the first and seam the rest.
 			return "Inner Corner " + DIAGONAL_NAMES[_lowest_bit(open_diagonals)]
 		1:
 			# A straight edge. If the run continues into a 1-wide arm on one

@@ -187,6 +187,7 @@ func _apply_rect(rect: Rect2i, erase: bool) -> void:
 	var origin := _toolbar.region_origin
 	var forced := _toolbar.forced_tile_name
 	var missing: Array[String] = []
+	var substituted: Array[String] = []
 
 	for row in rect.size.y:
 		for column in rect.size.x:
@@ -200,9 +201,9 @@ func _apply_rect(rect: Rect2i, erase: bool) -> void:
 			if tile_name.is_empty():
 				tile_name = RectTileLayout.tile_name_at(column, row, rect.size.x, rect.size.y)
 
-			_paint_cell(cell, tile_name, source_id, origin, missing)
+			_paint_cell(cell, tile_name, source_id, origin, missing, substituted)
 
-	_commit(before, "Rect Tile Erase" if erase else "Rect Tile Paint", missing)
+	_commit(before, "Rect Tile Erase" if erase else "Rect Tile Paint", missing, substituted)
 
 
 ## Summation mode: union or subtract the rect into whatever is already there,
@@ -212,6 +213,7 @@ func _apply_terrain(rect: Rect2i, subtract: bool) -> void:
 	var source_id := _toolbar.source_id
 	var origin := _toolbar.region_origin
 	var missing: Array[String] = []
+	var substituted: Array[String] = []
 
 	var terrain := RectTerrain.new()
 	terrain.read(
@@ -238,9 +240,14 @@ func _apply_terrain(rect: Rect2i, subtract: bool) -> void:
 					_layer.erase_cell(cell)
 				continue
 
-			_paint_cell(cell, terrain.tile_name(cell), source_id, origin, missing)
+			_paint_cell(cell, terrain.tile_name(cell), source_id, origin, missing, substituted)
 
-	_commit(before, "Rect Terrain Subtract" if subtract else "Rect Terrain Add", missing)
+	_commit(
+		before,
+		"Rect Terrain Subtract" if subtract else "Rect Terrain Add",
+		missing,
+		substituted
+	)
 
 
 func _paint_cell(
@@ -248,16 +255,24 @@ func _paint_cell(
 	tile_name: String,
 	source_id: int,
 	origin: Vector2i,
-	missing: Array[String]
+	missing: Array[String],
+	substituted: Array[String]
 ) -> void:
 	# Walk the piece's fallback chain rather than trusting the first coord, so
 	# a sheet that hasn't been extended with the newest pieces yet still paints
-	# the nearest thing it does have.
-	for candidate in RectTileLayout.name_chain(tile_name):
+	# the nearest thing it does have. Anything past the first entry is a
+	# SUBSTITUTION and gets reported -- a silent fallback just looks like the
+	# tool picking the wrong piece.
+	var chain := RectTileLayout.name_chain(tile_name)
+	for index in chain.size():
+		var candidate: String = chain[index]
 		var coords: Vector2i = origin + RectTileLayout.NAME_TO_TILE[candidate]
-		if _tile_exists(source_id, coords):
-			_layer.set_cell(cell, source_id, coords, 0)
-			return
+		if not _tile_exists(source_id, coords):
+			continue
+		if index > 0 and not substituted.has(tile_name):
+			substituted.append(tile_name)
+		_layer.set_cell(cell, source_id, coords, 0)
+		return
 
 	if not missing.has(tile_name):
 		missing.append(tile_name)
@@ -265,10 +280,15 @@ func _paint_cell(
 
 ## Roll the edit back, then let undo/redo re-apply it so Ctrl+Z works and the
 ## scene is marked dirty properly.
-func _commit(before: PackedByteArray, action: String, missing: Array[String]) -> void:
+func _commit(
+	before: PackedByteArray,
+	action: String,
+	missing: Array[String],
+	substituted: Array[String]
+) -> void:
 	var after := _layer.tile_map_data
 	if after == before:
-		_report_missing(missing)
+		_report_problems(missing, substituted)
 		return
 
 	_layer.tile_map_data = before
@@ -279,7 +299,7 @@ func _commit(before: PackedByteArray, action: String, missing: Array[String]) ->
 	undo_redo.add_undo_property(_layer, "tile_map_data", before)
 	undo_redo.commit_action()
 
-	_report_missing(missing)
+	_report_problems(missing, substituted)
 
 
 func _tile_exists(source_id: int, coords: Vector2i) -> bool:
@@ -293,19 +313,46 @@ func _tile_exists(source_id: int, coords: Vector2i) -> bool:
 	return atlas.has_tile(coords)
 
 
-func _report_missing(missing: Array[String]) -> void:
-	if missing.is_empty():
+## Both lists mean "the tileset is missing a tile the layout points at". The
+## difference is only what happened next: a substituted cell got the fallback
+## piece, a missing one got nothing at all.
+func _report_problems(missing: Array[String], substituted: Array[String]) -> void:
+	if missing.is_empty() and substituted.is_empty():
 		_refresh_status()
 		return
+
+	var source_id := _toolbar.source_id
 	var origin := _toolbar.region_origin
-	var details: Array[String] = []
-	for tile_name in missing:
-		details.append("%s -> %s" % [tile_name, RectTileLayout.atlas_coords(tile_name, origin)])
-	push_warning(
-		"Rect Tile Painter: source %d has no tile at %s. Skipped those cells."
-		% [_toolbar.source_id, ", ".join(details)]
-	)
-	_toolbar.set_status("%d tile(s) missing -- see Output" % missing.size(), true)
+
+	if not substituted.is_empty():
+		var swaps: Array[String] = []
+		for tile_name in substituted:
+			var used := RectTileLayout.resolve_name(tile_name)
+			swaps.append("%s (wanted %s) -> drew %s" % [
+				tile_name,
+				origin + RectTileLayout.NAME_TO_TILE[tile_name],
+				used,
+			])
+		push_warning(
+			"Rect Tile Painter: source %d has no tile for %s. Used the fallback piece instead."
+			% [source_id, ", ".join(swaps)]
+		)
+
+	if not missing.is_empty():
+		var details: Array[String] = []
+		for tile_name in missing:
+			details.append("%s -> %s" % [tile_name, RectTileLayout.atlas_coords(tile_name, origin)])
+		push_warning(
+			"Rect Tile Painter: source %d has no tile at %s. Skipped those cells."
+			% [source_id, ", ".join(details)]
+		)
+
+	var parts: Array[String] = []
+	if not missing.is_empty():
+		parts.append("%d missing" % missing.size())
+	if not substituted.is_empty():
+		parts.append("%d substituted" % substituted.size())
+	_toolbar.set_status("%s -- see Output" % ", ".join(parts), true)
 
 #endregion
 

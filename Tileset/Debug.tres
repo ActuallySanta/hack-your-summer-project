@@ -45,6 +45,12 @@ texture = ExtResource("1_kin4j")
 2:5/0 = 0
 3:5/0 = 0
 2:1/0 = 0
+5:4/0 = 0
+6:4/0 = 0
+7:4/0 = 0
+4:5/0 = 0
+5:5/0 = 0
+6:5/0 = 0
 
 [resource]
 sources/0 = SubResource("TileSetAtlasSource_qf5gk")

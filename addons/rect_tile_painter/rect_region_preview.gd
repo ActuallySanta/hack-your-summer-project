@@ -20,11 +20,14 @@ const FOOTER := 15.0
 const ABBREVIATIONS: Dictionary[String, String] = {
 	"Vertical Column": "Col",
 	"Horizontal Bar": "Bar",
+	"Double Inner Corner": "Dbl",
 	"Inner Corner": "Inner",
 	"Small Corner": "S-Cnr",
 	"Small Tee": "S-Tee",
 	"Small Cross": "S-X",
 	"Big Tee": "B-Tee",
+	"Step Corner": "StepC",
+	"Step": "Step",
 	"Corner": "Cnr",
 	"Edge": "Edge",
 }

@@ -70,22 +70,23 @@ region itself, under the tileset's resource path.
 
 Every coordinate is *relative* to the region origin you set in the toolbar, so
 the same dictionary works for any tileset that arranges its block the same way.
-`DebugRectText/Debug TerrainGen.png` is the reference sheet columns 0-5 were read
-off: **red = big-block walls, yellow = small-block walls** (anything 1 tile wide
-or 1 tile tall), **green = the lone 1x1**. Columns 6-7 are the step pieces, which
-that sheet has no slots for — see `DebugRectText/MissingPieces.png`.
+`DebugRectText/Debug TerrainGen.png` is the reference sheet this was read off:
+**red = big-block walls, yellow = small-block walls** (anything 1 tile wide or 1
+tile tall), **green = the lone 1x1**, **blue = interior**, i.e. the part of the
+cell that is inside the shape.
 
 ```
-        x=0          x=1          x=2          x=3          x=4           x=5           x=6        x=7
- y=0  Col Top      Corner TL    Edge Top     Corner TR    Inner BR      Inner BL      Step L-T   Step L-B
- y=1  Col Mid      Edge Left    Fill         Edge Right   Inner TR      Inner TL      Step R-T   Step R-B
- y=2  Col Bot      Corner BL    Edge Bottom  Corner BR    Small Cnr TL  Small Cnr TR  Step T-L   Step T-R
- y=3  Single       Bar Left     Bar Mid      Bar Right    Small Cnr BL  Small Cnr BR  Step B-L   Step B-R
- y=4  Big Tee T    Big Tee B    Small Tee R  Small Tee L  Small Cross   --            --         --
- y=5  Big Tee L    Big Tee R    Small Tee T  Small Tee B  --            --            --         --
+        x=0          x=1          x=2          x=3          x=4          x=5          x=6          x=7
+ y=0  Col Top      Corner TL    Edge Top     Corner TR    Inner BR     Inner BL     Step L-T     Step L-B
+ y=1  Col Mid      Edge Left    Fill         Edge Right   Inner TR     Inner TL     Step R-T     Step R-B
+ y=2  Col Bot      Corner BL    Edge Bottom  Corner BR    Small Cnr TL Small Cnr TR Step T-L     Step T-R
+ y=3  Single       Bar Left     Bar Mid      Bar Right    Small Cnr BL Small Cnr BR Step B-L     Step B-R
+ y=4  Big Tee T    Big Tee B    Small Tee R  Small Tee L  Dbl TL-BR    StepCnr TL   StepCnr TR   Small Cross
+ y=5  Big Tee L    Big Tee R    Small Tee T  Small Tee B  Dbl TR-BL    StepCnr BL   StepCnr BR   --
 ```
 
-The top-left 4x4 is untouched, so basic mode is bit-for-bit what it always was.
+All 47 drawn tiles have a name; the only empty slot is `(7,5)`. The top-left 4x4
+is untouched, so basic mode is bit-for-bit what it always was.
 
 Pieces the sheet draws as a bare corner nub straddling a 2x2 of tiles are four
 orientations of one piece, one per tile — the nub sits in the corner of the tile
@@ -94,6 +95,10 @@ it belongs to.
 - **Inner corner** — a cell walled in on all four sides but missing one
   *diagonal* neighbour. Named for the corner the nub sits in, which faces the
   hole. This is what an L-shaped union needs at its reflex corner.
+- **Double inner corner** — the same cell, but with *both* diagonals of one axis
+  missing, so it takes two nubs. This is what the inside of a filled hashtag
+  needs. Named for the two notched corners: `Top Left Bottom Right` is the `\`
+  pair, `Top Right Bottom Left` the `/` pair.
 - **Small corner** — a 1-wide run turning 90 degrees. Named like the big corners:
   `Top Left` means the walls are on the top and left.
 - **Big tee** — a big block's edge cell with a 1-wide arm branching out of it,
@@ -103,6 +108,11 @@ it belongs to.
   arm, i.e. the arm leaves flush with the block instead of centred in it, so the
   wall jogs from 4px down to 2px. Named `Step <wall side> <arm side>`, and laid
   out on that grid: row picks the wall, column picks the arm.
+- **Step corner** — the corner counterpart: both open sides of a block *corner*
+  carry a 1-wide arm, so the cell reads as a pseudo 4-way. Named for which corner
+  of the block it is, like the plain corners — `Top Left` means the arms leave up
+  and left. Three nubs, one per pair of walls that meet; the inside corner stays
+  open.
 
 `rect_tile_layout.gd` holds all of it as one dictionary:
 
@@ -142,8 +152,11 @@ painted in Sum mode comes out identical to the same rectangle in basic mode.
 | --- | --- | --- |
 | thick | one side open | `Edge <side>` |
 | thick | two adjacent sides open | `Corner <v> <h>` |
-| thick | boxed in, one diagonal open | `Inner Corner <diagonal>` |
+| thick | one side open, a perpendicular side is a thin arm | `Step <wall> <arm>` |
 | thick | boxed in, one side is a thin arm | `Big Tee <arm>` |
+| thick | boxed in, two perpendicular sides are thin arms | `Step Corner <v> <h>` |
+| thick | boxed in, one diagonal open | `Inner Corner <diagonal>` |
+| thick | boxed in, both diagonals of one axis open | `Double Inner Corner <v> <h> <v> <h>` |
 | thick | boxed in, nothing missing | `Fill` |
 | thin | 0 neighbours | `Single` |
 | thin | 1 neighbour | the capped end of a run |
@@ -168,13 +181,32 @@ piece's `FALLBACK` chain and uses the first coordinate the tileset **actually ha
 a tile at**, so a sheet that hasn't been extended yet degrades to the nearest
 piece instead of leaving holes.
 
-- The 8 **step** pieces at columns 6-7 fall back to the plain `Edge` piece. Until
-  you draw them you get a visible seam where the wall thickness changes, never a
-  wrong shape. `DebugRectText/MissingPieces.png` shows what each one should look
-  like and which offset it belongs at.
-- **Multi-notch inner corners** — a cell boxed in on all four sides with two or
-  more diagonals missing — have no piece at all. Only single-notch inner corners
-  exist, so one is picked and the other corners take the seam.
+**Every substitution is reported.** The status text turns orange with a count and
+the Output panel names the piece, the coord it wanted and what it drew instead. A
+silent fallback is indistinguishable from the tool picking the wrong piece, so it
+never happens quietly — if a drag comes out looking wrong, check Output first.
+
+Note that a tile has to *exist in the atlas source*, not merely have pixels under
+it. A `TileSetAtlasSource` only has a tile where one was created, so art you drew
+into the sheet after setting the tileset up is invisible to the painter until you
+create those tiles too.
+
+Every piece in the reference sheet is drawn, but an individual tileset may not
+have caught up yet — that is what the chain is for:
+
+- The 8 **step** pieces fall back to the plain `Edge` piece, so you get a visible
+  seam where the wall thickness changes, never a wrong shape.
+- The 4 **step corner** pieces fall back to `Fill`. The plain corner piece would
+  be worse, not better: both of that corner's sides are open here, so `Corner`
+  would wall the two arms off.
+
+Two situations have no piece anywhere and always take a seam:
+
+- **Adjacent-notch inner corners** — a cell boxed in on all four sides with two
+  *adjacent* diagonals missing, or three, or four. Singles and opposite pairs
+  both have art; anything else takes the first notch and seams the rest.
+- **Three or more arms off one thick cell**, or two arms leaving straight through
+  opposite sides. Both resolve to `Fill`.
 
 The (i) popover tints any mapped-but-absent tile red and counts them in its
 footer, so it doubles as a to-draw list.
