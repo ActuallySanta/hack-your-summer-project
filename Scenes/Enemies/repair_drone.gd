@@ -40,23 +40,22 @@ func _ready() -> void:
 	enable_thrusters( start_dir_as_state )
 
 func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
-	if not check_activation(state.step):
+	if was_deactivated:
 		return
 
 	state.linear_velocity = snap_to_diagonal(state.linear_velocity) * speed
 
 	if check_dir(state.linear_velocity):
 		set_sprite(old_dir)
+		
 
-func check_activation(delta: float) -> bool:
+func _process(delta: float) -> void:
 	if is_deactivated > 0:
 		was_deactivated = true
 		is_deactivated -= delta
-		return false
 	elif was_deactivated:
 		was_deactivated = false
 		enable_thrusters( start_dir_as_state )
-	return true
 
 func snap_to_diagonal(velocity: Vector2) -> Vector2:
 	var fallback : Vector2 = DIRECTION_VECTORS.get(old_dir, DIRECTION_VECTORS.get(start_dir_as_state, Vector2(1, -1)))

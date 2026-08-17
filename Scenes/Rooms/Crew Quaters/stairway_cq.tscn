@@ -130,3 +130,4 @@ position = Vector2(14, 448)
 position = Vector2(594, 642)
 start_direction = "DL"
 speed = 150.0
+stun_time = 2.0

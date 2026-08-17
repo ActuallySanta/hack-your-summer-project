@@ -55,11 +55,11 @@ metadata/_custom_type_script = "uid://ctc17oyja7fup"
 position = Vector2(-1.5, 1.5)
 shape = SubResource("CircleShape2D_jc8ds")
 
-[node name="Hurtbox" parent="." instance=ExtResource("5_hrtbx")]
+[node name="Hurtbox" parent="." unique_id=1081351614 instance=ExtResource("5_hrtbx")]
 visible = false
 collision_layer = 4
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=88918251]
 position = Vector2(-1.5, 1.5)
 shape = SubResource("CircleShape2D_vjkby")
 
