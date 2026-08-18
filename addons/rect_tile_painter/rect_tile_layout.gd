@@ -23,8 +23,8 @@ extends RefCounted
 ## only empty slot is (7,5).
 ##
 ##          x=0          x=1          x=2         x=3          x=4         x=5         x=6         x=7
-##   y=0  Col Top      Corner TL    Edge Top    Corner TR    Inner BR    Inner BL    Step L-T    Step L-B
-##   y=1  Col Mid      Edge Left    Fill        Edge Right   Inner TR    Inner TL    Step R-T    Step R-B
+##   y=0  Col Top      Corner TL    Edge Top    Corner TR    Inner BR    Inner BL    Step L-T    Step R-T
+##   y=1  Col Mid      Edge Left    Fill        Edge Right   Inner TR    Inner TL    Step L-B    Step R-B
 ##   y=2  Col Bot      Corner BL    Edge Bottom Corner BR    Small TL    Small TR    Step T-L    Step T-R
 ##   y=3  Single       Bar Left     Bar Mid     Bar Right    Small BL    Small BR    Step B-L    Step B-R
 ##   y=4  Big Tee T    Big Tee B    Small Tee R Small Tee L  Dbl TL-BR   StepCnr TL  StepCnr TR  Small Cross
@@ -138,12 +138,15 @@ const NAME_TO_TILE: Dictionary[String, Vector2i] = {
 	# -- Big <-> small steps ------------------------------------------------
 	# A big block's EDGE cell whose perpendicular neighbour is a 1-wide arm,
 	# i.e. the arm leaves flush with the block instead of centred in it, so the
-	# wall has to jog from 4px down to 2px. Named "Step <wall side> <arm side>",
-	# and laid out on that same grid: ROW picks the wall, COLUMN picks the arm.
+	# wall has to jog from 4px down to 2px. Named "Step <wall side> <arm side>".
+	#
+	# Laid out so each side lands on its own axis -- Left/Right always picks the
+	# COLUMN, Top/Bottom always picks the ROW -- so every piece sits where its
+	# geometry points, whichever half of the block you are reading.
 	#
 	#            x=6                 x=7
-	#     y=0  Step Left Top       Step Left Bottom
-	#     y=1  Step Right Top      Step Right Bottom
+	#     y=0  Step Left Top       Step Right Top
+	#     y=1  Step Left Bottom    Step Right Bottom
 	#     y=2  Step Top Left       Step Top Right
 	#     y=3  Step Bottom Left    Step Bottom Right
 	#
@@ -151,8 +154,8 @@ const NAME_TO_TILE: Dictionary[String, Vector2i] = {
 	# they fall through FALLBACK to the plain edge piece, which paints a visible
 	# seam but never a wrong shape or a hole.
 	"Step Left Top": Vector2i(6, 0),
-	"Step Left Bottom": Vector2i(7, 0),
-	"Step Right Top": Vector2i(6, 1),
+	"Step Right Top": Vector2i(7, 0),
+	"Step Left Bottom": Vector2i(6, 1),
 	"Step Right Bottom": Vector2i(7, 1),
 	"Step Top Left": Vector2i(6, 2),
 	"Step Top Right": Vector2i(7, 2),

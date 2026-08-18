@@ -77,8 +77,8 @@ cell that is inside the shape.
 
 ```
         x=0          x=1          x=2          x=3          x=4          x=5          x=6          x=7
- y=0  Col Top      Corner TL    Edge Top     Corner TR    Inner BR     Inner BL     Step L-T     Step L-B
- y=1  Col Mid      Edge Left    Fill         Edge Right   Inner TR     Inner TL     Step R-T     Step R-B
+ y=0  Col Top      Corner TL    Edge Top     Corner TR    Inner BR     Inner BL     Step L-T     Step R-T
+ y=1  Col Mid      Edge Left    Fill         Edge Right   Inner TR     Inner TL     Step L-B     Step R-B
  y=2  Col Bot      Corner BL    Edge Bottom  Corner BR    Small Cnr TL Small Cnr TR Step T-L     Step T-R
  y=3  Single       Bar Left     Bar Mid      Bar Right    Small Cnr BL Small Cnr BR Step B-L     Step B-R
  y=4  Big Tee T    Big Tee B    Small Tee R  Small Tee L  Dbl TL-BR    StepCnr TL   StepCnr TR   Small Cross
@@ -107,7 +107,9 @@ it belongs to.
 - **Step** — a big block's *edge* cell whose perpendicular neighbour is a 1-wide
   arm, i.e. the arm leaves flush with the block instead of centred in it, so the
   wall jogs from 4px down to 2px. Named `Step <wall side> <arm side>`, and laid
-  out on that grid: row picks the wall, column picks the arm.
+  out so each side lands on its own axis: `Left`/`Right` always picks the column,
+  `Top`/`Bottom` always picks the row. Every piece sits where its geometry
+  points, whichever half of the block you are reading.
 - **Step corner** — the corner counterpart: both open sides of a block *corner*
   carry a 1-wide arm, so the cell reads as a pseudo 4-way. Named for which corner
   of the block it is, like the plain corners — `Top Left` means the arms leave up
