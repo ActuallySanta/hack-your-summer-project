@@ -1,4 +1,4 @@
-extends Node2D
+extends Door
 
 @export var button_names : Array[ String ]
 @export var door_name : String = "SecureDoor"
@@ -7,57 +7,49 @@ var door_controls
 @onready var sound_player = $SFX
 var collider : Node2D
 
-func _ready() -> void:
+func setup() -> void:
 	door_controls = get_children_with_name("Door")
-	# Set collider
 	var colliders = get_children_with_name("Collider")
 	if not colliders.is_empty():
 		collider = colliders[0]
-	
-	if check_all_buttons():
-		set_all_open()
-	
-	if MetSys.register_storable_object( self, set_all_open ):
-		if collider != null:
-			collider.queue_free()
-		return
 
-func check_all_buttons() -> bool:
+func should_be_opened_check() -> bool:
+	if MetSys.register_storable_object( self, func(): return ):
+		return true
+	if MetSys.save_data == null:
+		return false
+	
 	for button_name in button_names:
-		if not _is_button_pressed(button_name):
+		if not MetSys.save_data.stored_objects.get(button_name, false):
 			return false
 	return true
 
-func try_open_door() -> void:
+func animate_open() -> void:
+	# Check if the door is already open
 	if MetSys.save_data.stored_objects.get(door_name, false):
 		return
-	_open_door()
-
-func _open_door() -> void:
+	
+	# Remove the collider
 	if not collider == null:
 		collider.queue_free()
 	else:
 		print("collider already removed...") 
-	play_animation( "Opening" )
+	
+	# Do animation and save door as open
+	for door in door_controls: door.play( "Opening" )
 	sound_player.play()
 	MetSys.store_object(self)
 
-func play_animation(identifier: String) -> void: 
-	for door in door_controls:
-		door.play(identifier)
-
-func set_all_open() -> void:
-	play_animation( "IdleOpen" )
+func immediate_open() -> void:
+	for door in door_controls: door.play( "IdleOpen" )
 	if not collider == null:
 		collider.queue_free()
-
-func _is_button_pressed(id: String) -> bool:
-	if MetSys.save_data == null:
-		return false
-	return MetSys.save_data.stored_objects.get(id, false)
 
 func get_children_with_name(identifier: String) -> Array[ Node ]:
 	return get_children().filter(func(child: Node): return identifier in child.name)
 
 func _get_object_id() -> String:
 	return door_name
+
+func immediate_closed() -> void:
+	pass

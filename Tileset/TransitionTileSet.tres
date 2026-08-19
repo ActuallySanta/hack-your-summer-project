@@ -14,6 +14,9 @@ tile_data = PackedInt32Array(0, 1, 3, 65536, 1, 4, 1, 65537, 3, 65537, 65537, 4,
 [sub_resource type="TileMapPattern" id="TileMapPattern_ccjyx"]
 tile_data = PackedInt32Array(0, 1, 5, 65536, 1, 6, 1, 65537, 5, 65537, 65537, 6, 2, 131073, 5, 65538, 131073, 6, 3, 196609, 5, 65539, 196609, 6)
 
+[sub_resource type="TileMapPattern" id="TileMapPattern_n4wox"]
+tile_data = PackedInt32Array(0, 131073, 8, 1, 65537, 8)
+
 [sub_resource type="TileMapPattern" id="TileMapPattern_hr0dk"]
 tile_data = PackedInt32Array(0, 262145, 0, 65536, 262145, 1, 131072, 262145, 2, 1, 327681, 0, 65537, 327681, 1, 131073, 327681, 2)
 
@@ -136,6 +139,53 @@ texture = ExtResource("1_n4wox")
 9:7/0 = 0
 10:7/0 = 0
 11:7/0 = 0
+15:8/0 = 0
+15:7/0 = 0
+14:6/0 = 0
+14:5/0 = 0
+14:4/0 = 0
+13:4/0 = 0
+13:3/0 = 0
+13:2/0 = 0
+13:1/0 = 0
+12:1/0 = 0
+12:0/0 = 0
+13:5/0 = 0
+13:6/0 = 0
+13:7/0 = 0
+13:8/0 = 0
+12:8/0 = 0
+12:7/0 = 0
+12:6/0 = 0
+12:5/0 = 0
+12:4/0 = 0
+12:3/0 = 0
+12:2/0 = 0
+14:8/0 = 0
+15:6/0 = 0
+15:5/0 = 0
+15:4/0 = 0
+15:3/0 = 0
+15:2/0 = 0
+15:1/0 = 0
+15:0/0 = 0
+14:0/0 = 0
+14:1/0 = 0
+13:0/0 = 0
+14:2/0 = 0
+14:3/0 = 0
+11:8/0 = 0
+10:8/0 = 0
+9:8/0 = 0
+8:8/0 = 0
+7:8/0 = 0
+6:8/0 = 0
+5:8/0 = 0
+4:8/0 = 0
+3:8/0 = 0
+2:8/0 = 0
+1:8/0 = 0
+0:8/0 = 0
 
 [resource]
 sources/1 = SubResource("TileSetAtlasSource_xp7wl")
@@ -151,3 +201,4 @@ pattern_8 = SubResource("TileMapPattern_r5xi0")
 pattern_9 = SubResource("TileMapPattern_6ty24")
 pattern_10 = SubResource("TileMapPattern_jcigu")
 pattern_11 = SubResource("TileMapPattern_ccjyx")
+pattern_12 = SubResource("TileMapPattern_n4wox")

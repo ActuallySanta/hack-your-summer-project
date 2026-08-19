@@ -1,20 +1,15 @@
-extends Node2D
+extends Door
 
-@onready var sprite : Sprite2D = $Sprite2D
+@onready var sprite : AnimatedSprite2D = $Door1
 @onready var collider : StaticBody2D = $StaticBody2D
-@onready var animator : AnimationPlayer = $AnimationPlayer
 
-func _ready() -> void:
-	if GameManager.is_station_powered():
-		immediate_open()
-	else:
-		GlobalSignals.RestoreStationPower.connect(animate_open)
-
+func should_be_opened_check() -> bool:
+	return GameManager.is_station_powered()
 
 func animate_open() -> void:
 	collider.process_mode = Node.PROCESS_MODE_DISABLED
-	animator.play("open")
+	sprite.play("Opening")
 
 func immediate_open() -> void:
 	collider.process_mode = Node.PROCESS_MODE_DISABLED
-	sprite.frame = 5
+	sprite.play("IdleOpen")

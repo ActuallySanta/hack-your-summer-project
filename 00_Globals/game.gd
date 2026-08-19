@@ -1,7 +1,7 @@
 class_name GameManager
 extends "res://addons/MetroidvaniaSystem/Template/Scripts/MetSysGame.gd"
 
-const START_ROOM_UID = "uid://77ql1xom04cr" #Docking Station
+const START_ROOM_UID = "uid://djrq87v0sx3lq" #Docking Station
 const START_POS = Vector2(158, 834)
 const SaveManager = preload("res://addons/MetroidvaniaSystem/Template/Scripts/SaveManager.gd")
 

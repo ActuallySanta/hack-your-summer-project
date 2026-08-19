@@ -1,32 +1,40 @@
 [gd_scene format=3 uid="uid://bgwc4emcqyj3l"]
 
-[ext_resource type="PackedScene" uid="uid://77ql1xom04cr" path="res://Scenes/Rooms/Tutorial Area/docking_station.tscn" id="1_s1s0b"]
-[ext_resource type="PackedScene" uid="uid://dseaj8gec1u4l" path="res://Scenes/Rooms/Tutorial Area/maintenence_room.tscn" id="2_5jwjo"]
-[ext_resource type="PackedScene" uid="uid://dog7lxsiy4s6a" path="res://Scenes/Rooms/Docking Bay/oberservatory.tscn" id="3_bewut"]
-[ext_resource type="PackedScene" uid="uid://dtkowilv386lj" path="res://Scenes/Rooms/Tutorial Area/service_crossroads.tscn" id="4_0giw4"]
-[ext_resource type="PackedScene" uid="uid://domh0f8q1n87x" path="res://Scenes/Rooms/Tutorial Area/service_hall.tscn" id="5_rf76t"]
-[ext_resource type="PackedScene" uid="uid://4uwct0k53alw" path="res://Scenes/Rooms/Tutorial Area/storage_room.tscn" id="6_5jwjo"]
+[ext_resource type="PackedScene" uid="uid://dseaj8gec1u4l" path="res://Scenes/Rooms/Docking Bay/maintenence_room.tscn" id="2_5jwjo"]
+[ext_resource type="PackedScene" uid="uid://dtkowilv386lj" path="res://Scenes/Rooms/Docking Bay/service_crossroads.tscn" id="4_0giw4"]
+[ext_resource type="PackedScene" uid="uid://domh0f8q1n87x" path="res://Scenes/Rooms/Docking Bay/service_hall.tscn" id="5_rf76t"]
+[ext_resource type="PackedScene" uid="uid://cuuio53gbrowg" path="res://Scenes/Rooms/Docking Bay/bay_beta_db.tscn" id="6_0giw4"]
+[ext_resource type="PackedScene" uid="uid://4uwct0k53alw" path="res://Scenes/Rooms/Docking Bay/storage_room.tscn" id="6_5jwjo"]
 [ext_resource type="PackedScene" uid="uid://bpkobrts5eemu" path="res://Scenes/Rooms/Docking Bay/waiting_room_db.tscn" id="7_bewut"]
+[ext_resource type="PackedScene" uid="uid://djrq87v0sx3lq" path="res://Scenes/Rooms/Docking Bay/bay_alpha_db.tscn" id="7_rf76t"]
+[ext_resource type="PackedScene" uid="uid://cnpr7mnxn42v" path="res://Scenes/Rooms/Docking Bay/bay_gamma_db.tscn" id="8_e6yji"]
+[ext_resource type="PackedScene" uid="uid://b1iin7ex3hk0m" path="res://Scenes/Rooms/Docking Bay/save_room_db.tscn" id="9_rf76t"]
 
 [node name="WorldMapDB" type="Node2D" unique_id=19893736]
 
-[node name="WaitingRoomDB" parent="." unique_id=295914285 instance=ExtResource("7_bewut")]
-position = Vector2(1263, 1184)
-
-[node name="DockingStation" parent="." unique_id=2103613452 instance=ExtResource("1_s1s0b")]
-position = Vector2(111, 512)
-
 [node name="MaintenenceRoom" parent="." unique_id=1690497050 instance=ExtResource("2_5jwjo")]
-position = Vector2(1263, -160)
-
-[node name="Oberservatory" parent="." unique_id=791660570 instance=ExtResource("3_bewut")]
-position = Vector2(3567, 1184)
+position = Vector2(1770, -384)
 
 [node name="ServiceCrossroads" parent="." unique_id=1037229723 instance=ExtResource("4_0giw4")]
-position = Vector2(2415, -160)
+position = Vector2(2922, -384)
 
 [node name="ServiceHall" parent="." unique_id=1846424740 instance=ExtResource("5_rf76t")]
-position = Vector2(1263, 512)
+position = Vector2(1770, 960)
 
 [node name="StorageRoom" parent="." unique_id=1041062810 instance=ExtResource("6_5jwjo")]
-position = Vector2(3566, 512)
+position = Vector2(6378, 288)
+
+[node name="WaitingRoomDB" parent="." unique_id=295914285 instance=ExtResource("7_bewut")]
+position = Vector2(1770, 1632)
+
+[node name="BayBetaDb" parent="." unique_id=586346883 instance=ExtResource("6_0giw4")]
+position = Vector2(-535, -384)
+
+[node name="BayAlphaDB" parent="." unique_id=1161255728 instance=ExtResource("7_rf76t")]
+position = Vector2(-535, 960)
+
+[node name="BayGammaDb" parent="." unique_id=1040202241 instance=ExtResource("8_e6yji")]
+position = Vector2(4074, 288)
+
+[node name="SaveRoomDb" parent="." unique_id=780188657 instance=ExtResource("9_rf76t")]
+position = Vector2(1770, 288)

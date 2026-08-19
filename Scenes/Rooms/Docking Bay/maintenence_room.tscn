@@ -1,0 +1,86 @@
+[gd_scene format=4 uid="uid://dseaj8gec1u4l"]
+
+[ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="1_wieg8"]
+[ext_resource type="Script" uid="uid://c6wsbj7poj3t4" path="res://Scenes/Rooms/Tutorial Area/maintenence_room_trigger.gd" id="1_yp3rd"]
+[ext_resource type="TileSet" uid="uid://chq502fexv5m" path="res://Tileset/DockingBay.tres" id="2_d0xhl"]
+[ext_resource type="PackedScene" uid="uid://cdsjsvuyovomn" path="res://Scenes/tile_map_for_rooms.tscn" id="2_mrovi"]
+[ext_resource type="TileSet" uid="uid://c0dbvnpaoeomc" path="res://Tileset/TransitionTileSet.tres" id="5_yrnhe"]
+[ext_resource type="TileSet" uid="uid://cgca0f3tq55f" path="res://Tileset/Debug.tres" id="6_kq8r0"]
+[ext_resource type="PackedScene" uid="uid://b3d6cwvyjev0s" path="res://Scenes/Level Elements/fusebox.tscn" id="6_x1qgj"]
+[ext_resource type="PackedScene" uid="uid://cvo6nu4jnyud4" path="res://Scenes/Pickups/gun.tscn" id="7_absri"]
+[ext_resource type="PackedScene" uid="uid://bca0ty75ytv76" path="res://Scenes/Dialogue System/sign_npc.tscn" id="9_k2gtt"]
+[ext_resource type="Script" uid="uid://bdh437kih1wx8" path="res://Scripts/Resources/Dialogue/dialogue_entry.gd" id="10_u3til"]
+[ext_resource type="Resource" uid="uid://dqx60eyssrhnl" path="res://Dialogue/Speakers/tutorialSign_speaker.tres" id="11_hhfor"]
+[ext_resource type="Script" uid="uid://bf316n5tk84lf" path="res://Scripts/Resources/Dialogue/dialogue_conversation.gd" id="12_xs432"]
+[ext_resource type="PackedScene" uid="uid://va01arxegvof" path="res://Scenes/Components/developer_note.tscn" id="13_5h6um"]
+[ext_resource type="PackedScene" uid="uid://drg4fijv5i2sf" path="res://Scenes/Pickups/fuse.tscn" id="14_3dyav"]
+
+[sub_resource type="Resource" id="Resource_i3sx5"]
+script = ExtResource("10_u3til")
+entryText = "[font_size=24][color=black][p]The Stun Gun can be used to temporarily disable enemies from a distance.[/p][p]Right Click to fire.[/p]"
+speaker = ExtResource("11_hhfor")
+metadata/_custom_type_script = "uid://bdh437kih1wx8"
+
+[sub_resource type="Resource" id="Resource_jjhkn"]
+script = ExtResource("12_xs432")
+conversationContents = Array[ExtResource("10_u3til")]([SubResource("Resource_i3sx5")])
+metadata/_custom_type_script = "uid://bf316n5tk84lf"
+
+[node name="MaintenenceRoom" type="Node2D" unique_id=1690497050]
+script = ExtResource("1_yp3rd")
+
+[node name="RoomInstance" parent="." unique_id=347632812 instance=ExtResource("1_wieg8")]
+
+[node name="VisualAssets" parent="." unique_id=1359070375 instance=ExtResource("2_mrovi")]
+scale = Vector2(3, 3)
+
+[node name="Background" type="TileMapLayer" parent="VisualAssets" unique_id=1240295103]
+modulate = Color(0.72156864, 0.72156864, 0.72156864, 1)
+tile_map_data = PackedByteArray("AAAWAAcAAQADAAcAAAAXAAcAAQAEAAcAAAAVAAcAAQACAAcAAAAWAAYAAQADAAcAAAAXAAYAAQAEAAcAAAAVAAYAAQACAAcAAAAVAAgAAQACAAcAAAAWAAgAAQADAAcAAAAXAAgAAQAEAAcAAAA=")
+tile_set = ExtResource("2_d0xhl")
+
+[node name="Decoration" type="TileMapLayer" parent="VisualAssets" unique_id=227728670]
+tile_set = ExtResource("2_d0xhl")
+
+[node name="Door" type="TileMapLayer" parent="VisualAssets" unique_id=46306657]
+z_index = 20
+tile_map_data = PackedByteArray("AAAWAAYAAQAAAAAAAAAWAAcAAQAAAAEAAAAWAAgAAQAAAAIAAAAXAAYAAQABAAAAAAAXAAcAAQABAAEAAAAXAAgAAQABAAIAAAA=")
+tile_set = ExtResource("5_yrnhe")
+
+[node name="Foreground" type="TileMapLayer" parent="VisualAssets" unique_id=1533847523 groups=["Geometry"]]
+tile_map_data = PackedByteArray("AAAAAAsAAAABAAAAAAABAAsAAAACAAAAAAACAAsAAAACAAAAAAADAAsAAAACAAAAAAAEAAsAAAACAAAAAAAFAAsAAAACAAAAAAAGAAsAAAACAAAAAAAHAAsAAAACAAAAAAAIAAsAAAACAAAAAAAJAAsAAAACAAAAAAAKAAsAAAACAAAAAAALAAsAAAACAAAAAAAMAAsAAAACAAAAAAANAAsAAAACAAAAAAAOAAsAAAACAAAAAAAPAAsAAAACAAAAAAAQAAsAAAACAAAAAAARAAsAAAAFAAEAAAASAAsAAAACAAEAAAATAAsAAAACAAEAAAAUAAsAAAACAAEAAAAVAAsAAAACAAEAAAAWAAsAAAACAAEAAAAXAAsAAAADAAEAAAAAAAwAAAABAAEAAAABAAwAAAACAAEAAAACAAwAAAACAAEAAAADAAwAAAACAAEAAAAEAAwAAAACAAEAAAAFAAwAAAACAAEAAAAGAAwAAAACAAEAAAAHAAwAAAACAAEAAAAIAAwAAAACAAEAAAAJAAwAAAACAAEAAAAKAAwAAAACAAEAAAALAAwAAAACAAEAAAAMAAwAAAACAAEAAAANAAwAAAACAAEAAAAOAAwAAAACAAEAAAAPAAwAAAACAAEAAAAQAAwAAAACAAEAAAARAAwAAAACAAEAAAASAAwAAAACAAEAAAATAAwAAAACAAEAAAAUAAwAAAACAAEAAAAVAAwAAAACAAEAAAAWAAwAAAACAAEAAAAXAAwAAAADAAEAAAAAAA0AAAABAAIAAAABAA0AAAACAAIAAAACAA0AAAACAAIAAAADAA0AAAACAAIAAAAEAA0AAAACAAIAAAAFAA0AAAACAAIAAAAGAA0AAAACAAIAAAAHAA0AAAACAAIAAAAIAA0AAAACAAIAAAAJAA0AAAACAAIAAAAKAA0AAAACAAIAAAALAA0AAAACAAIAAAAMAA0AAAACAAIAAAANAA0AAAACAAIAAAAOAA0AAAACAAIAAAAPAA0AAAACAAIAAAAQAA0AAAACAAIAAAARAA0AAAACAAIAAAASAA0AAAACAAIAAAATAA0AAAACAAIAAAAUAA0AAAACAAIAAAAVAA0AAAACAAIAAAAWAA0AAAACAAIAAAAXAA0AAAADAAIAAAATAAkAAAABAAAAAAAUAAkAAAACAAAAAAAVAAkAAAACAAAAAAAWAAkAAAACAAAAAAAXAAkAAAADAAAAAAATAAoAAAAFAAEAAAAUAAoAAAACAAEAAAAVAAoAAAACAAEAAAAWAAoAAAACAAEAAAAXAAoAAAADAAEAAAARAAoAAAABAAAAAAASAAoAAAACAAAAAAAAAAcAAAABAAMAAAABAAcAAAACAAMAAAACAAcAAAACAAMAAAADAAcAAAACAAMAAAAEAAcAAAACAAMAAAAFAAcAAAACAAMAAAAGAAcAAAACAAMAAAAAAAUAAAABAAMAAAABAAUAAAACAAMAAAACAAUAAAACAAMAAAAAAAAAAAABAAAAAAABAAAAAAACAAAAAAACAAAAAAACAAAAAAAAAAEAAAABAAEAAAABAAEAAAACAAEAAAACAAEAAAAEAAAAAAAAAAIAAAABAAEAAAABAAIAAAACAAEAAAACAAIAAAADAAEAAAAAAAMAAAABAAIAAAABAAMAAAACAAIAAAACAAMAAAADAAIAAAADAAUAAAADAAMAAAAHAAcAAAACAAMAAAAIAAcAAAAFAAMAAAAIAAUAAAAAAAEAAAAIAAYAAAAAAAEAAAAIAAQAAAAAAAEAAAAUAAUAAAABAAMAAAAVAAUAAAACAAMAAAAWAAUAAAACAAMAAAAXAAUAAAADAAMAAAADAAAAAAACAAAAAAAEAAAAAAACAAAAAAAFAAAAAAACAAAAAAAGAAAAAAACAAAAAAAHAAAAAAACAAAAAAAIAAAAAAACAAAAAAAJAAAAAAACAAAAAAAKAAAAAAACAAAAAAALAAAAAAACAAAAAAAMAAAAAAACAAAAAAANAAAAAAACAAAAAAAOAAAAAAACAAAAAAAPAAAAAAACAAAAAAAQAAAAAAACAAAAAAARAAAAAAACAAAAAAASAAAAAAACAAAAAAATAAAAAAACAAAAAAAUAAAAAAACAAAAAAAVAAAAAAACAAAAAAAWAAAAAAACAAAAAAAXAAAAAAADAAAAAAAXAAEAAAADAAEAAAAXAAIAAAADAAEAAAAXAAMAAAADAAIAAAAWAAEAAAACAAEAAAAWAAIAAAACAAEAAAAWAAMAAAACAAIAAAADAAEAAAACAAIAAAAEAAEAAAACAAIAAAAFAAEAAAACAAIAAAAGAAEAAAACAAIAAAAHAAEAAAACAAIAAAAIAAEAAAAFAAAAAAAJAAEAAAACAAEAAAAKAAEAAAACAAEAAAALAAEAAAACAAEAAAAMAAEAAAACAAEAAAANAAEAAAACAAEAAAAOAAEAAAACAAEAAAAPAAEAAAACAAEAAAAQAAEAAAACAAEAAAARAAEAAAACAAEAAAASAAEAAAACAAEAAAATAAEAAAACAAEAAAAUAAEAAAACAAEAAAAVAAEAAAACAAEAAAAIAAIAAAAGAAEAAAAJAAIAAAACAAIAAAAKAAIAAAACAAIAAAALAAIAAAACAAIAAAAMAAIAAAACAAIAAAANAAIAAAACAAIAAAAOAAIAAAACAAIAAAAPAAIAAAACAAIAAAAQAAIAAAACAAIAAAARAAIAAAACAAIAAAASAAIAAAACAAIAAAATAAIAAAACAAIAAAAUAAIAAAAFAAAAAAAVAAIAAAACAAEAAAAIAAMAAAAAAAEAAAAUAAMAAAABAAIAAAAVAAMAAAACAAIAAAA=")
+tile_set = ExtResource("6_kq8r0")
+
+[node name="Fusebox" parent="." unique_id=1487914227 instance=ExtResource("6_x1qgj")]
+position = Vector2(653, 466)
+
+[node name="Gun" parent="." unique_id=2024901390 instance=ExtResource("7_absri")]
+position = Vector2(226, 473)
+
+[node name="Marker2D" type="Marker2D" parent="." unique_id=1085067390 groups=["save_checkpoint"]]
+position = Vector2(847, 398)
+
+[node name="Sign NPC" parent="." unique_id=1942218757 instance=ExtResource("9_k2gtt")]
+position = Vector2(120, -177)
+
+[node name="DialogueTrigger" parent="Sign NPC" index="0" unique_id=1367779263]
+loadedConversation = SubResource("Resource_jjhkn")
+
+[node name="DeveloperNote" parent="." unique_id=272395008 instance=ExtResource("13_5h6um")]
+offset_left = 155.0
+offset_top = 176.0
+offset_right = 370.0
+offset_bottom = 211.0
+text = "Fuse here"
+
+[node name="DeveloperNote2" parent="." unique_id=992929749 instance=ExtResource("13_5h6um")]
+offset_left = 921.0
+offset_top = 28.0
+offset_right = 1136.0
+offset_bottom = 117.0
+text = "Once player enters they CANNOT leave until they reactivate the ship"
+
+[node name="Fuse" parent="." unique_id=866049687 instance=ExtResource("14_3dyav")]
+position = Vector2(289, 240)
+
+[editable path="Sign NPC"]

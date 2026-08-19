@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://va01arxegvof"]
+
+[sub_resource type="GDScript" id="GDScript_2h8ca"]
+resource_name = "DevNote"
+script/source = "@tool
+extends TextEdit
+
+func _ready() -> void:
+	if Engine.is_editor_hint():
+		return
+
+	var parentID = MetSys.current_room.get_parent().name if not MetSys.current_room == null else get_parent().name
+	if parentID == \"root\":
+		return
+	printerr(\"There is a developer note still in \", parentID)
+	queue_free()
+
+func _process(delta: float) -> void:
+	print(\"_process called\")
+	if not Engine.is_editor_hint():
+		return
+	
+	print(\" continuing\")
+	size.y = 0
+"
+
+[node name="DeveloperNote" type="TextEdit" unique_id=272395008]
+offset_right = 215.0
+offset_bottom = 35.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_placeholder_color = Color(0, 0, 0, 1)
+theme_override_colors/background_color = Color(1, 1, 0, 1)
+placeholder_text = "This needs to be changed"
+wrap_mode = 1
+autowrap_mode = 2
+scroll_smooth = true
+scroll_fit_content_height = true
+script = SubResource("GDScript_2h8ca")
