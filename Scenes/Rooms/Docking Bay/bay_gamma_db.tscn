@@ -29,3 +29,9 @@ tile_map_data = PackedByteArray("AAAAAAoAAQACAAgAAAABAAoAAQADAAgAAAAAABgAAQACAAg
 
 [node name="LockedDoor" parent="." unique_id=1290327451 instance=ExtResource("5_8curq")]
 position = Vector2(2136, 456)
+
+[node name="LockedDoor2" parent="." unique_id=131997362 instance=ExtResource("5_8curq")]
+position = Vector2(168, 1800)
+
+[node name="LockedDoor3" parent="." unique_id=48001535 instance=ExtResource("5_8curq")]
+position = Vector2(168, 984)

@@ -1,7 +1,6 @@
-extends Node2D
+extends DoorTrigger
 
 @export var button_name: String
-@export var doors_in_room : Array[ Node2D ]
 @onready var icon_manager := $MonitorIconManager
 
 signal OnButtonInteract
@@ -23,9 +22,7 @@ func OnButtonInteraction(body: Node2D) -> void:
 		icon_manager.switch_to_activated()
 		has_been_collected = true
 		OnButtonInteract.emit()
-		for door in doors_in_room:
-			if door.has_method("try_open_door"):
-				door.try_open_door()
+		open_doors()
 
 func switch_to_activated_with_icon_manager() -> void:
 	icon_manager.switch_to_activated()

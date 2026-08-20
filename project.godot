@@ -41,6 +41,7 @@ enabled=PackedStringArray("res://addons/MetroidvaniaSystem/EditorExtension/plugi
 
 [global_group]
 
+BreakAbles="Breakable tile layers the player can crumble by standing on them"
 player=""
 jetpack_checkpoint=""
 save_checkpoint=""

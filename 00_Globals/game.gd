@@ -214,6 +214,7 @@ func _on_pickup_collected(pickup: Pickup) -> void:
 		Pickup.PickupType.StunGun:
 			_player.enable_gun()
 			call_deferred("save_game")
+			PlayerManager.player.set_gun("stun")
 		Pickup.PickupType.PlasmaGun:
 			save.set_value("plasma_gun_collected", true)
 			PlayerManager.player.set_gun("plasma")

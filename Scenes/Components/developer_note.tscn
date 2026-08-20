@@ -16,11 +16,8 @@ func _ready() -> void:
 	queue_free()
 
 func _process(delta: float) -> void:
-	print(\"_process called\")
 	if not Engine.is_editor_hint():
 		return
-	
-	print(\" continuing\")
 	size.y = 0
 "
 

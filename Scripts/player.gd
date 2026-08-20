@@ -18,6 +18,9 @@ signal death_end()
 ## How close the active collider's leading edge must be to the wall face, in pixels,
 ## before a mantle is allowed. Keeps the vault from starting across the player's tile.
 @export var mantleWallDistance := 6.0
+## How far below the feet of the active collider the crumbling-floor probe reaches.
+## Just deep enough to land inside the tile being stood on.
+@export var crumbleProbeDepth := 8.0
 
 @export_subgroup("Wall Jump")
 @export var wallJumpTimeBufferSeconds := 0.1
@@ -81,6 +84,9 @@ const IDLESTATEPARAM := "parameters/StandardMovement/Idle/MoveState/transition_r
 const MOVESTATEPARAM := "parameters/StandardMovement/Move/MoveState/transition_request"
 const FIRESTATEPARAM := "parameters/RangedFire/MoveState/transition_request"
 const TILE_SIZE := 48
+## Group every BreakAbles layer joins, so the player can find the ones in the
+## room it is standing in without the room having to wire them up.
+const BREAKABLE_GROUP := &"BreakAbles"
 const GUN_MODES : Array[ StringName ]= [ "stun", "plasma" ]
 # Input
 var _moveInput : float
@@ -337,6 +343,25 @@ func handle_shooting(delta: float) -> void:
 		shoot()
 	else:
 		_shootBufferTimer -= delta
+
+## Crumbling breakable tiles have no hitbox to be caught by, so the player is
+## what tells them they are being stood on. Only the single cell under the centre
+## of the player counts, which is what keeps the edges of a crumbling floor
+## forgiving: clipping a corner of one is not standing on it.
+func handle_crumbling_floor() -> void:
+	if not is_on_floor():
+		return
+
+	var layers := get_tree().get_nodes_in_group( BREAKABLE_GROUP )
+	if layers.is_empty():
+		return
+
+	var bounds = collisionManager.get_bounds()
+	var feet : float = maxf( bounds[0].y, bounds[1].y )
+	var probe := Vector2( global_position.x, feet + crumbleProbeDepth )
+	var foreground := get_foreground()
+	for layer in layers:
+		layer.step_on( probe, foreground )
 #endregion
 
 func determine_move_state() -> MoveState:
@@ -403,6 +428,8 @@ func _physics_process(delta: float) -> void:
 			hurtbox.process_mode = Node.PROCESS_MODE_INHERIT
 	
 	move_and_slide()
+	
+	handle_crumbling_floor()
 	
 	sprite.flip_h = false if _facingRight else true
 	

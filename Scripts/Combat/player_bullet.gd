@@ -13,7 +13,6 @@ var duration_timer : float
 func _ready() -> void:
 	super._ready()
 	duration_timer = lifetime
-	print(mode)
 	if mode == "plasma":
 		damage = plasma_damage
 
@@ -52,7 +51,10 @@ func _on_environment_hit(target: Node2D) -> void:
 		
 		var foreground : TileMapLayer = get_tree().get_first_node_in_group("Geometry")
 		var coordinates = tile_target.local_to_map(tile_target.to_local( global_position ) )
-		tile_target.destroy_tile( coordinates, get_damage_type(), foreground )
+		# A shot that cannot break the tile still uncovers it: the gun doubles as
+		# a probe for what is buried in a wall, which the wrench deliberately
+		# does not.
+		tile_target.destroy_tile( coordinates, get_damage_type(), foreground, Callable(), true )
 		return
 	
 	

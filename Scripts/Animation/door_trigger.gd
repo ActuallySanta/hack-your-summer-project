@@ -1,6 +1,6 @@
 class_name DoorTrigger extends Node2D
 
-@export var doors_to_open : Door
+@export var doors_to_open : Array[ Door ]
 
 func open_doors() -> void:
 	for door in doors_to_open:
