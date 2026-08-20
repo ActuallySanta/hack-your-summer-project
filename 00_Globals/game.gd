@@ -207,13 +207,10 @@ func _on_pickup_collected(pickup: Pickup) -> void:
 	match pickup.type:
 		Pickup.PickupType.Jetpack:
 			_player.enable_jetpack()
-			call_deferred("save_game")
 		Pickup.PickupType.Fuse:
-			#call_deferred("save_game")
 			pass
 		Pickup.PickupType.StunGun:
 			_player.enable_gun()
-			call_deferred("save_game")
 			PlayerManager.player.set_gun("stun")
 		Pickup.PickupType.PlasmaGun:
 			save.set_value("plasma_gun_collected", true)
@@ -226,7 +223,6 @@ func _push_blocking_cyborg() -> void:
 
 func _restore_station_power() -> void:
 	save.set_value("station_powered", true)
-	save_game()
 
 func _process(_delta: float) -> void:
 	

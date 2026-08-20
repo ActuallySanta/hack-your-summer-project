@@ -36,6 +36,11 @@ func _init(coords: Vector2i, tile_y_index: int, p_frame_step: int = 1, p_time_go
 	phase = Phase.BREAKING
 	time = 0
 
+func reset() -> void:
+	frame = 1
+	phase = Phase.BREAKING
+	time = TIME_ANIM
+
 func pull_cover_from(foreground: TileMapLayer) -> void:
 	cover_layer = foreground
 	cover_source = foreground.get_cell_source_id( coord )

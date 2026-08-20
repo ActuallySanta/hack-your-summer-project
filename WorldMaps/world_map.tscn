@@ -9,9 +9,6 @@
 [node name="WorldMap" type="Node2D" unique_id=1287662466]
 script = ExtResource("1_v4sft")
 
-[node name="WorldMapDB" parent="." unique_id=19893736 instance=ExtResource("2_boi75")]
-position = Vector2(-5566, 255)
-
 [node name="WorldMapCQ" parent="." unique_id=1768770900 instance=ExtResource("3_boi75")]
 position = Vector2(-4454, 2054)
 
@@ -20,3 +17,6 @@ position = Vector2(1149, 456)
 
 [node name="WorldMapRS" parent="." unique_id=1107164827 instance=ExtResource("5_bj1wo")]
 position = Vector2(5897, 3479)
+
+[node name="WorldMapDB" parent="." unique_id=19893736 instance=ExtResource("2_boi75")]
+position = Vector2(-7224, -194)

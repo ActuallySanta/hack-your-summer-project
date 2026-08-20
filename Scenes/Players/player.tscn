@@ -16,6 +16,7 @@
 [ext_resource type="AudioStream" uid="uid://8jtcqp1gbmcq" path="res://Sounds/Entities/Player/PlayerJump.wav" id="13_r5bcf"]
 [ext_resource type="AudioStream" uid="uid://y4se7p08x45o" path="res://Sounds/Entities/Player/PlayerHurt.ogg" id="14_7vh4w"]
 [ext_resource type="AudioStream" uid="uid://cgvbfwlbptv4w" path="res://Sounds/Entities/Player/PlayerMeleeSwing.wav" id="15_npdhm"]
+[ext_resource type="PackedScene" uid="uid://cmslssxbgmkj7" path="res://Scenes/Components/darkness.tscn" id="17_m3db5"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_f1ek2"]
 radius = 24.0
@@ -1364,6 +1365,8 @@ volume_db = 24.0
 max_distance = 100000.0
 attenuation = 1e-05
 panning_strength = 0.0
+
+[node name="Darkness" parent="." unique_id=1231306066 instance=ExtResource("17_m3db5")]
 
 [connection signal="hit" from="Hurtbox" to="." method="_on_hit"]
 [connection signal="animation_finished" from="TempClimberSinceZachIsStupid" to="." method="_on_mantle_complete"]
