@@ -1,6 +1,5 @@
 extends Area2D
 
-@export var powered_texture : Texture2D
 @export var electrical : Door
 @onready var sprite : Sprite2D = $Sprite2D
 
@@ -10,7 +9,7 @@ func _ready() -> void:
 	body_entered.connect(_on_body_entered)
 
 func switch_to_powered_sprite() -> void:
-	sprite.texture = powered_texture
+	sprite.frame = 1
 	electrical.animate_open()
 
 func try_insert_fuse() -> void:

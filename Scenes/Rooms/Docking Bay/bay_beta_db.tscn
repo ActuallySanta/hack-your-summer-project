@@ -71,6 +71,7 @@ position = Vector2(2169, 673)
 position = Vector2(519, 170)
 
 [node name="CameraAxisRegion" type="Area2D" parent="." unique_id=1832089095]
+visible = false
 script = ExtResource("7_6u4rj")
 lock_mode = 1
 center_override = Vector2(2.625, 0)
@@ -80,6 +81,7 @@ metadata/_custom_type_script = "uid://b3xkq7wnva8y"
 polygon = PackedVector2Array(1164, 1343, 2305, 1344, 2305, 780, 1164, 780)
 
 [node name="HardBoundryRemover" type="Node2D" parent="." unique_id=698509830]
+visible = false
 script = SubResource("GDScript_yx2ah")
 
 [node name="CameraHardBoundary" type="Area2D" parent="HardBoundryRemover" unique_id=2128448969]
@@ -91,6 +93,7 @@ position = Vector2(768, 387.5)
 shape = SubResource("RectangleShape2D_85ri6")
 
 [node name="CameraAxisRegion2" type="Area2D" parent="." unique_id=699040713]
+visible = false
 script = ExtResource("7_6u4rj")
 preserved_axis = 1
 metadata/_custom_type_script = "uid://b3xkq7wnva8y"

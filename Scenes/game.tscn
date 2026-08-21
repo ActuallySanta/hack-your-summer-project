@@ -6,7 +6,6 @@
 
 [node name="Game" type="Node" unique_id=651801150]
 script = ExtResource("1_wrm1d")
-use_custom_save = true
 save_room = "uid://dtkowilv386lj"
 save_pos = Vector2(248, 640)
 save_fuse_state = 2
