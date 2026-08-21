@@ -25,6 +25,7 @@ GlobalSignals="*uid://bac60hesolscg"
 SceneLoader="*uid://bdtr22633bwcl"
 MusicManager="*uid://d0sejejpytdhi"
 StationPowerTiles="*uid://bi8odjtxgyfiu"
+MapBorders="*res://00_Globals/map_borders.gd"
 
 [display]
 

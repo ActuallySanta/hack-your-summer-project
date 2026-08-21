@@ -118,7 +118,7 @@ func load_from_binary(path: String):
 
 ## Stores the data as text using [method @GlobalScope.var_to_str], returning the resulting [String]. Use it if you can't use the file methods for some reason.
 func save_as_string() -> String:
-	data.merge(MetSys.get_save_data())
+	data.merge(MetSys.get_save_data(), true)
 	return var_to_str(data)
 
 ## Loads a text saved data from the provided [String] (it must have been created with [method save_as_string]). The data can be then retrieved using [method get_value].
@@ -132,8 +132,13 @@ func load_from_string(string: String):
 	MetSys.set_save_data(data)
 
 func _setup_save(path: String) -> FileAccess:
-	data.merge(MetSys.get_save_data())
-	
+	# Overwriting, because MetSys' data is the live state and whatever is already
+	# under these keys is a copy taken at the last save or load. Most of them are the
+	# very same dictionaries and so cannot go stale, but cell_overrides is rebuilt as
+	# a fresh array every time, and without overwriting it the first one ever written
+	# is the one every later save keeps.
+	data.merge(MetSys.get_save_data(), true)
+
 	var file := FileAccess.open(path, FileAccess.WRITE)
 	if not file:
 		push_error("Failed to write save file \"%s\"! Error %d." % [path, FileAccess.get_open_error()])

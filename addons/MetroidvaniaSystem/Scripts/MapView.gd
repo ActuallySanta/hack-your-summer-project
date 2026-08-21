@@ -125,34 +125,44 @@ func move(offset: Vector2i, new_layer := layer):
 	
 	var shared_borders: bool = MetSys.settings.theme.use_shared_borders
 	var new_cache: Dictionary[Vector3i, CellView]
+	# Drawn only once the whole view has been relinked, below. With shared borders a
+	# cell decides whether to draw its left and top borders from these links, so a
+	# cell drawn before they are set draws as though it were at the edge of the view,
+	# and a cell whose links changed keeps drawing to the old ones. Either way the one
+	# line between two cells ends up drawn twice or not at all, by cells that were
+	# last drawn at different times and so may not even agree on what is there.
+	var to_update: Array[CellView]
 	for y in size.y:
 		for x in size.x:
 			var coords := Vector3i(begin.x + x, begin.y + y, layer)
 			var cell: CellView = _cache.get(coords)
+			var needs_update := false
 			if not cell:
 				cell = CellView.new(_canvas_item)
 				cell.coords = coords
-				cell.update()
-			
+				needs_update = true
+
 			cell.offset = Vector2(x, y)
 			new_cache[coords] = cell
-			
+
 			if shared_borders:
-				if x > 0:
-					cell._left_cell = new_cache[coords + Vector3i(-1, 0, 0)]
-				else:
-					cell._left_cell = null
-				
-				if y > 0:
-					cell._top_cell = new_cache[coords + Vector3i(0, -1, 0)]
-				else:
-					cell._top_cell = null
-				
-				if x > 0 and y > 0:
-					cell._top_left_cell = new_cache[coords + Vector3i(-1, -1, 0)]
-				else:
-					cell._top_left_cell = null
-	
+				var left: CellView = new_cache.get(coords + Vector3i(-1, 0, 0)) if x > 0 else null
+				var top: CellView = new_cache.get(coords + Vector3i(0, -1, 0)) if y > 0 else null
+				var top_left: CellView = new_cache.get(coords + Vector3i(-1, -1, 0)) if x > 0 and y > 0 else null
+
+				if cell._left_cell != left or cell._top_cell != top or cell._top_left_cell != top_left:
+					needs_update = true
+
+				cell._left_cell = left
+				cell._top_cell = top
+				cell._top_left_cell = top_left
+
+			if needs_update:
+				to_update.append(cell)
+
+	for cell in to_update:
+		cell.update()
+
 	var rect := Rect2i(_begin, size)
 	var element_manager: MetroidvaniaSystem.CustomElementManager = MetSys.settings.custom_elements
 	var element_list: Dictionary[Vector3i, CustomElement] = MetSys.map_data.custom_elements
