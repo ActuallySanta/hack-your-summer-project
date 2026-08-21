@@ -61,7 +61,7 @@ visible = false
 script = ExtResource("8_cb5li")
 claim_directions = 5
 use_center_override = true
-center_override = 336.0
+center_override = Vector2(0, 336)
 metadata/_custom_type_script = "uid://b3xkq7wnva8y"
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="CameraAxisRegionHorizontal" unique_id=1412255596]

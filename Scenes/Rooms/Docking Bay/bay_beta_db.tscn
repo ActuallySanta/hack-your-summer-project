@@ -6,6 +6,11 @@
 [ext_resource type="PackedScene" uid="uid://ba6450qhwuqee" path="res://Scenes/Components/break_ables.tscn" id="4_1k17a"]
 [ext_resource type="PackedScene" uid="uid://cvo6nu4jnyud4" path="res://Scenes/Pickups/gun.tscn" id="5_rhf1s"]
 [ext_resource type="PackedScene" uid="uid://bnpsyl86ggbjm" path="res://Scenes/Pickups/health_extender.tscn" id="6_fo38q"]
+[ext_resource type="Script" uid="uid://b3xkq7wnva8y" path="res://Scripts/BehaviorAdjustments/camera_axis_region.gd" id="7_6u4rj"]
+[ext_resource type="Script" uid="uid://dxvniwuir8ci5" path="res://Scripts/BehaviorAdjustments/camera_hard_boundary.gd" id="8_yx2ah"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_85ri6"]
+size = Vector2(897, 1243)
 
 [node name="BayBetaDb" type="Node2D" unique_id=586346883]
 
@@ -45,3 +50,20 @@ position = Vector2(2169, 673)
 
 [node name="HealthExtender2" parent="." unique_id=648412909 instance=ExtResource("6_fo38q")]
 position = Vector2(519, 170)
+
+[node name="CameraAxisRegion" type="Area2D" parent="." unique_id=1832089095]
+script = ExtResource("7_6u4rj")
+lock_mode = 1
+center_override = Vector2(2.625, 0)
+metadata/_custom_type_script = "uid://b3xkq7wnva8y"
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="CameraAxisRegion" unique_id=1723331899]
+polygon = PackedVector2Array(1164, 1343, 2305, 1344, 2305, 780, 1164, 780)
+
+[node name="CameraHardBoundary" type="Area2D" parent="." unique_id=2128448969]
+position = Vector2(768, 264)
+script = ExtResource("8_yx2ah")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraHardBoundary" unique_id=2010889745]
+position = Vector2(448.5, 387.5)
+shape = SubResource("RectangleShape2D_85ri6")

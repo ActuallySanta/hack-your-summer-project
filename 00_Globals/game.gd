@@ -34,15 +34,19 @@ var isInGame : bool = false
 var paused : bool = false
 # Camera axis region state (see _apply_camera_axis_regions).
 var _axis_region: CameraAxisRegion = null
-var _axis_locked := 1
-var _axis_start := 0.0
+# Axes _axis_region drives, as CameraAxisRegion.AXIS_* flags.
+var _axis_locked := CameraAxisRegion.AXIS_Y
+var _axis_start := Vector2.ZERO
 var _axis_progress := 0.0
 var _axis_rate := 1.0
-# Hand-back of a locked axis to normal following. -1 when nothing is releasing.
-var _release_axis := -1
-var _release_start := 0.0
-var _release_progress := 0.0
-var _release_rate := 1.0
+# Hand-back of locked axes to normal following, tracked per axis. _release_axes
+# holds the axes still easing back, _release_ignore those among them that are
+# still exempt from the hard bounds.
+var _release_axes := 0
+var _release_ignore := 0
+var _release_start := Vector2.ZERO
+var _release_progress := Vector2.ZERO
+var _release_rate := Vector2.ONE
 var _prev_player_pos := Vector2.ZERO
 var _prev_player_valid := false
 # False while a room is being swapped in and the player has not been placed in it
@@ -228,7 +232,7 @@ func _process(_delta: float) -> void:
 	
 	if(!isInGame):
 		return
-	MetSys.get_current_room_instance().adjust_camera_limits(_camera)
+	var bounds := _camera_bounds()
 	var camPos := _camera.position
 	var playerPos := _player.position
 	var posDiff := camPos - playerPos
@@ -236,7 +240,7 @@ func _process(_delta: float) -> void:
 		camPos.x = playerPos.x + (cameraDeadzone.x * sign(posDiff.x))
 	if abs(posDiff.y) > cameraDeadzone.y:
 		camPos.y = playerPos.y + (cameraDeadzone.y * sign(posDiff.y))
-	camPos = _apply_camera_axis_regions(camPos, _delta)
+	camPos = _apply_camera_axis_regions(camPos, bounds, _delta)
 	_camera.position = camPos
 	
 	if allow_save_anywhere and Input.is_action_just_pressed(&"debug_save"):
@@ -266,16 +270,38 @@ static func is_station_powered() -> bool:
 		return false
 	return instance.save.get_value("station_powered", false)
 
-#region Camera axis regions
+#region Camera bounds and axis regions
+## Camera2D's own limits are pushed this far out on an axis we don't want it to
+## clamp, since our clamping is the authority and the two must not fight.
+const CAMERA_LIMIT_OPEN := 10000000
+
+## The rectangle the camera's view is kept inside: the current room's bounds, cut
+## back by every [CameraHardBoundary] that applies right now.
+##
+## Everything that places the camera goes through this, so a boundary is as hard
+## as a room edge. Without a room loaded, nothing is bounded.
+func _camera_bounds() -> Rect2:
+	var room := MetSys.get_current_room_instance()
+	if not room:
+		return Rect2(Vector2.ONE * -CAMERA_LIMIT_OPEN, Vector2.ONE * (CAMERA_LIMIT_OPEN * 2))
+	var rect := Rect2(Vector2.ZERO, room.get_size())
+	var focus := _player.global_position
+	for node in get_tree().get_nodes_in_group(CameraHardBoundary.GROUP):
+		var boundary := node as CameraHardBoundary
+		if boundary.is_active():
+			rect = boundary.apply_to(rect, focus)
+	return rect
+
 ## Applies whichever [CameraAxisRegion] currently holds the camera, then re-applies
-## the room's rectangular hard bounds so they stay the final authority.
+## the hard bounds so they stay the final authority on every axis that is not
+## exempt from them.
 ##
 ## A region is a candidate while the player stands inside its polygon, and takes
 ## control when the player is also moving in one of its claim directions. Control
 ## then persists until the player leaves the polygon or another region claims. On
 ## every change of hands the blend restarts from the camera's current position, so
 ## a hand-over behaves exactly like a fresh entry (see [CameraAxisRegion]).
-func _apply_camera_axis_regions(cam_center: Vector2, delta: float) -> Vector2:
+func _apply_camera_axis_regions(cam_center: Vector2, bounds: Rect2, delta: float) -> Vector2:
 	var movement := _player_movement(PlayerManager.player, delta)
 
 	# A region freed under us (room unloaded) just stops holding the camera.
@@ -303,27 +329,30 @@ func _apply_camera_axis_regions(cam_center: Vector2, delta: float) -> Vector2:
 	var result := cam_center
 	if _axis_region != null:
 		_axis_progress = minf(_axis_progress + _axis_rate * delta, 1.0)
-		result[_axis_locked] = lerpf(_axis_start, _axis_region.get_center_value(),
-			smoothstep(0.0, 1.0, _axis_progress))
-	if _release_axis >= 0:
+		var target := _axis_region.get_center_point()
+		var weight := smoothstep(0.0, 1.0, _axis_progress)
+		for axis in 2:
+			if _axis_locked & (1 << axis):
+				result[axis] = lerpf(_axis_start[axis], target[axis], weight)
+	for axis in 2:
+		var bit := 1 << axis
+		if not (_release_axes & bit):
+			continue
 		# Ease from where the axis was parked back onto normal following, which is
 		# what cam_center already holds for that axis.
-		_release_progress = minf(_release_progress + _release_rate * delta, 1.0)
-		result[_release_axis] = lerpf(_release_start, cam_center[_release_axis],
-			smoothstep(0.0, 1.0, _release_progress))
-		if _release_progress >= 1.0:
-			_release_axis = -1
+		_release_progress[axis] = minf(_release_progress[axis] + _release_rate[axis] * delta, 1.0)
+		result[axis] = lerpf(_release_start[axis], cam_center[axis],
+			smoothstep(0.0, 1.0, _release_progress[axis]))
+		if _release_progress[axis] >= 1.0:
+			_release_axes &= ~bit
+			_release_ignore &= ~bit
 
-	# adjust_camera_limits() was already called this frame, so the limits are current.
-	var hard_rect := Rect2(
-		_camera.limit_left, _camera.limit_top,
-		_camera.limit_right - _camera.limit_left,
-		_camera.limit_bottom - _camera.limit_top)
-	var half_view := _camera.get_viewport_rect().size * 0.5 / _camera.zoom
-	return _clamp_view_to_rect(result, half_view, hard_rect)
+	var exempt := _bounds_exempt_axes()
+	_apply_camera_limits(bounds, exempt)
+	return _clamp_view_to_rect(result, _half_view(), bounds, exempt)
 
-## Takes camera control for [param region] with the locked axis already sitting on
-## its centre line, and moves the camera there immediately.
+## Takes camera control for [param region] with its axes already sitting on their
+## centre, and moves the camera there immediately.
 ##
 ## Called by a region that finds the player inside it as its room resolves, which
 ## happens before the first frame in that room is drawn. There is no previous shot
@@ -335,55 +364,97 @@ func snap_to_camera_axis_region(region: CameraAxisRegion) -> void:
 	_begin_axis_region(region)
 	# Nothing to travel: the shot starts at its destination.
 	_axis_progress = 1.0
-	_release_axis = -1
+	_release_axes = 0
+	_release_ignore = 0
 
-	var room := MetSys.get_current_room_instance()
-	if not room:
-		return
-	# The room may not have been measured yet this frame, and the hard bounds have
-	# to win here too, so refresh the limits before clamping to them.
-	room.adjust_camera_limits(_camera)
 	var pos := _camera.position
-	pos[_axis_locked] = region.get_center_value()
-	var hard_rect := Rect2(
-		_camera.limit_left, _camera.limit_top,
-		_camera.limit_right - _camera.limit_left,
-		_camera.limit_bottom - _camera.limit_top)
-	var half_view := _camera.get_viewport_rect().size * 0.5 / _camera.zoom
-	_camera.position = _clamp_view_to_rect(pos, half_view, hard_rect)
+	var target := region.get_center_point()
+	for axis in 2:
+		if _axis_locked & (1 << axis):
+			pos[axis] = target[axis]
+	# The hard bounds have to win here too, and the room may not have been measured
+	# yet this frame, so take them fresh.
+	var bounds := _camera_bounds()
+	var exempt := _bounds_exempt_axes()
+	_apply_camera_limits(bounds, exempt)
+	_camera.position = _clamp_view_to_rect(pos, _half_view(), bounds, exempt)
 
 ## Hands the camera to [param region], measuring its slide from where the camera
 ## actually is right now.
 func _begin_axis_region(region: CameraAxisRegion) -> void:
 	var previous := _axis_region
+	var previous_axes := _axis_locked if previous != null else 0
 	_axis_region = region
-	_axis_locked = region.get_locked_axis()
-	_axis_start = _camera.position[_axis_locked]
+	_axis_locked = region.get_locked_axes()
+	_axis_start = _camera.position
 	_axis_progress = 0.0
 	_axis_rate = region.centering_rate
 
-	if previous != null and previous.get_locked_axis() != _axis_locked:
-		# Swapping preserved axis (e.g. rounding the corner of an L-shaped shaft):
-		# ease the axis we just freed back into normal following.
-		_start_axis_release(previous.get_locked_axis(), previous.get_release_rate())
-	elif _release_axis == _axis_locked:
-		# We are driving that axis again, so an in-flight hand-back is moot.
-		_release_axis = -1
+	# Axes the outgoing region drove and this one does not (rounding the corner of
+	# an L-shaped shaft, or leaving a point region for a line one) ease back into
+	# normal following.
+	var freed := previous_axes & ~_axis_locked
+	if freed != 0:
+		_release_freed_axes(freed, previous)
+	# We are driving these again, so an in-flight hand-back of them is moot.
+	_release_axes &= ~_axis_locked
+	_release_ignore &= ~_axis_locked
 
-## Drops camera control and eases the locked axis back into normal following.
+## Drops camera control and eases the locked axes back into normal following.
 func _end_axis_region() -> void:
 	var region := _axis_region
 	_axis_region = null
-	_start_axis_release(_axis_locked, region.get_release_rate())
+	_release_freed_axes(_axis_locked, region)
 
-func _start_axis_release(axis: int, rate: float) -> void:
-	_release_axis = axis
-	_release_start = _camera.position[axis]
-	_release_progress = 0.0
-	_release_rate = rate
+func _release_freed_axes(axes: int, region: CameraAxisRegion) -> void:
+	var rate := region.get_release_rate()
+	var ignores := region.ignore_hard_boundaries
+	for axis in 2:
+		var bit := 1 << axis
+		if not (axes & bit):
+			continue
+		_release_axes |= bit
+		_release_start[axis] = _camera.position[axis]
+		_release_progress[axis] = 0.0
+		_release_rate[axis] = rate
+		# Keep the exemption for the whole hand-back, so an axis parked outside the
+		# bounds eases back inside instead of snapping to them on release.
+		if ignores:
+			_release_ignore |= bit
+		else:
+			_release_ignore &= ~bit
+
+## The axes currently allowed out of the hard bounds, as CameraAxisRegion.AXIS_*
+## flags. Only regions with [member CameraAxisRegion.ignore_hard_boundaries] grant
+## this, and only for the axes they drive.
+func _bounds_exempt_axes() -> int:
+	var exempt := 0
+	if _axis_region != null and _axis_region.ignore_hard_boundaries:
+		exempt |= _axis_locked
+	return exempt | (_release_ignore & _release_axes)
+
+## Mirrors [param bounds] onto the camera's own limits, which Godot applies to the
+## view on top of anything we do. Axes we place ourselves keep their limits open,
+## so the camera is never clamped twice by two different rules: the exempt ones,
+## and any span too narrow to fit the view, which [method _clamp_view_to_rect]
+## centres instead.
+func _apply_camera_limits(bounds: Rect2, exempt_axes: int) -> void:
+	var half_view := _half_view()
+	for axis in 2:
+		var lo := -CAMERA_LIMIT_OPEN
+		var hi := CAMERA_LIMIT_OPEN
+		if not (exempt_axes & (1 << axis)) and bounds.size[axis] >= half_view[axis] * 2.0:
+			lo = int(floorf(bounds.position[axis]))
+			hi = int(ceilf(bounds.end[axis]))
+		if axis == 0:
+			_camera.limit_left = lo
+			_camera.limit_right = hi
+		else:
+			_camera.limit_top = lo
+			_camera.limit_bottom = hi
 
 ## The player's travel this frame in global pixels/second. Teleports (room change,
-## respawn) are reported as no movement so they can't claim a region.
+## respawn) are reported as no movement so they cannot claim a region.
 func _player_movement(player: Node2D, delta: float) -> Vector2:
 	var pos := player.global_position
 	var movement := Vector2.ZERO
@@ -399,7 +470,8 @@ func _player_movement(player: Node2D, delta: float) -> Vector2:
 ## room changes, where the old regions are freed and the player teleports.
 func reset_camera_axis_state() -> void:
 	_axis_region = null
-	_release_axis = -1
+	_release_axes = 0
+	_release_ignore = 0
 	_prev_player_valid = false
 	# MetSys can report the room change after the new room's regions have already
 	# resolved, so re-resolve rather than leaving the camera unclaimed until the
@@ -408,7 +480,7 @@ func reset_camera_axis_state() -> void:
 	_resolve_camera_arrival.call_deferred()
 
 ## Gives the camera to whichever loaded region the player is already standing in,
-## centred and without easing. A no-op when they aren't in one.
+## centred and without easing. A no-op when they are not in one.
 func _resolve_camera_arrival() -> void:
 	var best: CameraAxisRegion = null
 	for node in get_tree().get_nodes_in_group(CameraAxisRegion.GROUP):
@@ -418,20 +490,24 @@ func _resolve_camera_arrival() -> void:
 	if best != null:
 		snap_to_camera_axis_region(best)
 
-## Clamps a camera centre so its view rectangle stays within [param rect].
-## If the room is smaller than the view on an axis, the view is centred there.
-func _clamp_view_to_rect(center: Vector2, half_view: Vector2, rect: Rect2) -> Vector2:
+## Half the camera's view, in world pixels.
+func _half_view() -> Vector2:
+	return _camera.get_viewport_rect().size * 0.5 / _camera.zoom
+
+## Clamps a camera centre so its view rectangle stays within [param rect]. Axes in
+## [param exempt_axes] are left alone. If the rect is smaller than the view on an
+## axis, the view is centred there.
+func _clamp_view_to_rect(center: Vector2, half_view: Vector2, rect: Rect2, exempt_axes := 0) -> Vector2:
 	var result := center
 	var lo := rect.position + half_view
 	var hi := rect.end - half_view
-	if lo.x <= hi.x:
-		result.x = clampf(center.x, lo.x, hi.x)
-	else:
-		result.x = (rect.position.x + rect.end.x) * 0.5
-	if lo.y <= hi.y:
-		result.y = clampf(center.y, lo.y, hi.y)
-	else:
-		result.y = (rect.position.y + rect.end.y) * 0.5
+	for axis in 2:
+		if exempt_axes & (1 << axis):
+			continue
+		if lo[axis] <= hi[axis]:
+			result[axis] = clampf(center[axis], lo[axis], hi[axis])
+		else:
+			result[axis] = (rect.position[axis] + rect.end[axis]) * 0.5
 	return result
 #endregion
 

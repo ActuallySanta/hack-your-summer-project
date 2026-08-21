@@ -48,7 +48,7 @@ visible = false
 script = ExtResource("6_qism0")
 preserved_axis = 1
 claim_directions = 5
-center_override = 1000.0
+center_override = Vector2(1000, 0)
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="CameraBoundsVertical" unique_id=1729215804]
 polygon = PackedVector2Array(0, 176, 0, 1202, 1152, 1200, 1152, 1056, 1151, 95)
@@ -57,7 +57,7 @@ polygon = PackedVector2Array(0, 176, 0, 1202, 1152, 1200, 1152, 1056, 1151, 95)
 visible = false
 script = ExtResource("6_qism0")
 claim_directions = 6
-center_override = 1000.0
+center_override = Vector2(0, 1000)
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="CameraBoundsHorizontal" unique_id=230133667]
 position = Vector2(583, -34)
