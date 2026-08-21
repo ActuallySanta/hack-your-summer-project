@@ -62,6 +62,8 @@ enum RepairMode {
 ## The player drives this, since being stood on is not an attack; see
 ## Player.handle_crumbling_floor.
 @export var crumbles_underfoot : bool = true
+## A List of nodes that can be expected to have the method: _on_tile_broken
+@export var nodes_with_on_break : Array[ Node2D ]
 
 var list_of_broken_cords : Array[ BreakableTileData ]
 
@@ -175,6 +177,16 @@ func destroy_tile(coords: Vector2i, attempt_type: StringName, foreground : TileM
 		if can_reveal:
 			reveal_tile( coords, foreground )
 		return
+	
+	# Run breakable functions
+	for node in nodes_with_on_break:
+		print("test begin...")
+		if node.has_method("_on_tile_broken"):
+			print("  calling function...")
+			node._on_tile_broken()
+		else:
+			printerr("Node does not have method \"_on_tile_broken\": ", node.name)
+	nodes_with_on_break = []
 
 	# Create TileData
 	var tile_data := BreakableTileData.new( coords, break_type, animation_frames_skipped + 1, time_gone_seconds, respawn )

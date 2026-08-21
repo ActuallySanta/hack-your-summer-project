@@ -377,6 +377,7 @@ texture = ExtResource("1_a6myr")
 sources/0 = SubResource("TileSetAtlasSource_we1ai")
 
 [node name="Darkness" type="Sprite2D" unique_id=1231306066]
+z_index = 999
 scale = Vector2(3, 3)
 texture = ExtResource("1_a6myr")
 script = SubResource("GDScript_k8qpn")

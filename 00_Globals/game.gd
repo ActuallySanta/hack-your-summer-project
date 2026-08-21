@@ -47,6 +47,18 @@ var _release_ignore := 0
 var _release_start := Vector2.ZERO
 var _release_progress := Vector2.ZERO
 var _release_rate := Vector2.ONE
+# Hard bounds easing (see _eased_camera_bounds). _bounds_eased is what the camera
+# is actually held inside this frame, on its way to _bounds_target.
+var _bounds_ready := false
+var _bounds_roomless := false
+var _bounds_eased := Rect2()
+var _bounds_start := Rect2()
+var _bounds_target := Rect2()
+var _bounds_progress := 1.0
+var _bounds_rate := 1.5
+# Slowest shift rate among the boundaries that changed during the last bounds pass,
+# or 0 when none did.
+var _bounds_change_rate := 0.0
 var _prev_player_pos := Vector2.ZERO
 var _prev_player_valid := false
 # False while a room is being swapped in and the player has not been placed in it
@@ -232,7 +244,7 @@ func _process(_delta: float) -> void:
 	
 	if(!isInGame):
 		return
-	var bounds := _camera_bounds()
+	var bounds := _eased_camera_bounds(_delta)
 	var camPos := _camera.position
 	var playerPos := _player.position
 	var posDiff := camPos - playerPos
@@ -275,22 +287,95 @@ static func is_station_powered() -> bool:
 ## clamp, since our clamping is the authority and the two must not fight.
 const CAMERA_LIMIT_OPEN := 10000000
 
-## The rectangle the camera's view is kept inside: the current room's bounds, cut
-## back by every [CameraHardBoundary] that applies right now.
+## An edge of the hard bounds travelling slower than this (pixels/second) is
+## followed as it moves rather than eased after, because there is no cut to hide.
+## Above it, the change is treated as a boundary switching on, off, or jumping.
+const CAMERA_BOUNDS_TRACK_SPEED := 1200.0
+
+## Rate used to ease a bounds change that no [CameraHardBoundary] accounted for.
+const CAMERA_BOUNDS_SHIFT_RATE := 1.5
+
+## Where the hard bounds are heading: the current room's bounds, cut back by every
+## [CameraHardBoundary] that applies right now.
 ##
-## Everything that places the camera goes through this, so a boundary is as hard
-## as a room edge. Without a room loaded, nothing is bounded.
-func _camera_bounds() -> Rect2:
+## Everything that places the camera goes through this, so a boundary is as hard as
+## a room edge. Without a room loaded, nothing is bounded. Pass [param track_changes]
+## on the once-a-frame call to note which boundaries changed, which is what decides
+## the rate the camera eases across at.
+func _camera_bounds(track_changes := false) -> Rect2:
 	var room := MetSys.get_current_room_instance()
-	if not room:
+	_bounds_roomless = room == null
+	if _bounds_roomless:
 		return Rect2(Vector2.ONE * -CAMERA_LIMIT_OPEN, Vector2.ONE * (CAMERA_LIMIT_OPEN * 2))
 	var rect := Rect2(Vector2.ZERO, room.get_size())
 	var focus := _player.global_position
+	if track_changes:
+		_bounds_change_rate = 0.0
 	for node in get_tree().get_nodes_in_group(CameraHardBoundary.GROUP):
 		var boundary := node as CameraHardBoundary
-		if boundary.is_active():
+		var active := boundary.is_active()
+		if track_changes and boundary.poll_state_change(active):
+			# Several can change on the same frame, and the gentlest reading of that
+			# is the slowest of them.
+			_bounds_change_rate = boundary.shift_rate if _bounds_change_rate <= 0.0 \
+				else minf(_bounds_change_rate, boundary.shift_rate)
+		if active:
 			rect = boundary.apply_to(rect, focus)
 	return rect
+
+## The bounds the camera is actually held inside this frame.
+##
+## A boundary switching on or off, or being moved in one step, would otherwise cut
+## the shot to a new position the moment it happened. Instead the bounds themselves
+## slide to their new shape on the same smoothstep the regions centre on, so the
+## camera is carried across by the edge that holds it and the two systems read as
+## one. Nothing waits on the player here: unlike a region, which needs them walking
+## its way before it claims, a boundary starts easing the moment it changes.
+func _eased_camera_bounds(delta: float) -> Rect2:
+	var target := _camera_bounds(true)
+	# Nothing to ease from on the first frame in a room, or while there is no room.
+	if not _bounds_ready or _bounds_roomless:
+		_settle_camera_bounds(target)
+		_bounds_ready = not _bounds_roomless
+		return _bounds_eased
+
+	if target != _bounds_target:
+		var speed := _rect_edge_change(_bounds_target, target) / maxf(delta, 0.0001)
+		if speed > CAMERA_BOUNDS_TRACK_SPEED:
+			# Restart from where the bounds have actually reached, so a second change
+			# mid-slide picks up from the current shape instead of jumping back.
+			_bounds_start = _bounds_eased
+			_bounds_progress = 0.0
+			_bounds_rate = _bounds_change_rate if _bounds_change_rate > 0.0 else CAMERA_BOUNDS_SHIFT_RATE
+		_bounds_target = target
+
+	if _bounds_progress < 1.0:
+		_bounds_progress = minf(_bounds_progress + _bounds_rate * delta, 1.0)
+		_bounds_eased = _lerp_rect(_bounds_start, _bounds_target, smoothstep(0.0, 1.0, _bounds_progress))
+	else:
+		_bounds_eased = _bounds_target
+	return _bounds_eased
+
+## Puts the hard bounds at [param rect] with nothing in flight, for the moments the
+## camera is placed rather than moved: arriving in a room, or respawning.
+func _settle_camera_bounds(rect: Rect2) -> void:
+	_bounds_ready = true
+	_bounds_eased = rect
+	_bounds_start = rect
+	_bounds_target = rect
+	_bounds_progress = 1.0
+
+## The furthest any one edge moved between two bounds rects.
+func _rect_edge_change(from: Rect2, to: Rect2) -> float:
+	var moved := (to.position - from.position).abs()
+	var end_moved := (to.end - from.end).abs()
+	return maxf(maxf(moved.x, moved.y), maxf(end_moved.x, end_moved.y))
+
+## Blends two bounds rects edge by edge, so an edge that isn't moving stays put.
+func _lerp_rect(from: Rect2, to: Rect2, weight: float) -> Rect2:
+	var start := from.position.lerp(to.position, weight)
+	var end := from.end.lerp(to.end, weight)
+	return Rect2(start, end - start)
 
 ## Applies whichever [CameraAxisRegion] currently holds the camera, then re-applies
 ## the hard bounds so they stay the final authority on every axis that is not
@@ -373,8 +458,12 @@ func snap_to_camera_axis_region(region: CameraAxisRegion) -> void:
 		if _axis_locked & (1 << axis):
 			pos[axis] = target[axis]
 	# The hard bounds have to win here too, and the room may not have been measured
-	# yet this frame, so take them fresh.
+	# yet this frame, so take them fresh. Arriving somewhere is a placement rather
+	# than a move, so they settle where they are instead of sliding in from whatever
+	# shape the last room left behind.
 	var bounds := _camera_bounds()
+	if not _bounds_roomless:
+		_settle_camera_bounds(bounds)
 	var exempt := _bounds_exempt_axes()
 	_apply_camera_limits(bounds, exempt)
 	_camera.position = _clamp_view_to_rect(pos, _half_view(), bounds, exempt)
@@ -473,6 +562,9 @@ func reset_camera_axis_state() -> void:
 	_release_axes = 0
 	_release_ignore = 0
 	_prev_player_valid = false
+	# The next room's bounds are a different shape entirely, so they are taken as
+	# read rather than eased across the seam.
+	_bounds_ready = false
 	# MetSys can report the room change after the new room's regions have already
 	# resolved, so re-resolve rather than leaving the camera unclaimed until the
 	# player next moves. Deferred, because on a transition the room this belongs

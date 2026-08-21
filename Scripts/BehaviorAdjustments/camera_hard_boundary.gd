@@ -51,6 +51,16 @@ enum CameraSide {
 		if Engine.is_editor_hint():
 			queue_redraw()
 
+## How quickly the camera eases across when this boundary starts applying, stops
+## applying, or is moved in one step, matching the way a [CameraAxisRegion] slides
+## onto its centre. The camera is never cut to a new position, so a boundary
+## appearing and a region taking over should read as the same piece of camera work.
+##
+## Only consulted for changes this boundary caused; when several change at once the
+## slowest of them wins. A boundary sliding along continuously is followed as it
+## moves instead, since there is no cut to smooth over.
+@export_range(0.1, 8.0, 0.05, "or_greater") var shift_rate := 1.5
+
 @export_group("Editor preview")
 ## How long the drawn line is when the boundary has no collision polygons to
 ## span. Has no effect in game.
@@ -64,6 +74,9 @@ var _bounds := Rect2()
 var _has_bounds := false
 var _has_area := false
 var _shapes: Array = []
+## What this boundary contributed the last time it was polled: whether it applied,
+## and where its line was. Starts as a value no real state matches.
+var _polled_state := Vector2(-1.0, 0.0)
 
 func _ready() -> void:
 	if Engine.is_editor_hint():
@@ -111,6 +124,15 @@ func is_active() -> bool:
 	if not _has_area:
 		return true
 	return PlayerOverlap.with_shapes(_shapes)
+
+## True when what this boundary contributes has changed since the last poll, so the
+## camera has a cut to ease over. Consumes the change: only the first caller in a
+## frame sees it, which is the per-frame bounds pass.
+func poll_state_change(active: bool) -> bool:
+	var state := Vector2(1.0 if active else 0.0, get_line_position())
+	var changed := state != _polled_state
+	_polled_state = state
+	return changed
 
 ## Returns [param rect] cut back to the side of the line the camera is held on.
 ## [param focus] is the position the side is judged from in [constant CameraSide.PLAYER]
