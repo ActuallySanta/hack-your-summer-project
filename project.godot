@@ -24,6 +24,7 @@ CheckpointEventBus="*uid://dhboilckmjc7f"
 GlobalSignals="*uid://bac60hesolscg"
 SceneLoader="*uid://bdtr22633bwcl"
 MusicManager="*uid://d0sejejpytdhi"
+StationPowerTiles="*uid://bi8odjtxgyfiu"
 
 [display]
 
