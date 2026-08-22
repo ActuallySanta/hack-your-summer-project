@@ -2,14 +2,14 @@ class_name Bullet extends CharacterBody2D
 
 @export var MOVESPEED = 100
 @export var sprite_texture_map : Dictionary[ StringName, int ] = {
-	"U" : 1,
-	"UR": 3,
-	"R" : 0,
-	"DR": 2,
-	"D" : 1,
-	"DL": 3,
-	"L" : 0,
-	"UL": 2,
+	"U" : 194,
+	"UR": 194,
+	"R" : 194,
+	"DR": 194,
+	"D" : 195,
+	"DL": 195,
+	"L" : 195,
+	"UL": 195,
 }
 var direction_to_vector : Dictionary[ StringName, Vector2 ] = {
 	"U" : Vector2(0, -1),
@@ -34,7 +34,10 @@ func _on_bullet_lifetime_timeout() -> void:
 func _physics_process(delta: float) -> void:
 	move_and_slide()
 
-func initial_operations() -> void:
+func initial_operations(spawn_pos: Vector2, spawn_direction: StringName, spawn_offset: float) -> void:
+	initDir = spawn_direction
+	spawnPos = spawn_pos
+	start_offset = spawn_offset
 	var dir : = direction_to_vector[ initDir ]
 	position = spawnPos + dir * start_offset
 	velocity = dir * MOVESPEED

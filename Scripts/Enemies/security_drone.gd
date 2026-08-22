@@ -1,6 +1,5 @@
 extends RigidBody2D
 
-
 const BULLET_SCENE := preload("res://Scenes/Enemies/turret_bullet.tscn")
 
 @export var bullet_spawn_distance := 40.0
@@ -79,10 +78,7 @@ func _shoot(at_angle: bool) -> void:
 	var dirs : Array = [ "UR","DR","DL","UL" ] if at_angle else [ "U","R","D","L" ]
 	for dir in dirs:
 		var bullet = BULLET_SCENE.instantiate() as Bullet
-		bullet.initDir = dir
-		bullet.spawnPos = position
-		bullet.start_offset = bullet_spawn_distance
-		bullet.initial_operations()
+		bullet.initial_operations(position, dir, bullet_spawn_distance)
 		get_parent().add_child(bullet)
 
 func _die() -> void:
@@ -95,8 +91,7 @@ func _die() -> void:
 	animator.play("Death")
 	gravity_scale = 1.0
 	is_dead = true
-	get_tree().create_timer(5).timeout
 
-func _on_hit(hit_info: HitInfo, source: Hitbox) -> void:
+func _on_hit(hit_info: HitInfo, _source: Hitbox) -> void:
 	if hit_info.damage == 0:
 		pass

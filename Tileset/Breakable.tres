@@ -1,6 +1,7 @@
 [gd_resource type="TileSet" format=3 uid="uid://br5esnmcj21yj"]
 
 [ext_resource type="Texture2D" uid="uid://5tufpjiltsyd" path="res://Textures/Tiles/MVPSprites/Visuals.png" id="1_qjaos"]
+[ext_resource type="Texture2D" uid="uid://der2aqw5nryec" path="res://Textures/Tiles/MVPSprites/BreakableHint.png" id="2_18biu"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_juyxd"]
 texture = ExtResource("1_qjaos")
@@ -35,7 +36,12 @@ texture = ExtResource("1_qjaos")
 0:4/0 = 0
 0:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_87qe4"]
+texture = ExtResource("2_18biu")
+0:0/0 = 0
+
 [resource]
 physics_layer_0/collision_layer = 33
 physics_layer_0/collision_mask = 42
 sources/0 = SubResource("TileSetAtlasSource_juyxd")
+sources/1 = SubResource("TileSetAtlasSource_87qe4")

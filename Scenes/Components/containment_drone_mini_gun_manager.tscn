@@ -1,0 +1,73 @@
+[gd_scene format=3 uid="uid://dovt1604oi88h"]
+
+[ext_resource type="Script" uid="uid://cpds1x0tlgyc1" path="res://Scripts/Animation/containment_drone_mini_gun_manager.gd" id="1_nq6mb"]
+[ext_resource type="PackedScene" uid="uid://dx27csn4jx8c3" path="res://Scenes/Components/containment_drone_bullet.tscn" id="2_8ikbp"]
+[ext_resource type="Texture2D" uid="uid://cnfdf4c4egoxv" path="res://Sprites/Characters/Enemy SpriteSheets/ContainmentDrone.png" id="3_t5qca"]
+[ext_resource type="Script" uid="uid://mrhr0yu4i7jh" path="res://Scripts/Animation/ManualAnim.gd" id="4_mo2hx"]
+
+[sub_resource type="Animation" id="Animation_uh283"]
+resource_name = "Shoot"
+length = 0.5
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:anim_offset:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 4, 8, 12, 16]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("..")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"spawn_bullet"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_uh283"]
+_data = {
+&"Shoot": SubResource("Animation_uh283")
+}
+
+[node name="MiniGunManager" type="Node2D" unique_id=1817450234]
+script = ExtResource("1_nq6mb")
+bullet_scene = ExtResource("2_8ikbp")
+spawn_delta = Vector2(32, -13)
+
+[node name="MiniGun" type="Sprite2D" parent="." unique_id=1497808456]
+position = Vector2(32, 0)
+texture = ExtResource("3_t5qca")
+hframes = 20
+vframes = 5
+frame = 62
+script = ExtResource("4_mo2hx")
+anim_offset = Vector2i(0, 3)
+anim_speed_adjust = 0.0
+metadata/_custom_type_script = "uid://mrhr0yu4i7jh"
+
+[node name="MinigunAnimator" type="AnimationPlayer" parent="MiniGun" unique_id=2015846801]
+libraries/ = SubResource("AnimationLibrary_uh283")

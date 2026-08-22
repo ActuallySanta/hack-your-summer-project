@@ -1434,7 +1434,7 @@ $ln;Demo Level;NewMap
 [9,-1,0]
 2,1,-1,0|ffb400,,,,||Scenes/Rooms/Docking Bay/waiting_room_db.tscn
 [8,-2,0]
-2,0,4,0|ffb400,,,,||Scenes/Rooms/Docking Bay/service_hall.tscn
+2,0,4,0|ffb400,,,,|0|Scenes/Rooms/Docking Bay/service_hall.tscn
 [10,-2,0]
 -1,-1,2,-1|ffb400,,,,||Scenes/Rooms/Docking Bay/bay_gamma_db.tscn
 [10,-3,0]
@@ -1446,7 +1446,7 @@ $ln;Demo Level;NewMap
 [11,-1,0]
 0,0,-1,-1|ffb400,,,,||Scenes/Rooms/Docking Bay/bay_gamma_db.tscn
 [11,-2,0]
-0,-1,-1,-1|ffb400,,,,||Scenes/Rooms/Docking Bay/bay_gamma_db.tscn
+0,-1,-1,-1|ffb400,,,,|0|Scenes/Rooms/Docking Bay/bay_gamma_db.tscn
 [12,-3,0]
 -1,0,2,0|b78100,,,,||Scenes/Rooms/Docking Bay/storage_room.tscn
 [13,-3,0]
@@ -1460,12 +1460,12 @@ $ln;Demo Level;NewMap
 [8,-3,0]
 1,0,0,0|ffb400,,,,|3|Scenes/Rooms/Docking Bay/save_room_db.tscn
 [8,-4,0]
-2,0,1,0|ffb400,,,,||Scenes/Rooms/Docking Bay/maintenence_room.tscn
+2,0,1,0|ffb400,,,,|2|Scenes/Rooms/Docking Bay/maintenence_room.tscn
 [7,-3,0]
-0,0,-1,-1|ffb400,,,,||Scenes/Rooms/Docking Bay/bay_beta_db.tscn
+0,0,-1,-1|ffb400,,,,|0|Scenes/Rooms/Docking Bay/bay_beta_db.tscn
 [7,-4,0]
-1,-1,-1,0|ffb400,,,,||Scenes/Rooms/Docking Bay/bay_beta_db.tscn
+1,-1,-1,0|ffb400,,,,|0|Scenes/Rooms/Docking Bay/bay_beta_db.tscn
 [6,-4,0]
--1,-1,0,0|ffb400,,,,||Scenes/Rooms/Docking Bay/bay_beta_db.tscn
+-1,-1,0,0|ffb400,,,,|0|Scenes/Rooms/Docking Bay/bay_beta_db.tscn
 [6,-3,0]
 -1,0,0,-1|ffb400,,,,||Scenes/Rooms/Docking Bay/bay_beta_db.tscn

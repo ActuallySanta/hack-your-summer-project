@@ -1,0 +1,314 @@
+[gd_scene format=4 uid="uid://w5xke1tfkqvw"]
+
+[ext_resource type="Texture2D" uid="uid://cnfdf4c4egoxv" path="res://Sprites/Characters/Enemy SpriteSheets/ContainmentDrone.png" id="1_cds01"]
+[ext_resource type="Script" uid="uid://hvoeqiahkqyn" path="res://Scripts/Enemies/Boss/containment_drone.gd" id="1_r0870"]
+[ext_resource type="Script" uid="uid://mrhr0yu4i7jh" path="res://Scripts/Animation/ManualAnim.gd" id="2_lhspb"]
+[ext_resource type="Script" uid="uid://jxljh1ot5yl1" path="res://Scripts/Animation/containment_drone_shoot.gd" id="3_3x08p"]
+[ext_resource type="Script" uid="uid://bvpc2b8y1wl8b" path="res://Scripts/Animation/contain_drone_big_gun.gd" id="3_ypqr6"]
+[ext_resource type="PackedScene" uid="uid://dovt1604oi88h" path="res://Scenes/Components/containment_drone_mini_gun_manager.tscn" id="5_k025c"]
+[ext_resource type="PackedScene" uid="uid://che1cjtb3l04o" path="res://Scenes/Components/containment_drone_bumper.tscn" id="6_uh283"]
+[ext_resource type="Script" uid="uid://b2xtfh0jg14vc" path="res://Scenes/Enemies/Boss/ContainmentDroneHealth.gd" id="7_4ltoi"]
+[ext_resource type="Script" uid="uid://dhgcprjrtfobr" path="res://Scripts/Combat/hurtbox.gd" id="8_kor2i"]
+[ext_resource type="Script" uid="uid://cwbhyi6ndlanq" path="res://Scripts/Animation/exploder.gd" id="10_uhlro"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ypqr6"]
+texture = ExtResource("1_cds01")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+9:0/0 = 0
+10:0/0 = 0
+11:0/0 = 0
+12:0/0 = 0
+13:0/0 = 0
+14:0/0 = 0
+15:0/0 = 0
+16:0/0 = 0
+17:0/0 = 0
+18:0/0 = 0
+19:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+7:1/0 = 0
+8:1/0 = 0
+9:1/0 = 0
+10:1/0 = 0
+11:1/0 = 0
+12:1/0 = 0
+13:1/0 = 0
+14:1/0 = 0
+15:1/0 = 0
+16:1/0 = 0
+17:1/0 = 0
+18:1/0 = 0
+19:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+7:2/0 = 0
+8:2/0 = 0
+9:2/0 = 0
+10:2/0 = 0
+11:2/0 = 0
+12:2/0 = 0
+13:2/0 = 0
+14:2/0 = 0
+15:2/0 = 0
+16:2/0 = 0
+17:2/0 = 0
+18:2/0 = 0
+19:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+7:3/0 = 0
+8:3/0 = 0
+9:3/0 = 0
+10:3/0 = 0
+11:3/0 = 0
+12:3/0 = 0
+13:3/0 = 0
+14:3/0 = 0
+15:3/0 = 0
+16:3/0 = 0
+19:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+6:4/0 = 0
+7:4/0 = 0
+8:4/0 = 0
+9:4/0 = 0
+10:4/0 = 0
+11:4/0 = 0
+12:4/0 = 0
+13:4/0 = 0
+14:4/0 = 0
+15:4/0 = 0
+16:4/0 = 0
+17:4/0 = 0
+18:4/0 = 0
+19:4/0 = 0
+0:5/0 = 0
+1:5/0 = 0
+2:5/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+5:5/0 = 0
+6:5/0 = 0
+7:5/0 = 0
+8:5/0 = 0
+9:5/0 = 0
+10:5/0 = 0
+11:5/0 = 0
+12:5/0 = 0
+13:5/0 = 0
+14:5/0 = 0
+15:5/0 = 0
+16:5/0 = 0
+17:5/0 = 0
+18:5/0 = 0
+19:5/0 = 0
+0:6/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+4:6/0 = 0
+5:6/0 = 0
+6:6/0 = 0
+7:6/0 = 0
+8:6/0 = 0
+9:6/0 = 0
+10:6/0 = 0
+11:6/0 = 0
+12:6/0 = 0
+13:6/0 = 0
+14:6/0 = 0
+15:6/0 = 0
+16:6/0 = 0
+17:6/0 = 0
+18:6/0 = 0
+19:6/0 = 0
+0:7/0 = 0
+1:7/0 = 0
+2:7/0 = 0
+3:7/0 = 0
+4:7/0 = 0
+5:7/0 = 0
+6:7/0 = 0
+7:7/0 = 0
+8:7/0 = 0
+9:7/0 = 0
+10:7/0 = 0
+11:7/0 = 0
+12:7/0 = 0
+13:7/0 = 0
+14:7/0 = 0
+15:7/0 = 0
+16:7/0 = 0
+17:7/0 = 0
+18:7/0 = 0
+19:7/0 = 0
+0:8/0 = 0
+1:8/0 = 0
+2:8/0 = 0
+3:8/0 = 0
+4:8/0 = 0
+5:8/0 = 0
+6:8/0 = 0
+7:8/0 = 0
+0:9/0 = 0
+1:9/0 = 0
+2:9/0 = 0
+3:9/0 = 0
+16:9/0 = 0
+17:9/animation_speed = 10.0
+17:9/0 = 0
+19:9/0 = 0
+18:9/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_bpmhk"]
+sources/0 = SubResource("TileSetAtlasSource_ypqr6")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bpmhk"]
+size = Vector2(8.333336, 11)
+
+[node name="ContainmentDrone" type="Node2D" unique_id=1774801713]
+position = Vector2(137, 128)
+scale = Vector2(3, 3)
+script = ExtResource("1_r0870")
+
+[node name="Wheels" type="Sprite2D" parent="." unique_id=207382179]
+position = Vector2(0, 8)
+texture = ExtResource("1_cds01")
+hframes = 4
+vframes = 10
+frame = 3
+script = ExtResource("2_lhspb")
+anim_speed_adjust = 0.0
+metadata/_custom_type_script = "uid://mrhr0yu4i7jh"
+
+[node name="Shell" type="Sprite2D" parent="." unique_id=59097730]
+texture = ExtResource("1_cds01")
+hframes = 4
+vframes = 5
+frame = 7
+script = ExtResource("2_lhspb")
+anim_offset = Vector2i(0, 1)
+anim_speed_adjust = 0.0
+
+[node name="BIGGUNStand" type="Sprite2D" parent="." unique_id=1709171871]
+position = Vector2(16, -24)
+texture = ExtResource("1_cds01")
+hframes = 20
+vframes = 10
+frame = 38
+script = ExtResource("2_lhspb")
+anim_offset = Vector2i(3, 1)
+anim_jump = 5
+anim_speed_adjust = 0.0
+metadata/_custom_type_script = "uid://mrhr0yu4i7jh"
+
+[node name="BigGun" type="Node2D" parent="." unique_id=1489786400]
+script = ExtResource("3_ypqr6")
+
+[node name="BIGGUNBarrel" type="Sprite2D" parent="BigGun" unique_id=949683034]
+position = Vector2(0, -24)
+texture = ExtResource("1_cds01")
+hframes = 20
+vframes = 10
+frame = 37
+script = ExtResource("2_lhspb")
+anim_offset = Vector2i(2, 1)
+anim_jump = 5
+anim_speed_adjust = 0.0
+metadata/_custom_type_script = "uid://mrhr0yu4i7jh"
+
+[node name="BIGGUNFlare" type="Sprite2D" parent="BigGun" unique_id=914661936]
+visible = false
+position = Vector2(0, -24)
+texture = ExtResource("1_cds01")
+hframes = 20
+vframes = 10
+frame = 183
+script = ExtResource("2_lhspb")
+anim_offset = Vector2i(0, 9)
+anim_speed_adjust = 0.0
+metadata/_custom_type_script = "uid://mrhr0yu4i7jh"
+
+[node name="Shoot" type="Node2D" parent="BigGun" unique_id=526456573]
+visible = false
+script = ExtResource("3_3x08p")
+
+[node name="BIGGUNSHOOT" type="Sprite2D" parent="BigGun/Shoot" unique_id=793231529]
+position = Vector2(0, -24)
+texture = ExtResource("1_cds01")
+hframes = 20
+vframes = 10
+frame = 163
+script = ExtResource("2_lhspb")
+anim_offset = Vector2i(0, 8)
+anim_speed_adjust = 0.0
+metadata/_custom_type_script = "uid://mrhr0yu4i7jh"
+
+[node name="Laser" type="Node2D" parent="BigGun/Shoot" unique_id=2031547831]
+position = Vector2(0, -1)
+
+[node name="TileMapLayerBright" type="TileMapLayer" parent="BigGun/Shoot/Laser" unique_id=1391101527]
+z_index = 1000
+position = Vector2(8, 0)
+tile_map_data = PackedByteArray("AAD+//7/AAARAAkAAAD9//7/AAARAAkAAAD8//7/AAARAAkAAAD7//7/AAARAAkAAAD6//7/AAARAAkAAAD5//7/AAARAAkAAAD4//7/AAARAAkAAAD3//7/AAARAAkAAAD2//7/AAARAAkAAAD1//7/AAARAAkAAAD0//7/AAARAAkAAADz//7/AAARAAkAAADy//7/AAARAAkAAADx//7/AAARAAkAAADw//7/AAARAAkAAADv//7/AAARAAkAAADu//7/AAARAAkAAADt//7/AAARAAkAAADs//7/AAARAAkAAADr//7/AAARAAkAAADq//7/AAARAAkAAADp//7/AAARAAkAAADo//7/AAARAAkAAADn//7/AAARAAkAAADm//7/AAARAAkAAADl//7/AAARAAkAAADk//7/AAARAAkAAADj//7/AAARAAkAAADi//7/AAARAAkAAADh//7/AAARAAkAAADg//7/AAARAAkAAADf//7/AAARAAkAAADe//7/AAARAAkAAADd//7/AAARAAkAAAA=")
+tile_set = SubResource("TileSet_bpmhk")
+
+[node name="TileMapLayerDim" type="TileMapLayer" parent="BigGun/Shoot/Laser" unique_id=1676527005]
+position = Vector2(8, 0)
+tile_map_data = PackedByteArray("AAD+//7/AAASAAkAAAD9//7/AAASAAkAAAD8//7/AAASAAkAAAD7//7/AAASAAkAAAD6//7/AAASAAkAAAD5//7/AAASAAkAAAD4//7/AAASAAkAAAD3//7/AAASAAkAAAD2//7/AAASAAkAAAD1//7/AAASAAkAAAD0//7/AAASAAkAAADz//7/AAASAAkAAADy//7/AAASAAkAAADx//7/AAASAAkAAADw//7/AAASAAkAAADv//7/AAASAAkAAADu//7/AAASAAkAAADt//7/AAASAAkAAADs//7/AAASAAkAAADr//7/AAASAAkAAADq//7/AAASAAkAAADp//7/AAASAAkAAADo//7/AAASAAkAAADn//7/AAASAAkAAADm//7/AAASAAkAAADl//7/AAASAAkAAADk//7/AAASAAkAAADj//7/AAASAAkAAADi//7/AAASAAkAAADh//7/AAASAAkAAADg//7/AAASAAkAAADf//7/AAASAAkAAADe//7/AAASAAkAAADd//7/AAASAAkAAAA=")
+tile_set = SubResource("TileSet_bpmhk")
+
+[node name="MiniGunManager" parent="." unique_id=1817450234 instance=ExtResource("5_k025c")]
+
+[node name="Bumper" parent="." unique_id=2001874401 instance=ExtResource("6_uh283")]
+position = Vector2(-32, 0)
+frame = 43
+
+[node name="HealthComponent" type="Node2D" parent="." unique_id=383718714]
+script = ExtResource("7_4ltoi")
+
+[node name="Hurtbox" type="Area2D" parent="HealthComponent" unique_id=905099928]
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("8_kor2i")
+metadata/_custom_type_script = "uid://dhgcprjrtfobr"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HealthComponent/Hurtbox" unique_id=728552946]
+position = Vector2(37.83334, -0.83333206)
+shape = SubResource("RectangleShape2D_bpmhk")
+
+[node name="Exploder" type="Node2D" parent="." unique_id=1164108349]
+script = ExtResource("10_uhlro")
+max_explosions = 20
+time_between_explosions = 0.4
+num_spawn = 1
+range_rect = Rect2(-30, -15, 65, 30)
