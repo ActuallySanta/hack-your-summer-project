@@ -31,7 +31,7 @@ MapBorders="*res://00_Globals/map_borders.gd"
 
 window/size/viewport_height=672
 window/stretch/mode="viewport"
-window/stretch/aspect="expand"
+window/stretch/aspect="keep"
 
 [dotnet]
 
@@ -161,6 +161,7 @@ OpenMap={
 
 [rendering]
 
+2d/snap/snap_2d_transforms_to_pixel=true
 textures/canvas_textures/default_texture_filter=0
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method="gl_compatibility"

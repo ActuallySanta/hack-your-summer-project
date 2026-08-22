@@ -13,6 +13,6 @@ func _ready() -> void:
 	health_component.on_death_event.connect(exploder.start_explosions)
 
 func flash_and_spawn_gun() -> void:
-	node_to_drop_on_destroy.position = position
+	node_to_drop_on_destroy.global_position = global_position
 	
 	queue_free()

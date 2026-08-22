@@ -7,13 +7,14 @@ extends Node2D
 
 var stop_anim : bool = false:
 	set(value):
-		print("Test")
 		_need_reset = true
 		stop_anim = value
 var _need_reset : bool = false
 
 var _time: float
 var _rps: float
+## Rest position in the parent's space, so the occilation follows the parent if
+## it ever gets moved (e.g. a pickup teleported in by a boss on death).
 var _root_position: Vector2
 var _shift: Vector2
 var _offset: float = 0
@@ -24,12 +25,12 @@ func _ready() -> void:
 	
 	_time = 0 
 	_rps = occilations_per_second * TAU
-	_root_position = global_position
+	_root_position = position
 	_shift = Vector2(horizontal_shift * 16, vertical_shift * 16)
 
 func _process(delta: float) -> void:
 	if stop_anim and _need_reset:
-		global_position = _root_position
+		position = _root_position
 		_time = 0
 		_need_reset = false
 		return
@@ -37,5 +38,5 @@ func _process(delta: float) -> void:
 		return
 	
 	_time += delta
-	global_position.x = _root_position.x + cos(_time * _rps + _offset) * _shift.x
-	global_position.y = _root_position.y + sin(_time * _rps + _offset) * _shift.y
+	position.x = _root_position.x + cos(_time * _rps + _offset) * _shift.x
+	position.y = _root_position.y + sin(_time * _rps + _offset) * _shift.y
