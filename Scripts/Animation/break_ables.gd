@@ -180,9 +180,7 @@ func destroy_tile(coords: Vector2i, attempt_type: StringName, foreground : TileM
 	
 	# Run breakable functions
 	for node in nodes_with_on_break:
-		print("test begin...")
 		if node.has_method("_on_tile_broken"):
-			print("  calling function...")
 			node._on_tile_broken()
 		else:
 			printerr("Node does not have method \"_on_tile_broken\": ", node.name)

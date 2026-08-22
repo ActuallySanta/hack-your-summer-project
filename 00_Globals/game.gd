@@ -187,7 +187,7 @@ func _load_custom_save() -> void:
 	save = SaveManager.new()
 	save.set_value("current_room", save_room)
 	save.set_value("player_pos", save_pos)
-	print(save_fuse_state)
+	print("Fuse state: ", save_fuse_state)
 	save.set_value("station_powered", save_fuse_state == 2)
 	
 	if save_fuse_state > 0:

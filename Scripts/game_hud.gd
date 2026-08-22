@@ -52,16 +52,13 @@ func _process(_delta: float) -> void:
 			death_screen.modulate.a = 1 - death_screen.modulate.a
 
 func show_load_screen() -> void:
-	print("Showing load screen")
 	loading_screen.modulate.a = 1
 
 func hide_load_screen(fade := true) -> void:
 	if fade:
-		print("Fading load screen")
 		load_fade_timer = get_tree().create_timer(load_screen_fade_time)
 		load_fade_timer.timeout.connect(hide_load_screen.bind(false))
 	else:
-		print("Hiding load screen")
 		loading_screen.modulate.a = 0
 
 func fade_in_death_screen() -> void:

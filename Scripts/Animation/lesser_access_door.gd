@@ -25,7 +25,6 @@ func should_be_opened_check() -> bool:
 	return true
 
 func animate_open() -> void:
-	print("test")
 	# Check if the door is already open
 	if MetSys.save_data.stored_objects.get(door_name, false):
 		return
@@ -34,7 +33,7 @@ func animate_open() -> void:
 	if not collider == null:
 		collider.queue_free()
 	else:
-		print("collider already removed...") 
+		printerr("collider already removed...") 
 	
 	# Do animation and save door as open
 	for door in door_controls: door.play( "Opening" )

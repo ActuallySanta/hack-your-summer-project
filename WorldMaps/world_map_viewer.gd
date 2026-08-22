@@ -33,7 +33,7 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if _camera == null:
 		_camera = get_viewport().get_camera_2d()
-		print("No cam.")
+		printerr("No camera.")
 		return
 	
 	var cam_pos := _camera.global_position

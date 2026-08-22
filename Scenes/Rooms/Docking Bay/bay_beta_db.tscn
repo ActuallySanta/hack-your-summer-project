@@ -63,7 +63,7 @@ nodes_with_on_break = [NodePath("../HardBoundryRemover")]
 tile_map_data = PackedByteArray("AAAiABAAAAAAAAQAAAAjABAAAAAAAAQAAAAkABAAAAAAAAQAAAAlABAAAAAAAAQAAAA=")
 
 [node name="Gun" parent="." unique_id=2024901390 instance=ExtResource("5_rhf1s")]
-position = Vector2(1919, 1176)
+position = Vector2(2133, 950)
 
 [node name="HealthExtender" parent="." unique_id=545634817 instance=ExtResource("6_fo38q")]
 position = Vector2(2164, 621)
@@ -102,5 +102,6 @@ metadata/_custom_type_script = "uid://b3xkq7wnva8y"
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="CameraAxisRegion2" unique_id=1236843775]
 polygon = PackedVector2Array(234, 1062, 774, 1062, 774, 42, 234, 42)
 
-[node name="ContainmentDrone" parent="." unique_id=1774801713 instance=ExtResource("9_uhu62")]
+[node name="ContainmentDrone" parent="." unique_id=1774801713 node_paths=PackedStringArray("node_to_drop_on_destroy") instance=ExtResource("9_uhu62")]
 position = Vector2(2130, 1200)
+node_to_drop_on_destroy = NodePath("../Gun")
