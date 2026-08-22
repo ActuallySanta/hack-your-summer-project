@@ -21,10 +21,23 @@ var frame_step : int
 var time_gone : float
 var repairs : bool
 
-var cover_layer : TileMapLayer
-var cover_source : int = -1
-var cover_atlas : Vector2i
-var cover_alternative : int
+## One tile that was covering the block, remembered well enough to be put back
+## exactly as it was on the exact layer it came off.
+class Cover extends RefCounted:
+	var layer : TileMapLayer
+	var source : int
+	var atlas : Vector2i
+	var alternative : int
+
+	func _init(p_layer: TileMapLayer, coord: Vector2i) -> void:
+		layer = p_layer
+		source = p_layer.get_cell_source_id( coord )
+		atlas = p_layer.get_cell_atlas_coords( coord )
+		alternative = p_layer.get_cell_alternative_tile( coord )
+
+## Every tile lifted off this cell, one per layer that had one. A block covered
+## by a wall tile and a piece of decoration on top of it has two.
+var covers : Array[ Cover ]
 
 func _init(coords: Vector2i, tile_y_index: int, p_frame_step: int = 1, p_time_gone: float = 2.0, p_repairs: bool = true) -> void:
 	coord = coords
@@ -42,20 +55,34 @@ func reset() -> void:
 	time = TIME_ANIM
 
 func pull_cover_from(foreground: TileMapLayer) -> void:
-	cover_layer = foreground
-	cover_source = foreground.get_cell_source_id( coord )
-	cover_atlas = foreground.get_cell_atlas_coords( coord )
-	cover_alternative = foreground.get_cell_alternative_tile( coord )
-	foreground.erase_cell( coord )
+	var only : Array[ TileMapLayer ] = [ foreground ]
+	pull_covers_from( only )
+
+## Lifts this cell off every layer in [param layers] that has a tile there, and
+## remembers each one so it can go back where it came from. Layers without a tile
+## over this cell are skipped, so a caller can hand over every layer that might
+## be covering the block without checking first.
+func pull_covers_from(layers: Array[ TileMapLayer ]) -> void:
+	for layer in layers:
+		if not is_instance_valid( layer ) or layer.get_cell_source_id( coord ) == -1:
+			continue
+		covers.append( Cover.new( layer, coord ) )
+		layer.erase_cell( coord )
 
 func forget_cover() -> void:
-	cover_layer = null
-	cover_source = -1
+	covers.clear()
 
-func restore_cover() -> void:
-	if cover_source == -1 or not is_instance_valid( cover_layer ):
-		return
-	cover_layer.set_cell( coord, cover_source, cover_atlas, cover_alternative )
+## Puts every tile that was covering the block back. Returns whether there was
+## anything to put back, since a cover going back on is what changes whether the
+## block under it should be drawn.
+func restore_cover() -> bool:
+	var restored := false
+	for cover in covers:
+		if not is_instance_valid( cover.layer ):
+			continue
+		cover.layer.set_cell( coord, cover.source, cover.atlas, cover.alternative )
+		restored = true
+	return restored
 
 func _to_string() -> String:
 	var output : String = "Break Tile Data: [ position: "

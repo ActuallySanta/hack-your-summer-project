@@ -41,6 +41,7 @@ const NONE = preload("res://Sounds/Music/issue.wav")
 @onready var boss_ost := {
 	"Awoken Android": ANDROID,
 	"Matrix": MATRIX,
+	"Containment Drone": NONE,
 }
 
 @onready var special_ost := {
@@ -58,12 +59,14 @@ const NONE = preload("res://Sounds/Music/issue.wav")
 
 var default := DEBUG
 var music_volume : float
+var list_of_pausers : Array[ String ]
 
 func _ready() -> void:
 	music_volume = volume_db
 	await get_tree().process_frame
 	set_background_track_from_room_instance()
 
+#region Playing Audio
 ## Switches the background track
 func play_background_track(track: AudioStream) -> void:
 	if track == null:
@@ -152,3 +155,13 @@ func _parse_special_room(type: String, special_name: String) -> AudioStream:
 		
 	var dictionary = osts[type]
 	return dictionary.get(special_name)
+#endregion
+
+#region Pause Audio
+
+func mute_volume(requester: String) -> void:
+	pass
+	
+func unmute_volume(requester: String) -> void:
+	pass
+#endregion

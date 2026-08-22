@@ -2,6 +2,7 @@
 
 [ext_resource type="SpriteFrames" uid="uid://bjf811xv2eh73" path="res://Sprites/Explosions/enemy_death_explosion_sprite_frames.tres" id="1_t0rvh"]
 [ext_resource type="Script" uid="uid://bsk5plkw2hoha" path="res://Scenes/Enemies/enemy_death_boom.gd" id="2_nnnfe"]
+[ext_resource type="AudioStream" uid="uid://bxsj5nxt3pclg" path="res://Sounds/Entities/Enemies/ContianmentDrone/explosion.wav" id="3_jxm5a"]
 
 [node name="EnemyDeathBoom" type="AnimatedSprite2D" unique_id=1239807976]
 scale = Vector2(3, 3)
@@ -10,3 +11,7 @@ autoplay = "default"
 frame = 7
 frame_progress = 1.0
 script = ExtResource("2_nnnfe")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1473657134]
+stream = ExtResource("3_jxm5a")
+autoplay = true
