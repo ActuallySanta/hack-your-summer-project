@@ -1,5 +1,7 @@
 class_name Hurtbox extends Area2D
 
+var ignore_hits : bool
+
 ## Hurtbox is an Area2D that is detected by Hurtbox objects and gets dealt hits.
 ##
 ## Hurtbox is an Area2D and needs a collision shape to be able to detect Hitboxes.[br]
@@ -15,4 +17,6 @@ class_name Hurtbox extends Area2D
 signal hit(hurtBox: Hurtbox, hit_info: HitInfo, source: Hitbox)
 
 func register_hit(hit_info: HitInfo, source: Hitbox) -> void:
+	if ignore_hits:
+		return
 	hit.emit(self, hit_info, source)

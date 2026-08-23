@@ -14,7 +14,9 @@
 [ext_resource type="AudioStream" uid="uid://nmmwtl6pnlba" path="res://Sounds/Entities/Enemies/ContianmentDrone/Boss_Explosion.wav" id="11_1irxt"]
 [ext_resource type="AudioStream" uid="uid://cwe6iq22arpcq" path="res://Sounds/Entities/Enemies/ContianmentDrone/CD_Announce.wav" id="11_ea62n"]
 [ext_resource type="AudioStream" uid="uid://85aie0fanqff" path="res://Sounds/Entities/Enemies/ContianmentDrone/CD_engine_hum.wav" id="11_qc4of"]
+[ext_resource type="Script" uid="uid://6lfx514ntiaq" path="res://Scripts/Animation/containment_drone_pre_fight_node.gd" id="12_smu5p"]
 [ext_resource type="Script" uid="uid://ctc17oyja7fup" path="res://Scripts/Combat/hitbox.gd" id="15_xyaey"]
+[ext_resource type="Script" uid="uid://cs2uowcxd3wpe" path="res://Scripts/Enemies/Boss/ContainmentDrone/navigator.gd" id="17_vgk46"]
 
 [sub_resource type="Animation" id="Animation_1irxt"]
 length = 0.001
@@ -349,8 +351,6 @@ size = Vector2(8.333336, 11)
 position = Vector2(137, 128)
 scale = Vector2(3, 3)
 script = ExtResource("1_r0870")
-acceleration_px_per_ss = 10.0
-max_velocity = 5.0
 
 [node name="Animator" type="AnimationPlayer" parent="." unique_id=811031707]
 libraries/ = SubResource("AnimationLibrary_cpx58")
@@ -366,6 +366,7 @@ position = Vector2(0, -8)
 texture = ExtResource("1_cds01")
 hframes = 4
 vframes = 10
+frame = 1
 script = ExtResource("2_lhspb")
 anim_speed_adjust = 0.0
 metadata/_custom_type_script = "uid://mrhr0yu4i7jh"
@@ -375,7 +376,7 @@ position = Vector2(0, -16.000004)
 texture = ExtResource("1_cds01")
 hframes = 4
 vframes = 5
-frame = 4
+frame = 5
 script = ExtResource("2_lhspb")
 anim_offset = Vector2i(0, 1)
 anim_speed_adjust = 0.0
@@ -385,7 +386,7 @@ position = Vector2(16, -40)
 texture = ExtResource("1_cds01")
 hframes = 20
 vframes = 10
-frame = 23
+frame = 28
 script = ExtResource("2_lhspb")
 anim_offset = Vector2i(3, 1)
 anim_jump = 5
@@ -401,7 +402,7 @@ position = Vector2(0, -24)
 texture = ExtResource("1_cds01")
 hframes = 20
 vframes = 10
-frame = 22
+frame = 27
 script = ExtResource("2_lhspb")
 anim_offset = Vector2i(2, 1)
 anim_jump = 5
@@ -414,7 +415,7 @@ position = Vector2(0, -24)
 texture = ExtResource("1_cds01")
 hframes = 20
 vframes = 10
-frame = 180
+frame = 181
 script = ExtResource("2_lhspb")
 anim_offset = Vector2i(0, 9)
 anim_speed_adjust = 0.0
@@ -429,16 +430,17 @@ position = Vector2(0, -24)
 texture = ExtResource("1_cds01")
 hframes = 20
 vframes = 10
-frame = 164
+frame = 161
 script = ExtResource("2_lhspb")
-anim_offset = Vector2i(4, 8)
+anim_offset = Vector2i(0, 8)
 anim_speed_adjust = 0.0
 metadata/_custom_type_script = "uid://mrhr0yu4i7jh"
 
 [node name="Laser" type="Node2D" parent="FaderNode/Visuals/BigGun/Shoot" unique_id=1764618669]
+position = Vector2(0, 1)
 
 [node name="TileMapLayerBright" type="TileMapLayer" parent="FaderNode/Visuals/BigGun/Shoot/Laser" unique_id=54367485]
-z_index = -1000
+z_index = 1000
 position = Vector2(8, 0)
 tile_map_data = PackedByteArray("AAD+//7/AAARAAkAAAD9//7/AAARAAkAAAD8//7/AAARAAkAAAD7//7/AAARAAkAAAD6//7/AAARAAkAAAD5//7/AAARAAkAAAD4//7/AAARAAkAAAD3//7/AAARAAkAAAD2//7/AAARAAkAAAD1//7/AAARAAkAAAD0//7/AAARAAkAAADz//7/AAARAAkAAADy//7/AAARAAkAAADx//7/AAARAAkAAADw//7/AAARAAkAAADv//7/AAARAAkAAADu//7/AAARAAkAAADt//7/AAARAAkAAADs//7/AAARAAkAAADr//7/AAARAAkAAADq//7/AAARAAkAAADp//7/AAARAAkAAADo//7/AAARAAkAAADn//7/AAARAAkAAADm//7/AAARAAkAAADl//7/AAARAAkAAADk//7/AAARAAkAAADj//7/AAARAAkAAADi//7/AAARAAkAAADh//7/AAARAAkAAADg//7/AAARAAkAAADf//7/AAARAAkAAADe//7/AAARAAkAAADd//7/AAARAAkAAAA=")
 tile_set = SubResource("TileSet_bpmhk")
@@ -453,6 +455,7 @@ position = Vector2(0, -16.000004)
 
 [node name="Bumper" parent="FaderNode/Visuals" unique_id=2001874401 instance=ExtResource("6_uh283")]
 position = Vector2(-32, -16.000004)
+frame = 41
 
 [node name="HealthComponent" type="Node2D" parent="." unique_id=383718714]
 script = ExtResource("7_4ltoi")
@@ -477,10 +480,13 @@ time_between_explosions = 0.4
 num_spawn = 1
 range_rect = Rect2(-30, -15, 65, 30)
 
-[node name="PreFightNodes" type="Node2D" parent="." unique_id=1481891593]
+[node name="PreFightNodes" type="Node2D" parent="." unique_id=1481891593 node_paths=PackedStringArray("audioStream")]
+script = ExtResource("12_smu5p")
+audioStream = NodePath("AudioStreamPlayer2D")
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="PreFightNodes" unique_id=1058490056]
 stream = ExtResource("11_ea62n")
+volume_db = 10.0
 
 [node name="Vocalizer" type="AudioStreamPlayer2D" parent="." unique_id=706541061]
 max_distance = 6085.0
@@ -503,7 +509,16 @@ max_polyphony = 3
 collision_layer = 4
 collision_mask = 2
 script = ExtResource("15_xyaey")
+knockback_strength = 5.0
+knockback_duration = 0.5
 metadata/_custom_type_script = "uid://ctc17oyja7fup"
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Hitbox" unique_id=549575815]
 polygon = PackedVector2Array(-33.333336, 12, 38.666668, 12.666668, 38.666668, 4.666668, 32.666668, 1, 36.333332, -6.666668, 28.333332, -14, 14, -15.666668, 15.666668, -26.333334, 9.666668, -25.333334, 9.333332, -16.333334, -3, -13.333334, -30.333334, -3.333332)
+
+[node name="Navigator" type="Node2D" parent="." unique_id=654802792 node_paths=PackedStringArray("node_to_move_instead_of_me")]
+script = ExtResource("17_vgk46")
+steering_max_force = 0.8
+max_speed = 40.0
+stop_friction = 0.97
+node_to_move_instead_of_me = NodePath("..")

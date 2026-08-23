@@ -7,8 +7,7 @@ const boss_death_sfx := preload("res://Sounds/Entities/Enemies/ContianmentDrone/
 @export var left_tunnel_pos : Marker2D
 @export var right_tunnel_pos : Marker2D
 @export var node_to_drop_on_destroy : Node2D
-@export var acceleration_px_per_ss : float
-@export var max_velocity : float
+@export var intro_collider : Area2D
 @export var anim_speed_adjust : float:
 	set(value):
 		anim_speed_adjust = value
@@ -42,13 +41,26 @@ const boss_death_sfx := preload("res://Sounds/Entities/Enemies/ContianmentDrone/
 @onready var motor := $Motor
 @onready var animator := $Animator
 @onready var prefightNodes := $PreFightNodes
+@onready var navigator := $Navigator
+# Hit/Hurt Colliders
+@onready var hurtbox := $HealthComponent/Hurtbox
+@onready var hitbox := $Hitbox
 
 var do_intro_cutscene : bool = true
 var left_tunnel_global_pos : float
 var right_tunnel_global_pos : float
-var target_tunnel : StringName = "Left"
-var target_tunnel_to_glo_pos : Dictionary[ StringName, float ]
-var velocity : float = 0.0
+var destination_tunnel : StringName:
+	set(value):
+		destination_tunnel = value
+		if value == "LEFT":
+			navigator.node_to_go_to = left_tunnel_pos
+		elif value == "RIGHT":
+			navigator.node_to_go_to = right_tunnel_pos
+var is_in_background : bool:
+	set(value):
+		is_in_background = value
+		hurtbox.ignore_hits = value
+		hitbox.ignore_hits = value
 
 enum state{
 	INTRO,
@@ -70,11 +82,11 @@ func _process(delta: float) -> void:
 		state.DIE:
 			return
 		state.NAV_TUNNEL:
-			_on_nav_tunnel(delta)
+			_on_nav_tunnel()
 		state.ENTER_TUNNEL:
-			_on_enter_tunnel(delta)
+			_on_enter_tunnel()
 		state.CHOOSE_ATTACK:
-			_on_choose_attack(delta)
+			_on_choose_attack()
 		state.PERFORM_ATTACK_CHARGE:
 			_on_attack_charge(false)
 		state.PERFORM_ATTACK_CHARGE_GUN:
@@ -82,31 +94,25 @@ func _process(delta: float) -> void:
 		state.PERFORM_ATTACK_MINIGUN:
 			_on_attack_mini_gun()
 
-func _on_nav_tunnel(delta: float) -> void:
-	if (target_tunnel == "LEFT" and left_tunnel_global_pos >= global_position.x) or (target_tunnel == "RIGHT" and left_tunnel_global_pos <= global_position.x):
+func _on_nav_tunnel() -> void:
+	if (destination_tunnel == "LEFT" and left_tunnel_global_pos >= global_position.x) or (destination_tunnel == "RIGHT" and left_tunnel_global_pos <= global_position.x):
+		navigator.node_to_go_to = null
 		behavior = state.ENTER_TUNNEL
 		return
-	
-	var amount = acceleration_px_per_ss * delta
-	if target_tunnel == "LEFT":
-		amount *= -1
-	
-	velocity += amount
-	if abs(velocity) >= max_velocity:
-		velocity = max_velocity if target_tunnel == "Left" else -max_velocity
-	global_position.x += velocity
 
-func _on_enter_tunnel(delta:float) -> void:
+func _on_enter_tunnel() -> void:
 	if animator.is_playing():
 		return
-	animator.play("fade_out")
+	
+	is_in_background = true
+	#animator.play("fade_out")
 	behavior = state.CHOOSE_ATTACK
 
-func _on_choose_attack(delta: float) -> void:
+func _on_choose_attack() -> void:
 	pass
 
 func _on_attack_charge(use_big_gun: bool) -> void:
-	pass
+	bumper.flash()
 
 func _on_attack_mini_gun() -> void:
 	pass
@@ -118,9 +124,14 @@ func _ready() -> void:
 		queue_free()
 		return
 	
-	left_tunnel_global_pos = left_tunnel_pos.global_position.x
-	right_tunnel_global_pos = right_tunnel_pos.global_position.x
-	target_tunnel_to_glo_pos = { "LEFT": left_tunnel_global_pos, "RIGHT": right_tunnel_global_pos }
+	prefightNodes.attach_collider(intro_collider)
+	
+	if left_tunnel_pos != null:
+		left_tunnel_pos.global_position.y = global_position.y
+		left_tunnel_global_pos = left_tunnel_pos.global_position.x
+	if right_tunnel_pos != null:
+		right_tunnel_pos.global_position.y = global_position.y
+		right_tunnel_global_pos = right_tunnel_pos.global_position.x
 	
 	MusicManager.override_automatic_assignment( true )
 	MusicManager.set_background_track_from_name("BOSS", "Ambiance")
@@ -138,6 +149,7 @@ func on_death() -> void:
 	motor.volume_db = -80
 	vocalizer.stop()
 	vocalizer.volume_db = -80
+	hitbox.queue_free()
 
 func yelp_in_agony() -> void:
 	vocalizer.stream = yelp
@@ -147,28 +159,22 @@ func yelp_in_agony() -> void:
 		start_intro_cutscene()
 
 func enter_tunnel(querry_mode: StringName) -> void:
+	animator.play("accelerate")
+	behavior = state.NAV_TUNNEL
+	
 	if querry_mode == "left":
-		enter_left_tunnel()
+		destination_tunnel = "LEFT"
 	elif querry_mode == "right":
-		enter_right_tunnel()
+		destination_tunnel = "RIGHT"
 	elif querry_mode == "closest":
 		var delta_l := left_tunnel_global_pos - global_position.x
 		if delta_l < right_tunnel_global_pos - global_position.x:
-			enter_left_tunnel()
+			destination_tunnel = "LEFT"
 		else:
-			enter_right_tunnel()
+			destination_tunnel = "RIGHT"
 
-func enter_left_tunnel() -> void:
-	animator.play("accelerate")
-	behavior = state.NAV_TUNNEL
-	target_tunnel = "LEFT"
-	velocity = 0.0
-
-func enter_right_tunnel() -> void:
-	animator.play("accelerate")
-	behavior = state.NAV_TUNNEL
-	target_tunnel = "RIGHT"
-	velocity = 0.0
+func exit_a_tunnel() -> void:
+	is_in_background = false
 
 func start_intro_cutscene() -> void:
 	if not do_intro_cutscene:
@@ -176,7 +182,6 @@ func start_intro_cutscene() -> void:
 	
 	health_component.ignore_effects = true
 	enter_tunnel("closest")
-	MusicManager.set_background_track_from_name("NONE", "I can say whatever the fuck I want here heheheh")
 	
 	# Temp timer to get around lack of intro cutscene
 	await get_tree().create_timer(1.0).timeout
@@ -185,16 +190,16 @@ func start_intro_cutscene() -> void:
 func leave_intro_cutscene() -> void:
 	do_intro_cutscene = false
 	health_component.ignore_effects = false
-	vocalizer.stream = battle_cry
-	vocalizer.volume_db = 10
-	vocalizer.play()
+	prefightNodes.rawr()
 	CameraEffects.shake(17, 1.4, CameraEffects.Axis.BOTH, CameraEffects.Ease.EASE_IN_OUT)
 	await vocalizer.finished
-	vocalizer.volume_db = 0.0
 	MusicManager.set_background_track_from_name("BOSS", "Containment Drone")
 
 func remove_visuals() -> void:
-	$FaderNode.queue_free()
+	if is_instance_valid($FaderNode):
+		$FaderNode.queue_free()
+	elif is_instance_valid(visuals):
+		visuals.queue_free()
 
 func flash_and_spawn_gun() -> void:
 	CameraEffects.flash(Color(1,1,1,0.5), 0.1, 0.075, 0.075, CameraEffects.Ease.EASE_OUT, CameraEffects.Ease.EASE_IN)

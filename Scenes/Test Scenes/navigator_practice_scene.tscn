@@ -1,0 +1,45 @@
+[gd_scene format=3 uid="uid://bq7ac5uvbhpm5"]
+
+[ext_resource type="Script" uid="uid://cs2uowcxd3wpe" path="res://Scripts/Enemies/Boss/ContainmentDrone/navigator.gd" id="1_qh3jp"]
+[ext_resource type="Texture2D" uid="uid://bp1qv2dhalftv" path="res://icon.svg" id="2_e8r4i"]
+[ext_resource type="Texture2D" uid="uid://7uadm0yjun2c" path="res://Textures/Eye.png" id="3_ir1bw"]
+[ext_resource type="Script" uid="uid://6f15nb6r34b0" path="res://Scripts/EnvironmentalHazards/path.gd" id="4_e8r4i"]
+
+[node name="Navigator practiceScene" type="Node2D" unique_id=1021513479]
+
+[node name="Intercepter" type="Node2D" parent="." unique_id=1157356892 node_paths=PackedStringArray("node_to_go_to")]
+modulate = Color(0, 1, 1, 0.47058824)
+script = ExtResource("1_qh3jp")
+node_to_go_to = NodePath("../Sprite2D")
+move_to_intercept = true
+steering_max_force = 0.5
+max_speed = 250.0
+
+[node name="Sprite2D" type="Sprite2D" parent="Intercepter" unique_id=388754750]
+texture = ExtResource("2_e8r4i")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=473308058]
+z_index = -1
+position = Vector2(929, 446)
+texture = ExtResource("3_ir1bw")
+
+[node name="Path" type="Node2D" parent="." unique_id=2106492705 node_paths=PackedStringArray("nodes_to_move")]
+script = ExtResource("4_e8r4i")
+loop_mode = "Closed Loop"
+wait_time_seconds = 0.0
+node_speed = 500.0
+nodes_to_move = [NodePath("../Sprite2D")]
+points = Array[Vector2]([Vector2(183, 99), Vector2(101, 568), Vector2(986, 563), Vector2(673, 281), Vector2(916, 77)])
+metadata/_custom_type_script = "uid://6f15nb6r34b0"
+
+[node name="Dumbass" type="Node2D" parent="." unique_id=1931576752 node_paths=PackedStringArray("node_to_go_to", "node_to_move_instead_of_me")]
+modulate = Color(1, 0, 1, 0.45882353)
+script = ExtResource("1_qh3jp")
+node_to_go_to = NodePath("../Sprite2D")
+max_speed = -1.0
+stop_friction = 0.0
+stop_velocity = 0.0
+node_to_move_instead_of_me = NodePath("../Sprite2D2")
+
+[node name="Sprite2D2" type="Sprite2D" parent="." unique_id=512271886]
+texture = ExtResource("2_e8r4i")

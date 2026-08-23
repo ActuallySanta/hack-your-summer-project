@@ -22,6 +22,7 @@ signal environment_hit(target: Node2D)
 @export var knockback_strength: float
 @export var knockback_duration: float
 
+var ignore_hits : bool
 var previous_hits : Array[Hurtbox]
 
 func _ready() -> void:
@@ -33,6 +34,8 @@ func reset() -> void:
 	previous_hits = []
 
 func _on_area_entered(area: Area2D) -> void:
+	if ignore_hits:
+		return
 	var hurtbox := area as Hurtbox
 	if not hurtbox:
 		return
@@ -47,6 +50,8 @@ func _on_area_entered(area: Area2D) -> void:
 const ENVIRONMENT_LAYERS := 1 << 0 | 1 << 5
 
 func _on_body_entered(body: Node2D) -> void:
+	if ignore_hits:
+		return
 	if body is TileMapLayer:
 		environment_hit.emit(body)
 		return

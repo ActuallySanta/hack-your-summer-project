@@ -27,6 +27,9 @@ func _on_tile_broken() -> void:
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_85ri6"]
 size = Vector2(1536, 1243)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bpmhk"]
+size = Vector2(247, 71)
+
 [node name="BayBetaDb" type="Node2D" unique_id=586346883]
 
 [node name="Background" parent="." unique_id=1411061257 instance=ExtResource("1_1g5d8")]
@@ -68,6 +71,8 @@ nodes_with_on_break = [NodePath("../../CameraBoundries/HardBoundryRemover")]
 
 [node name="BreakAbles3" parent="Visuals" unique_id=138756050 instance=ExtResource("4_1k17a")]
 tile_map_data = PackedByteArray("AAAiABAAAAAAAAQAAAAjABAAAAAAAAQAAAAkABAAAAAAAAQAAAAlABAAAAAAAAQAAAA=")
+time_gone_seconds = 0.25
+repair_mode = 1
 hide_while_covered = true
 
 [node name="Foreground Decoration" parent="Visuals" unique_id=522440360 instance=ExtResource("2_u7dop")]
@@ -91,11 +96,12 @@ position = Vector2(2164, 621)
 [node name="HealthExtender2" parent="." unique_id=648412909 instance=ExtResource("6_fo38q")]
 position = Vector2(519, 170)
 
-[node name="ContainmentDrone" parent="." unique_id=1774801713 node_paths=PackedStringArray("left_tunnel_pos", "right_tunnel_pos", "node_to_drop_on_destroy") instance=ExtResource("9_uhu62")]
-position = Vector2(1329, 1200)
+[node name="ContainmentDrone" parent="." unique_id=1774801713 node_paths=PackedStringArray("left_tunnel_pos", "right_tunnel_pos", "node_to_drop_on_destroy", "intro_collider") instance=ExtResource("9_uhu62")]
+position = Vector2(1332, 1200)
 left_tunnel_pos = NodePath("../LeftTunnel")
 right_tunnel_pos = NodePath("../RightTunnel")
 node_to_drop_on_destroy = NodePath("../Gun")
+intro_collider = NodePath("../Area2D")
 
 [node name="CameraBoundries" type="Node" parent="." unique_id=1858424137]
 
@@ -138,3 +144,11 @@ position = Vector2(1324, 1194)
 
 [node name="RightTunnel" type="Marker2D" parent="." unique_id=1214008984]
 position = Vector2(2142, 1201)
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1432653595]
+collision_layer = 5
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=2083521320]
+position = Vector2(1733.5, 828.5)
+shape = SubResource("RectangleShape2D_bpmhk")
