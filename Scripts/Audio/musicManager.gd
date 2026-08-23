@@ -12,8 +12,10 @@ const LOWER_BRS = preload("res://Sounds/Music/Lower Biological Zone.ogg")
 
 const MAIN_MENU = DEBUG
 
+const BOSS_AMBIANCE = preload("res://Sounds/Music/Tension before a… big scary robot.ogg")
 const ANDROID = DEBUG
 const MATRIX = preload("uid://dlo7hhcd6w44g")
+const CONTAINMENT_DRONE = preload("res://Sounds/Music/Containment Drone.ogg")
 
 const MAP = preload("res://Sounds/Music/Uncertainty.ogg")
 const SAVE = preload("res://Sounds/Music/Uncertainty.ogg")
@@ -39,9 +41,10 @@ const NONE = preload("res://Sounds/Music/issue.wav")
 }
 
 @onready var boss_ost := {
+	"Ambiance": BOSS_AMBIANCE,
 	"Awoken Android": ANDROID,
 	"Matrix": MATRIX,
-	"Containment Drone": NONE,
+	"Containment Drone": CONTAINMENT_DRONE,
 }
 
 @onready var special_ost := {
@@ -61,7 +64,11 @@ var default := DEBUG
 var music_volume : float
 var list_of_pausers : Array[ String ]
 
+var ignore_cell_groups_flag : bool
+var allow_auto_swap : bool
+
 func _ready() -> void:
+	MetSys.room_changed.connect(update_ignore)
 	music_volume = volume_db
 	await get_tree().process_frame
 	set_background_track_from_room_instance()
@@ -72,7 +79,7 @@ func play_background_track(track: AudioStream) -> void:
 	if track == null:
 		playing = false
 		return
-		
+	
 	if stream == track and playing:
 		return
 	
@@ -104,6 +111,10 @@ func _DEBUG_set_background_track_ost_name(ost_name: String) -> void:
 	play_background_track( DEBUG )
 
 func set_background_track_from_name(type: String, ost_name: String) -> void:
+	if type == "NONE":
+		play_background_track( NONE )
+		return
+	
 	var dictionary = osts[ type ]
 	if dictionary == null:
 		return
@@ -116,11 +127,16 @@ func set_background_track_from_name(type: String, ost_name: String) -> void:
 
 ## Takes a MetSys cell groups and determines what song should play
 func set_background_track(location: PackedInt32Array) -> void:
+	if ignore_cell_groups_flag:
+		return
 	play_background_track( _get_current_cell_group_music( location ) )
 
 ## Determines the music to play VIA the current active MetSys RoomInstance.
 ## Only works on rooms that have uniform groupings between cells.
 func set_background_track_from_room_instance() -> void:
+	if ignore_cell_groups_flag:
+		return
+	
 	var groups := get_current_room_instance_groups()
 	if groups.is_empty():
 		return
@@ -129,6 +145,9 @@ func set_background_track_from_room_instance() -> void:
 	play_background_track( track )
 
 func _get_current_cell_group_music(groups: PackedInt32Array) -> AudioStream:
+	if ignore_cell_groups_flag:
+		return NONE
+		
 	var best_guess: AudioStream
 	for group in groups:
 		var group_name = MetSys.get_group_name(group)
@@ -155,13 +174,37 @@ func _parse_special_room(type: String, special_name: String) -> AudioStream:
 		
 	var dictionary = osts[type]
 	return dictionary.get(special_name)
+
+func override_automatic_assignment(restore_when_leaving_room) -> void:
+	ignore_cell_groups_flag = true
+	allow_auto_swap = restore_when_leaving_room
+	
+func restore_automatic_assignment() -> void:
+	ignore_cell_groups_flag = false
+
+func update_ignore(_new_room: String) -> void:
+	if not ignore_cell_groups_flag or not allow_auto_swap:
+		return
+	
+	ignore_cell_groups_flag = false
 #endregion
 
 #region Pause Audio
 
-func mute_volume(requester: String) -> void:
-	pass
+func try_mute_volume(requester: String) -> bool:
+	if list_of_pausers.has(requester):
+		return false
 	
-func unmute_volume(requester: String) -> void:
-	pass
+	list_of_pausers.append(requester)
+	volume_db = -80
+	return true
+
+func try_unmute_volume(requester: String) -> bool:
+	if not list_of_pausers.has(requester):
+		return false
+	list_of_pausers.erase(requester)
+	
+	if list_of_pausers.size() <= 0:
+		volume_db = music_volume
+	return true
 #endregion

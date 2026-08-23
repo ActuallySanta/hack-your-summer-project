@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://cpojq3rbx4ttd" path="res://Scripts/Audio/musicManager.gd" id="1_4ggqb"]
 
 [node name="MusicManager" type="AudioStreamPlayer2D" unique_id=1474149195]
-volume_db = -9.142
+volume_db = -9.227
 max_distance = 10000.0
 attenuation = 1e-05
 panning_strength = 0.0

@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://dape0lhyuqomy"
+path="res://.godot/imported/Tension before a… big scary robot.ogg-1be1e95ef551a71f02ce93d5e0a2ff74.oggvorbisstr"
+
+[deps]
+
+source_file="res://Sounds/Music/Tension before a… big scary robot.ogg"
+dest_files=["res://.godot/imported/Tension before a… big scary robot.ogg-1be1e95ef551a71f02ce93d5e0a2ff74.oggvorbisstr"]
+
+[params]
+
+loop=true
+loop_offset=0.0
+bpm=0.0
+beat_count=0
+bar_beats=4
