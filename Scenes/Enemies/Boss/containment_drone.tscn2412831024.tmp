@@ -248,6 +248,7 @@ position = Vector2(0, 8)
 texture = ExtResource("1_cds01")
 hframes = 4
 vframes = 10
+frame = 3
 script = ExtResource("2_lhspb")
 anim_speed_adjust = 0.0
 metadata/_custom_type_script = "uid://mrhr0yu4i7jh"
@@ -256,7 +257,7 @@ metadata/_custom_type_script = "uid://mrhr0yu4i7jh"
 texture = ExtResource("1_cds01")
 hframes = 4
 vframes = 5
-frame = 4
+frame = 7
 script = ExtResource("2_lhspb")
 anim_offset = Vector2i(0, 1)
 anim_speed_adjust = 0.0
@@ -266,7 +267,7 @@ position = Vector2(16, -24)
 texture = ExtResource("1_cds01")
 hframes = 20
 vframes = 10
-frame = 23
+frame = 38
 script = ExtResource("2_lhspb")
 anim_offset = Vector2i(3, 1)
 anim_jump = 5
@@ -281,7 +282,7 @@ position = Vector2(0, -24)
 texture = ExtResource("1_cds01")
 hframes = 20
 vframes = 10
-frame = 22
+frame = 37
 script = ExtResource("2_lhspb")
 anim_offset = Vector2i(2, 1)
 anim_jump = 5
@@ -294,7 +295,7 @@ position = Vector2(0, -24)
 texture = ExtResource("1_cds01")
 hframes = 20
 vframes = 10
-frame = 180
+frame = 183
 script = ExtResource("2_lhspb")
 anim_offset = Vector2i(0, 9)
 anim_speed_adjust = 0.0
@@ -309,16 +310,17 @@ position = Vector2(0, -24)
 texture = ExtResource("1_cds01")
 hframes = 20
 vframes = 10
-frame = 164
+frame = 163
 script = ExtResource("2_lhspb")
-anim_offset = Vector2i(4, 8)
+anim_offset = Vector2i(0, 8)
 anim_speed_adjust = 0.0
 metadata/_custom_type_script = "uid://mrhr0yu4i7jh"
 
 [node name="Laser" type="Node2D" parent="BigGun/Shoot" unique_id=2031547831]
+position = Vector2(0, -1)
 
 [node name="TileMapLayerBright" type="TileMapLayer" parent="BigGun/Shoot/Laser" unique_id=1391101527]
-z_index = -1000
+z_index = 1000
 position = Vector2(8, 0)
 tile_map_data = PackedByteArray("AAD+//7/AAARAAkAAAD9//7/AAARAAkAAAD8//7/AAARAAkAAAD7//7/AAARAAkAAAD6//7/AAARAAkAAAD5//7/AAARAAkAAAD4//7/AAARAAkAAAD3//7/AAARAAkAAAD2//7/AAARAAkAAAD1//7/AAARAAkAAAD0//7/AAARAAkAAADz//7/AAARAAkAAADy//7/AAARAAkAAADx//7/AAARAAkAAADw//7/AAARAAkAAADv//7/AAARAAkAAADu//7/AAARAAkAAADt//7/AAARAAkAAADs//7/AAARAAkAAADr//7/AAARAAkAAADq//7/AAARAAkAAADp//7/AAARAAkAAADo//7/AAARAAkAAADn//7/AAARAAkAAADm//7/AAARAAkAAADl//7/AAARAAkAAADk//7/AAARAAkAAADj//7/AAARAAkAAADi//7/AAARAAkAAADh//7/AAARAAkAAADg//7/AAARAAkAAADf//7/AAARAAkAAADe//7/AAARAAkAAADd//7/AAARAAkAAAA=")
 tile_set = SubResource("TileSet_bpmhk")
@@ -332,6 +334,7 @@ tile_set = SubResource("TileSet_bpmhk")
 
 [node name="Bumper" parent="." unique_id=2001874401 instance=ExtResource("6_uh283")]
 position = Vector2(-32, 0)
+frame = 43
 
 [node name="HealthComponent" type="Node2D" parent="." unique_id=383718714]
 script = ExtResource("7_4ltoi")

@@ -1,6 +1,5 @@
 class_name CDHealthComponent extends HealthComponent
 
-signal on_death_event
 signal on_destroy_event
 
 @export var seconds_to_vaporize := 5.5
@@ -13,5 +12,8 @@ func _on_death() -> void:
 	queue_free()
 
 func _on_hit(_hurtBox: Hurtbox, hit_info: HitInfo, _source: Hitbox) -> void:
+	if ignore_effects:
+		return
+	on_hit_event.emit()
 	if hit_info.damage > 0:
 		take_damage(hit_info.damage)

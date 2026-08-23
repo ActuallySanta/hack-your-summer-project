@@ -23,6 +23,10 @@
 class_name Darkness
 extends Sprite2D
 
+## How [CameraEffects] finds us, since the darkness lives under the player rather
+## than anywhere a global could name by path.
+const GROUP := &"darkness"
+
 ## Rooms the darkness never appears in, as room scenes. The player's own ship is not
 ## part of the station, so it keeps its lights whatever the station is doing.
 ##
@@ -68,7 +72,12 @@ var _dark := false
 ## Null whenever nothing is in flight, so "is a fade playing" is a single read.
 var _fade : Tween
 
+## True while something has taken the darkness off the station's power and the
+## current room and is driving it by hand. See the "Manual hold" region.
+var _held := false
+
 func _ready() -> void:
+	add_to_group(GROUP)
 	_base_scale = scale
 	# At engine start there is no save and no room — the main menu is still up — so
 	# start clear and let the first spawn settle us.
@@ -82,9 +91,13 @@ func _ready() -> void:
 ## load screen or a respawn, so the darkness is simply already right when the screen
 ## comes back, with no fade to catch the eye.
 func _on_player_spawned() -> void:
+	if _held:
+		return
 	_set_dark(_should_be_dark(), false)
 
 func _on_room_changed(_new_room: String) -> void:
+	if _held:
+		return
 	_set_dark(_should_be_dark(), true)
 
 ## Clears the darkness when the fuse goes in.
@@ -94,7 +107,35 @@ func _on_room_changed(_new_room: String) -> void:
 ## means we run while the save still says the station is unpowered. The signal itself
 ## is the fact; the save catches up a moment later.
 func _on_station_power_restored() -> void:
+	if _held:
+		return
 	_set_dark(false, true)
+
+#region Manual hold
+## Everything here exists so a cutscene or a boss fight can drive the darkness for a
+## moment through [CameraEffects] without the next room change or power-up snatching
+## it back. A hold is never saved: it is a moment, not state, and a reload lands on
+## whatever the station's power and the room say.
+
+## Takes the darkness over and puts it to [param dark], fading if [param animate].
+## It stays there through room changes and the station powering on until
+## [method release] hands it back.
+func hold(dark: bool, animate := true) -> void:
+	_held = true
+	_set_dark(dark, animate)
+
+## Hands the darkness back to the station's power and the current room, moving it to
+## whichever they call for.
+func release(animate := true) -> void:
+	if not _held:
+		return
+	_held = false
+	_set_dark(_should_be_dark(), animate)
+
+## Whether something is currently driving the darkness by hand.
+func is_held() -> bool:
+	return _held
+#endregion
 
 ## Whether the darkness belongs on screen right now.
 func _should_be_dark() -> bool:

@@ -1,13 +1,20 @@
 @abstract
 class_name HealthComponent extends Node2D
 
+signal on_hit_event
+signal on_death_event
+
 @export_range(0, 5, 1, "or_greater") var max_health : int = 0
 @export_range(0, 5, 1, "or_greater") var start_health : int = 0
 
 @onready var hurtbox : Hurtbox = $Hurtbox
 
+var ignore_effects : bool = false
+
 var curr_health : int:
 	set(value):
+		if ignore_effects:
+			return
 		curr_health = min(value, max_health)
 		if curr_health <= 0:
 			_on_death()

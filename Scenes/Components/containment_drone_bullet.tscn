@@ -12,6 +12,16 @@ radius = 4.0
 
 [node name="ContainmentDroneBullet" type="CharacterBody2D" unique_id=560320549]
 script = ExtResource("1_t6o8u")
+sprite_texture_map = Dictionary[StringName, int]({
+&"D": 195,
+&"DL": 195,
+&"DR": 194,
+&"L": 195,
+&"R": 194,
+&"U": 194,
+&"UL": 195,
+&"UR": 194
+})
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=306942780]
 z_index = 666

@@ -11,6 +11,7 @@
 [ext_resource type="Script" uid="uid://b3xkq7wnva8y" path="res://Scripts/BehaviorAdjustments/camera_axis_region.gd" id="7_6u4rj"]
 [ext_resource type="Script" uid="uid://dxvniwuir8ci5" path="res://Scripts/BehaviorAdjustments/camera_hard_boundary.gd" id="8_yx2ah"]
 [ext_resource type="PackedScene" uid="uid://w5xke1tfkqvw" path="res://Scenes/Enemies/Boss/containment_drone.tscn" id="9_uhu62"]
+[ext_resource type="PackedScene" uid="uid://6jbhsdtefk1p" path="res://Scenes/Components/door_tile_map_layer.tscn" id="12_2dnxg"]
 
 [sub_resource type="GDScript" id="GDScript_yx2ah"]
 resource_name = "HardBoundryBreaker"
@@ -36,18 +37,11 @@ region_rect = Rect2(0, 0, 2304, 1344)
 z_index = 10
 position = Vector2(1, 0)
 
-[node name="DeveloperNote" parent="." unique_id=272395008 instance=ExtResource("3_kungg")]
-offset_left = 2344.0
-offset_top = 1068.0
-offset_right = 2559.0
-offset_bottom = 1157.0
-text = "This will be a mini boss arena that gives the player the gun"
-
 [node name="DeveloperNote2" parent="." unique_id=1419830926 instance=ExtResource("3_kungg")]
-offset_left = -265.0
-offset_top = 791.0
-offset_right = -50.0
-offset_bottom = 1096.0
+offset_left = 402.0
+offset_top = 640.0
+offset_right = 617.0
+offset_bottom = 945.0
 text = "This is an area that uses teleport ability to earn the player an expansion item:
 
 - Acid base
@@ -77,7 +71,7 @@ tile_map_data = PackedByteArray("AAAiABAAAAAAAAQAAAAjABAAAAAAAAQAAAAkABAAAAAAAAQ
 hide_while_covered = true
 
 [node name="Foreground Decoration" parent="Visuals" unique_id=522440360 instance=ExtResource("2_u7dop")]
-tile_map_data = PackedByteArray("AAAOABYAAQADAAAAAAAPABYAAQAEAAAAAAAQAP//AQADAAUAAAAQAAAAAQADAAYAAAAQAAEAAQADAAUAAAAQAAIAAQADAAYAAAAQAAMAAQAFAAMAAAAQAAQAAQADAAYAAAAQAAUAAQADAAUAAAAQAAYAAQADAAYAAAAQAAcAAQADAAUAAAAQAAgAAQADAAYAAAAQAAkAAQAFAAMAAAAQAAoAAQADAAYAAAAQAAsAAQADAAUAAAAQAAwAAQADAAYAAAAQAA0AAQADAAUAAAAQAA4AAQADAAYAAAAQAA8AAQADAAUAAAAQABAAAQADAAYAAAAQABEAAQADAAUAAAAQABIAAQADAAYAAAAQABMAAQAFAAMAAAAQABQAAQADAAYAAAAQABUAAQADAAUAAAAQABYAAQADAAYAAAAQABoAAQADAAUAAAAQABsAAQADAAYAAAAhAAoAAQAMAAYAAAAiAAoAAQANAAYAAAAiAAsAAQANAAcAAAAjAAoAAQAOAAYAAAAjAAsAAQAOAAcAAAAhAAkAAQAGAAMAAAAlAAkAAQAGAAMAAAA=")
+tile_map_data = PackedByteArray("AAAOABYAAQADAAAAAAAPABYAAQAEAAAAAAAQAP//AQADAAUAAAAQAAAAAQADAAYAAAAQAAEAAQADAAUAAAAQAAIAAQADAAYAAAAQAAMAAQAFAAMAAAAQAAQAAQADAAYAAAAQAAUAAQADAAUAAAAQAAYAAQADAAYAAAAQAAcAAQADAAUAAAAQAAgAAQADAAYAAAAQAAkAAQAFAAMAAAAQAAoAAQADAAYAAAAQAAsAAQADAAUAAAAQAAwAAQADAAYAAAAQAA0AAQADAAUAAAAQAA4AAQADAAYAAAAQAA8AAQADAAUAAAAQABAAAQADAAYAAAAQABEAAQADAAUAAAAQABIAAQADAAYAAAAQABMAAQAFAAMAAAAQABQAAQADAAYAAAAQABUAAQADAAUAAAAQABYAAQADAAYAAAAQABoAAQADAAUAAAAQABsAAQADAAYAAAAhAAoAAQAMAAYAAAAiAAoAAQANAAYAAAAiAAsAAQANAAcAAAAjAAoAAQAOAAYAAAAjAAsAAQAOAAcAAAAhAAkAAQAGAAMAAAAlAAkAAQAGAAMAAAAZAAgAAQAIAAUAAAAZAAkAAQAIAAUAAAAZAAoAAQAIAAUAAAAZAAsAAQAIAAUAAAAZAAwAAQAIAAUAAAAZAA0AAQAIAAUAAAAbAA0AAQAIAAYAAAAbAAwAAQAIAAYAAAAbAAsAAQAIAAYAAAAbAAoAAQAIAAYAAAAbAAkAAQAIAAYAAAAbAAgAAQAIAAYAAAAaAAYAAQAIAAcAAAAdAAYAAQAIAAcAAAAgAAYAAQAIAAcAAAAjAAYAAQAIAAcAAAAmAAYAAQAIAAcAAAA=")
 tile_set = ExtResource("5_6tfiu")
 
 [node name="Grating" parent="Visuals" unique_id=2101826522 instance=ExtResource("2_u7dop")]
@@ -133,3 +127,6 @@ script = ExtResource("8_yx2ah")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CameraBoundries/HardBoundryRemover/CameraHardBoundary" unique_id=2010889745]
 position = Vector2(768, 387.5)
 shape = SubResource("RectangleShape2D_85ri6")
+
+[node name="DoorTileMapLayer" parent="." unique_id=197313074 instance=ExtResource("12_2dnxg")]
+tile_map_data = PackedByteArray("AAAuAAgAAQACAAAAAAAuAAkAAQACAAEAAAAuAAoAAQACAAIAAAAvAAgAAQADAAAAAAAvAAkAAQADAAEAAAAvAAoAAQADAAIAAAAuAAYAAQAAAAgAAAAvAAYAAQABAAgAAAAuAAQAAQAAAAgAAAAvAAQAAQABAAgAAAA=")

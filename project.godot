@@ -26,6 +26,7 @@ SceneLoader="*uid://bdtr22633bwcl"
 MusicManager="*uid://d0sejejpytdhi"
 StationPowerTiles="*uid://bi8odjtxgyfiu"
 MapBorders="*res://00_Globals/map_borders.gd"
+CameraEffects="*res://00_Globals/camera_effects.gd"
 
 [display]
 

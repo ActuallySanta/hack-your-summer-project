@@ -1462,7 +1462,7 @@ $ln;Demo Level;NewMap
 [8,-4,0]
 2,0,1,0|ffb400,,,,|2|Scenes/Rooms/Docking Bay/maintenence_room.tscn
 [7,-3,0]
-0,0,-1,-1|ffb400,,,,|0|Scenes/Rooms/Docking Bay/bay_beta_db.tscn
+0,0,-1,-1|ffb400,,,,|5|Scenes/Rooms/Docking Bay/bay_beta_db.tscn
 [7,-4,0]
 1,-1,-1,0|ffb400,,,,|0|Scenes/Rooms/Docking Bay/bay_beta_db.tscn
 [6,-4,0]

@@ -2,14 +2,14 @@ class_name Bullet extends CharacterBody2D
 
 @export var MOVESPEED = 100
 @export var sprite_texture_map : Dictionary[ StringName, int ] = {
-	"U" : 194,
-	"UR": 194,
-	"R" : 194,
-	"DR": 194,
-	"D" : 195,
-	"DL": 195,
-	"L" : 195,
-	"UL": 195,
+	"U" : 1,
+	"UR": 3,
+	"R" : 0,
+	"DR": 2,
+	"D" : 1,
+	"DL": 3,
+	"L" : 0,
+	"UL": 2,
 }
 var direction_to_vector : Dictionary[ StringName, Vector2 ] = {
 	"U" : Vector2(0, -1),

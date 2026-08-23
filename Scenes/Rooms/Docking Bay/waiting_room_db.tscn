@@ -15,14 +15,14 @@
 
 [node name="RoomInstance" parent="." unique_id=1610066515 instance=ExtResource("1_t3g5v")]
 
-[node name="Background" parent="." unique_id=1411061257 instance=ExtResource("2_1fb4d")]
-position = Vector2(1152, 336)
-region_rect = Rect2(0, 0, 2304, 672)
-
 [node name="Node2D" type="Node2D" parent="." unique_id=1762840005]
 position = Vector2(73.41, -200)
 script = ExtResource("4_anilx")
 preserve_axis = "Vertical"
+
+[node name="Background2" parent="Node2D" unique_id=1411061257 instance=ExtResource("2_1fb4d")]
+position = Vector2(1078.59, 536)
+region_rect = Rect2(0, 0, 2304, 672)
 
 [node name="Background" type="TileMapLayer" parent="Node2D" unique_id=780941211]
 modulate = Color(0.7233511, 0.7233511, 0.7233511, 1)
