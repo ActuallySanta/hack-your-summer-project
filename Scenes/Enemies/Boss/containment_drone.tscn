@@ -14,6 +14,7 @@
 [ext_resource type="AudioStream" uid="uid://nmmwtl6pnlba" path="res://Sounds/Entities/Enemies/ContianmentDrone/Boss_Explosion.wav" id="11_1irxt"]
 [ext_resource type="AudioStream" uid="uid://cwe6iq22arpcq" path="res://Sounds/Entities/Enemies/ContianmentDrone/CD_Announce.wav" id="11_ea62n"]
 [ext_resource type="AudioStream" uid="uid://85aie0fanqff" path="res://Sounds/Entities/Enemies/ContianmentDrone/CD_engine_hum.wav" id="11_qc4of"]
+[ext_resource type="Script" uid="uid://ctc17oyja7fup" path="res://Scripts/Combat/hitbox.gd" id="15_xyaey"]
 
 [sub_resource type="Animation" id="Animation_1irxt"]
 length = 0.001
@@ -497,3 +498,12 @@ stream = ExtResource("11_1irxt")
 max_distance = 6085.0
 attenuation = 1e-05
 max_polyphony = 3
+
+[node name="Hitbox" type="Area2D" parent="." unique_id=2009875665]
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("15_xyaey")
+metadata/_custom_type_script = "uid://ctc17oyja7fup"
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Hitbox" unique_id=549575815]
+polygon = PackedVector2Array(-33.333336, 12, 38.666668, 12.666668, 38.666668, 4.666668, 32.666668, 1, 36.333332, -6.666668, 28.333332, -14, 14, -15.666668, 15.666668, -26.333334, 9.666668, -25.333334, 9.333332, -16.333334, -3, -13.333334, -30.333334, -3.333332)

@@ -194,7 +194,7 @@ func leave_intro_cutscene() -> void:
 	MusicManager.set_background_track_from_name("BOSS", "Containment Drone")
 
 func remove_visuals() -> void:
-	$Visuals.queue_free()
+	$FaderNode.queue_free()
 
 func flash_and_spawn_gun() -> void:
 	CameraEffects.flash(Color(1,1,1,0.5), 0.1, 0.075, 0.075, CameraEffects.Ease.EASE_OUT, CameraEffects.Ease.EASE_IN)
