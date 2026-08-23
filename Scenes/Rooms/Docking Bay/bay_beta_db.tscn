@@ -91,8 +91,10 @@ position = Vector2(2164, 621)
 [node name="HealthExtender2" parent="." unique_id=648412909 instance=ExtResource("6_fo38q")]
 position = Vector2(519, 170)
 
-[node name="ContainmentDrone" parent="." unique_id=1774801713 node_paths=PackedStringArray("node_to_drop_on_destroy") instance=ExtResource("9_uhu62")]
+[node name="ContainmentDrone" parent="." unique_id=1774801713 node_paths=PackedStringArray("left_tunnel_pos", "right_tunnel_pos", "node_to_drop_on_destroy") instance=ExtResource("9_uhu62")]
 position = Vector2(2130, 1200)
+left_tunnel_pos = NodePath("../LeftTunnel")
+right_tunnel_pos = NodePath("../RightTunnel")
 node_to_drop_on_destroy = NodePath("../Gun")
 
 [node name="CameraBoundries" type="Node" parent="." unique_id=1858424137]
@@ -130,3 +132,9 @@ shape = SubResource("RectangleShape2D_85ri6")
 
 [node name="DoorTileMapLayer" parent="." unique_id=197313074 instance=ExtResource("12_2dnxg")]
 tile_map_data = PackedByteArray("AAAuAAgAAQACAAAAAAAuAAkAAQACAAEAAAAuAAoAAQACAAIAAAAvAAgAAQADAAAAAAAvAAkAAQADAAEAAAAvAAoAAQADAAIAAAAuAAYAAQAAAAgAAAAvAAYAAQABAAgAAAAuAAQAAQAAAAgAAAAvAAQAAQABAAgAAAA=")
+
+[node name="LeftTunnel" type="Marker2D" parent="." unique_id=518432698]
+position = Vector2(1324, 1194)
+
+[node name="RightTunnel" type="Marker2D" parent="." unique_id=1214008984]
+position = Vector2(2142, 1201)

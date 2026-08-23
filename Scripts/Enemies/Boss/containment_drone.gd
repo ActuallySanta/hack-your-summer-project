@@ -7,10 +7,23 @@ const boss_death_sfx := preload("res://Sounds/Entities/Enemies/ContianmentDrone/
 @export var left_tunnel_pos : Marker2D
 @export var right_tunnel_pos : Marker2D
 @export var node_to_drop_on_destroy : Node2D
+@export var anim_speed_adjust : float:
+	set(value):
+		anim_speed_adjust = value
+		big_gun.anim_speed_adjust = value
+		mini_gun.anim_speed_adjust = value
+		wheels.anim_speed_adjust = value
+		shell.anim_speed_adjust = value
+		gun_stand.anim_speed_adjust = value
+		bumper.anim_speed_adjust = value
 
-@onready var big_gun := $BigGun
-@onready var mini_gun := $MiniGunManager
-@onready var bumper := $Bumper
+
+@onready var wheels := $Visuals/Wheels
+@onready var shell := $Visuals/Shell
+@onready var gun_stand := $Visuals/BIGGUNStand
+@onready var big_gun := $Visuals/BigGun
+@onready var mini_gun := $Visuals/MiniGunManager
+@onready var bumper := $Visuals/Bumper
 @onready var health_component := $HealthComponent
 @onready var exploder := $Exploder
 @onready var vocalizer := $Vocalizer
@@ -18,17 +31,77 @@ const boss_death_sfx := preload("res://Sounds/Entities/Enemies/ContianmentDrone/
 @onready var animator := $Animator
 @onready var prefightNodes := $PreFightNodes
 
+var pause_sprite_animations : bool:
+	set(value):
+		pause_sprite_animations = value
+		big_gun.make_paused(value)
+		mini_gun.make_paused(value)
+		wheels.make_paused(value)
+		shell.make_paused(value)
+		gun_stand.make_paused(value)
+		bumper.make_paused(value)
+
 var do_intro_cutscene : bool = true
-var left_tunnel_global_pos : Vector2
-var right_tunnel_global_pos : Vector2
+var left_tunnel_global_pos : float
+var right_tunnel_global_pos : float
+var target_tunnel : StringName = "Left"
+
+enum state{
+	INTRO,
+	NAV_TUNNEL,
+	ENTER_TUNNEL,
+	CHOOSE_ATTACK,
+	PERFORM_ATTACK_CHARGE,
+	PERFORM_ATTACK_CHARGE_GUN,
+	PERFORM_ATTACK_MINIGUN,
+	DIE,
+}
+var behavior : state = state.INTRO
+
+#region Update Behaviors
+func _process(delta: float) -> void:
+	match behavior:
+		state.INTRO:
+			return
+		state.DIE:
+			return
+		state.NAV_TUNNEL:
+			_on_nav_tunnel(delta)
+		state.ENTER_TUNNEL:
+			_on_enter_tunnel(delta)
+		state.CHOOSE_ATTACK:
+			_on_choose_attack(delta)
+		state.PERFORM_ATTACK_CHARGE:
+			_on_attack_charge(false)
+		state.PERFORM_ATTACK_CHARGE_GUN:
+			_on_attack_charge(true)
+		state.PERFORM_ATTACK_MINIGUN:
+			_on_attack_mini_gun()
+
+func _on_nav_tunnel(delta: float) -> void:
+	pass
+
+func _on_enter_tunnel(delta:float) -> void:
+	pass
+
+func _on_choose_attack(delta: float) -> void:
+	pass
+
+func _on_attack_charge(use_big_gun: bool) -> void:
+	pass
+
+func _on_attack_mini_gun() -> void:
+	pass
+
+#endregion
 
 func _ready() -> void:
 	if GameManager.is_object_collected("Gun"):
 		queue_free()
 		return
 	
-	left_tunnel_global_pos = left_tunnel_pos.global_position
-	right_tunnel_global_pos = right_tunnel_pos.global_position
+	left_tunnel_global_pos = left_tunnel_pos.global_position.x
+	right_tunnel_global_pos = right_tunnel_pos.global_position.x
 	
 	MusicManager.override_automatic_assignment( true )
 	MusicManager.set_background_track_from_name("BOSS", "Ambiance")
@@ -57,35 +130,39 @@ func enter_tunnel(querry_mode: StringName) -> void:
 	elif querry_mode == "right":
 		enter_right_tunnel()
 	elif querry_mode == "closest":
-		var delta := left_tunnel_global_pos - global_position
-		pass
-	elif querry_mode == "opposite":
-		#TODO
-		pass
-	else:
-		pass
-	
+		var delta_l := left_tunnel_global_pos - global_position.x
+		if delta_l < right_tunnel_global_pos - global_position.x:
+			enter_left_tunnel()
+		else:
+			enter_right_tunnel()
 
 func enter_left_tunnel() -> void:
-	pass
+	behavior = state.NAV_TUNNEL
+	target_tunnel = "LEFT"
 
 func enter_right_tunnel() -> void:
-	pass
+	behavior = state.NAV_TUNNEL
+	target_tunnel = "RIGHT"
 
 func start_intro_cutscene() -> void:
+	if not do_intro_cutscene:
+		return
+	
 	health_component.ignore_effects = true
+	enter_tunnel("closest")
+	MusicManager.set_background_track_from_name("NONE", "I can say whatever the fuck I want here heheheh")
+	
+	# Temp timer to get around lack of intro cutscene
+	await get_tree().create_timer(1.0).timeout
+	leave_intro_cutscene()
 
 func leave_intro_cutscene() -> void:
+	do_intro_cutscene = false
 	health_component.ignore_effects = false
+	MusicManager.set_background_track_from_name("BOSS", "Containment Drone")
 
 func remove_visuals() -> void:
-	big_gun.queue_free()
-	mini_gun.queue_free()
-	bumper.queue_free()
-	exploder.queue_free()
-	$BIGGUNStand.queue_free()
-	$Wheels.queue_free()
-	$Shell.queue_free()
+	$Visuals.queue_free()
 
 func flash_and_spawn_gun() -> void:
 	CameraEffects.flash(Color(1,1,1,0.5), 0.1, 0.075, 0.075, CameraEffects.Ease.EASE_OUT, CameraEffects.Ease.EASE_IN)
@@ -94,6 +171,14 @@ func flash_and_spawn_gun() -> void:
 	MusicManager.set_background_track_from_name("NONE", "I can say whatever the fuck I want here heheheh")
 	node_to_drop_on_destroy.global_position = global_position
 	remove_visuals()
-	$DeathExplosion.play()
-	await vocalizer.finished
-	queue_free()
+	
+	var deathsfx : AudioStreamPlayer2D = $DeathExplosion
+	deathsfx.play()
+	exploder.end_explosions()
+	await exploder.when_no_explosions_left
+	if deathsfx.playing == true:
+		await deathsfx.finished
+		queue_free()
+	else:
+		queue_free()
+	

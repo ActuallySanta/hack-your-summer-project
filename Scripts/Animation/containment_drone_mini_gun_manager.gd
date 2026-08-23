@@ -5,8 +5,16 @@ class_name CDMinigun extends Node2D
 
 @onready var animator := $MiniGun/MinigunAnimator
 
+var anim_speed_adjust : float:
+	set(value):
+		anim_speed_adjust = value
+		$MiniGun.anim_speed_adjust = value
+
 var timer := 0.0
 var is_flipped : bool = false
+
+func make_paused(value: bool) -> void:
+	$MiniGun.make_paused(value)
 
 func _process(delta: float) -> void:
 	timer += delta

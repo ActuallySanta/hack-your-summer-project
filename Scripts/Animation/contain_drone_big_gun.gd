@@ -7,9 +7,22 @@ const ANIM_FRAME_TIME_SECONDS := 0.1
 @onready var barrel := $BIGGUNBarrel
 @onready var flare := $BIGGUNFlare
 @onready var shooter := $Shoot
+@onready var shooter_visual := $Shoot/BIGGUNSHOOT
+
+var anim_speed_adjust : float:
+	set(value):
+		anim_speed_adjust = value
+		barrel.anim_speed_adjust = value
+		flare.anim_speed_adjust = value
+		shooter_visual.anim_speed_adjust = value
 
 var timer : float = 0
 var anim_state : int = 0
+
+func make_paused(value: bool) -> void:
+	barrel.make_paused(value)
+	flare.make_paused(value)
+	shooter_visual.make_paused(value)
 
 func iterate() -> void:
 	match anim_state:

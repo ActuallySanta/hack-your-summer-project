@@ -1,6 +1,8 @@
 @tool
 class_name Exploder extends Node2D
 
+signal when_no_explosions_left
+
 const EXPLOSTION := preload("res://Scenes/Enemies/enemy_death_boom.tscn")
 
 @export var max_explosions := 5
@@ -29,11 +31,11 @@ func _process(delta: float) -> void:
 		return
 	
 	if queue_destruction and explosions.size() == 0:
+		when_no_explosions_left.emit()
 		queue_free()
 		return
 	
 	explosions = explosions.filter(func(item): return is_instance_valid(item))
-
 	
 	if not do_explosions:
 		return
@@ -59,4 +61,4 @@ func try_create_explosion() -> bool:
 func _draw() -> void:
 	if not Engine.is_editor_hint():
 		return
-	draw_rect(range_rect, Color.WHITE, false, 3)
+	draw_rect(range_rect, Color(1,1,1,0.1), false, 3)
