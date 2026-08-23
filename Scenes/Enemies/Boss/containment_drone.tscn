@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://cnfdf4c4egoxv" path="res://Sprites/Characters/Enemy SpriteSheets/ContainmentDrone.png" id="1_cds01"]
 [ext_resource type="Script" uid="uid://hvoeqiahkqyn" path="res://Scripts/Enemies/Boss/containment_drone.gd" id="1_r0870"]
+[ext_resource type="PackedScene" uid="uid://c744kphkhs1tv" path="res://Scenes/Components/flasher.tscn" id="2_cpx58"]
 [ext_resource type="Script" uid="uid://mrhr0yu4i7jh" path="res://Scripts/Animation/ManualAnim.gd" id="2_lhspb"]
 [ext_resource type="Script" uid="uid://jxljh1ot5yl1" path="res://Scripts/Animation/containment_drone_shoot.gd" id="3_3x08p"]
 [ext_resource type="Script" uid="uid://bvpc2b8y1wl8b" path="res://Scripts/Animation/contain_drone_big_gun.gd" id="3_ypqr6"]
@@ -19,43 +20,54 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Visuals:modulate")
+tracks/0/path = NodePath(".:anim_speed_adjust")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Color(1, 1, 1, 1)]
+"values": [0.0]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Visuals:scale")
+tracks/1/path = NodePath(".:pause_sprite_animations")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(1, 1)]
+"update": 1,
+"values": [false]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath(".:anim_speed_adjust")
+tracks/2/path = NodePath("FaderNode/Visuals:scale")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [0.0]
+"values": [Vector2(1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("FaderNode:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_smu5p"]
 resource_name = "accelerate"
-loop_mode = 1
 step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -64,39 +76,36 @@ tracks/0/path = NodePath(".:anim_speed_adjust")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 1),
+"times": PackedFloat32Array(0, 0.2),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [0.3, 0.0]
+"values": [0.2, 0.0]
 }
-
-[sub_resource type="Animation" id="Animation_ea62n"]
-resource_name = "damage_flash"
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Visuals:modulate")
-tracks/0/interp = 2
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(0.5176325, 1),
-"update": 0,
-"values": [Color(10, 10, 10, 1), Color(1, 1, 1, 1)]
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:pause_sprite_animations")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
 }
 
 [sub_resource type="Animation" id="Animation_cpx58"]
 resource_name = "fade_in"
+length = 0.5
 step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Visuals:modulate")
+tracks/0/path = NodePath("FaderNode:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5, 1),
+"times": PackedFloat32Array(0, 0.2, 0.5),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(0, 0, 0, 0), Color(0, 0, 0, 1), Color(1, 1, 1, 1)]
@@ -104,27 +113,28 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Visuals:scale")
+tracks/1/path = NodePath("FaderNode/Visuals:scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(0.32987702, 1),
+"transitions": PackedFloat32Array(0.8408964, 1),
 "update": 0,
 "values": [Vector2(0.8, 0.8), Vector2(1, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_xyaey"]
 resource_name = "fade_out"
+length = 0.5
 step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Visuals:modulate")
+tracks/0/path = NodePath("FaderNode:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5, 1),
+"times": PackedFloat32Array(0, 0.3, 0.5),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(0, 0, 0, 1), Color(0, 0, 0, 0)]
@@ -132,12 +142,12 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Visuals:scale")
+tracks/1/path = NodePath("FaderNode/Visuals:scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(1, 0.32987702),
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 0.8408964),
 "update": 0,
 "values": [Vector2(1, 1), Vector2(0.8, 0.8)]
 }
@@ -146,7 +156,6 @@ tracks/1/keys = {
 _data = {
 &"RESET": SubResource("Animation_1irxt"),
 &"accelerate": SubResource("Animation_smu5p"),
-&"damage_flash": SubResource("Animation_ea62n"),
 &"fade_in": SubResource("Animation_cpx58"),
 &"fade_out": SubResource("Animation_xyaey")
 }
@@ -339,108 +348,110 @@ size = Vector2(8.333336, 11)
 position = Vector2(137, 128)
 scale = Vector2(3, 3)
 script = ExtResource("1_r0870")
+acceleration_px_per_ss = 10.0
+max_velocity = 5.0
 
 [node name="Animator" type="AnimationPlayer" parent="." unique_id=811031707]
 libraries/ = SubResource("AnimationLibrary_cpx58")
 
-[node name="Visuals" type="Node2D" parent="." unique_id=1311315567]
-position = Vector2(0, 16.176668)
+[node name="FaderNode" type="Node2D" parent="." unique_id=1817932731]
 
-[node name="Wheels" type="Sprite2D" parent="Visuals" unique_id=207382179]
+[node name="Visuals" parent="FaderNode" unique_id=734208757 instance=ExtResource("2_cpx58")]
+modulate = Color(1, 1, 1, 1)
+position = Vector2(0, 16)
+
+[node name="Wheels" type="Sprite2D" parent="FaderNode/Visuals" unique_id=1050438208]
 position = Vector2(0, -8)
 texture = ExtResource("1_cds01")
 hframes = 4
 vframes = 10
-frame = 1
 script = ExtResource("2_lhspb")
 anim_speed_adjust = 0.0
 metadata/_custom_type_script = "uid://mrhr0yu4i7jh"
 
-[node name="Shell" type="Sprite2D" parent="Visuals" unique_id=59097730]
+[node name="Shell" type="Sprite2D" parent="FaderNode/Visuals" unique_id=1282022190]
 position = Vector2(0, -16.000004)
 texture = ExtResource("1_cds01")
 hframes = 4
 vframes = 5
-frame = 5
+frame = 4
 script = ExtResource("2_lhspb")
 anim_offset = Vector2i(0, 1)
 anim_speed_adjust = 0.0
 
-[node name="BIGGUNStand" type="Sprite2D" parent="Visuals" unique_id=1709171871]
+[node name="BIGGUNStand" type="Sprite2D" parent="FaderNode/Visuals" unique_id=928611861]
 position = Vector2(16, -40)
 texture = ExtResource("1_cds01")
 hframes = 20
 vframes = 10
-frame = 28
+frame = 23
 script = ExtResource("2_lhspb")
 anim_offset = Vector2i(3, 1)
 anim_jump = 5
 anim_speed_adjust = 0.0
 metadata/_custom_type_script = "uid://mrhr0yu4i7jh"
 
-[node name="BigGun" type="Node2D" parent="Visuals" unique_id=1489786400]
+[node name="BigGun" type="Node2D" parent="FaderNode/Visuals" unique_id=1924921915]
 position = Vector2(0, -16.000004)
 script = ExtResource("3_ypqr6")
 
-[node name="BIGGUNBarrel" type="Sprite2D" parent="Visuals/BigGun" unique_id=949683034]
+[node name="BIGGUNBarrel" type="Sprite2D" parent="FaderNode/Visuals/BigGun" unique_id=132280047]
 position = Vector2(0, -24)
 texture = ExtResource("1_cds01")
 hframes = 20
 vframes = 10
-frame = 27
+frame = 22
 script = ExtResource("2_lhspb")
 anim_offset = Vector2i(2, 1)
 anim_jump = 5
 anim_speed_adjust = 0.0
 metadata/_custom_type_script = "uid://mrhr0yu4i7jh"
 
-[node name="BIGGUNFlare" type="Sprite2D" parent="Visuals/BigGun" unique_id=914661936]
+[node name="BIGGUNFlare" type="Sprite2D" parent="FaderNode/Visuals/BigGun" unique_id=1245892061]
 visible = false
 position = Vector2(0, -24)
 texture = ExtResource("1_cds01")
 hframes = 20
 vframes = 10
-frame = 181
+frame = 180
 script = ExtResource("2_lhspb")
 anim_offset = Vector2i(0, 9)
 anim_speed_adjust = 0.0
 metadata/_custom_type_script = "uid://mrhr0yu4i7jh"
 
-[node name="Shoot" type="Node2D" parent="Visuals/BigGun" unique_id=526456573]
+[node name="Shoot" type="Node2D" parent="FaderNode/Visuals/BigGun" unique_id=274612941]
 visible = false
 script = ExtResource("3_3x08p")
 
-[node name="BIGGUNSHOOT" type="Sprite2D" parent="Visuals/BigGun/Shoot" unique_id=793231529]
+[node name="BIGGUNSHOOT" type="Sprite2D" parent="FaderNode/Visuals/BigGun/Shoot" unique_id=927348548]
 position = Vector2(0, -24)
 texture = ExtResource("1_cds01")
 hframes = 20
 vframes = 10
-frame = 161
+frame = 164
 script = ExtResource("2_lhspb")
-anim_offset = Vector2i(0, 8)
+anim_offset = Vector2i(4, 8)
 anim_speed_adjust = 0.0
 metadata/_custom_type_script = "uid://mrhr0yu4i7jh"
 
-[node name="Laser" type="Node2D" parent="Visuals/BigGun/Shoot" unique_id=2031547831]
-position = Vector2(0, 1)
+[node name="Laser" type="Node2D" parent="FaderNode/Visuals/BigGun/Shoot" unique_id=1764618669]
 
-[node name="TileMapLayerBright" type="TileMapLayer" parent="Visuals/BigGun/Shoot/Laser" unique_id=1391101527]
-z_index = 1000
+[node name="TileMapLayerBright" type="TileMapLayer" parent="FaderNode/Visuals/BigGun/Shoot/Laser" unique_id=54367485]
+z_index = -1000
 position = Vector2(8, 0)
 tile_map_data = PackedByteArray("AAD+//7/AAARAAkAAAD9//7/AAARAAkAAAD8//7/AAARAAkAAAD7//7/AAARAAkAAAD6//7/AAARAAkAAAD5//7/AAARAAkAAAD4//7/AAARAAkAAAD3//7/AAARAAkAAAD2//7/AAARAAkAAAD1//7/AAARAAkAAAD0//7/AAARAAkAAADz//7/AAARAAkAAADy//7/AAARAAkAAADx//7/AAARAAkAAADw//7/AAARAAkAAADv//7/AAARAAkAAADu//7/AAARAAkAAADt//7/AAARAAkAAADs//7/AAARAAkAAADr//7/AAARAAkAAADq//7/AAARAAkAAADp//7/AAARAAkAAADo//7/AAARAAkAAADn//7/AAARAAkAAADm//7/AAARAAkAAADl//7/AAARAAkAAADk//7/AAARAAkAAADj//7/AAARAAkAAADi//7/AAARAAkAAADh//7/AAARAAkAAADg//7/AAARAAkAAADf//7/AAARAAkAAADe//7/AAARAAkAAADd//7/AAARAAkAAAA=")
 tile_set = SubResource("TileSet_bpmhk")
 
-[node name="TileMapLayerDim" type="TileMapLayer" parent="Visuals/BigGun/Shoot/Laser" unique_id=1676527005]
+[node name="TileMapLayerDim" type="TileMapLayer" parent="FaderNode/Visuals/BigGun/Shoot/Laser" unique_id=1060004641]
 position = Vector2(8, 0)
 tile_map_data = PackedByteArray("AAD+//7/AAASAAkAAAD9//7/AAASAAkAAAD8//7/AAASAAkAAAD7//7/AAASAAkAAAD6//7/AAASAAkAAAD5//7/AAASAAkAAAD4//7/AAASAAkAAAD3//7/AAASAAkAAAD2//7/AAASAAkAAAD1//7/AAASAAkAAAD0//7/AAASAAkAAADz//7/AAASAAkAAADy//7/AAASAAkAAADx//7/AAASAAkAAADw//7/AAASAAkAAADv//7/AAASAAkAAADu//7/AAASAAkAAADt//7/AAASAAkAAADs//7/AAASAAkAAADr//7/AAASAAkAAADq//7/AAASAAkAAADp//7/AAASAAkAAADo//7/AAASAAkAAADn//7/AAASAAkAAADm//7/AAASAAkAAADl//7/AAASAAkAAADk//7/AAASAAkAAADj//7/AAASAAkAAADi//7/AAASAAkAAADh//7/AAASAAkAAADg//7/AAASAAkAAADf//7/AAASAAkAAADe//7/AAASAAkAAADd//7/AAASAAkAAAA=")
 tile_set = SubResource("TileSet_bpmhk")
 
-[node name="MiniGunManager" parent="Visuals" unique_id=1817450234 instance=ExtResource("5_k025c")]
+[node name="MiniGunManager" parent="FaderNode/Visuals" unique_id=1817450234 instance=ExtResource("5_k025c")]
 position = Vector2(0, -16.000004)
 
-[node name="Bumper" parent="Visuals" unique_id=2001874401 instance=ExtResource("6_uh283")]
+[node name="Bumper" parent="FaderNode/Visuals" unique_id=2001874401 instance=ExtResource("6_uh283")]
 position = Vector2(-32, -16.000004)
-frame = 41
 
 [node name="HealthComponent" type="Node2D" parent="." unique_id=383718714]
 script = ExtResource("7_4ltoi")

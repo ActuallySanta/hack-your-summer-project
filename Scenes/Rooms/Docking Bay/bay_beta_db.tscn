@@ -92,7 +92,7 @@ position = Vector2(2164, 621)
 position = Vector2(519, 170)
 
 [node name="ContainmentDrone" parent="." unique_id=1774801713 node_paths=PackedStringArray("left_tunnel_pos", "right_tunnel_pos", "node_to_drop_on_destroy") instance=ExtResource("9_uhu62")]
-position = Vector2(2130, 1200)
+position = Vector2(1329, 1200)
 left_tunnel_pos = NodePath("../LeftTunnel")
 right_tunnel_pos = NodePath("../RightTunnel")
 node_to_drop_on_destroy = NodePath("../Gun")
