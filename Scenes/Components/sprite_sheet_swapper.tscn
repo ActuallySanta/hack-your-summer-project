@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://end71yxujdkc"]
+
+[ext_resource type="Script" uid="uid://bgmfpgsf652qa" path="res://sprite_sheet_swapper.gd" id="1_n5fdr"]
+
+[node name="SpriteSheetSwapper" type="Node2D" unique_id=234053968]
+script = ExtResource("1_n5fdr")

@@ -12,9 +12,9 @@ const WHEEL_STOP_SPEED := 1.0
 @export var intro_collider : Area2D
 @export_group("Attack")
 @export var chances_for_attack : Dictionary[ StringName, float ] = {
-	"CHARGE": 0.49,
+	#"CHARGE": 0.49,
 	"CHARGE_LASER": 0.01,
-	"MINIGUN": 0.50,
+	#"MINIGUN": 0.50,
 }
 @export var max_speed_when_charging : float
 @export var navigator_force_maximum_when_charging : float
@@ -43,6 +43,7 @@ const WHEEL_STOP_SPEED := 1.0
 		gun_stand.make_paused(value)
 		bumper.make_paused(value)
 
+@onready var sprite_sheet_swapper := $FaderNode
 @onready var visuals := $FaderNode/Visuals
 @onready var wheels := $FaderNode/Visuals/Wheels
 @onready var shell := $FaderNode/Visuals/Shell
@@ -284,6 +285,7 @@ func on_death() -> void:
 	hitbox.queue_free()
 
 func yelp_in_agony() -> void:
+	sprite_sheet_swapper.set_sprite_level(3)
 	set_navigator_speeds("YELP")
 	vocalizer.stream = yelp
 	vocalizer.play()

@@ -27,6 +27,7 @@ MusicManager="*uid://d0sejejpytdhi"
 StationPowerTiles="*uid://bi8odjtxgyfiu"
 MapBorders="*res://00_Globals/map_borders.gd"
 CameraEffects="*res://00_Globals/camera_effects.gd"
+PieChartRandom="*uid://c3452x7sc5cl"
 
 [display]
 

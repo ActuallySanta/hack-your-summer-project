@@ -15,7 +15,8 @@ var frame := 0:
 		set_frame()
 
 func _ready() -> void:
-	var manims = get_manim_children_down_hierachy( self )
+	var manims : Array[ ManualAnim ] = [ ]
+	manims.assign( ChildFilter.get_desendants_of_type( self, ManualAnim ) )
 	if manims.size() == 0:
 		printerr("No Manim as child!~")
 	else:
@@ -51,19 +52,4 @@ func shift() -> void:
 	else:
 		visible = true
 		frame += 1
-
-func get_manim_children_down_hierachy(node: Node) -> Array[ ManualAnim ]:
-	var children : Array[ Node ] = node.get_children()
-	# Base case
-	if children.size() == 0:
-		return [ ]
 	
-	var manualAnimChildren : Array[ ManualAnim ]
-	for child in children:
-		# Second base case
-		if is_instance_of(child, ManualAnim):
-			return [ child ]
-		else:
-			manualAnimChildren.append_array( get_manim_children_down_hierachy(child) )
-		
-	return manualAnimChildren
