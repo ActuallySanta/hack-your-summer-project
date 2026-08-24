@@ -8,6 +8,17 @@ const boss_death_sfx := preload("res://Sounds/Entities/Enemies/ContianmentDrone/
 @export var right_tunnel_pos : Marker2D
 @export var node_to_drop_on_destroy : Node2D
 @export var intro_collider : Area2D
+@export var chances_for_attack : Dictionary[ StringName, float ] = {
+	#"CHARGE": 0.75,
+	"CHARGE_LASER": 0.01,
+	#"MINIGUN": 0.24,
+}
+@export_category("Charge Attack")
+@export var max_speed_when_charging : float
+@export var navigator_force_maximum_when_charging : float
+@export var max_speed_when_escaping : float
+
+@export_category("Export for anim, no use in inspector")
 @export var anim_speed_adjust : float:
 	set(value):
 		anim_speed_adjust = value
@@ -17,7 +28,6 @@ const boss_death_sfx := preload("res://Sounds/Entities/Enemies/ContianmentDrone/
 		shell.anim_speed_adjust = value
 		gun_stand.anim_speed_adjust = value
 		bumper.anim_speed_adjust = value
-
 @export var pause_sprite_animations : bool:
 	set(value):
 		pause_sprite_animations = value
@@ -46,6 +56,7 @@ const boss_death_sfx := preload("res://Sounds/Entities/Enemies/ContianmentDrone/
 @onready var hurtbox := $HealthComponent/Hurtbox
 @onready var hitbox := $Hitbox
 
+var is_dead : bool = false
 var do_intro_cutscene : bool = true
 var left_tunnel_global_pos : float
 var right_tunnel_global_pos : float
@@ -59,10 +70,12 @@ var destination_tunnel : StringName:
 var is_in_background : bool:
 	set(value):
 		is_in_background = value
-		hurtbox.ignore_hits = value
-		hitbox.ignore_hits = value
+		if is_instance_valid(hurtbox):
+			hurtbox.ignore_hits = value
+		if is_instance_valid(hitbox):
+			hitbox.ignore_hits = value
 
-enum state{
+enum state {
 	INTRO,
 	NAV_TUNNEL,
 	ENTER_TUNNEL,
@@ -75,7 +88,9 @@ enum state{
 var behavior : state = state.INTRO
 
 #region Update Behaviors
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
+	if is_dead:
+		return
 	match behavior:
 		state.INTRO:
 			return
@@ -86,7 +101,7 @@ func _process(delta: float) -> void:
 		state.ENTER_TUNNEL:
 			_on_enter_tunnel()
 		state.CHOOSE_ATTACK:
-			_on_choose_attack()
+			_on_choose_attack( )
 		state.PERFORM_ATTACK_CHARGE:
 			_on_attack_charge(false)
 		state.PERFORM_ATTACK_CHARGE_GUN:
@@ -95,7 +110,8 @@ func _process(delta: float) -> void:
 			_on_attack_mini_gun()
 
 func _on_nav_tunnel() -> void:
-	if (destination_tunnel == "LEFT" and left_tunnel_global_pos >= global_position.x) or (destination_tunnel == "RIGHT" and left_tunnel_global_pos <= global_position.x):
+	if (destination_tunnel == "LEFT" and left_tunnel_global_pos >= global_position.x) or (destination_tunnel == "RIGHT" and right_tunnel_global_pos <= global_position.x):
+		print("Destination: ", destination_tunnel, "  | ")
 		navigator.node_to_go_to = null
 		behavior = state.ENTER_TUNNEL
 		return
@@ -104,26 +120,85 @@ func _on_enter_tunnel() -> void:
 	if animator.is_playing():
 		return
 	
+	big_gun.turn_on_barrel()
 	is_in_background = true
-	#animator.play("fade_out")
+	animator.play("fade_out")
 	behavior = state.CHOOSE_ATTACK
 
 func _on_choose_attack() -> void:
-	pass
+	if animator.is_playing():
+		return
+	
+	navigator.ignore_target = true
+	set_navigator_speeds()
+	var choose_side := "LEFT" if randf() <= 0.5 else "RIGHT"
+	var atk_type : StringName = PieRand.Roll(chances_for_attack)
+	
+	navigator.x = left_tunnel_global_pos if choose_side == "LEFT" else right_tunnel_global_pos
+	if choose_side == "LEFT":
+		if atk_type == "MINIGUN":
+			face_left()
+		else:
+			face_right()
+	elif choose_side == "RIGHT":
+		if atk_type == "MINIGUN":
+			face_right()
+		else:
+			face_left()
+	
+	behavior = (state.PERFORM_ATTACK_CHARGE if atk_type == "CHARGE" else 
+				state.PERFORM_ATTACK_CHARGE_GUN if atk_type == "CHARGE_LASER" else 
+				state.PERFORM_ATTACK_MINIGUN
+			)
+	
+	if atk_type != "MINIGUN":
+		if choose_side == "LEFT":
+			destination_tunnel = "RIGHT"
+		else:
+			destination_tunnel = "LEFT"
+	
+	animator.play("fade_in")
 
 func _on_attack_charge(use_big_gun: bool) -> void:
+	if animator.is_playing(): return
+	navigator.ignore_target = false
+	is_in_background = false
+	
+	if use_big_gun:
+		big_gun.turn_on_gun()
+	
 	bumper.flash()
+	behavior = state.NAV_TUNNEL
+	print("Nav target: ", navigator.node_to_go_to.name)
 
 func _on_attack_mini_gun() -> void:
-	pass
-
+	if animator.is_playing(): return
+	is_in_background = false
+	
 #endregion
+
+func set_navigator_speeds(mode: StringName = "DEFAULT") -> void:
+	if mode == "YELP":
+		navigator.max_speed = max_speed_when_escaping
+		navigator.steering_max_force = -1
+	elif mode == "DEFAULT":
+		navigator.max_speed = max_speed_when_charging
+		navigator.steering_max_force = navigator_force_maximum_when_charging
+
+#TODO implement more cleanly
+func face_right() -> void:
+	scale.x = -3
+
+#TODO implement more cleanly
+func face_left() -> void:
+	scale.x = 3
 
 func _ready() -> void:
 	if GameManager.is_object_collected("Gun"):
 		queue_free()
 		return
 	
+	is_dead = false
 	prefightNodes.attach_collider(intro_collider)
 	
 	if left_tunnel_pos != null:
@@ -139,10 +214,21 @@ func _ready() -> void:
 	health_component.on_destroy_event.connect(flash_and_spawn_gun)
 	health_component.on_death_event.connect(on_death)
 	health_component.on_hit_event.connect(yelp_in_agony)
+	health_component.on_low_health_entry.connect(_swap_charge_chances)
 	
 	pause_sprite_animations = true
 
+func _swap_charge_chances() -> void:
+	chances_for_attack = {
+	"CHARGE": 0.01,
+	"CHARGE_LASER": 0.69,
+	"MINIGUN": 0.30,
+}
+
 func on_death() -> void:
+	big_gun.turn_on_barrel()
+	navigator.sudden_stop()
+	is_dead = true
 	exploder.start_explosions()
 	MusicManager.try_mute_volume(name)
 	motor.stop()
@@ -152,6 +238,7 @@ func on_death() -> void:
 	hitbox.queue_free()
 
 func yelp_in_agony() -> void:
+	set_navigator_speeds("YELP")
 	vocalizer.stream = yelp
 	vocalizer.play()
 	visuals.flash()
@@ -192,7 +279,8 @@ func leave_intro_cutscene() -> void:
 	health_component.ignore_effects = false
 	prefightNodes.rawr()
 	CameraEffects.shake(17, 1.4, CameraEffects.Axis.BOTH, CameraEffects.Ease.EASE_IN_OUT)
-	await vocalizer.finished
+	await prefightNodes.audioStream.finished
+	print("vocalizer Finished")
 	MusicManager.set_background_track_from_name("BOSS", "Containment Drone")
 
 func remove_visuals() -> void:
@@ -218,4 +306,3 @@ func flash_and_spawn_gun() -> void:
 		queue_free()
 	else:
 		queue_free()
-	

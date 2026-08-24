@@ -68,18 +68,6 @@ tracks/3/keys = {
 "update": 0,
 "values": [Color(1, 1, 1, 1)]
 }
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("Motor:volume_db")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [0.0]
-}
 
 [sub_resource type="Animation" id="Animation_smu5p"]
 resource_name = "accelerate"
@@ -137,18 +125,6 @@ tracks/1/keys = {
 "update": 0,
 "values": [Vector2(0.8, 0.8), Vector2(1, 1)]
 }
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Motor:volume_db")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [-80.0, 0.0]
-}
 
 [sub_resource type="Animation" id="Animation_xyaey"]
 resource_name = "fade_out"
@@ -164,7 +140,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.3, 0.5),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 0, 0, 1), Color(1, 0, 0, 0.49019608)]
+"values": [Color(1, 1, 1, 1), Color(0, 0, 0, 1), Color(0, 0, 0, 0)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -177,18 +153,6 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1, 0.8408964),
 "update": 0,
 "values": [Vector2(1, 1), Vector2(0.8, 0.8)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Motor:volume_db")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [0.0, -80.0]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_cpx58"]
@@ -387,9 +351,6 @@ size = Vector2(8.333336, 11)
 position = Vector2(137, 128)
 scale = Vector2(3, 3)
 script = ExtResource("1_r0870")
-max_speed_when_charging = 200.0
-navigator_force_maximum_when_charging = 1.2
-max_speed_when_escaping = 500.0
 
 [node name="Animator" type="AnimationPlayer" parent="." unique_id=811031707]
 libraries/ = SubResource("AnimationLibrary_cpx58")
@@ -405,7 +366,6 @@ position = Vector2(0, -8)
 texture = ExtResource("1_cds01")
 hframes = 4
 vframes = 10
-frame = 2
 script = ExtResource("2_lhspb")
 anim_speed_adjust = 0.0
 metadata/_custom_type_script = "uid://mrhr0yu4i7jh"
@@ -415,7 +375,7 @@ position = Vector2(0, -16.000004)
 texture = ExtResource("1_cds01")
 hframes = 4
 vframes = 5
-frame = 6
+frame = 4
 script = ExtResource("2_lhspb")
 anim_offset = Vector2i(0, 1)
 anim_speed_adjust = 0.0
@@ -425,7 +385,7 @@ position = Vector2(16, -40)
 texture = ExtResource("1_cds01")
 hframes = 20
 vframes = 10
-frame = 33
+frame = 23
 script = ExtResource("2_lhspb")
 anim_offset = Vector2i(3, 1)
 anim_jump = 5
@@ -441,7 +401,7 @@ position = Vector2(0, -24)
 texture = ExtResource("1_cds01")
 hframes = 20
 vframes = 10
-frame = 32
+frame = 22
 script = ExtResource("2_lhspb")
 anim_offset = Vector2i(2, 1)
 anim_jump = 5
@@ -454,7 +414,7 @@ position = Vector2(0, -24)
 texture = ExtResource("1_cds01")
 hframes = 20
 vframes = 10
-frame = 182
+frame = 180
 script = ExtResource("2_lhspb")
 anim_offset = Vector2i(0, 9)
 anim_speed_adjust = 0.0
@@ -469,7 +429,7 @@ position = Vector2(0, -24)
 texture = ExtResource("1_cds01")
 hframes = 20
 vframes = 10
-frame = 166
+frame = 164
 script = ExtResource("2_lhspb")
 anim_offset = Vector2i(4, 8)
 anim_speed_adjust = 0.0
@@ -493,13 +453,12 @@ position = Vector2(0, -16.000004)
 
 [node name="Bumper" parent="FaderNode/Visuals" unique_id=2001874401 instance=ExtResource("6_uh283")]
 position = Vector2(-32, -16.000004)
-frame = 42
 
 [node name="HealthComponent" type="Node2D" parent="." unique_id=383718714]
 script = ExtResource("7_4ltoi")
 seconds_to_vaporize = 3.0
-max_health = 10
-start_health = 10
+max_health = 2
+start_health = 2
 
 [node name="Hurtbox" type="Area2D" parent="HealthComponent" unique_id=905099928]
 collision_layer = 4
@@ -558,5 +517,5 @@ polygon = PackedVector2Array(-33.333336, 12, 38.666668, 12.666668, 38.666668, 4.
 script = ExtResource("17_vgk46")
 steering_max_force = 0.8
 max_speed = 40.0
-stop_friction = 0.5
+stop_friction = 0.97
 node_to_move_instead_of_me = NodePath("..")

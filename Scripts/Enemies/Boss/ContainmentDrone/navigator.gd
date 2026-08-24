@@ -19,6 +19,17 @@ func _ready() -> void:
 	else:
 		_nav_position = global_position
 
+func set_nav_position(new_pos: Vector2) -> void:
+	_nav_position = new_pos
+
+var x : float:
+	get(): return _nav_position.x
+	set(value): _nav_position.x = value
+
+var y : float:
+	get(): return _nav_position.y
+	set(value): _nav_position.y = value
+
 var _nav_position : Vector2:
 	set(value):
 		if is_instance_valid(node_to_move_instead_of_me):

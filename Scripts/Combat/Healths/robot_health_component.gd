@@ -12,7 +12,7 @@ func _on_death() -> void:
 	
 
 func _on_hit(_hurtBox: Hurtbox, hit_info: HitInfo, source: Hitbox) -> void:
-	curr_health -= hit_info.damage
+	take_damage(hit_info.damage)
 	var parent = get_parent()
 	if parent.has_method("_on_hit"):
 		parent._on_hit(hit_info, source)
