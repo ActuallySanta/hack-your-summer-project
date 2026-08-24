@@ -72,9 +72,6 @@ tile_set = ExtResource("2_d0xhl")
 position = Vector2(339, 480)
 electrical = NodePath("../VisualAssets/ActivatedElectricals")
 
-[node name="Marker2D" type="Marker2D" parent="." unique_id=1085067390 groups=["save_checkpoint"]]
-position = Vector2(847, 398)
-
 [node name="Fuse" parent="." unique_id=866049687 instance=ExtResource("14_3dyav")]
 position = Vector2(282, 220)
 

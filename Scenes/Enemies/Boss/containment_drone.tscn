@@ -9,7 +9,9 @@
 [ext_resource type="PackedScene" uid="uid://dovt1604oi88h" path="res://Scenes/Components/containment_drone_mini_gun_manager.tscn" id="5_k025c"]
 [ext_resource type="PackedScene" uid="uid://che1cjtb3l04o" path="res://Scenes/Components/containment_drone_bumper.tscn" id="6_uh283"]
 [ext_resource type="Script" uid="uid://b2xtfh0jg14vc" path="res://Scenes/Enemies/Boss/ContainmentDroneHealth.gd" id="7_4ltoi"]
+[ext_resource type="AudioStream" uid="uid://br533wgxl3tvg" path="res://Sounds/Entities/Enemies/ContianmentDrone/CD_BigGun.wav" id="8_fu7ib"]
 [ext_resource type="Script" uid="uid://dhgcprjrtfobr" path="res://Scripts/Combat/hurtbox.gd" id="8_kor2i"]
+[ext_resource type="AudioStream" uid="uid://dih83142xuv4x" path="res://Sounds/Entities/Enemies/ContianmentDrone/CD_BigGun_Fire.wav" id="9_261m1"]
 [ext_resource type="Script" uid="uid://cwbhyi6ndlanq" path="res://Scripts/Animation/exploder.gd" id="10_uhlro"]
 [ext_resource type="AudioStream" uid="uid://nmmwtl6pnlba" path="res://Sounds/Entities/Enemies/ContianmentDrone/Boss_Explosion.wav" id="11_1irxt"]
 [ext_resource type="AudioStream" uid="uid://cwe6iq22arpcq" path="res://Sounds/Entities/Enemies/ContianmentDrone/CD_Announce.wav" id="11_ea62n"]
@@ -164,7 +166,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.3, 0.5),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 0, 0, 1), Color(1, 0, 0, 0.49019608)]
+"values": [Color(1, 1, 1, 1), Color(0, 0, 0, 1), Color(0, 0, 0, 0.49019608)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -380,8 +382,11 @@ texture = ExtResource("1_cds01")
 [sub_resource type="TileSet" id="TileSet_bpmhk"]
 sources/0 = SubResource("TileSetAtlasSource_ypqr6")
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_npwjr"]
+size = Vector2(550, 2.6666703)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bpmhk"]
-size = Vector2(8.333336, 11)
+size = Vector2(18.333334, 11)
 
 [node name="ContainmentDrone" type="Node2D" unique_id=1774801713]
 position = Vector2(137, 128)
@@ -469,24 +474,43 @@ position = Vector2(0, -24)
 texture = ExtResource("1_cds01")
 hframes = 20
 vframes = 10
-frame = 166
+frame = 162
 script = ExtResource("2_lhspb")
-anim_offset = Vector2i(4, 8)
+anim_offset = Vector2i(0, 8)
 anim_speed_adjust = 0.0
 metadata/_custom_type_script = "uid://mrhr0yu4i7jh"
 
 [node name="Laser" type="Node2D" parent="FaderNode/Visuals/BigGun/Shoot" unique_id=1764618669]
+position = Vector2(0, -1)
 
 [node name="TileMapLayerBright" type="TileMapLayer" parent="FaderNode/Visuals/BigGun/Shoot/Laser" unique_id=54367485]
-z_index = -1000
+z_index = 1000
 position = Vector2(8, 0)
 tile_map_data = PackedByteArray("AAD+//7/AAARAAkAAAD9//7/AAARAAkAAAD8//7/AAARAAkAAAD7//7/AAARAAkAAAD6//7/AAARAAkAAAD5//7/AAARAAkAAAD4//7/AAARAAkAAAD3//7/AAARAAkAAAD2//7/AAARAAkAAAD1//7/AAARAAkAAAD0//7/AAARAAkAAADz//7/AAARAAkAAADy//7/AAARAAkAAADx//7/AAARAAkAAADw//7/AAARAAkAAADv//7/AAARAAkAAADu//7/AAARAAkAAADt//7/AAARAAkAAADs//7/AAARAAkAAADr//7/AAARAAkAAADq//7/AAARAAkAAADp//7/AAARAAkAAADo//7/AAARAAkAAADn//7/AAARAAkAAADm//7/AAARAAkAAADl//7/AAARAAkAAADk//7/AAARAAkAAADj//7/AAARAAkAAADi//7/AAARAAkAAADh//7/AAARAAkAAADg//7/AAARAAkAAADf//7/AAARAAkAAADe//7/AAARAAkAAADd//7/AAARAAkAAAA=")
 tile_set = SubResource("TileSet_bpmhk")
 
 [node name="TileMapLayerDim" type="TileMapLayer" parent="FaderNode/Visuals/BigGun/Shoot/Laser" unique_id=1060004641]
+z_index = -1000
 position = Vector2(8, 0)
 tile_map_data = PackedByteArray("AAD+//7/AAASAAkAAAD9//7/AAASAAkAAAD8//7/AAASAAkAAAD7//7/AAASAAkAAAD6//7/AAASAAkAAAD5//7/AAASAAkAAAD4//7/AAASAAkAAAD3//7/AAASAAkAAAD2//7/AAASAAkAAAD1//7/AAASAAkAAAD0//7/AAASAAkAAADz//7/AAASAAkAAADy//7/AAASAAkAAADx//7/AAASAAkAAADw//7/AAASAAkAAADv//7/AAASAAkAAADu//7/AAASAAkAAADt//7/AAASAAkAAADs//7/AAASAAkAAADr//7/AAASAAkAAADq//7/AAASAAkAAADp//7/AAASAAkAAADo//7/AAASAAkAAADn//7/AAASAAkAAADm//7/AAASAAkAAADl//7/AAASAAkAAADk//7/AAASAAkAAADj//7/AAASAAkAAADi//7/AAASAAkAAADh//7/AAASAAkAAADg//7/AAASAAkAAADf//7/AAASAAkAAADe//7/AAASAAkAAADd//7/AAASAAkAAAA=")
 tile_set = SubResource("TileSet_bpmhk")
+
+[node name="Hitbox" type="Area2D" parent="FaderNode/Visuals/BigGun" unique_id=1604937108]
+visible = false
+collision_layer = 8
+collision_mask = 2
+script = ExtResource("15_xyaey")
+metadata/_custom_type_script = "uid://ctc17oyja7fup"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FaderNode/Visuals/BigGun/Hitbox" unique_id=673192716]
+position = Vector2(-276.66666, -24.000011)
+shape = SubResource("RectangleShape2D_npwjr")
+
+[node name="Hummer" type="AudioStreamPlayer2D" parent="FaderNode/Visuals/BigGun" unique_id=295919420]
+stream = ExtResource("8_fu7ib")
+
+[node name="Boomer" type="AudioStreamPlayer2D" parent="FaderNode/Visuals/BigGun" unique_id=2014334024]
+stream = ExtResource("9_261m1")
 
 [node name="MiniGunManager" parent="FaderNode/Visuals" unique_id=1817450234 instance=ExtResource("5_k025c")]
 position = Vector2(0, -16.000004)
@@ -508,7 +532,7 @@ script = ExtResource("8_kor2i")
 metadata/_custom_type_script = "uid://dhgcprjrtfobr"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HealthComponent/Hurtbox" unique_id=728552946]
-position = Vector2(37.83334, -0.83333206)
+position = Vector2(30.833332, -0.83333206)
 shape = SubResource("RectangleShape2D_bpmhk")
 
 [node name="Exploder" type="Node2D" parent="." unique_id=1164108349]

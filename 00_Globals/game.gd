@@ -187,7 +187,6 @@ func _load_custom_save() -> void:
 	save = SaveManager.new()
 	save.set_value("current_room", save_room)
 	save.set_value("player_pos", save_pos)
-	print("Fuse state: ", save_fuse_state)
 	save.set_value("station_powered", save_fuse_state == 2)
 	
 	if save_fuse_state > 0:
@@ -217,7 +216,6 @@ func _on_room_changed(new_room: String) -> void:
 	# The old room's regions are about to be freed, and the player teleports across
 	# the boundary, so drop all camera state instead of easing across the seam.
 	reset_camera_axis_state()
-	#print("Entering room " + new_room)
 
 func _on_pickup_collected(pickup: Pickup) -> void:
 	match pickup.type:
@@ -232,7 +230,7 @@ func _on_pickup_collected(pickup: Pickup) -> void:
 			save.set_value("plasma_gun_collected", true)
 			PlayerManager.player.set_gun("plasma")
 		_:
-			print("No action defined for pickup " + pickup.get_type_as_str())
+			printerr("No action defined for pickup " + pickup.get_type_as_str())
 
 func _push_blocking_cyborg() -> void:
 	save.set_value("cyborg_pushed", true)
@@ -266,19 +264,19 @@ func _process(_delta: float) -> void:
 
 static func is_object_collected(name : String) -> bool:
 	if !MetSys.save_data:
-		print("No save data found, cannot determine object collection status.")
+		printerr("No save data found, cannot determine object collection status.")
 		return false
 	return MetSys.save_data.stored_objects.get(name, false)
 
 static func is_cyborg_pushed() -> bool:
 	if !instance or !instance.save:
-		print("No save data found, cannot determine push status.")
+		printerr("No save data found, cannot determine push status.")
 		return false
 	return true
 
 static func is_station_powered() -> bool:
 	if !instance or !instance.save:
-		print("No save data found, cannot determine power status.")
+		printerr("No save data found, cannot determine power status.")
 		return false
 	return instance.save.get_value("station_powered", false)
 
@@ -605,7 +603,6 @@ func _clamp_view_to_rect(center: Vector2, half_view: Vector2, rect: Rect2, exemp
 
 #Add any other variables you need as you save them, they will be saved as a dictionary
 func save_game(save_index: int = 0, set_checkpoint := true) -> void:
-	print("Saving")
 	save.set_value("player_pos", _player.global_position)
 	save.set_value("current_room", MetSys.get_current_room_name())
 	if set_checkpoint:

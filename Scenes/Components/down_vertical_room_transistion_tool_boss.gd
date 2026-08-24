@@ -11,4 +11,4 @@ func _process(delta: float) -> void:
 	pass
 
 func disable_collider() -> void:
-	print("Override")
+	pass

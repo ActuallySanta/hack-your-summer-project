@@ -10,13 +10,15 @@ const boss_death_sfx := preload("res://Sounds/Entities/Enemies/ContianmentDrone/
 @export var intro_collider : Area2D
 @export var chances_for_attack : Dictionary[ StringName, float ] = {
 	#"CHARGE": 0.75,
-	"CHARGE_LASER": 0.01,
-	#"MINIGUN": 0.24,
+	#"CHARGE_LASER": 0.01,
+	"MINIGUN": 0.24,
 }
 @export_category("Charge Attack")
 @export var max_speed_when_charging : float
 @export var navigator_force_maximum_when_charging : float
 @export var max_speed_when_escaping : float
+@export var max_laser_time : float = 5.0
+@export var min_laser_time : float = 1.0
 
 @export_category("Export for anim, no use in inspector")
 @export var anim_speed_adjust : float:
@@ -60,6 +62,8 @@ var is_dead : bool = false
 var do_intro_cutscene : bool = true
 var left_tunnel_global_pos : float
 var right_tunnel_global_pos : float
+var do_random_big_laser_shot : bool
+var alt_shoot_timer: float
 var destination_tunnel : StringName:
 	set(value):
 		destination_tunnel = value
@@ -111,7 +115,6 @@ func _process(_delta: float) -> void:
 
 func _on_nav_tunnel() -> void:
 	if (destination_tunnel == "LEFT" and left_tunnel_global_pos >= global_position.x) or (destination_tunnel == "RIGHT" and right_tunnel_global_pos <= global_position.x):
-		print("Destination: ", destination_tunnel, "  | ")
 		navigator.node_to_go_to = null
 		behavior = state.ENTER_TUNNEL
 		return
@@ -120,6 +123,7 @@ func _on_enter_tunnel() -> void:
 	if animator.is_playing():
 		return
 	
+	do_random_big_laser_shot = false
 	big_gun.turn_on_barrel()
 	is_in_background = true
 	animator.play("fade_out")
@@ -165,16 +169,19 @@ func _on_attack_charge(use_big_gun: bool) -> void:
 	is_in_background = false
 	
 	if use_big_gun:
+		do_random_big_laser_shot = true
 		big_gun.turn_on_gun()
 	
 	bumper.flash()
 	behavior = state.NAV_TUNNEL
-	print("Nav target: ", navigator.node_to_go_to.name)
+	await get_tree().create_timer(randf_range(min_laser_time, max_laser_time)).timeout
+	big_gun.turn_off_gun()
 
 func _on_attack_mini_gun() -> void:
 	if animator.is_playing(): return
 	is_in_background = false
 	
+	mini_gun.shoot()
 #endregion
 
 func set_navigator_speeds(mode: StringName = "DEFAULT") -> void:
@@ -188,10 +195,12 @@ func set_navigator_speeds(mode: StringName = "DEFAULT") -> void:
 #TODO implement more cleanly
 func face_right() -> void:
 	scale.x = -3
+	mini_gun.is_flipped = true
 
 #TODO implement more cleanly
 func face_left() -> void:
 	scale.x = 3
+	mini_gun.is_flipped = false
 
 func _ready() -> void:
 	if GameManager.is_object_collected("Gun"):
@@ -280,7 +289,6 @@ func leave_intro_cutscene() -> void:
 	prefightNodes.rawr()
 	CameraEffects.shake(17, 1.4, CameraEffects.Axis.BOTH, CameraEffects.Ease.EASE_IN_OUT)
 	await prefightNodes.audioStream.finished
-	print("vocalizer Finished")
 	MusicManager.set_background_track_from_name("BOSS", "Containment Drone")
 
 func remove_visuals() -> void:

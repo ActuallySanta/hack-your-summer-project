@@ -691,10 +691,6 @@ func get_camera() -> Camera2D:
 func get_foreground() -> TileMapLayer:
 	var geoNode = get_tree().get_first_node_in_group("Geometry")
 	return geoNode
-	#var options = geoNode.filter(func(child): return child.name.begins_with("Fore"))
-	#print(options)
-	#var foreground : TileMapLayer = options[0]
-	#return foreground
 
 func get_map_position(foreground: TileMapLayer, relative_to_player: Vector2i = Vector2i.ZERO) -> Vector2i:
 	var map_pos : Vector2i = get_map_cordinates(foreground, global_position) + relative_to_player

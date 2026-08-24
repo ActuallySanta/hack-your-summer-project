@@ -87,7 +87,7 @@ func _die() -> void:
 		if parent.remove_node(self):
 			print(" I was removed successfully")
 		else:
-			print(" Something has gone terribly, terribly wrong and I have no idea how to fix this")
+			printerr(" Something has gone terribly, terribly wrong and I have no idea how to fix this")
 	animator.play("Death")
 	gravity_scale = 1.0
 	is_dead = true

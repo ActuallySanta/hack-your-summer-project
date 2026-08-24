@@ -18,10 +18,4 @@ func generateAttack():
 	pass
 
 func _on_melee_hitbox_on_hit(hitbox: Hitbox, target: Hurtbox) -> void:
-	#print(target.owner)
-	#
-	#if(target.owner is Player):
-		#print(name + " has hit the player!")
-	#else:
-		#print(target.owner)
 	pass
