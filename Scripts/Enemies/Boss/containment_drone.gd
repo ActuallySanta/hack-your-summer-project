@@ -4,8 +4,6 @@ const battle_cry := preload("res://Sounds/Entities/Enemies/ContianmentDrone/CD_A
 const yelp := preload("res://Sounds/Entities/Enemies/ContianmentDrone/CD_Hurt.wav")
 const boss_death_sfx := preload("res://Sounds/Entities/Enemies/ContianmentDrone/Boss_Explosion.wav")
 
-## Below this many pixels per second the drone counts as parked and its wheels
-## stop turning.
 const WHEEL_STOP_SPEED := 1.0
 
 @export var left_tunnel_pos : Marker2D
@@ -14,9 +12,9 @@ const WHEEL_STOP_SPEED := 1.0
 @export var intro_collider : Area2D
 @export_group("Attack")
 @export var chances_for_attack : Dictionary[ StringName, float ] = {
-	#"CHARGE": 0.75,
-	#"CHARGE_LASER": 0.01,
-	"MINIGUN": 0.24,
+	"CHARGE": 0.49,
+	"CHARGE_LASER": 0.01,
+	"MINIGUN": 0.50,
 }
 @export var max_speed_when_charging : float
 @export var navigator_force_maximum_when_charging : float
@@ -265,14 +263,16 @@ func _ready() -> void:
 	pause_sprite_animations = true
 
 func _swap_charge_chances() -> void:
+	print("Swapping to more deadly version")
 	chances_for_attack = {
-	"CHARGE": 0.01,
 	"CHARGE_LASER": 0.69,
 	"MINIGUN": 0.30,
+	"CHARGE": 0.01,
 }
 
 func on_death() -> void:
 	big_gun.turn_on_barrel()
+	mini_gun.despawn_bullets()
 	navigator.sudden_stop()
 	is_dead = true
 	exploder.start_explosions()

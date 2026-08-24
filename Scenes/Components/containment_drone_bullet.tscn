@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dx27csn4jx8c3"]
 
-[ext_resource type="Script" uid="uid://6t1wlfec2sqr" path="res://Scenes/Components/bullet.gd" id="1_t6o8u"]
+[ext_resource type="Script" uid="uid://b0xpfphy36djm" path="res://Scenes/Components/containment_drone_bullet.gd" id="1_t6o8u"]
 [ext_resource type="Texture2D" uid="uid://cnfdf4c4egoxv" path="res://Sprites/Characters/Enemy SpriteSheets/ContainmentDrone.png" id="2_s04d2"]
 [ext_resource type="PackedScene" uid="uid://liprjmtialrh" path="res://Scenes/Components/Hitbox.tscn" id="3_41j1m"]
 
@@ -12,6 +12,7 @@ radius = 4.0
 
 [node name="ContainmentDroneBullet" type="CharacterBody2D" unique_id=560320549]
 script = ExtResource("1_t6o8u")
+vertical_range = 12.0
 sprite_texture_map = Dictionary[StringName, int]({
 &"D": 195,
 &"DL": 195,

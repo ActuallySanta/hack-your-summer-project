@@ -42,6 +42,10 @@ func initial_operations(spawn_pos: Vector2, spawn_direction: StringName, spawn_o
 	position = spawnPos + dir * start_offset
 	velocity = dir * MOVESPEED
 	$Sprite2D.frame = sprite_texture_map[ initDir ]
+	post_init_operations()
+	
+func post_init_operations() -> void:
+	pass
 
 
 func _on_hitbox_on_hit(_hitbox: Hitbox, _target: Hurtbox) -> void:

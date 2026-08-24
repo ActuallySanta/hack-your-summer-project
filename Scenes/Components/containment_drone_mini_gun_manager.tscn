@@ -84,7 +84,9 @@ _data = {
 
 [node name="MiniGunManager" type="Node2D" unique_id=1817450234]
 script = ExtResource("1_nq6mb")
-bullet_scene = ExtResource("2_8ikbp")
+bullet_scenes = Dictionary[PackedScene, float]({
+ExtResource("2_8ikbp"): 0.5
+})
 spawn_delta = Vector2(40, -13)
 
 [node name="MiniGun" type="Sprite2D" parent="." unique_id=1497808456]
@@ -92,7 +94,7 @@ position = Vector2(32, 0)
 texture = ExtResource("3_t5qca")
 hframes = 20
 vframes = 5
-frame = 61
+frame = 62
 script = ExtResource("4_mo2hx")
 anim_offset = Vector2i(0, 3)
 anim_speed_adjust = 0.0

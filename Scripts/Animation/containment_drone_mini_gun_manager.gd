@@ -1,11 +1,10 @@
 class_name CDMinigun extends Node2D
 
-@export var bullet_scene : PackedScene
+@export var bullet_scenes : Dictionary[ PackedScene, float ]
 @export var spawn_delta : Vector2
 
 @onready var animator := $MiniGun/MinigunAnimator
 
-## Where spawned bullets get parented. The drone sets this to its own parent in
 ## _ready(). It must be somewhere outside the drone's FaderNode: bullets left
 ## under the drone inherit its fade and its mirrored scale, so they wink out and
 ## teleport with it whenever it ducks into a tunnel.
@@ -19,14 +18,29 @@ var anim_speed_adjust : float:
 var timer := 0.0
 var is_flipped : bool = false
 
+## Bullets this gun has put into the world. They are deliberately parented
+## outside the drone, so they outlive it -- the drone has to clear them itself
+## when it dies or a stray round can still kill the player after the fight.
+var _live_bullets : Array[Bullet] = []
+
 func make_paused(value: bool) -> void:
 	$MiniGun.make_paused(value)
 
 func _process(delta: float) -> void:
 	timer += delta
 
-## True while a shot is still playing out, i.e. its bullet may not have spawned
-## yet -- the Shoot animation spawns on a method track partway through.
+## Clears every bullet still in flight and cancels any shot mid-animation.
+func despawn_bullets() -> void:
+	# A shot already underway would otherwise still reach the spawn_bullet()
+	# method track partway through Shoot and fire posthumously.
+	animator.stop()
+	$MiniGun.visible = false  # where the animation would have left it at rest
+	
+	for bullet in _live_bullets:
+		if is_instance_valid(bullet):
+			bullet.queue_free()
+	_live_bullets.clear()
+
 func is_shooting() -> bool:
 	return animator.is_playing()
 
@@ -39,15 +53,19 @@ func shoot() -> bool:
 
 func spawn_bullet() -> void:
 	var parent : Node2D = bullet_parent if is_instance_valid(bullet_parent) else get_parent()
+	var bullet_scene : PackedScene = PieRand.Roll(bullet_scenes)
 	var bullet : Bullet = bullet_scene.instantiate()
-	# to_global() already mirrors the offset when the drone faces right (the
-	# root's scale.x goes negative), so spawn_delta.x must NOT be negated here
-	# as well -- doing both cancels out and the muzzle offset never flips.
 	var spawn_global := to_global(spawn_delta)
 	
 	parent.add_child(bullet)
 	bullet.initial_operations(parent.to_local(spawn_global), "L" if is_flipped else "R", 0.0)
-	# Bullets no longer live under the drone, so carry its art size across by
-	# hand -- unsigned, so the sprite is not mirrored on top of its direction.
+
 	var drone_scale := global_scale
 	bullet.global_scale = Vector2(absf(drone_scale.x), absf(drone_scale.y))
+	
+	# Forget bullets that already expired on their own, so a long fight does not
+	# pile up dead references.
+	for i in range(_live_bullets.size() - 1, -1, -1):
+		if not is_instance_valid(_live_bullets[i]):
+			_live_bullets.remove_at(i)
+	_live_bullets.append(bullet)
