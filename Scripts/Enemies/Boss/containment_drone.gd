@@ -4,21 +4,26 @@ const battle_cry := preload("res://Sounds/Entities/Enemies/ContianmentDrone/CD_A
 const yelp := preload("res://Sounds/Entities/Enemies/ContianmentDrone/CD_Hurt.wav")
 const boss_death_sfx := preload("res://Sounds/Entities/Enemies/ContianmentDrone/Boss_Explosion.wav")
 
+## Below this many pixels per second the drone counts as parked and its wheels
+## stop turning.
+const WHEEL_STOP_SPEED := 1.0
+
 @export var left_tunnel_pos : Marker2D
 @export var right_tunnel_pos : Marker2D
 @export var node_to_drop_on_destroy : Node2D
 @export var intro_collider : Area2D
+@export_group("Attack")
 @export var chances_for_attack : Dictionary[ StringName, float ] = {
 	#"CHARGE": 0.75,
 	#"CHARGE_LASER": 0.01,
 	"MINIGUN": 0.24,
 }
-@export_category("Charge Attack")
 @export var max_speed_when_charging : float
 @export var navigator_force_maximum_when_charging : float
 @export var max_speed_when_escaping : float
 @export var max_laser_time : float = 5.0
 @export var min_laser_time : float = 1.0
+@export var num_bullets_mingun_shoot : int = 5
 
 @export_category("Export for anim, no use in inspector")
 @export var anim_speed_adjust : float:
@@ -64,6 +69,8 @@ var left_tunnel_global_pos : float
 var right_tunnel_global_pos : float
 var do_random_big_laser_shot : bool
 var alt_shoot_timer: float
+var bullets_to_fire : int
+var _last_wheel_pos : Vector2
 var destination_tunnel : StringName:
 	set(value):
 		destination_tunnel = value
@@ -92,7 +99,8 @@ enum state {
 var behavior : state = state.INTRO
 
 #region Update Behaviors
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
+	_update_wheel_spin(delta)
 	if is_dead:
 		return
 	match behavior:
@@ -112,6 +120,17 @@ func _process(_delta: float) -> void:
 			_on_attack_charge(true)
 		state.PERFORM_ATTACK_MINIGUN:
 			_on_attack_mini_gun()
+
+## Nothing ever re-paused the wheels once an animation unpaused them, so they
+## kept turning while the drone sat still. Tie them to how far it actually
+## moved instead -- that holds no matter what does the moving.
+func _update_wheel_spin(delta: float) -> void:
+	if not is_instance_valid(wheels):
+		return
+	
+	var speed := global_position.distance_to(_last_wheel_pos) / maxf(delta, 0.0001)
+	_last_wheel_pos = global_position
+	wheels.make_paused(pause_sprite_animations or speed < WHEEL_STOP_SPEED)
 
 func _on_nav_tunnel() -> void:
 	if (destination_tunnel == "LEFT" and left_tunnel_global_pos >= global_position.x) or (destination_tunnel == "RIGHT" and right_tunnel_global_pos <= global_position.x):
@@ -141,11 +160,13 @@ func _on_choose_attack() -> void:
 	navigator.x = left_tunnel_global_pos if choose_side == "LEFT" else right_tunnel_global_pos
 	if choose_side == "LEFT":
 		if atk_type == "MINIGUN":
+			bullets_to_fire = num_bullets_mingun_shoot
 			face_left()
 		else:
 			face_right()
 	elif choose_side == "RIGHT":
 		if atk_type == "MINIGUN":
+			bullets_to_fire = num_bullets_mingun_shoot
 			face_right()
 		else:
 			face_left()
@@ -181,7 +202,19 @@ func _on_attack_mini_gun() -> void:
 	if animator.is_playing(): return
 	is_in_background = false
 	
-	mini_gun.shoot()
+	if bullets_to_fire <= 0:
+		# The Shoot animation spawns its bullet partway through, so leaving the
+		# moment the last shot starts would fire it from halfway down the room.
+		if mini_gun.is_shooting():
+			return
+		enter_tunnel("closest")
+		return
+	
+	# shoot() refuses while the previous shot is still playing. Counting the
+	# refusals as shots burned all five rounds in five frames and sent the drone
+	# straight back to a tunnel after a single bullet.
+	if mini_gun.shoot():
+		bullets_to_fire -= 1
 #endregion
 
 func set_navigator_speeds(mode: StringName = "DEFAULT") -> void:
@@ -208,6 +241,10 @@ func _ready() -> void:
 		return
 	
 	is_dead = false
+	_last_wheel_pos = global_position
+	# Keep bullets out of the drone's FaderNode so they do not fade and teleport
+	# along with it when it ducks into a tunnel.
+	mini_gun.bullet_parent = get_parent()
 	prefightNodes.attach_collider(intro_collider)
 	
 	if left_tunnel_pos != null:
@@ -257,14 +294,20 @@ func yelp_in_agony() -> void:
 func enter_tunnel(querry_mode: StringName) -> void:
 	animator.play("accelerate")
 	behavior = state.NAV_TUNNEL
+	# The minigun attack parks the navigator to hold position while it fires;
+	# without this the drone would sit still forever instead of driving off.
+	navigator.ignore_target = false
 	
 	if querry_mode == "left":
 		destination_tunnel = "LEFT"
 	elif querry_mode == "right":
 		destination_tunnel = "RIGHT"
 	elif querry_mode == "closest":
-		var delta_l := left_tunnel_global_pos - global_position.x
-		if delta_l < right_tunnel_global_pos - global_position.x:
+		# These have to be compared as distances. Raw deltas made the left tunnel
+		# win every time, since its delta is negative whenever the drone is to the
+		# right of it -- so a minigun volley on the left re-entered the tunnel it
+		# was already sitting in, over and over.
+		if absf(left_tunnel_global_pos - global_position.x) < absf(right_tunnel_global_pos - global_position.x):
 			destination_tunnel = "LEFT"
 		else:
 			destination_tunnel = "RIGHT"

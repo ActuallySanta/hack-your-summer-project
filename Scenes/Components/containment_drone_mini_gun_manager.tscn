@@ -4,6 +4,22 @@
 [ext_resource type="PackedScene" uid="uid://dx27csn4jx8c3" path="res://Scenes/Components/containment_drone_bullet.tscn" id="2_8ikbp"]
 [ext_resource type="Texture2D" uid="uid://cnfdf4c4egoxv" path="res://Sprites/Characters/Enemy SpriteSheets/ContainmentDrone.png" id="3_t5qca"]
 [ext_resource type="Script" uid="uid://mrhr0yu4i7jh" path="res://Scripts/Animation/ManualAnim.gd" id="4_mo2hx"]
+[ext_resource type="AudioStream" uid="uid://cuesku8232hdq" path="res://Sounds/Entities/Player/Gun Fire.wav" id="5_8ikbp"]
+
+[sub_resource type="Animation" id="Animation_8ikbp"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../sfx:playing")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="Animation_uh283"]
 resource_name = "Shoot"
@@ -47,23 +63,36 @@ tracks/2/keys = {
 "method": &"spawn_bullet"
 }]
 }
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../sfx:playing")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.2),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_uh283"]
 _data = {
+&"RESET": SubResource("Animation_8ikbp"),
 &"Shoot": SubResource("Animation_uh283")
 }
 
 [node name="MiniGunManager" type="Node2D" unique_id=1817450234]
 script = ExtResource("1_nq6mb")
 bullet_scene = ExtResource("2_8ikbp")
-spawn_delta = Vector2(32, -13)
+spawn_delta = Vector2(40, -13)
 
 [node name="MiniGun" type="Sprite2D" parent="." unique_id=1497808456]
 position = Vector2(32, 0)
 texture = ExtResource("3_t5qca")
 hframes = 20
 vframes = 5
-frame = 62
+frame = 61
 script = ExtResource("4_mo2hx")
 anim_offset = Vector2i(0, 3)
 anim_speed_adjust = 0.0
@@ -71,3 +100,6 @@ metadata/_custom_type_script = "uid://mrhr0yu4i7jh"
 
 [node name="MinigunAnimator" type="AnimationPlayer" parent="MiniGun" unique_id=2015846801]
 libraries/ = SubResource("AnimationLibrary_uh283")
+
+[node name="sfx" type="AudioStreamPlayer2D" parent="." unique_id=292730332]
+stream = ExtResource("5_8ikbp")
