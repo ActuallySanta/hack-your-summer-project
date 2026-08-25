@@ -12,9 +12,9 @@ const WHEEL_STOP_SPEED := 1.0
 @export var intro_collider : Area2D
 @export_group("Attack")
 @export var chances_for_attack : Dictionary[ StringName, float ] = {
-	#"CHARGE": 0.49,
+	"CHARGE": 0.49,
 	"CHARGE_LASER": 0.01,
-	#"MINIGUN": 0.50,
+	"MINIGUN": 0.50,
 }
 @export var max_speed_when_charging : float
 @export var navigator_force_maximum_when_charging : float
@@ -285,11 +285,18 @@ func on_death() -> void:
 	hitbox.queue_free()
 
 func yelp_in_agony() -> void:
-	sprite_sheet_swapper.set_sprite_level(3)
 	set_navigator_speeds("YELP")
 	vocalizer.stream = yelp
 	vocalizer.play()
 	visuals.flash()
+	if health_component.current_health() > 9:
+		pass
+	elif health_component.current_health() > 7:
+		sprite_sheet_swapper.set_sprite_level(1)
+	elif health_component.current_health() > 5:
+		sprite_sheet_swapper.set_sprite_level(2)
+	elif health_component.current_health() > 3:
+		sprite_sheet_swapper.set_sprite_level(3)
 	if do_intro_cutscene:
 		start_intro_cutscene()
 

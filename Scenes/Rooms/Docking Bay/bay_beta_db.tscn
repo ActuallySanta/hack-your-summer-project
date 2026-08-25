@@ -106,8 +106,8 @@ node_to_drop_on_destroy = NodePath("../Gun")
 intro_collider = NodePath("../Area2D")
 navigator_force_maximum_when_charging = 1.0
 max_speed_when_escaping = 600.0
-max_laser_time = 3.25
-min_laser_time = 3.25
+max_laser_time = 3.33
+min_laser_time = 3.0
 
 [node name="CameraBoundries" type="Node" parent="." unique_id=1858424137]
 
