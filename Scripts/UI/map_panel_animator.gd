@@ -66,6 +66,24 @@ func toggle() -> void:
 	else:
 		open()
 
+## Closes with no animation, in one call.
+##
+## For the moments the panel has to be off screen now rather than shortly: pausing,
+## where the tree stops and a half-played close animation would freeze mid-slide with
+## the panel still covering the screen. The step callable is run once with a delta
+## long enough that any duration-based animation reports itself finished.
+func snap_closed() -> void:
+	if state == State.CLOSED:
+		return
+	close()
+	# Large enough that any sane animation_duration is over; run twice so an animation
+	# that resets its own elapsed time on close_started still lands.
+	_close_step.call(3600.0)
+	if not _close_step.call(3600.0):
+		push_warning("MapPanelAnimator: the close animation did not finish when snapped. It may not be duration-based.")
+	state = State.CLOSED
+	closed.emit()
+
 ## Drives the current animation. Call once per frame from the panel's [code]_process[/code].
 func step(delta: float) -> void:
 	match state:

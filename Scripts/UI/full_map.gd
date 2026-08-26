@@ -174,6 +174,13 @@ func toggle() -> void:
 	_animator.toggle()
 	set_process(_needs_process())
 
+## Takes the panel off screen immediately, with no animation. Used when the game
+## pauses: the tree stops, so a close animation started there would freeze part-way
+## and leave the map sitting over the pause menu.
+func snap_closed() -> void:
+	_animator.snap_closed()
+	set_process(_needs_process())
+
 ## True once the opening animation has finished, false from the moment a close starts.
 func is_open() -> bool:
 	return _animator.is_open()

@@ -1,774 +1,457 @@
+## The player: a manager for the components that actually do the work.
+##
+## This file owns only what all of them share -- the input snapshot for the frame,
+## the movement state, which way the player faces, which collider is active, and the
+## order the components run in. Everything else lives in a [PlayerComponent] under
+## this node, found by type in [method _collect_components], so a feature can be
+## worked on, switched off, or taken out without touching anything else.
+##
+## Adding a component: give it a script extending [PlayerComponent], drop it under
+## the player, and add it to [method _collect_components] if the manager needs to
+## address it by name. It will already be getting [method PlayerComponent.bind] and
+## the three update hooks.
+##
+## The frame runs in this order, and the order matters:
+## [br]1. inputs are read once, into [member move_input] and friends
+## [br]2. the mantle gets first refusal, because a vault owns the whole body
+## [br]3. the move state and the collider that goes with it are settled
+## [br]4. components take their turn, jump before movement so a launch this frame is
+##      in the velocity movement then works with
+## [br]5. [method move_and_slide]
+## [br]6. post-move hooks, which are the only place the results of the move are known
 class_name Player
 extends CharacterBody2D
 
-# Signals
-signal pickup_collected(pickup : Pickup)
+#region Signals
+signal pickup_collected(pickup: Pickup)
 signal save_station_used()
 signal death_start(anim_duration: float)
 signal death_end()
+## Emitted by whatever launched the player -- the floor jump or the wall jump -- so
+## the other one knows the ground has been spent.
+signal jumped()
+## Emitted after the move state changes, with the state left behind.
+signal move_state_changed(from: MoveState, to: MoveState)
+#endregion
 
-# Exports
-@export_group("Movement")
-@export var moveSpeed := 500.0
-@export var crouchSpeedMult := 0.5
-@export var climbingSpeed := 100
-@export var jumpForce := 600.0
-@export var jumpBufferTime := 0.25
-@export var coyoteTime := 0.2
-## How close the active collider's leading edge must be to the wall face, in pixels,
-## before a mantle is allowed. Keeps the vault from starting across the player's tile.
-@export var mantleWallDistance := 6.0
-## How far below the feet of the active collider the crumbling-floor probe reaches.
-## Just deep enough to land inside the tile being stood on.
-@export var crumbleProbeDepth := 8.0
-
-@export_subgroup("Wall Jump")
-@export var wallJumpTimeBufferSeconds := 0.1
-@export var wallJumpVerticalBuffer := 24.0
-@export var wallJumpHorizontalBuffer := 10.0
-@export_flags_2d_physics var wallJumpGeometryLayers := 1
-
-@export_group("Combat")
-@export var baseHealth := 5
-@export var attackCooldown := 0.45
-@export var attackBufferTime := 0.15
-@export var swingOffset := 100.0
-@export var swingScene : PackedScene
-@export var shootCooldown := 0.6
-@export var shootBufferTime := 0.15
-@export var bulletOffset := 100.0
-@export var bulletScene : PackedScene
-@export var hitInvulnTime := 1.0
-@export var invulnBlinkInterval := 0.15
-@export var knockbackDI := 300.0
-@export var canClimb : bool = false
-
-@export_group("Visuals")
-## How far down the visuals are shifted while the shorter air collider is active.
-## Should match JumpCollision's offset from WalkingCollision in the player scene,
-## so the collider bottoms and the sprite's feet all stay at the same height.
-@export var airVisualOffset := 21.0
-
-# Enums
-enum MoveState{
+enum MoveState {
 	Standing,
 	Crouching,
-	Climbing,
 	Jumping,
 	Knockback,
 }
 
-var bullet_y_offset : Dictionary[ MoveState, float ] = {
-	MoveState.Standing: -20,
-	MoveState.Crouching: 4,
-	MoveState.Climbing: -20,
-	MoveState.Jumping: 0,
-	MoveState.Knockback: 0,
-}
+@export_group("World")
+## Size of one tile in world pixels. Components measure jumps and vaults in tiles.
+@export var tile_size := 48.0
+@export_flags_2d_physics var geometry_layers := 1
 
-# Onreadys
-@onready var animator: AnimationTree = $AnimationTree
-@onready var animPlayback: AnimationNodeStateMachinePlayback = animator.get("parameters/playback")
-@onready var jetpack: Sprite2D = $JetpackAsset
-@onready var sprite : Sprite2D = $Character
-@onready var collisionManager: Node = $CollisionManager
-@onready var hurtbox : Hurtbox = $Hurtbox
+@export_group("Visuals")
+## How far down the visuals are shifted while the shorter air collider is active.
+## Should match JumpCollision's offset from WalkingCollision in the player scene, so
+## the collider bottoms and the sprite's feet all stay at the same height.
+@export var airVisualOffset := 21.0
+
+@export_group("Environment")
+## How far below the feet of the active collider the crumbling-floor probe reaches.
+## Just deep enough to land inside the tile being stood on.
+@export var crumbleProbeDepth := 8.0
+
+## Group every BreakAbles layer joins, so the player can find the ones in the room it
+## is standing in without the room having to wire them up.
+const BREAKABLE_GROUP := &"BreakAbles"
+
+#region Node references
+@onready var collision_manager: CollisionManager = $CollisionManager
 @onready var jump_sfx: AudioStreamPlayer2D = $SFX/JumpSFX
 @onready var hurt_sfx: AudioStreamPlayer2D = $SFX/HurtSFX
 @onready var melee_swing_sfx: AudioStreamPlayer2D = $SFX/MeleeSwingSFX
 @onready var shoot_sfx: AudioStreamPlayer2D = $SFX/ShootSFX
+@onready var animator := $Animator
+@onready var health := $HealthComponent
+@onready var mantle := $Mantle
+@onready var planar_movement := $PlanarMovement
+@onready var floor_jump := $FloorJump
+@onready var wall_jump := $WallJump
+@onready var jetpack := $Jetpack
+@onready var wrench := $WrenchAttack
+@onready var shooting := $Shooting
 
+var _components: Array[PlayerComponent] = []
+#endregion
 
-# Consts
-const IDLESTATEPARAM := "parameters/StandardMovement/Idle/MoveState/transition_request"
-const MOVESTATEPARAM := "parameters/StandardMovement/Move/MoveState/transition_request"
-const FIRESTATEPARAM := "parameters/RangedFire/MoveState/transition_request"
-const TILE_SIZE := 48
-## Group every BreakAbles layer joins, so the player can find the ones in the
-## room it is standing in without the room having to wire them up.
-const BREAKABLE_GROUP := &"BreakAbles"
-const GUN_MODES : Array[ StringName ]= [ "stun", "plasma" ]
-# Input
-var _moveInput : float
-var _vertMoveInput :float
-var _crouchInput : bool
-var _climbInput : bool
-# Direction
-var _facingRight : bool
-# Jumping and air
-var _holdingDownSpaceForSpace : bool
-var _jumpBufferTimer : float
-var _coyoteTimer : float
-var _wall_jump_speed_bonus : float
-var _wall_jump_dir : float
-var _wall_jump_contact_buffer : float
-var _wall_jump_input_buffer : float
-var _wall_jump_available : bool
-# Health
-var _currentHealth : int
-# Attack
-var _attackCooldownTimer : float
-var _attackBufferTimer : float
-# Shooting
-var _hasGun : bool
-var _shootCooldownTimer : float
-var _shootBufferTimer : float
-var _gunMode : StringName
-# Knockback
-var _knockbackTimer : float
-var _knockbackForce : float
-# Invinciblity frames
-var _invulnTimer : float
-var _invulnBlinkTimer : float
-var _deathRespawnTimer : float
-# Mantling and Vaulting
-var _is_vaulting : bool
-var _mantle_dir : int = 1
-# Visual alignment
-var _visual_offset_nodes : Array[Node2D]
-var _visual_offset_bases : PackedVector2Array
-var _visual_offset : float
-# Camera offset
-var _camera_offset : Vector2
-var _need_to_move_camera : bool
-# Camera animation
-var _camera_anim_pos : Vector2
-var _camera_anim_time : float
-var _camera_anim_elapsed_time : float
-# Player MoveState
-var playerMoveState: MoveState
-var previousMoveState: MoveState
-#Animation
-var anim_moving : bool
-var anim_jumping : bool
-var anim_hurt : bool
-var anim_death : bool
-var anim_swing : bool
-var anim_fire : bool
-# Map and MetSys
-var previous_cell_Group := "None"
+#region Shared state
+var move_input := 0.0
+var crouch_input := false
+var jump_held := false
+var shoot_held := false
+var attack_held := false
+var facing_right := true
+var move_state: MoveState = MoveState.Standing
+var previous_move_state: MoveState = MoveState.Standing
+var visual_offset := 0.0
+var knockback_timer := 0.0
+var knockback_force := 0.0
+var gravity_override := -1.0
+var horizontal_lock := 0.0
+var _visual_offset_nodes: Array[Node2D] = []
+var _visual_offset_bases: PackedVector2Array
+var _dying := false
+#endregion
 
 func _ready() -> void:
 	PlayerManager.player = self
-	_facingRight = true
-	_currentHealth = baseHealth
-	jetpack.jetpack_updated.connect(do_jetpack_logic)
-	disable_jetpack()
-	playerMoveState = MoveState.Standing
-	cache_visual_offset_nodes()
-	GlobalSignals.health_extended_by_one.connect(increment_health_amount_by_one)
+	facing_right = true
+	move_state = MoveState.Standing
+	previous_move_state = MoveState.Standing
 
-func _move_player_pos(pos: Vector2) -> void:
-	position = pos
-
-func jump() -> void:
-	_holdingDownSpaceForSpace = true
-	_jumpBufferTimer = 0
-	_wall_jump_input_buffer = 0
-	_coyoteTimer = 0
-	if try_mantle():
-		return
+	_components.clear()
+	for child in get_children():
+		var component := child as PlayerComponent
+		if component:
+			_components.append(component)
+	_components.sort_custom(_component_order)
 	
-	jump_sfx.play()
-	velocity.y = -jumpForce
+	_cache_visual_offset_nodes()
 
-func wall_jump() -> void:
-	_jumpBufferTimer = 0
-	_coyoteTimer = 0
-	_wall_jump_contact_buffer = 0
-	_wall_jump_input_buffer = 0
+	if health:
+		health.knocked_back.connect(_on_knocked_back)
+	for component in _components:
+		component.bind(self)
 
-	_wall_jump_speed_bonus = 700
-	_wall_jump_dir = _moveInput
-	jump_sfx.play()
-	velocity.y = -1000
+	collision_manager.swap_active_collision(_collider_for_state(move_state))
+	_align_visuals_to_collider(_collider_for_state(move_state))
 
-func validate_wall_jump() -> bool:
-	# A wall jump is an air move, and it needs a direction to push away from.
-	if is_on_floor() or is_zero_approx( _moveInput ):
-		return false
+func _component_order(a: PlayerComponent, b: PlayerComponent) -> bool:
+	return _order_of(a) < _order_of(b)
 
-	for point in get_wall_probe_points():
-		if is_point_solid( point ):
-			_wall_jump_contact_buffer = wallJumpTimeBufferSeconds
-			return true
-	return false
+func _order_of(component: PlayerComponent) -> int:
+	if component is PlayerMantle: return 0
+	if component is PlayerWallJump: return 1
+	if component is PlayerFloorJump: return 2
+	if component is PlayerJetpack: return 3
+	if component is PlayerPlanarMovement: return 4
+	if component is PlayerWrenchAttack: return 5
+	if component is PlayerShooting: return 6
+	if component is PlayerAnimator: return 8
+	return 7
 
-func set_wall_jump_anim(_available: bool) -> void:
-	#TODO Point this at the wall cling animation once it is in the AnimationTree, e.g.
-	#animator.set(IDLESTATEPARAM, "WallCling" if _available else "Stand")
-	#animator.set(MOVESTATEPARAM, "WallCling" if _available else "Stand")
-	pass
+## The first component of [param type] under this node, or null.
+func get_component(type: Variant) -> PlayerComponent:
+	for component in _components:
+		if is_instance_of(component, type):
+			return component
+	return null
 
-func attack() -> void:
-	var newAttack := swingScene.instantiate() as PlayerMeleeSwing
-	var swingX := swingOffset
-	if !_facingRight:
-		swingX *= -1
-		newAttack.scale.x = -1
-	newAttack.position = Vector2(swingX, 0)
-	add_child(newAttack)
-	_attackCooldownTimer = attackCooldown
-	_shootCooldownTimer = attackCooldown
-	_attackBufferTimer = 0
-	melee_swing_sfx.play()
-	anim_swing = true
+#region Frame
+func _process(delta: float) -> void:
+	_read_inputs()
 
-#region Handlers
-func handle_vertical_speed() -> void:
-	if velocity.y < -1000:
-		velocity.y = -1000
-	elif velocity.y > 1500:
-		velocity.y = 1500
-
-func handle_jump_and_gravity(delta: float) -> void:
-	# Add the gravity.
-	if not is_on_floor():
-		if playerMoveState != MoveState.Climbing:
-			var gravity = get_gravity() * delta
-			if _holdingDownSpaceForSpace:
-				gravity.y -= 10
-			velocity += gravity
-		_coyoteTimer -= delta
-	else:
-		_coyoteTimer = coyoteTime
-	
-	# Handle jump.
-	if _wall_jump_speed_bonus > 0:
-		_wall_jump_speed_bonus -= 50
-	
-	var grounded := is_on_floor() or _coyoteTimer > 0
-
-	# The wall jump runs off its own press window rather than the general jump
-	# buffer, so the slack before reaching the wall matches the slack after
-	# leaving it.
-	if not grounded and _wall_jump_input_buffer > 0 and _wall_jump_contact_buffer > 0:
-		wall_jump()
-		return
-
-	if _jumpBufferTimer <= 0:
-		return
-
-	if grounded and playerMoveState != MoveState.Climbing:
-		jump()
-	else:
-		_jumpBufferTimer -= delta
-
-func handle_wall_jumping(delta: float) -> void:
-	var available := validate_wall_jump()
-	if not available:
-		_wall_jump_contact_buffer = maxf( _wall_jump_contact_buffer - delta, 0.0 )
-	_wall_jump_input_buffer = maxf( _wall_jump_input_buffer - delta, 0.0 )
-
-	if available != _wall_jump_available:
-		_wall_jump_available = available
-		set_wall_jump_anim( available )
-
-func handle_standard_movement(_delta: float) -> void:
-	# Get the input direction and handle the movement/deceleration.
-	if _moveInput:
-		velocity.x = _moveInput * moveSpeed
-		if _wall_jump_speed_bonus > 0:
-			velocity.x += _wall_jump_speed_bonus * _wall_jump_dir
-		if(playerMoveState == MoveState.Crouching):
-			velocity.x *= crouchSpeedMult
-		_facingRight = _moveInput > 0
-	else:
-		velocity.x = move_toward(velocity.x, 0, moveSpeed * 0.1)
-	set_anim_move_state(playerMoveState, _moveInput != 0)
-
-func handle_climbing_movement(_delta: float) -> void:
-	velocity.x = 0
-	velocity.y = _vertMoveInput * climbingSpeed
-	set_anim_move_state(MoveState.Climbing, _vertMoveInput != 0)
-
-func handle_knockback_movement(delta: float) -> void:
-	velocity.x = _knockbackForce
-	if _moveInput:
-		velocity.x += _moveInput * knockbackDI
-	_knockbackTimer -= delta
-	set_anim_move_state(MoveState.Knockback, false)
-
-func handle_inputs() -> void:
-	if(!PlayerManager.canMove or _currentHealth <= 0): return
-	
-	_moveInput = Input.get_axis("Left", "Right")
-	_vertMoveInput = Input.get_axis("Up","Down")
-	_crouchInput = Input.is_action_pressed("Crouch")
-	_climbInput = Input.is_action_pressed("Climb")	
-	
-	if Input.is_action_just_pressed("Jump"):
-		set_jump_input()
-	if Input.is_action_just_pressed("Attack"):
-		set_attack_input()
-	if Input.is_action_just_pressed("Shoot") and _hasGun:
-		set_shoot_input()
-	if not Input.is_action_pressed("Jump"):
-		_holdingDownSpaceForSpace = false
-
-func handle_invuln_blinking(delta: float) -> void:
-	if _invulnTimer <= 0:
-		_invulnBlinkTimer = 0
-		sprite.show()
-		return
-	
-	if _invulnBlinkTimer > invulnBlinkInterval/2:
-		sprite.hide()
-	else:
-		sprite.show()
-	_invulnBlinkTimer -= delta
-	if _invulnBlinkTimer < 0:
-		_invulnBlinkTimer += invulnBlinkInterval
-
-func handle_attack(delta: float) -> void:
-	if _attackCooldownTimer > 0:
-		_attackCooldownTimer -= delta
-	
-	if _attackBufferTimer <= 0:
-		return
-		
-	if _attackCooldownTimer <= 0:
-		attack()
-	else:
-		_attackBufferTimer -= delta
-
-func handle_shooting(delta: float) -> void:
-	if _shootCooldownTimer > 0:
-		_shootCooldownTimer -= delta
-	
-	if _shootBufferTimer <= 0:
-		return
-	
-	if _shootCooldownTimer <= 0:
-		shoot()
-	else:
-		_shootBufferTimer -= delta
-
-## Crumbling breakable tiles have no hitbox to be caught by, so the player is
-## what tells them they are being stood on. Only the single cell under the centre
-## of the player counts, which is what keeps the edges of a crumbling floor
-## forgiving: clipping a corner of one is not standing on it.
-func handle_crumbling_floor() -> void:
-	if not is_on_floor():
-		return
-
-	var layers := get_tree().get_nodes_in_group( BREAKABLE_GROUP )
-	if layers.is_empty():
-		return
-
-	var bounds = collisionManager.get_bounds()
-	var feet : float = maxf( bounds[0].y, bounds[1].y )
-	var probe := Vector2( global_position.x, feet + crumbleProbeDepth )
-	var foreground := get_foreground()
-	for layer in layers:
-		layer.step_on( probe, foreground )
-#endregion
-
-func determine_move_state() -> MoveState:
-	if previousMoveState == MoveState.Crouching:
-		var forground = get_foreground()
-		var pos = get_map_position_player_bounds(forground)
-		for i in pos:
-			i.y -= 1
-			if not is_tile_air(forground, i):
-				return MoveState.Crouching
-		
-	if _knockbackTimer > 0:
-		return MoveState.Knockback
-	
-	if is_on_wall() and _climbInput and canClimb:
-		return MoveState.Climbing
-	
-	if !is_on_floor() and _coyoteTimer <= 0:
-		return MoveState.Jumping
-	
-	if _crouchInput:
-		return MoveState.Crouching
-	
-	return MoveState.Standing
-
-func translate_state() -> CollisionManager.State:
-	if playerMoveState == MoveState.Standing or playerMoveState == MoveState.Climbing or playerMoveState == MoveState.Knockback:
-		return CollisionManager.State.WALK
-	elif playerMoveState == MoveState.Jumping:
-		return CollisionManager.State.AIR
-	elif playerMoveState == MoveState.Crouching:
-		return CollisionManager.State.CROUCH
-	
-	return CollisionManager.State.WALK
+	for component in _components:
+		if component.component_enabled:
+			component.frame_update(delta)
 
 func _physics_process(delta: float) -> void:
-	if _is_vaulting:
+	# A vault owns the whole body: no gravity, no steering, no attacks until it hands
+	# control back. It still gets its own update so it can decide when that is.
+	if mantle and mantle.is_active():
+		mantle.physics_update(delta)
 		return
-	
-	previousMoveState = playerMoveState
-	playerMoveState = determine_move_state()
-	
-	if previousMoveState != playerMoveState:
-		var collisionState := translate_state()
-		collisionManager.swap_active_collision( collisionState )
-		align_visuals_to_collider( collisionState )
 
-	handle_wall_jumping(delta)
-	handle_jump_and_gravity(delta)
-	
-	if playerMoveState == MoveState.Knockback:
-		handle_knockback_movement(delta)
-	elif playerMoveState == MoveState.Climbing:
-		handle_climbing_movement(delta)
-	else:
-		handle_standard_movement(delta)
-	
-	handle_attack(delta)
-	handle_shooting(delta)
-	
-	if _invulnTimer > 0:
-		_invulnTimer -= delta
-		if _invulnTimer <= 0:
-			hurtbox.process_mode = Node.PROCESS_MODE_INHERIT
-	
+	_update_move_state()
+
+	for component in _components:
+		if component.component_enabled:
+			component.physics_update(delta)
+
+	_apply_animation()
+
 	move_and_slide()
-	
-	handle_crumbling_floor()
-	
-	sprite.flip_h = false if _facingRight else true
-	
-	refresh_cell_group_music()	
 
-func refresh_cell_group_music(force := false) -> void:
-	var groups := MetSys.get_cell_groups(MetSys.get_current_coords())
-	if groups.is_empty():
+	for component in _components:
+		if component.component_enabled:
+			component.post_move_update(delta)
+
+	_handle_crumbling_floor()
+	_refresh_cell_group_music()
+
+func _read_inputs() -> void:
+	if not can_act():
 		return
-	
-	MusicManager.set_background_track(groups)
 
-func _process( _delta: float ) -> void:
-	handle_inputs()
-	handle_invuln_blinking( _delta )
-	handle_vertical_speed()
-	#get_camera().global_position += _camera_offset
-	#if _need_to_move_camera:
-	#	anim_camera_update( _delta )
-	
-	if animPlayback.get_current_node() == "RangedFire" or animPlayback.get_current_node() == "MeleeSwing":
-		anim_fire = false
-		anim_swing = false
-	
-#region Damage and respawn
-func increment_health_amount_by_one() -> void:
-	baseHealth += 1
-	_currentHealth = baseHealth
+	move_input = Input.get_axis("Left", "Right")
+	crouch_input = Input.is_action_pressed("Crouch")
+	jump_held = Input.is_action_pressed("Jump")
+	shoot_held = Input.is_action_pressed("Shoot")
+	attack_held = Input.is_action_pressed("Attack")
 
-func die() -> void:
-	_invulnTimer = 0
-	anim_death = true
-	reset_all_inputs()
-	_moveInput = 0
-	hurtbox.process_mode = Node.PROCESS_MODE_DISABLED
-	death_start.emit($AnimationPlayer.get_animation(&"death").length)
+	if Input.is_action_just_pressed("Jump"):
+		_on_jump_pressed()
+	if Input.is_action_just_pressed("Attack") and wrench:
+		wrench.on_attack_pressed()
+	if Input.is_action_just_pressed("Shoot") and shooting:
+		shooting.on_shoot_pressed()
 
-func respawn() -> void:
-	hurtbox.process_mode = Node.PROCESS_MODE_INHERIT
-	_currentHealth = baseHealth
-	GlobalSignals.health_changed.emit(_currentHealth, baseHealth)
-	anim_death = false
-
-func _on_hit(_hurtBox: Hurtbox, hit_info: HitInfo, _source: Hitbox) -> void:
-	if _invulnTimer > 0 or _currentHealth <= 0:
+## A press goes to the mantle first: at a ledge it is a vault, and only otherwise a
+## jump. Both jump components hear about it either way, so their buffers stay in step.
+func _on_jump_pressed() -> void:
+	if mantle and mantle.try_mantle():
 		return
-	_currentHealth -= hit_info.damage
-	hurt_sfx.play()
-	GlobalSignals.health_changed.emit(_currentHealth, baseHealth)
-	_knockbackTimer = hit_info.knockback_duration
-	_knockbackForce = hit_info.knockback_strength / _knockbackTimer
-	_invulnTimer = hitInvulnTime
-	_invulnBlinkTimer = invulnBlinkInterval
-	hurtbox.process_mode = Node.PROCESS_MODE_DISABLED
-	anim_hurt = true
-	if _currentHealth <= 0:
-		die()
+	if floor_jump:
+		floor_jump.on_jump_pressed()
+	if wall_jump:
+		wall_jump.on_jump_pressed()
+
+## Whether the player is allowed to act on input at all.
+func can_act() -> bool:
+	return PlayerManager.canMove and not _dying and not (health and health.is_dead())
 #endregion
 
-func collect(pickup: Pickup) -> bool:
-	pickup_collected.emit(pickup)
-	return true
-
-#region Jetpack
-func do_jetpack_logic(net_accel: float, max_speed: float, delta: float):
-	if _is_vaulting:
+#region Move state
+func _update_move_state() -> void:
+	previous_move_state = move_state
+	move_state = _determine_move_state()
+	if previous_move_state == move_state:
 		return
-	var drag_coef := -velocity.y/max_speed
-	var total_accel := get_gravity().y + (net_accel * (1-drag_coef))
-	velocity.y -= total_accel * delta
 
-func disable_jetpack() -> void:
-	jetpack.process_mode = Node.PROCESS_MODE_DISABLED
+	var collider := _collider_for_state(move_state)
+	collision_manager.swap_active_collision(collider)
+	_align_visuals_to_collider(collider)
+	move_state_changed.emit(previous_move_state, move_state)
 
-func enable_jetpack() -> void:
-	jetpack.process_mode = Node.PROCESS_MODE_INHERIT
+func _determine_move_state() -> MoveState:
+	# Held down by a ceiling: whatever else is true, the player cannot stand up here.
+	if previous_move_state == MoveState.Crouching and not has_headroom():
+		return MoveState.Crouching
+
+	if knockback_timer > 0.0:
+		return MoveState.Knockback
+	if not is_on_floor() and (floor_jump == null or not floor_jump.can_jump()):
+		return MoveState.Jumping
+	if crouch_input:
+		return MoveState.Crouching
+	return MoveState.Standing
+
+## Puts the player into [param state] and swaps the collider to match, for the moments
+## something else decides the state outright (coming out of a vault).
+func enter_state(state: MoveState) -> void:
+	previous_move_state = move_state
+	move_state = state
+	var collider := _collider_for_state(state)
+	collision_manager.swap_active_collision(collider)
+	_align_visuals_to_collider(collider)
+	if previous_move_state != state:
+		move_state_changed.emit(previous_move_state, state)
+
+func _collider_for_state(state: MoveState) -> CollisionManager.State:
+	match state:
+		MoveState.Jumping:
+			return CollisionManager.State.AIR
+		MoveState.Crouching:
+			return CollisionManager.State.CROUCH
+		_:
+			return CollisionManager.State.WALK
+
+## Whether the standing collider would fit where the player is right now.
+##
+## Asked of the shape itself rather than of the tiles above the crouch box: a tile
+## check counts a cell as blocking whether or not what is in it has a collider, and
+## misses anything that is not a tile at all.
+func has_headroom() -> bool:
+	var shape_node := collision_manager.collider_for(CollisionManager.State.WALK)
+	if shape_node == null or shape_node.shape == null:
+		return true
+
+	var query := PhysicsShapeQueryParameters2D.new()
+	query.shape = shape_node.shape
+	query.transform = shape_node.global_transform
+	query.collision_mask = geometry_layers
+	query.collide_with_areas = false
+	query.exclude = [get_rid()]
+	return get_world_2d().direct_space_state.intersect_shape(query, 1).is_empty()
 #endregion
 
-#region Gun
-func set_gun(mode: StringName) -> void:
-	if not mode in GUN_MODES:
+#region Animation
+## Turns the frame's state into one request to the animator. This is the only place
+## the resting pose is chosen, so there is one answer per frame rather than several
+## components each having an opinion.
+func _apply_animation() -> void:
+	if animator == null:
 		return
-	_gunMode = mode
-  
-func disable_gun() -> void:
-	_hasGun = false
 
-func enable_gun() -> void:
-	_hasGun = true
+	# Requested every frame even while a one-shot is playing: the animator holds the
+	# pose rather than playing it, so the right thing is already queued for the moment
+	# the swing or the shot ends.
+	match move_state:
+		MoveState.Knockback:
+			# The hit itself played the reaction. Asking again here would restart it
+			# every frame for as long as the knockback lasts.
+			pass
+		MoveState.Jumping:
+			if jetpack and jetpack.is_thrusting():
+				animator.request_pose(&"jetpack")
+			elif wall_jump and wall_jump.is_wall_available():
+				animator.request_pose(&"wall_cling")
+			else:
+				animator.request_pose(&"jump")
+		MoveState.Crouching:
+			animator.request_pose(&"crawl" if _is_moving() else &"crouch")
+		_:
+			animator.request_pose(&"run" if _is_moving() else &"idle")
 
-func shoot() -> void:
-	var newBullet := bulletScene.instantiate() as PlayerBullet
-	var bulletX := bulletOffset
-	# The tuned offsets are relative to the sprite, so they follow it while airborne.
-	var bulletY := bullet_y_offset[ playerMoveState ] + _visual_offset
-	if !_facingRight:
-		bulletX *= -1
-		newBullet.scale.x = -1
-	newBullet.position = position + Vector2(bulletX, bulletY)
-	newBullet.direction = Vector2.RIGHT if _facingRight else Vector2.LEFT
-	newBullet.set_mode(_gunMode)
-	get_tree().root.add_child(newBullet)
-	shoot_sfx.play()
-	_shootCooldownTimer = shootCooldown
-	_attackCooldownTimer = shootCooldown
-	_shootBufferTimer = 0
-	anim_fire = true
+## Whether the player is actually travelling. Held input alone is not enough: pushing
+## into a wall is not walking, and playing the walk cycle there is what made the
+## player look like they were jogging on the spot.
+func _is_moving() -> bool:
+	if planar_movement:
+		return planar_movement.is_walking()
+	return not is_zero_approx(move_input)
 #endregion
 
-#region Mantle
-func try_mantle() -> bool:
-	if not is_on_floor():
-		return false
-	
-	# Vault the way the player is pushing, not just the way they happen to face, so
-	# standing still against a ledge and tapping jump is an ordinary jump.
-	if is_zero_approx(_moveInput):
-		return false
-
-	var dir := 1 if _moveInput > 0 else -1
-	var foreground = get_foreground()
-	var mantle_block = get_map_position( foreground )
-	mantle_block.x += dir
-	if is_tile_air(foreground, mantle_block):
-		return false
-
-	var air_check = Vector2i(mantle_block.x, mantle_block.y - 1)
-	if not is_tile_air(foreground, air_check):
-		return false
-
-	if not is_against_wall( foreground, mantle_block, dir ):
-		return false
-
-	_mantle_dir = dir
-	mantle()
-	return true
-
-## True when the active collider's leading edge is within [member mantleWallDistance]
-## of the near face of [param block]. Without this the mantle triggers from anywhere
-## inside the player's own tile, so vaulting from the far edge floats them across it.
-func is_against_wall(foreground: TileMapLayer, block: Vector2i, dir: int) -> bool:
-	var bounds = collisionManager.get_bounds()
-	var right_edge : float = maxf( bounds[0].x, bounds[1].x )
-	var left_edge : float = minf( bounds[0].x, bounds[1].x )
-	var lead_edge := right_edge if dir > 0 else left_edge
-
-	var block_center := foreground.to_global( foreground.map_to_local( block ) )
-	var wall_face := block_center.x - (TILE_SIZE * 0.5 * dir)
-	return absf( wall_face - lead_edge ) <= mantleWallDistance
-
-#TODO Replace both of these functions (As well as the tempClimber) with things in the animtree
-func mantle() -> void:
-	_is_vaulting = true
-	$TempClimberSinceZachIsStupid.flip_h = _mantle_dir < 0
-	$TempClimberSinceZachIsStupid.position.x = 15 * _mantle_dir
-	$TempClimberSinceZachIsStupid.visible = true
-	$Character.modulate = Color(1,1,1,0)
-	$TempClimberSinceZachIsStupid.play("Small Climb")
-	var camera_pos = Vector2(TILE_SIZE * _mantle_dir, -TILE_SIZE)
-	anim_camera_start(camera_pos.x, camera_pos.y, 0.25)
-
-func _on_mantle_complete() -> void:
-	_is_vaulting = false
-	$TempClimberSinceZachIsStupid.visible = false
-	$Character.modulate = Color(1,1,1,1)
-	position += Vector2(TILE_SIZE * _mantle_dir, -TILE_SIZE)
-	reset_camera()
-
-	# Come out of the vault crouched. determine_move_state()'s ceiling check only runs
-	# when the previous state was Crouching, so this is what lets a 1-tile-tall gap hold
-	# the player down; where there is headroom they stand up on the next frame anyway.
-	playerMoveState = MoveState.Crouching
-	var collisionState := translate_state()
-	collisionManager.swap_active_collision( collisionState )
-	align_visuals_to_collider( collisionState )
-	set_anim_move_state(MoveState.Crouching, false)
-#endregion
-
-#region Visual alignment
+#region Collider-aligned visuals
 ## The air collider is shorter than the walking one and is pushed down in the editor
 ## so every collider shares the same bottom edge, which keeps the body origin (and so
 ## the camera) at one height through a jump and landing. The visuals have to make the
 ## same trip or the sprite hops up when the jump starts and drops when it ends.
-##
-## Only the children that read as "the player" move: the sprite, the worn jetpack and
-## the Hurtbox. The *Collision shapes belong to CollisionManager, the mantle stand-in
-## is only ever visible while grounded, and the rest carry no transform.
-func cache_visual_offset_nodes() -> void:
-	_visual_offset_nodes = [ sprite, jetpack, $Hurtbox ]
+func _cache_visual_offset_nodes() -> void:
+	_visual_offset_nodes = []
 	_visual_offset_bases = PackedVector2Array()
-	for node in _visual_offset_nodes:
-		_visual_offset_bases.append( node.position )
+	for node in [get_node_or_null(^"Character"), get_node_or_null(^"JetpackAsset"), get_node_or_null(^"HealthComponent/Hurtbox")]:
+		var node_2d := node as Node2D
+		if node_2d == null:
+			continue
+		_visual_offset_nodes.append(node_2d)
+		_visual_offset_bases.append(node_2d.position)
 
-func align_visuals_to_collider( state: CollisionManager.State ) -> void:
+func _align_visuals_to_collider(state: CollisionManager.State) -> void:
 	var offset := airVisualOffset if state == CollisionManager.State.AIR else 0.0
-	if is_equal_approx( offset, _visual_offset ):
+	if is_equal_approx(offset, visual_offset):
 		return
 
-	_visual_offset = offset
+	visual_offset = offset
 	for i in _visual_offset_nodes.size():
-		_visual_offset_nodes[ i ].position = _visual_offset_bases[ i ] + Vector2( 0, offset )
+		_visual_offset_nodes[i].position = _visual_offset_bases[i] + Vector2(0.0, offset)
 #endregion
 
-#region Camera stuffs
-func move_camera(x: float, y: float) -> void:
-	_camera_offset.x += x
-	_camera_offset.y += y
+#region Cross-component plumbing
+## The wrench and the gun share a cooldown, so one cannot be used to skip the other's.
+func share_attack_cooldown(seconds: float) -> void:
+	if shooting:
+		shooting.block_for(seconds)
 
-func anim_camera_start(x: float, y: float, time: float) -> void:
-	_camera_anim_elapsed_time = 0.0
-	_camera_anim_time = time
-	_camera_anim_pos = Vector2(x, y)
-	_need_to_move_camera = true
+func share_shoot_cooldown(seconds: float) -> void:
+	if wrench:
+		wrench.block_for(seconds)
 
-func anim_camera_update(delta: float) -> void:
-	var time = min(_camera_anim_elapsed_time / _camera_anim_time, 1.0)
-	_camera_offset = _camera_anim_pos * time
-	_camera_anim_elapsed_time += delta
-
-func reset_camera() -> void:
-	_camera_anim_pos = Vector2.ZERO
-	_camera_anim_time = -1.0
-	_need_to_move_camera = false
-	_camera_offset = Vector2.ZERO
+func _on_knocked_back(force: float, duration: float) -> void:
+	knockback_force = force
+	knockback_timer = duration
+	if animator:
+		animator.request_action(&"knockback")
 #endregion
 
-#region Getters and Setters
-func get_wall_probe_points() -> PackedVector2Array:
-	# The wall sits opposite the held direction: you push away from it to launch.
-	var dir := -1.0 if _moveInput > 0 else 1.0
+#region Damage, death and respawn
+## Called by the health component once health reaches zero.
+func on_death() -> void:
+	if _dying:
+		return
+	_dying = true
+	reset_all_inputs()
+	if animator:
+		animator.request_action(&"death", 0.0, 0.0)
+		death_start.emit(animator.animation_length(&"death"))
+	else:
+		death_start.emit(0.0)
 
-	var bounds = collisionManager.get_bounds()
-	var right_edge : float = maxf( bounds[0].x, bounds[1].x )
-	var left_edge : float = minf( bounds[0].x, bounds[1].x )
-	var lead_edge : float = right_edge if dir > 0 else left_edge
+func respawn() -> void:
+	_dying = false
+	velocity = Vector2.ZERO
+	gravity_override = -1.0
+	horizontal_lock = 0.0
+	knockback_timer = 0.0
+	knockback_force = 0.0
+	reset_all_inputs()
+	enter_state(MoveState.Standing)
 
-	var depths : Array[ float ] = [ 1.0, wallJumpHorizontalBuffer ]
-	var rows : Array[ float ] = [ 0.0, wallJumpVerticalBuffer, -wallJumpVerticalBuffer ]
-	var points := PackedVector2Array()
-	for depth in depths:
-		for row in rows:
-			points.append( Vector2( lead_edge + dir * depth, global_position.y + row ) )
-	return points
+	for component in _components:
+		component.on_respawn()
+	if health:
+		health.refresh_from_save()
+	death_end.emit()
 
-func is_point_solid(point: Vector2) -> bool:
-	var query := PhysicsPointQueryParameters2D.new()
-	query.position = point
-	query.collision_mask = wallJumpGeometryLayers
-	query.collide_with_areas = false
-	query.exclude = [ get_rid() ]
-	return not get_world_2d().direct_space_state.intersect_point( query, 1 ).is_empty()
+func collect(pickup: Pickup) -> bool:
+	pickup_collected.emit(pickup)
+	return true
+#endregion
 
-func is_tile_air(foreground: TileMapLayer, pos: Vector2i) -> bool:
-	return foreground and foreground.get_cell_source_id(pos) == -1
+#region Ability toggles kept for the rest of the game to call
+func enable_jetpack() -> void:
+	if jetpack:
+		jetpack.set_unlocked(true)
+
+func disable_jetpack() -> void:
+	if jetpack:
+		jetpack.set_unlocked(false)
+
+func enable_gun() -> void:
+	if shooting:
+		shooting.enable_gun()
+
+func disable_gun() -> void:
+	if shooting:
+		shooting.disable_gun()
+
+func set_gun(mode: StringName) -> void:
+	if shooting:
+		shooting.set_gun(mode)
+
+## Holds the jetpack off while the player is somewhere it must not fire (a ladder),
+## without touching whether they own one.
+func set_jetpack_suppressed(suppressed: bool) -> void:
+	if jetpack:
+		jetpack.set_suppressed(suppressed)
+#endregion
+
+#region Inputs
+func reset_all_inputs() -> void:
+	move_input = 0.0
+	crouch_input = false
+	jump_held = false
+	shoot_held = false
+	attack_held = false
+	if floor_jump:
+		floor_jump.consume_jump_buffer()
+#endregion
+
+#region World interaction
+## Crumbling breakable tiles have no hitbox to be caught by, so the player is what
+## tells them they are being stood on. Only the single cell under the centre of the
+## player counts, which is what keeps the edges of a crumbling floor forgiving:
+## clipping a corner of one is not standing on it.
+func _handle_crumbling_floor() -> void:
+	if not is_on_floor():
+		return
+
+	var layers := get_tree().get_nodes_in_group(BREAKABLE_GROUP)
+	if layers.is_empty():
+		return
+
+	var bounds := collision_manager.get_bounds()
+	var feet := maxf(bounds[0].y, bounds[1].y)
+	var probe := Vector2(global_position.x, feet + crumbleProbeDepth)
+	var foreground := PlayerGeometry.foreground(get_tree())
+	for layer in layers:
+		layer.step_on(probe, foreground)
+
+func _refresh_cell_group_music() -> void:
+	var groups := MetSys.get_cell_groups(MetSys.get_current_coords())
+	if groups.is_empty():
+		return
+	MusicManager.set_background_track(groups)
 
 func get_camera() -> Camera2D:
 	return get_viewport().get_camera_2d()
 
 func get_foreground() -> TileMapLayer:
-	var geoNode = get_tree().get_first_node_in_group("Geometry")
-	return geoNode
-
-func get_map_position(foreground: TileMapLayer, relative_to_player: Vector2i = Vector2i.ZERO) -> Vector2i:
-	var map_pos : Vector2i = get_map_cordinates(foreground, global_position) + relative_to_player
-	return map_pos
-
-func get_map_cordinates(foreground: TileMapLayer, position: Vector2 ) -> Vector2i:
-	if foreground == null:
-		printerr("No Geo group in scene")
-		return Vector2i.MIN
-	return foreground.local_to_map(foreground.to_local( position ))
-
-func get_map_position_player_bounds(foreground: TileMapLayer) -> Array[Vector2i]:
-	var bounds = $CollisionManager.get_bounds()
-	var map_pos : Array[ Vector2i ]
-	map_pos.append( get_map_cordinates( foreground, bounds[0] ) )
-	map_pos.append( get_map_cordinates( foreground, Vector2(bounds[1].x, bounds[0].y) ) )
-	map_pos.append( get_map_cordinates( foreground, Vector2(bounds[0].x, bounds[1].y) ) )
-	map_pos.append( get_map_cordinates( foreground, bounds[1] ) )
-	return map_pos
-
-func set_jump_input() -> void:
-	_jumpBufferTimer = jumpBufferTime
-	_wall_jump_input_buffer = wallJumpTimeBufferSeconds
-
-func unset_jump_input() -> void:
-	_jumpBufferTimer = 0
-	_wall_jump_input_buffer = 0
-
-func set_attack_input() -> void:
-	_attackBufferTimer = attackBufferTime
-
-func unset_attack_input() -> void:
-	_attackBufferTimer = 0
-
-func set_shoot_input() -> void:
-	_shootBufferTimer = shootBufferTime
-
-func unset_shoot_input() -> void:
-	_shootBufferTimer = 0
-
-func reset_all_inputs() -> void:
-	_moveInput = 0
-	_vertMoveInput = 0
-	_crouchInput = 0
-	_climbInput = 0
-	unset_jump_input()
-	unset_attack_input()
-	unset_shoot_input()
-
-func set_anim_move_state(moveState: MoveState, moving: bool) -> void:
-	match moveState:
-		MoveState.Standing:
-			animator.set(IDLESTATEPARAM, "Stand")
-			animator.set(MOVESTATEPARAM, "Stand")
-			animator.set(FIRESTATEPARAM, "Stand")
-			anim_jumping = false
-			anim_moving = moving
-			anim_hurt = false
-		MoveState.Crouching:
-			animator.set(IDLESTATEPARAM, "Crouch")
-			animator.set(MOVESTATEPARAM, "Crouch")
-			animator.set(FIRESTATEPARAM, "Crouch")
-			anim_jumping = false
-			anim_moving = moving
-			anim_hurt = false
-		MoveState.Climbing:
-			animator.set(IDLESTATEPARAM, "Climb")
-			animator.set(MOVESTATEPARAM, "Climb")
-			animator.set(FIRESTATEPARAM, "Jump")
-			anim_jumping = false
-			anim_moving = moving
-			anim_hurt = false
-		MoveState.Jumping:
-			animator.set(FIRESTATEPARAM, "Jump")
-			anim_jumping = true
-			anim_moving = true
-			anim_hurt = false
-		MoveState.Knockback:
-			anim_hurt = true
-
+	return PlayerGeometry.foreground(get_tree())
 #endregion

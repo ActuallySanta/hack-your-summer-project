@@ -19,6 +19,12 @@ const PICKUP_JETPACK_ID = "Jetpack"
 @export var allow_save_anywhere := false
 @export var use_custom_save := false
 @export_file var save_room := START_ROOM_UID
+## Which [DebugSpawnPoint] in [member save_room] to start on. Drop one in the room and
+## drag it where you want; [member save_pos] is only used when the room has no marker
+## with this id.
+@export var save_spawn_id : StringName = &"default"
+## Fallback spawn coordinate, used when [member save_room] holds no [DebugSpawnPoint]
+## matching [member save_spawn_id].
 @export var save_pos := Vector2(3000, 483)
 @export_enum("Uncollected", "Collected", "Powered") var save_fuse_state : int
 @export var save_has_gun : bool
@@ -59,6 +65,10 @@ var _bounds_rate := 1.5
 # Slowest shift rate among the boundaries that changed during the last bounds pass,
 # or 0 when none did.
 var _bounds_change_rate := 0.0
+# The camera centre this script has worked out, before any [CameraEffects] shake or
+# pan is added. Everything internal reads and writes this rather than the camera, so
+# an effect in flight cannot be mistaken for where the shot actually is.
+var _camera_pos := Vector2.ZERO
 var _prev_player_pos := Vector2.ZERO
 var _prev_player_valid := false
 # False while a room is being swapped in and the player has not been placed in it
@@ -77,6 +87,10 @@ func _ready() -> void:
 	# Regions loaded inside a room find us through this to claim the camera on
 	# arrival, before the first frame in the room is drawn.
 	add_to_group(CameraAxisRegion.CONTROLLER_GROUP)
+	_camera_pos = _camera.position
+	# We place the camera every frame and clamp it; CameraEffects must not write its
+	# own offset on top, or a shake would show the outside of a room.
+	CameraEffects.use_external_applier(true)
 	_hud.start_new_game.connect(_new_game)
 	_hud.load_game.connect(_load_game)
 	_hud.quit_game.connect(get_tree().quit)
@@ -148,14 +162,23 @@ func _load_game(ignore_custom_save := false) -> void:
 	)
 	var room_id = save.get_value("current_room", START_ROOM_UID)
 	_player_positioned = false
+	_reset_world_state()
 	await load_room(room_id)
 	await get_tree().create_timer(artificial_load_time).timeout
+
+	# The custom save's spawn is resolved after the room is up, because the marker it
+	# prefers lives in the room.
+	if use_custom_save and !ignore_custom_save:
+		save.set_value("player_pos", _custom_spawn_position())
 	_player.global_position = save.get_value("player_pos", START_POS)
 	_player_positioned = true
+	_restore_world_state()
 	_player.respawn()
 	GlobalSignals.player_spawned.emit()
 	LevelManager.set_checkpoint(room_id, _player.position, false)
-	if use_custom_save:
+	if use_custom_save and !ignore_custom_save:
+		# Not a save in the ordinary sense: it writes down the custom start so that
+		# dying reverts to it, exactly as dying reverts to a save station.
 		save_game(0, false)
 	_player.process_mode = Node.PROCESS_MODE_INHERIT
 	isInGame = true
@@ -172,12 +195,17 @@ func _new_game():
 	_player.disable_gun()
 	_player.disable_jetpack()
 	_player_positioned = false
+	_reset_world_state()
 	await load_room(START_ROOM_UID)
 	await get_tree().create_timer(artificial_load_time).timeout
 	_player.global_position = START_POS
 	_player_positioned = true
+	_restore_world_state()
 	_player.respawn()
 	GlobalSignals.player_spawned.emit()
+	# The one save outside a save station, and the same job the station does: it writes
+	# down where a death reverts to. Without it, dying before reaching the first station
+	# would load whatever the previous playthrough left on disk.
 	save_game(0, false)
 	_player.process_mode = Node.PROCESS_MODE_INHERIT
 	isInGame = true
@@ -186,6 +214,8 @@ func _new_game():
 func _load_custom_save() -> void:
 	save = SaveManager.new()
 	save.set_value("current_room", save_room)
+	# A placeholder: the real one is taken from the room's DebugSpawnPoint once the
+	# room is loaded, in _load_game.
 	save.set_value("player_pos", save_pos)
 	save.set_value("station_powered", save_fuse_state == 2)
 	
@@ -201,7 +231,73 @@ func _load_custom_save() -> void:
 func get_save_path(save_index: int) -> StringName:
 	return "user://save" + str(save_index) +".sav"
 
+#region Restoring the world to the last save
+## Puts everything that is not the player back to what the loaded save says.
+##
+## Death is meant to cost the player everything they did since the last save station,
+## and it does -- the facts all live in the save and the save has just been re-read.
+## What did not happen was anyone being [i]told[/i]. The map panels in particular
+## cache the cells they have drawn and only redraw when MetSys announces a change, and
+## installing save data announces nothing. So after a reload the map went on showing
+## the run that had just ended, until the player walked into a new cell and the whole
+## thing snapped to the truth at once -- which read as the map being wiped as a
+## punishment for exploring, rather than as the reload it actually was.
+## Clears the run-time state a previous run may have left behind, [b]before[/b] the
+## room is built.
+##
+## The order matters, and getting it wrong is what broke the boss music. A room's own
+## nodes claim things as they enter the tree -- the containment drone takes the music
+## in its [method Node._ready] so the arena plays its ambiance instead of the docking
+## bay's track -- so anything a room might want to own has to be reset before the room
+## exists, never after. Cleared afterwards, the drone's claim was wiped a moment after
+## it was made, and the player's per-frame cell-group call then put the ordinary
+## location track back over the top of it.
+func _reset_world_state() -> void:
+	MusicManager.restore_automatic_assignment()
+
+## Puts back what the loaded save says, [b]after[/b] the room is up.
+##
+## This half needs the room to already be there: the map panels are redrawn here, and
+## they draw around where the player now is.
+func _restore_world_state() -> void:
+	_restore_map_state()
+
+func _restore_map_state() -> void:
+	# Regions a map station revealed are replayed from the save rather than trusted to
+	# survive as per-cell discovery data, so the two can never disagree.
+	for code in get_revealed_map_regions():
+		MapRegions.reveal(code)
+	# Everything that draws the map redraws now, on the data that was just loaded.
+	MetSys.map_updated.emit()
+#endregion
+
+#region Custom-save spawn
+## Group every [DebugSpawnPoint] joins, so a room's markers can be found once it is
+## loaded without the room having to wire anything up.
+const SPAWN_POINT_GROUP := &"debug_spawn_point"
+
+## Where the custom save should drop the player in the room it has just loaded.
+##
+## Prefers a [DebugSpawnPoint] marker in the room whose id matches
+## [member save_spawn_id] -- a marker can be dragged around in the room scene and
+## seen, which typing coordinates into [member save_pos] cannot. Falls back to
+## [member save_pos] when the room has no matching marker.
+func _custom_spawn_position() -> Vector2:
+	var markers := get_tree().get_nodes_in_group(SPAWN_POINT_GROUP)
+	for node in markers:
+		var marker := node as DebugSpawnPoint
+		if marker and marker.id == save_spawn_id:
+			return marker.global_position
+
+	if not markers.is_empty():
+		var names := markers.map(func(m): return str(m.id))
+		printerr("GameManager: no spawn point with id \"%s\" in this room. It has: %s. Using save_pos." % [save_spawn_id, ", ".join(names)])
+	return save_pos
+#endregion
+
 func pause_game() -> void:
+	# Before the tree stops, or the map freezes on screen over the menu.
+	_hud.force_close_map()
 	get_tree().paused = true
 	_hud.show_menu(GameHUD.MenuType.Pause)
 	paused = true
@@ -243,7 +339,7 @@ func _process(_delta: float) -> void:
 	if(!isInGame):
 		return
 	var bounds := _eased_camera_bounds(_delta)
-	var camPos := _camera.position
+	var camPos := _camera_pos
 	var playerPos := _player.position
 	var posDiff := camPos - playerPos
 	if abs(posDiff.x) > cameraDeadzone.x:
@@ -251,9 +347,11 @@ func _process(_delta: float) -> void:
 	if abs(posDiff.y) > cameraDeadzone.y:
 		camPos.y = playerPos.y + (cameraDeadzone.y * sign(posDiff.y))
 	camPos = _apply_camera_axis_regions(camPos, bounds, _delta)
-	_camera.position = camPos
+	_place_camera(camPos, bounds, _bounds_exempt_axes())
 	
-	if allow_save_anywhere and Input.is_action_just_pressed(&"debug_save"):
+	# Development tool. Saving is otherwise a save station and nothing else, because a
+	# death is meant to cost the player everything since the last one.
+	if allow_save_anywhere and OS.is_debug_build() and Input.is_action_just_pressed(&"debug_save"):
 		save_game(0, false)
 	if Input.is_action_just_pressed("pause"):
 		if paused:
@@ -262,17 +360,74 @@ func _process(_delta: float) -> void:
 			pause_game()
 		
 
+#region Saved player values
+## Key the set of collected health extenders is kept under. It is a set of object ids
+## rather than a count on purpose -- see [PlayerHealthComponent] for why.
+const HEALTH_UPGRADE_KEY := "health_upgrades"
+
+## Key the set of revealed map regions is kept under, as [MapRegions] codes.
+const REVEALED_REGIONS_KEY := "revealed_map_regions"
+
+## Records that a map station revealed [param code]'s region, and reports whether that
+## was news. Called by the station as it is used; replayed on load by
+## [method _restore_map_state].
+static func register_map_region_revealed(code: String) -> bool:
+	var revealed = get_saved_value(REVEALED_REGIONS_KEY, [])
+	var codes: Array = revealed if revealed is Array else []
+	if codes.has(code):
+		return false
+	codes.append(code)
+	set_saved_value(REVEALED_REGIONS_KEY, codes)
+	return true
+
+static func get_revealed_map_regions() -> Array:
+	var revealed = get_saved_value(REVEALED_REGIONS_KEY, [])
+	return revealed if revealed is Array else []
+
+## Reads a value out of the loaded save, for the player's components to restore
+## themselves from. Returns [param fallback] when there is no save yet (the menu).
+static func get_saved_value(key: String, fallback: Variant = null) -> Variant:
+	if not instance or not instance.save:
+		return fallback
+	return instance.save.get_value(key, fallback)
+
+## Writes a value into the loaded save. It reaches disk on the next [method save_game],
+## which is what keeps an upgrade and the pickup that granted it reverting together.
+static func set_saved_value(key: String, value: Variant) -> void:
+	if not instance or not instance.save:
+		printerr("GameManager: no save loaded, cannot store \"%s\"." % key)
+		return
+	instance.save.set_value(key, value)
+
+## How many health extenders the save says have been collected.
+static func get_health_upgrade_count() -> int:
+	var collected = get_saved_value(HEALTH_UPGRADE_KEY, [])
+	return (collected as Array).size() if collected is Array else 0
+
+## Records that the extender with [param object_id] has been collected, and reports
+## whether that was news.
+##
+## Storing the ids rather than a running total is what makes this safe to call twice.
+## A pickup that reappears because the run was never saved can be taken again, and
+## the second take adds nothing, because the id is already in the set.
+static func register_health_upgrade(object_id: String) -> bool:
+	if object_id.is_empty():
+		printerr("GameManager: a health extender has no object id; it cannot be tracked.")
+		return false
+	var collected = get_saved_value(HEALTH_UPGRADE_KEY, [])
+	var ids: Array = collected if collected is Array else []
+	if ids.has(object_id):
+		return false
+	ids.append(object_id)
+	set_saved_value(HEALTH_UPGRADE_KEY, ids)
+	return true
+#endregion
+
 static func is_object_collected(name : String) -> bool:
 	if !MetSys.save_data:
 		printerr("No save data found, cannot determine object collection status.")
 		return false
 	return MetSys.save_data.stored_objects.get(name, false)
-
-static func is_cyborg_pushed() -> bool:
-	if !instance or !instance.save:
-		printerr("No save data found, cannot determine push status.")
-		return false
-	return true
 
 static func is_station_powered() -> bool:
 	if !instance or !instance.save:
@@ -450,7 +605,7 @@ func snap_to_camera_axis_region(region: CameraAxisRegion) -> void:
 	_release_axes = 0
 	_release_ignore = 0
 
-	var pos := _camera.position
+	var pos := _camera_pos
 	var target := region.get_center_point()
 	for axis in 2:
 		if _axis_locked & (1 << axis):
@@ -464,7 +619,7 @@ func snap_to_camera_axis_region(region: CameraAxisRegion) -> void:
 		_settle_camera_bounds(bounds)
 	var exempt := _bounds_exempt_axes()
 	_apply_camera_limits(bounds, exempt)
-	_camera.position = _clamp_view_to_rect(pos, _half_view(), bounds, exempt)
+	_place_camera(_clamp_view_to_rect(pos, _half_view(), bounds, exempt), bounds, exempt)
 
 ## Hands the camera to [param region], measuring its slide from where the camera
 ## actually is right now.
@@ -473,7 +628,7 @@ func _begin_axis_region(region: CameraAxisRegion) -> void:
 	var previous_axes := _axis_locked if previous != null else 0
 	_axis_region = region
 	_axis_locked = region.get_locked_axes()
-	_axis_start = _camera.position
+	_axis_start = _camera_pos
 	_axis_progress = 0.0
 	_axis_rate = region.centering_rate
 
@@ -501,7 +656,7 @@ func _release_freed_axes(axes: int, region: CameraAxisRegion) -> void:
 		if not (axes & bit):
 			continue
 		_release_axes |= bit
-		_release_start[axis] = _camera.position[axis]
+		_release_start[axis] = _camera_pos[axis]
 		_release_progress[axis] = 0.0
 		_release_rate[axis] = rate
 		# Keep the exemption for the whole hand-back, so an axis parked outside the
@@ -519,6 +674,24 @@ func _bounds_exempt_axes() -> int:
 	if _axis_region != null and _axis_region.ignore_hard_boundaries:
 		exempt |= _axis_locked
 	return exempt | (_release_ignore & _release_axes)
+
+## Puts the camera at [param center], with whatever [CameraEffects] is adding folded
+## in and clamped by the same rules.
+##
+## This is the only place the camera's transform is written. Shake and pan used to go
+## straight onto [member Camera2D.offset], which Godot adds after the limits have been
+## applied -- so an effect near a room edge showed the outside of the room, and it was
+## the one thing in the game that could break the bounds. Adding the effect to the
+## centre and clamping the sum instead means a shake is simply worn down by whatever
+## edge it is pushing against.
+##
+## [member Camera2D.offset] is held at zero for the same reason: it is a second way to
+## move the shot that nothing here can see.
+func _place_camera(center: Vector2, bounds: Rect2, exempt_axes: int) -> void:
+	_camera_pos = center
+	_camera.offset = Vector2.ZERO
+	_camera.position = _clamp_view_to_rect(
+		center + CameraEffects.get_effect_offset(), _half_view(), bounds, exempt_axes)
 
 ## Mirrors [param bounds] onto the camera's own limits, which Godot applies to the
 ## view on top of anything we do. Axes we place ourselves keep their limits open,
@@ -615,15 +788,6 @@ func save_game(save_index: int = 0, set_checkpoint := true) -> void:
 			save.set_value("player_pos", checkpoint.global_position)
 		
 	save.save_as_text("user://save" + str(save_index) +".sav")
-
-func respawn_player_at_checkpoint() -> void:
-	_player_positioned = false
-	await load_room(LevelManager.checkpoint_room)
-	PlayerManager.player.global_position = LevelManager.checkpoint_pos
-	_player_positioned = true
-	PlayerManager.player._facingRight = !LevelManager.checkpoint_facing_left
-	PlayerManager.player.respawn()
-	GlobalSignals.player_spawned.emit()
 
 func _on_player_death(_anim_duration: float) -> void:
 	await get_tree().create_timer(death_respawn_delay).timeout

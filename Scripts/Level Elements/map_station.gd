@@ -1,3 +1,14 @@
+## A map station: walking into it reveals the regions listed on it.
+##
+## What it reveals is recorded twice on purpose. The station itself is a MetSys
+## storable object, so a used station stays used; and the region codes go in the save
+## under their own key, so a load can replay the reveal directly (see
+## [method GameManager.register_map_region_revealed]). The replay is what makes the
+## revealed map survive a reload rather than depending on MetSys' per-cell discovery
+## data surviving the trip through the save file intact.
+##
+## Both are in the save, so both revert together on death: a station used and then
+## died on before saving is unused again, and the map it showed is dark again.
 extends Node2D
 
 @export_enum("DB", "CQ", "BS", "RS", "OP", "IL") var what_to_keep : Array[ String ]
@@ -16,10 +27,10 @@ var _has_been_interacted_with = false
 func _ready() -> void:
 	if MetSys.register_storable_object(self, turn_off):
 		return
-	
+
 	for i in what_to_keep:
 		_map_image.show_sector( i )
-	
+
 	_start_pos = _map_image.global_position
 
 func _process(delta: float) -> void:
@@ -28,7 +39,7 @@ func _process(delta: float) -> void:
 func passiveAnim(delta: float) -> void:
 	if _has_been_interacted_with and not _is_on:
 		return
-	
+
 	_timer_passive += delta
 	var time = TAU * _timer_passive
 	var alpha = sin(time/10)
@@ -37,28 +48,15 @@ func passiveAnim(delta: float) -> void:
 	_map_image.global_position.y = _start_pos.y + height
 	_map_image.fade_fill(time)
 
-func _on_interaction_entered(body: Node2D) -> void: 
+func _on_interaction_entered(body: Node2D) -> void:
 	if not body.is_in_group("player") or _has_been_interacted_with:
 		return
-	
+
 	_has_been_interacted_with = true
-	var regionName : String
-	for entry in what_to_keep:
-		match entry:
-			"DB":
-				regionName = "Docking Bay"
-			"CQ":
-				regionName = "Crew Quarters"
-			"BS":
-				regionName = "BRS"
-			"RS":
-				regionName = "Maintainence"
-			"OP":
-				regionName = "Operations"
-			"IL":
-				regionName = "Internals"
-		
-		MetSys.discover_cell_group( MetSys.get_group_by_name(regionName) )
+	for code in what_to_keep:
+		# Recorded first, so the save knows what to put back on a reload, then applied.
+		GameManager.register_map_region_revealed( code )
+		MapRegions.reveal( code )
 	MetSys.store_object(self)
 	animator.play("Active")
 

@@ -9,15 +9,20 @@ var mode : StringName
 var direction : Vector2
 var duration_timer : float
 
-# Called when the node enters the scene tree for the first time.
+## Wherever it was spawned, a bullet belongs inside the room it was fired in -- see
+## [ProjectileHome]. This one used to be parented to the viewport root, so it went on
+## flying through whatever room came next.
 func _ready() -> void:
 	super._ready()
+	ProjectileHome.adopt(self)
 	duration_timer = lifetime
 	if mode == "plasma":
 		damage = plasma_damage
 
 func _physics_process(delta: float) -> void:
-	position += speed * direction * delta
+	# Global, so travel is unaffected by any transform on the room the bullet was
+	# adopted into.
+	global_position += speed * direction * delta
 	duration_timer -= delta
 	if duration_timer <= 0:
 		queue_free()

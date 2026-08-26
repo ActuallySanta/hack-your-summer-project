@@ -20,6 +20,11 @@
 ## follow the player and the two must not fight. The offset in place when a shake
 ## starts is remembered and put back when the last one ends.
 ##
+## [b]Pan[/b] rides on that same offset and composes with the shake rather than
+## fighting it. Unlike a shake it holds where it is put until something moves it
+## again, which is what lets a mantle lead the shot to where the player is about to
+## land and then drop the offset on the frame they actually get there.
+##
 ## [b]Flash[/b] is a [ColorRect] on a [CanvasLayer] of this script's own, above the
 ## HUD and above the loading screen (see [constant OVERLAY_LAYER]).
 ##
@@ -120,11 +125,19 @@ class Shake extends RefCounted:
 signal shake_finished
 
 var _shakes: Array[Shake] = []
-## The camera being shaken, so its offset can be put back on the exact node it was
-## taken from even if the active camera changes mid-shake.
+## The camera being driven, so its offset can be put back on the exact node it was
+## taken from even if the active camera changes mid-effect. Shared with the pan.
 var _shaken_camera: Camera2D = null
 ## The offset [member _shaken_camera] had before we touched it.
 var _base_offset := Vector2.ZERO
+## What the shakes in flight add up to this frame. Kept apart from the pan so the
+## two compose instead of overwriting each other.
+var _shake_total := Vector2.ZERO
+
+## Set while something else is placing the camera and will fold
+## [method get_effect_offset] into the position it works out -- see
+## [method use_external_applier].
+var _external_applier := false
 
 ## Shakes the screen.
 ##
@@ -151,7 +164,11 @@ func shake(intensity: float, duration: float, axis := Axis.BOTH, easing := Ease.
 ## [signal shake_finished].
 func stop_shake() -> void:
 	_shakes.clear()
-	_release_camera()
+	_shake_total = Vector2.ZERO
+	if _pan_is_idle():
+		_release_camera()
+	else:
+		_sync_camera_offset()
 
 ## Whether any shake is in flight.
 func is_shaking() -> bool:
@@ -172,13 +189,11 @@ func _process_shakes(delta: float) -> void:
 			continue
 		total += _shake_offset(s)
 
+	_shake_total = total
 	if _shakes.is_empty():
-		_release_camera()
+		_shake_total = Vector2.ZERO
 		if finished:
 			shake_finished.emit()
-		return
-
-	_apply_shake_offset(total)
 
 ## How far [param s] throws the camera this frame: fresh noise on each axis it drives,
 ## bounded by whatever its shape says its strength is right now.
@@ -191,9 +206,45 @@ func _shake_offset(s: Shake) -> Vector2:
 		result.y = randf_range(-strength, strength)
 	return result
 
-## Writes [param offset] on top of the active camera's own, taking a fresh reading of
-## that camera's untouched offset whenever the active camera changes under us.
-func _apply_shake_offset(offset: Vector2) -> void:
+#region Who applies the offset
+## Everything this script is currently adding to the shot: the shakes plus the pan.
+##
+## Whoever is placing the camera reads this and folds it in, so the effect goes
+## through the same clamping as everything else. A shake near a room edge is worn
+## down by the room's bounds rather than showing what is outside them.
+func get_effect_offset() -> Vector2:
+	return _shake_total + _pan_offset
+
+## Tells this script that something else -- [GameManager] -- places the camera each
+## frame and will apply [method get_effect_offset] itself, [i]inside[/i] the camera
+## bounds, the axis regions and the hard boundaries.
+##
+## Without this the effects were written straight onto [member Camera2D.offset], which
+## Godot adds after every limit has been applied. That is the one route by which a
+## shake or a mantle's pan could show the outside of a room.
+func use_external_applier(enabled: bool) -> void:
+	if _external_applier == enabled:
+		return
+	_external_applier = enabled
+	if enabled:
+		# Hand back whatever offset we were holding; the applier owns it now.
+		_release_camera()
+	else:
+		_sync_camera_offset()
+
+func is_externally_applied() -> bool:
+	return _external_applier
+#endregion
+
+## Writes everything this script is currently adding — the shakes and the pan — on
+## top of the active camera's own offset, taking a fresh reading of that camera's
+## untouched offset whenever the active camera changes under us.
+##
+## Does nothing while an external applier owns the camera: it reads
+## [method get_effect_offset] instead.
+func _sync_camera_offset() -> void:
+	if _external_applier:
+		return
 	var camera := get_viewport().get_camera_2d()
 	if camera != _shaken_camera:
 		_release_camera()
@@ -201,14 +252,116 @@ func _apply_shake_offset(offset: Vector2) -> void:
 		if camera:
 			_base_offset = camera.offset
 	if _shaken_camera:
-		_shaken_camera.offset = _base_offset + offset
+		_shaken_camera.offset = _base_offset + _shake_total + _pan_offset
 
-## Puts the shaken camera back the way it was found, with nothing in flight.
+## Puts the driven camera back the way it was found, with nothing in flight.
 func _release_camera() -> void:
 	if is_instance_valid(_shaken_camera):
 		_shaken_camera.offset = _base_offset
 	_shaken_camera = null
 	_base_offset = Vector2.ZERO
+
+#endregion
+
+#region Pan
+
+## A held, animated shift of the shot, on the same [member Camera2D.offset] a shake
+## rides on and composing with it rather than fighting it.
+##
+## Where a shake is noise that returns to nothing on its own, a pan [i]stays[/i]
+## where it is put until something moves it again. That is what a mantle wants: the
+## shot leads the vault to where the player is about to end up, and the moment they
+## are actually teleported there the pan is dropped in the same frame, so the world
+## never appears to move.
+## [codeblock]
+## CameraEffects.pan_to(Vector2(48, -48), 0.25)  # lead the vault
+## CameraEffects.set_pan(Vector2.ZERO)           # player has arrived; drop it
+## [/codeblock]
+
+## Emitted when a pan reaches its destination. Not emitted for a pan replaced by
+## another one or cut short by [method set_pan].
+signal pan_finished
+
+## Where the pan is right now. Composed into the camera offset every frame.
+var _pan_offset := Vector2.ZERO
+var _pan_from := Vector2.ZERO
+var _pan_to := Vector2.ZERO
+var _pan_duration := 0.0
+var _pan_elapsed := 0.0
+var _pan_ease := Ease.EASE_IN_OUT
+var _pan_curve: Curve = null
+var _panning := false
+
+## Slides the shot to [param offset] over [param duration] seconds, and holds it
+## there. [param easing] and [param curve] shape the slide exactly as they do for a
+## flash's fade — a curve is read as the progress directly, from 0 at the start to 1
+## at the destination.
+##
+## A pan while one is in flight replaces it, measured from where the shot has
+## actually reached, so a change of mind mid-slide never jumps.
+func pan_to(offset: Vector2, duration := 0.25, easing := Ease.EASE_IN_OUT, curve: Curve = null) -> void:
+	if duration <= 0.0:
+		set_pan(offset)
+		return
+	_pan_from = _pan_offset
+	_pan_to = offset
+	_pan_duration = duration
+	_pan_elapsed = 0.0
+	_pan_ease = easing
+	_pan_curve = curve
+	_panning = true
+	set_process(true)
+
+## Slides the shot [param offset] further from wherever it is heading now.
+func pan_by(offset: Vector2, duration := 0.25, easing := Ease.EASE_IN_OUT, curve: Curve = null) -> void:
+	var target := _pan_to if _panning else _pan_offset
+	pan_to(target + offset, duration, easing, curve)
+
+## Slides the shot back to centre. [param duration] of 0 drops it in one frame, which
+## is what a teleport wants.
+func pan_reset(duration := 0.25, easing := Ease.EASE_IN_OUT, curve: Curve = null) -> void:
+	pan_to(Vector2.ZERO, duration, easing, curve)
+
+## Puts the pan at [param offset] immediately, with nothing in flight.
+func set_pan(offset: Vector2) -> void:
+	_panning = false
+	_pan_offset = offset
+	_pan_from = offset
+	_pan_to = offset
+	if _pan_is_idle() and _shakes.is_empty():
+		_release_camera()
+		return
+	set_process(true)
+	_sync_camera_offset()
+
+## Where the pan currently sits.
+func get_pan() -> Vector2:
+	return _pan_offset
+
+## Whether a pan is currently sliding.
+func is_panning() -> bool:
+	return _panning
+
+## True when the pan is neither moving nor holding the shot off centre, so there is
+## nothing for it to keep the camera for.
+func _pan_is_idle() -> bool:
+	return not _panning and _pan_offset.is_zero_approx()
+
+func _process_pan(delta: float) -> void:
+	if not _panning:
+		return
+
+	_pan_elapsed += delta
+	var t := clampf(_pan_elapsed / _pan_duration, 0.0, 1.0)
+	# Read as progress rather than strength: a pan travels towards its destination,
+	# so "falling" never applies to it.
+	var weight := sample_shape(t, _pan_ease, _pan_curve, false)
+	_pan_offset = _pan_from.lerp(_pan_to, weight)
+
+	if t >= 1.0:
+		_pan_offset = _pan_to
+		_panning = false
+		pan_finished.emit()
 
 #endregion
 
@@ -372,8 +525,17 @@ func _build_overlay() -> void:
 
 func _process(delta: float) -> void:
 	_process_shakes(delta)
+	_process_pan(delta)
 	_process_flash(delta)
-	if _shakes.is_empty() and not _flashing:
+
+	# One write per frame, so a shake and a pan add up on the camera instead of the
+	# later of the two overwriting the earlier.
+	if not _shakes.is_empty() or not _pan_is_idle():
+		_sync_camera_offset()
+	elif _shaken_camera != null:
+		_release_camera()
+
+	if _shakes.is_empty() and not _flashing and _pan_is_idle():
 		set_process(false)
 
 #endregion

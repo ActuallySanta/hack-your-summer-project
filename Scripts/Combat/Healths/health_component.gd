@@ -17,39 +17,61 @@ signal on_low_health_exit
 
 var ignore_effects : bool = false
 
+## Whether health was under [member low_health_boundry] last time it changed, so the
+## two low-health signals fire on the crossing rather than on every hit that happens
+## to land while already low.
+var _was_low : bool = false
+
 var _curr_health : int:
 	set(value):
 		if ignore_effects:
 			return
-		_curr_health = min(value, max_health)
+		# Clamped at both ends. An overkill hit used to leave health negative, which
+		# every readout of it (the HUD, a death check) then had to know about.
+		_curr_health = clampi(value, 0, max_health)
 		if _curr_health <= 0:
 			_on_death()
-		
+
 func _ready() -> void:
 	if hurtbox == null:
 		printerr("No Hurtbox for this health to detect damage")
 	else:
 		hurtbox.hit.connect(_on_hit)
 	_curr_health = start_health
+	# Seeded rather than checked, so a body that starts below the line does not fire
+	# an "entry" it never crossed into.
+	_was_low = _curr_health < low_health_boundry
 
 func current_health() -> float:
 	return _curr_health;
 
 func take_damage(amount: int) -> void:
 	_curr_health -= amount
-	if _curr_health < low_health_boundry:
-		on_low_health_entry.emit()
+	_check_low_health()
 
 func heal(amount: int) -> void:
-	var new_health := _curr_health + amount
-	if _curr_health < low_health_boundry and new_health >= low_health_boundry:
-		on_low_health_exit.emit()
-	_curr_health = new_health
+	_curr_health += amount
+	_check_low_health()
 
 func max_out() -> void:
-	if _curr_health < low_health_boundry:
-		on_low_health_exit.emit()
 	_curr_health = max_health
+	_check_low_health()
+
+## Fires the low-health signals on the crossing only.
+##
+## They used to be raised by whoever changed the health, each in its own way, and the
+## damage path raised entry on every hit taken while already below the line rather
+## than on the hit that took it there -- so a listener that meant to switch behaviour
+## once (the containment drone's attack table) was re-run on every later hit.
+func _check_low_health() -> void:
+	var low := _curr_health < low_health_boundry
+	if low == _was_low:
+		return
+	_was_low = low
+	if low:
+		on_low_health_entry.emit()
+	else:
+		on_low_health_exit.emit()
 
 func kill_self() -> void:
 	_curr_health = 0

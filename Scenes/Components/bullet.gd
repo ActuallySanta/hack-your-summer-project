@@ -25,8 +25,11 @@ var initDir : StringName
 var spawnPos : Vector2
 var start_offset : float
 
+## Bullets are spawned by all sorts of things into all sorts of parents. Wherever
+## they land, they belong inside the room they were fired in, so they are cleaned up
+## with it rather than flying on into the next one. See [ProjectileHome].
 func _ready() -> void:
-	pass
+	ProjectileHome.adopt(self)
 
 func _on_bullet_lifetime_timeout() -> void:
 	queue_free()

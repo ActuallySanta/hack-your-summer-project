@@ -58,6 +58,19 @@ func close_map() -> void:
 	minimap.open()
 	full_map.close()
 
+## Puts the map away at once, for the moments something else takes the screen.
+##
+## The pause menu is the one that matters: pausing stops the tree, so a map closing
+## normally would freeze mid-slide and stay on screen over the menu for as long as the
+## game was paused. The minimap is snapped back with it so the HUD is whole again the
+## moment the game resumes.
+func force_close_map() -> void:
+	if not (full_map.is_open() or full_map.is_animating()):
+		return
+	# snap_closed() emits FullMap.closed, which runs _on_full_map_closed for us.
+	full_map.snap_closed()
+	minimap.open()
+
 ## The open map scrolls with the movement keys, so the player has to stop reading
 ## them for as long as it is on screen — including the inputs already buffered when
 ## it opened, which [code]handle_inputs()[/code] would otherwise keep acting on.

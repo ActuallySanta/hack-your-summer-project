@@ -9,10 +9,20 @@ const DAMAGE_TYPE : StringName = &"wrench"
 
 @onready var hitbox : Hitbox = $Hitbox
 
+## What this swing hits for, set by the wrench component before the swing is added to
+## the tree. Negative leaves the hitbox's own damage alone, so a swing spawned by
+## anything else still behaves as its scene says.
+##
+## It cannot be written straight onto the hitbox at spawn time: [member hitbox] is an
+## @onready and is still null until this node enters the tree.
+var pending_damage : int = -1
+
 var _lifetime_timer : float
 
 func _ready() -> void:
 	_lifetime_timer = lifetime
+	if pending_damage >= 0:
+		hitbox.damage = pending_damage
 	$AnimatedSprite2D.play("default")
 
 func _physics_process(delta: float) -> void:

@@ -5,9 +5,11 @@ var initDir: Vector2
 var spawnPos : Vector2
 var spawnRot : float
 
-func _ready():
+func _ready() -> void:
 	global_position = spawnPos
 	global_rotation = spawnRot
+	# Belongs inside the room it was fired in -- see [ProjectileHome].
+	ProjectileHome.adopt(self)
 	
 func _physics_process(delta: float) -> void:
 	velocity = initDir*MOVESPEED

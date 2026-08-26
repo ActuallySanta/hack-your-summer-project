@@ -15,6 +15,7 @@ signal quit_game()
 @onready var game_over_menu: EndMenu = $"Game Over Menu"
 @onready var game_complete_menu: EndMenu = $"Game Complete Menu"
 @onready var pause_menu : PauseMenu = $"Pause Menu"
+@onready var player_hud : PlayerHUD = $"Player HUD"
 @onready var menus: Array[Control] = [main_menu, game_over_menu, game_complete_menu, pause_menu]
 
 @export var load_screen_fade_time := 0.8
@@ -78,6 +79,12 @@ func fade_out_death_screen() -> void:
 func show_menu(type: MenuType) -> void:
 	hide_menus()
 	menus[type].visible = true
+
+## Puts the full map away at once. Called when the game pauses, so the map cannot sit
+## over the pause menu -- a paused tree would freeze its closing animation part-way.
+func force_close_map() -> void:
+	if is_instance_valid(player_hud):
+		player_hud.force_close_map()
 
 func hide_menus() -> void:
 	for item in menus:
