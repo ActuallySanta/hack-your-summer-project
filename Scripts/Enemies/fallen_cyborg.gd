@@ -1,4 +1,5 @@
 extends Enemy
+@export var repaired_scene : PackedScene
 @export var fire_check_timer : float = 0.4
 @export var bullet_spawn_offset : Vector2
 @export var start_flipped : bool = false:
@@ -8,11 +9,23 @@ extends Enemy
 @export var bulletScene := preload("uid://dx27csn4jx8c3")
 
 @onready var animator := $AnimationPlayer
+@onready var repair_node : RepairNode = $RepairNode
 
 var is_weapon_raised : bool = false
 var timer := 0.0
 
+func begin_repairs() -> void:
+	pass
+
+func finish_repairs() -> void:
+	var parent := get_parent()
+	var replacement := repaired_scene.instantiate()
+	replacement.global_position = global_position
+	parent.add_child.call_deferred(replacement)
+
 func _ready() -> void:
+	repair_node.on_repair_start.connect(begin_repairs)
+	repair_node.on_repair_end.connect(finish_repairs)
 	bt_player.blackboard.set_var("canAttack",true)
 	hurtbox.hit.connect(takeDamage)
 	if start_flipped:

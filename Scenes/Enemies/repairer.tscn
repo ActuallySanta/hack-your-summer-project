@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://chuseorsfaafy"]
+
+[ext_resource type="Texture2D" uid="uid://dr27a447as1vc" path="res://Sprites/Characters/Enemy SpriteSheets/Repair_Drone.png" id="1_h5wbh"]
+[ext_resource type="Script" uid="uid://b6m2ydxjtjcgv" path="res://Scenes/Enemies/repairer_manager.gd" id="1_keg66"]
+
+[sub_resource type="GDScript" id="GDScript_4vj60"]
+resource_name = "RepairerNav"
+script/source = "extends Navigator
+
+func set_target_pos(value: Vector2) -> void:
+	_target_current_pos = value
+
+func manual_movement(delta: float) -> void:
+	_target_current_pos = node_to_go_to.global_position
+	if max_speed < 0.0:
+		_nav_position = _target_current_pos
+		return
+	_velocity += _steering
+	_nav_position += _velocity * delta
+"
+
+[node name="Repairer" type="Node2D" unique_id=1078844072]
+script = ExtResource("1_keg66")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=242269428]
+texture = ExtResource("1_h5wbh")
+hframes = 2
+vframes = 3
+
+[node name="Navigator" type="Node2D" parent="." unique_id=1912730645 node_paths=PackedStringArray("node_to_move_instead_of_me")]
+script = SubResource("GDScript_4vj60")
+node_to_move_instead_of_me = NodePath("..")
+metadata/_custom_type_script = "uid://cs2uowcxd3wpe"

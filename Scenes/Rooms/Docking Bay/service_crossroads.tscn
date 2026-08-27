@@ -49,6 +49,7 @@ cycle_seconds = 6.0
 
 [node name="ObjectFlyer" parent="VisualAssets" unique_id=447494354 instance=ExtResource("7_t7avc")]
 position = Vector2(0, 2015)
+speed_scale = 0.5
 
 [node name="BreakAbles" parent="VisualAssets" unique_id=1463144321 instance=ExtResource("8_oqdsk")]
 tile_map_data = PackedByteArray("AAALABQAAAAAAAMAAAA=")

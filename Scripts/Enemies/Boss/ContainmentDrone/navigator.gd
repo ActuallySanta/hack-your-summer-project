@@ -91,7 +91,7 @@ func start_moving_manually() -> void:
 func start_following_target() -> void:
 	ignore_target = false
 
-func manual_movement() -> void:
+func manual_movement(delta: float) -> void:
 	pass
 
 func sudden_stop() -> void:
@@ -114,7 +114,7 @@ func slow_down_and_stop() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if ignore_target:
-		manual_movement()
+		manual_movement(delta)
 		return
 		
 	if not is_instance_valid(node_to_go_to):
