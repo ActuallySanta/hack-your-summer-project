@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://chbj0tshh45ox" path="res://Scripts/background_paralax.gd" id="4_tnlk3"]
 [ext_resource type="TileSet" uid="uid://chq502fexv5m" path="res://Tileset/DockingBay.tres" id="5_qf1ib"]
 [ext_resource type="Script" uid="uid://q5q152xvydxb" path="res://Scripts/brightness_oscillator.gd" id="6_pm1qf"]
+[ext_resource type="PackedScene" uid="uid://b7xmyerf0u271" path="res://Scenes/Components/object_flyer.tscn" id="7_t7avc"]
 [ext_resource type="TileSet" uid="uid://c0dbvnpaoeomc" path="res://Tileset/TransitionTileSet.tres" id="7_wrphf"]
 [ext_resource type="PackedScene" uid="uid://c23c0urqh5mm5" path="res://Scenes/Components/ScaledTileMap.tscn" id="8_sod7b"]
 [ext_resource type="PackedScene" uid="uid://bfdxh46jtantj" path="res://Scenes/Enemies/fallen_cyborg.tscn" id="9_ydc0m"]
@@ -44,6 +45,9 @@ script = ExtResource("6_pm1qf")
 start_brightness = 0.6
 end_brightness = 0.45
 cycle_seconds = 6.0
+
+[node name="ObjectFlyer" parent="VisualAssets/Node2D" unique_id=447494354 instance=ExtResource("7_t7avc")]
+position = Vector2(0, 2015)
 
 [node name="Decoration" type="TileMapLayer" parent="VisualAssets" unique_id=466789570]
 scale = Vector2(3, 3)

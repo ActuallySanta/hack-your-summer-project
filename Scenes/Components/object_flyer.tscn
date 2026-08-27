@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://b7xmyerf0u271"]
+
+[ext_resource type="Texture2D" uid="uid://jwfjw72gvd5h" path="res://Textures/PropsAndBackgrounds/Drone BG.png" id="1_kbaqm"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_t7avc"]
+particles_animation = true
+particles_anim_h_frames = 4
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_6ui6c"]
+emission_shape_offset = Vector3(597, 0, 0)
+emission_shape = 3
+emission_box_extents = Vector3(672, 1, 1)
+direction = Vector3(0, -1, 0)
+spread = 12.605
+initial_velocity_min = 223.04
+initial_velocity_max = 596.70996
+angular_velocity_min = -1.6093254e-05
+angular_velocity_max = -1.6093254e-05
+gravity = Vector3(0, -1000, 0)
+scale_min = 3.0
+scale_max = 3.0
+anim_offset_max = 1.0
+
+[sub_resource type="GDScript" id="GDScript_xx267"]
+resource_name = "DroneFlyer"
+script/source = "extends GPUParticles2D
+
+@export var max_x : float = 1152.0
+@export var min_y : float = 672.0
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	if not GameManager.is_station_powered():
+		speed_scale = 0.0
+"
+
+[node name="ObjectFlyer" type="GPUParticles2D" unique_id=447494354]
+modulate = Color(0.45490196, 0.45490196, 0.45490196, 1)
+material = SubResource("CanvasItemMaterial_t7avc")
+amount = 32
+texture = ExtResource("1_kbaqm")
+lifetime = 2.0
+fixed_fps = 15
+visibility_rect = Rect2(0, -2304, 7168, 2304)
+process_material = SubResource("ParticleProcessMaterial_6ui6c")
+script = SubResource("GDScript_xx267")
