@@ -49,6 +49,7 @@ jetpack_checkpoint=""
 save_checkpoint=""
 Cameras="The cameras in the game"
 Geometry=""
+Repairable=""
 
 [input]
 

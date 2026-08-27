@@ -66,17 +66,35 @@ static func is_point_solid(world: World2D, global_point: Vector2, mask: int, exc
 ## is not standing against a wall, however many colliders the point query finds.
 static func is_blocking_wall(world: World2D, global_point: Vector2, mask: int, exclude: Array[RID] = []) -> bool:
 	for hit in points_hits(world, global_point, mask, exclude):
-		if _hit_blocks_sideways(hit):
+		if _hit_blocks_sideways(hit, global_point):
 			return true
 	return false
 
-static func _hit_blocks_sideways(hit: Dictionary) -> bool:
+static func _hit_blocks_sideways(hit: Dictionary, global_point: Vector2) -> bool:
 	var tiles := hit.get("collider") as TileMapLayer
 	if tiles == null:
 		# A plain body. One-way is a per-shape flag on CollisionShape2D/CollisionPolygon2D;
 		# a body whose hit shape is one-way is no more a wall than a one-way tile is.
 		return not _hit_shape_is_one_way(hit)
-	return not tile_is_all_one_way(tiles, tiles.get_coords_for_body_rid(hit.get("rid", RID())))
+	return not tile_is_all_one_way(tiles, _coords_for_tile_hit(tiles, hit, global_point))
+
+## Which cell a tile hit actually came from.
+##
+## [b]Not from the body RID.[/b] A [TileMapLayer] merges every cell in a physics
+## quadrant into a single body, so one RID stands for a whole block of tiles and
+## [method TileMapLayer.get_coords_for_body_rid] answers with the quadrant's first
+## cell -- almost always an empty one, which has no tile data and so reads as "not
+## one-way". That is why a one-way platform still counted as a wall however carefully
+## it was checked: the cell being asked about was never the cell that was hit.
+##
+## The queried point is inside the tile whose collider answered, so the cell it falls
+## in is the answer. The RID stays as a fallback for a probe sitting exactly on a seam,
+## where the point lands in the empty cell next door.
+static func _coords_for_tile_hit(layer: TileMapLayer, hit: Dictionary, global_point: Vector2) -> Vector2i:
+	var coords := map_coords(layer, global_point)
+	if layer.get_cell_tile_data(coords) != null:
+		return coords
+	return layer.get_coords_for_body_rid(hit.get("rid", RID()))
 
 static func _hit_shape_is_one_way(hit: Dictionary) -> bool:
 	var body := hit.get("collider") as CollisionObject2D

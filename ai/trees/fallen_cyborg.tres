@@ -118,8 +118,31 @@ animation_name = &"bear_arms"
 custom_name = "Bear Arms"
 children = [SubResource("BTCheckVar_qmkgw"), SubResource("BTPlayAnimation_a61s3")]
 
+[sub_resource type="BBVariant" id="BBVariant_6gtj3"]
+type = 4
+saved_value = "go rest"
+resource_name = "go rest"
+
+[sub_resource type="BTCheckVar" id="BTCheckVar_73okb"]
+variable = &"state"
+value = SubResource("BBVariant_6gtj3")
+
+[sub_resource type="BBNode" id="BBNode_6gtj3"]
+saved_value = NodePath("AnimationPlayer")
+resource_name = "AnimationPlayer"
+
+[sub_resource type="BTPlayAnimation" id="BTPlayAnimation_73okb"]
+animation_player = SubResource("BBNode_6gtj3")
+animation_name = &"bear_arms"
+speed = -1.0
+from_end = true
+
+[sub_resource type="BTSequence" id="BTSequence_6gtj3"]
+custom_name = "Go Rest"
+children = [SubResource("BTCheckVar_73okb"), SubResource("BTPlayAnimation_73okb")]
+
 [sub_resource type="BTSelector" id="BTSelector_n1pcd"]
-children = [SubResource("BTSequence_4vj60"), SubResource("BTSequence_n1pcd"), SubResource("BTSequence_keixm"), SubResource("BTSequence_a61s3")]
+children = [SubResource("BTSequence_4vj60"), SubResource("BTSequence_n1pcd"), SubResource("BTSequence_keixm"), SubResource("BTSequence_a61s3"), SubResource("BTSequence_6gtj3")]
 
 [resource]
 blackboard_plan = SubResource("BlackboardPlan_lytq1")

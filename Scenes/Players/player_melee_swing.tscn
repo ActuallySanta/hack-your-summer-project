@@ -48,6 +48,7 @@ collision_mask = 45
 monitorable = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=1403102374]
+visible = false
 position = Vector2(-34, 0)
 shape = SubResource("RectangleShape2D_66lfr")
 

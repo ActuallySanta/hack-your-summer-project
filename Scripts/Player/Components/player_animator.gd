@@ -140,6 +140,22 @@ func request_action(action: StringName, min_duration := 0.0, from_time := 0.0, i
 	_action_timer = maxf(animation_length(resolved) - from_time, min_duration)
 	return true
 
+## Plays a one-shot and leaves it on its last frame instead of handing the pose back
+## when it ends.
+##
+## Death is what this exists for: the animation running out is the player lying on the
+## floor, not a cue to stand up again. An ordinary [method request_action] ends on its
+## own, and the pose waiting behind it -- idle -- is what came back and put the body
+## on its feet a second after it died.
+##
+## Held until [method cancel_action], the next [method request_action], or
+## [method on_respawn].
+func request_held_action(action: StringName) -> bool:
+	if not request_action(action):
+		return false
+	_action_timer = INF
+	return true
+
 ## Ends the running one-shot early and puts the pose back.
 func cancel_action() -> void:
 	if _action.is_empty():

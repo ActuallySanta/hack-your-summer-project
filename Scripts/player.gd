@@ -219,11 +219,28 @@ func _update_move_state() -> void:
 	_align_visuals_to_collider(collider)
 	move_state_changed.emit(previous_move_state, move_state)
 
+## The state the player is in this frame, which is also the collider they wear.
+##
+## [b]Room to be in it.[/b] The walking collider is 90px tall against the air
+## collider's 48 and the crouch box's 20, so a state is only available where its shape
+## fits. Swapping a tall one in where it does not buries half of it in the ceiling, and
+## the engine throws the player sideways getting it back out -- the "caught in the
+## corner, then stood up" of a ledge under an overhang.
+##
+## Asking per collider rather than per situation is what closes that off for good. The
+## first go at this asked "are they landing, or already crouched", which left standing
+## itself as a way in: for [member PlayerFloorJump.coyote_time] after walking off a
+## ledge the player counts as neither jumping nor on the floor, so they were briefly
+## Standing in mid-air -- tall collider and all -- under the very overhang they had
+## just crouched to get under.
 func _determine_move_state() -> MoveState:
-	# Held down by a ceiling: whatever else is true, the player cannot stand up here.
-	if previous_move_state == MoveState.Crouching and not has_headroom():
+	var wanted := _wanted_move_state()
+	if _needs_headroom(wanted) and not has_headroom():
 		return MoveState.Crouching
+	return wanted
 
+## What the player would be if there were room for it.
+func _wanted_move_state() -> MoveState:
 	if knockback_timer > 0.0:
 		return MoveState.Knockback
 	if not is_on_floor() and (floor_jump == null or not floor_jump.can_jump()):
@@ -231,6 +248,16 @@ func _determine_move_state() -> MoveState:
 	if crouch_input:
 		return MoveState.Crouching
 	return MoveState.Standing
+
+## Whether [param state] can only be entered somewhere the player could stand up.
+##
+## Two ways to need it. The state wears the walking collider -- standing, and being
+## knocked about -- or the player is crouched and would be coming up out of it, where
+## even the air collider has to fit: a crawl space is one tile high and so is that
+## shape, which is exactly the fit that wedges.
+func _needs_headroom(state: MoveState) -> bool:
+	return _collider_for_state(state) == CollisionManager.State.WALK \
+		or (previous_move_state == MoveState.Crouching and state != MoveState.Crouching)
 
 ## Puts the player into [param state] and swaps the collider to match, for the moments
 ## something else decides the state outright (coming out of a vault).
@@ -358,7 +385,7 @@ func on_death() -> void:
 	_dying = true
 	reset_all_inputs()
 	if animator:
-		animator.request_action(&"death", 0.0, 0.0)
+		animator.request_held_action(&"death")
 		death_start.emit(animator.animation_length(&"death"))
 	else:
 		death_start.emit(0.0)
