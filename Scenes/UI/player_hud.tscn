@@ -31,6 +31,7 @@ script = ExtResource("2_hudmm")
 animation_duration = 0.2
 hide_when_closed = true
 smooth_scroll = false
+display_player_location = true
 area = Vector2i(5, 3)
 
 [node name="PlayerHealth" parent="." unique_id=1360041974 instance=ExtResource("3_jh2mb")]

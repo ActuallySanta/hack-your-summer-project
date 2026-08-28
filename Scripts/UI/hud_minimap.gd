@@ -35,6 +35,10 @@ var _fade_elapsed: float
 
 func _ready() -> void:
 	super()
+
+	if not Engine.is_editor_hint() and track_position and MetSys.last_player_position != Vector3i.MAX:
+		_on_cell_changed(MetSys.get_current_coords())
+
 	# The minimap starts on screen, so it starts open.
 	_animator = MapPanelAnimator.new(_animate_open, _animate_close, MapPanelAnimator.State.OPEN)
 	_animator.open_started.connect(_on_open_started)
