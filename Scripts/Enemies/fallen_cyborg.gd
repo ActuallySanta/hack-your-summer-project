@@ -8,6 +8,7 @@ extends Enemy
 
 @export var bulletScene := preload("uid://dx27csn4jx8c3")
 
+@onready var repair_sprite := $RepairSprite
 @onready var animator := $AnimationPlayer
 @onready var repair_node : RepairNode = $RepairNode
 
@@ -15,13 +16,17 @@ var is_weapon_raised : bool = false
 var timer := 0.0
 
 func begin_repairs() -> void:
-	pass
+	visual.hide()
+	repair_sprite.show()
+	repair_sprite.play("Repair")
 
 func finish_repairs() -> void:
 	var parent := get_parent()
-	var replacement := repaired_scene.instantiate()
+	var replacement : Enemy = repaired_scene.instantiate()
 	replacement.global_position = global_position
-	parent.add_child.call_deferred(replacement)
+	replacement.update_flip(-1 if isFlipped else 1)
+	parent.add_child(replacement)
+	queue_free()
 
 func _ready() -> void:
 	repair_node.on_repair_start.connect(begin_repairs)

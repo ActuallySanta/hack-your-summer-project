@@ -31,12 +31,13 @@ func move(targetPos : Vector2, delta :float):
 	update_flip(dir.x)
 
 func update_flip(dir:float):
-	var doFlip : bool = dir < 0
-	if doFlip != isFlipped:
-		scale.x = -1
-	else:
-		scale.x = 1
-	isFlipped = doFlip
+	if is_zero_approx(dir):
+		return # No direction requested, keep the current facing
+	isFlipped = dir < 0
+	# A mirrored Node2D is stored back as rotation PI with a negative Y scale, so both
+	# have to be rewritten - setting scale.x alone turns the body 180 degrees instead
+	rotation = 0
+	scale = Vector2(-1.0 if isFlipped else 1.0, 1.0)
 
 func _physics_process(delta: float) -> void:
 	if not is_on_floor():
@@ -46,8 +47,9 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 		return
 	
+	ground_check.force_shapecast_update() # A cast that just entered the tree has no result yet
 	if ground_check.get_collision_count() == 0:
-		update_flip(scale.x * -1)
+		update_flip(1.0 if isFlipped else -1.0) # Turn away from the ledge
 		switch_state("idle")
 	
 	switch_state("patrolling" if not can_see_player() else "attacking")

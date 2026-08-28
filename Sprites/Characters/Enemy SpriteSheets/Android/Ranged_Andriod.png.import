@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://8gyuvkigb1yk"
-path="res://.godot/imported/Faulty_Android.png-4a11405cb82bb87eeb6caadbc04cabff.ctex"
+uid="uid://k77a80f40w7l"
+path="res://.godot/imported/Ranged_Andriod.png-0c4e4611308c57dda639d2f7a081956f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/Characters/Enemy SpriteSheets/Faulty_Android.png"
-dest_files=["res://.godot/imported/Faulty_Android.png-4a11405cb82bb87eeb6caadbc04cabff.ctex"]
+source_file="res://Sprites/Characters/Enemy SpriteSheets/Android/Ranged_Andriod.png"
+dest_files=["res://.godot/imported/Ranged_Andriod.png-0c4e4611308c57dda639d2f7a081956f.ctex"]
 
 [params]
 

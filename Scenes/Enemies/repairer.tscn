@@ -11,23 +11,27 @@ func set_target_pos(value: Vector2) -> void:
 	_target_current_pos = value
 
 func manual_movement(delta: float) -> void:
-	_target_current_pos = node_to_go_to.global_position
 	if max_speed < 0.0:
 		_nav_position = _target_current_pos
 		return
+	set_target_pos(_target_current_pos) # Refresh the steering toward the waypoint we were given
 	_velocity += _steering
 	_nav_position += _velocity * delta
 "
 
 [node name="Repairer" type="Node2D" unique_id=1078844072]
 script = ExtResource("1_keg66")
+transfer_cutoff = 32.0
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=242269428]
+scale = Vector2(3, 3)
 texture = ExtResource("1_h5wbh")
 hframes = 2
 vframes = 3
 
 [node name="Navigator" type="Node2D" parent="." unique_id=1912730645 node_paths=PackedStringArray("node_to_move_instead_of_me")]
 script = SubResource("GDScript_4vj60")
+steering_max_force = 15.0
+max_speed = 500.0
 node_to_move_instead_of_me = NodePath("..")
 metadata/_custom_type_script = "uid://cs2uowcxd3wpe"

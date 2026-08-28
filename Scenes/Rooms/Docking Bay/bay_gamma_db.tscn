@@ -9,6 +9,8 @@
 [ext_resource type="PackedScene" uid="uid://cy2osx3ogepds" path="res://Scenes/Rooms/Tutorial Area/locked_door.tscn" id="5_8curq"]
 [ext_resource type="PackedScene" uid="uid://sjty08w4065m" path="res://Scenes/Rooms/CommonRoomComponents/space_background.tscn" id="6_npag6"]
 [ext_resource type="PackedScene" uid="uid://ba6450qhwuqee" path="res://Scenes/Components/break_ables.tscn" id="7_1v5ve"]
+[ext_resource type="PackedScene" uid="uid://bfdxh46jtantj" path="res://Scenes/Enemies/fallen_cyborg.tscn" id="10_q2u2h"]
+[ext_resource type="PackedScene" uid="uid://chuseorsfaafy" path="res://Scenes/Enemies/repairer.tscn" id="11_meskk"]
 
 [node name="BayGammaDb" type="Node2D" unique_id=1040202241]
 
@@ -57,3 +59,10 @@ position = Vector2(168, 1800)
 
 [node name="LockedDoor3" parent="." unique_id=48001535 instance=ExtResource("5_8curq")]
 position = Vector2(168, 984)
+
+[node name="Fallen_Cyborg" parent="." unique_id=2020790701 instance=ExtResource("10_q2u2h")]
+position = Vector2(1632, 480)
+
+[node name="Repairer" parent="." unique_id=1078844072 node_paths=PackedStringArray("obstacle_tilemaps") instance=ExtResource("11_meskk")]
+position = Vector2(1883, 713)
+obstacle_tilemaps = [NodePath("../Foreground")]

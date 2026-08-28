@@ -1,10 +1,12 @@
 [gd_scene format=3 uid="uid://bfdxh46jtantj"]
 
 [ext_resource type="Script" uid="uid://cmqkqaiio0cq" path="res://Scripts/Enemies/fallen_cyborg.gd" id="1_65w47"]
-[ext_resource type="Texture2D" uid="uid://8gyuvkigb1yk" path="res://Sprites/Characters/Enemy SpriteSheets/Faulty_Android.png" id="1_qhda0"]
+[ext_resource type="PackedScene" uid="uid://b2ibnxde1hrva" path="res://Scenes/Enemies/ranged_enemy.tscn" id="2_b4axf"]
 [ext_resource type="BehaviorTree" uid="uid://36b1u17d1cg3" path="res://ai/trees/fallen_cyborg.tres" id="2_jcgcb"]
 [ext_resource type="PackedScene" uid="uid://djmeyycufny61" path="res://Scenes/Components/Hurtbox.tscn" id="3_5afkt"]
+[ext_resource type="Texture2D" uid="uid://bj2k402u2ldji" path="res://Sprites/Characters/Enemy SpriteSheets/Android/Faulty_Android.png" id="3_bjx1m"]
 [ext_resource type="Script" uid="uid://b38rxpp8gn23u" path="res://Scripts/Resources/Tools/Fallen_Cyborg_Sprite_Connector_For_Debugging.gd" id="4_a7tiw"]
+[ext_resource type="Texture2D" uid="uid://d2uib44ihookd" path="res://Sprites/Characters/Enemy SpriteSheets/Android/Faulty_Android_Repiar.png" id="6_6koa2"]
 [ext_resource type="Script" uid="uid://ctc17oyja7fup" path="res://Scripts/Combat/hitbox.gd" id="6_tos5j"]
 [ext_resource type="Script" uid="uid://42wdk8m1e0ck" path="res://Scripts/Enemies/enemy_components/repair_node.gd" id="7_bjx1m"]
 
@@ -135,6 +137,98 @@ _data = {
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jqfyr"]
 size = Vector2(45, 51)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_262vs"]
+atlas = ExtResource("6_6koa2")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4jg48"]
+atlas = ExtResource("6_6koa2")
+region = Rect2(48, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p04j3"]
+atlas = ExtResource("6_6koa2")
+region = Rect2(96, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0ds4t"]
+atlas = ExtResource("6_6koa2")
+region = Rect2(144, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cpnfp"]
+atlas = ExtResource("6_6koa2")
+region = Rect2(192, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e3mwi"]
+atlas = ExtResource("6_6koa2")
+region = Rect2(240, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uhdtc"]
+atlas = ExtResource("6_6koa2")
+region = Rect2(288, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ds37q"]
+atlas = ExtResource("6_6koa2")
+region = Rect2(336, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gydoy"]
+atlas = ExtResource("6_6koa2")
+region = Rect2(384, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_50nlv"]
+atlas = ExtResource("6_6koa2")
+region = Rect2(432, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_55fni"]
+atlas = ExtResource("6_6koa2")
+region = Rect2(480, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uqnaw"]
+atlas = ExtResource("6_6koa2")
+region = Rect2(528, 0, 48, 48)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_bpmhk"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_262vs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4jg48")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p04j3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0ds4t")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cpnfp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e3mwi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uhdtc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ds37q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gydoy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_50nlv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_55fni")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uqnaw")
+}],
+"loop": 0,
+"name": &"Repair",
+"speed": 10.0
+}]
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_65w47"]
 radius = 400.0
 
@@ -150,6 +244,7 @@ size = Vector2(27, 48)
 [node name="Fallen_Cyborg" type="CharacterBody2D" unique_id=2020790701]
 collision_layer = 5
 script = ExtResource("1_65w47")
+repaired_scene = ExtResource("2_b4axf")
 bullet_spawn_offset = Vector2(60, -20.5)
 attackCooldown = 0.1
 
@@ -169,10 +264,17 @@ disabled = true
 [node name="Visual" type="Sprite2D" parent="." unique_id=1225338681]
 position = Vector2(0, -48)
 scale = Vector2(3, 3)
-texture = ExtResource("1_qhda0")
+texture = ExtResource("3_bjx1m")
 hframes = 7
 vframes = 4
 script = ExtResource("4_a7tiw")
+
+[node name="RepairSprite" type="AnimatedSprite2D" parent="." unique_id=1072565428]
+visible = false
+position = Vector2(-12, -30.000002)
+scale = Vector2(3, 3)
+sprite_frames = SubResource("SpriteFrames_bpmhk")
+animation = &"Repair"
 
 [node name="Player Detection Check" type="ShapeCast2D" parent="." unique_id=1009719527]
 visible = false
@@ -231,3 +333,4 @@ shape = SubResource("RectangleShape2D_bpmhk")
 
 [node name="RepairNode" type="Node2D" parent="." unique_id=1748932073 groups=["Repairable"]]
 script = ExtResource("7_bjx1m")
+repair_timer = 1.2
