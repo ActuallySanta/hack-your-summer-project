@@ -47,7 +47,6 @@ area = Vector2i(5, 3)
 [node name="PlayerHealth" parent="." unique_id=1360041974 instance=ExtResource("3_jh2mb")]
 
 [node name="FullMap" parent="." unique_id=1902447311 instance=ExtResource("4_fullmap")]
-visible = false
 custom_minimum_size = Vector2(960, 576)
 layout_mode = 1
 offset_left = 96.0

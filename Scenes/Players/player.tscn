@@ -816,7 +816,6 @@ scale = Vector2(0.8, 0.93)
 shape = SubResource("CapsuleShape2D_f1ek2")
 
 [node name="Mantle" type="Node2D" parent="." unique_id=1158367714 node_paths=PackedStringArray("mantle_sprite")]
-visible = false
 script = ExtResource("22_mantle")
 mantle_sprite = NodePath("MantleSprite")
 
