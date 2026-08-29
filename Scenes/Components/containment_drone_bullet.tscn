@@ -13,6 +13,7 @@ radius = 3.0
 [node name="ContainmentDroneBullet" type="CharacterBody2D" unique_id=560320549]
 script = ExtResource("1_t6o8u")
 vertical_range = 12.0
+do_wall_collisions = false
 sprite_texture_map = Dictionary[StringName, int]({
 &"D": 195,
 &"DL": 195,
@@ -31,7 +32,7 @@ hframes = 20
 vframes = 10
 frame = 195
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1104748675]
+[node name="Collider" type="CollisionShape2D" parent="." unique_id=1104748675]
 shape = SubResource("CircleShape2D_o0dc2")
 disabled = true
 

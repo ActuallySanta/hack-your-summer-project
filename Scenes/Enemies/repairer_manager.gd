@@ -10,6 +10,7 @@ const _NEAREST_WALKABLE_RADIUS : int = 16
 
 @export var obstacle_tilemaps : Array[ TileMapLayer ]
 @export var transfer_cutoff : float = 16.0
+@export var repair_drone_scene : PackedScene = preload("res://Scenes/Enemies/repair_drone.tscn")
 @export_range( 0.0, 1.0 ) var wall_bounce : float = 0.8
 
 @onready var navigator := $Navigator
@@ -268,9 +269,16 @@ func _heap_pop(heap: Array[ Vector3i ]) -> Vector3i:
 		i = smallest
 	return top
 
+func _replace_me_with_repair_drone() -> void:
+	var repair_drone := repair_drone_scene.instantiate()
+	repair_drone.global_position = global_position
+	get_parent().add_child(repair_drone)
+	queue_free()
+
 func find_closest_repair_node() -> RepairNode:
 	var repairable_nodes := get_tree().get_nodes_in_group("Repairable")
 	if repairable_nodes.size() == 0:
+		_replace_me_with_repair_drone()
 		return null
 	var closest : RepairNode = repairable_nodes[0]
 	var dist_to_curr : float = (global_position - closest.global_position).length()

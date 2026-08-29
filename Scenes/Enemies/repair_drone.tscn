@@ -25,7 +25,7 @@ script = ExtResource("2_420ha")
 [node name="RepairDroneImage" type="Sprite2D" parent="." unique_id=1054687302]
 scale = Vector2(3, 3)
 texture = ExtResource("1_cbna3")
-hframes = 2
+hframes = 4
 vframes = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=728415125]

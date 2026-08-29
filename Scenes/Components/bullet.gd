@@ -1,6 +1,7 @@
 class_name Bullet extends CharacterBody2D
 
-@export var MOVESPEED = 100
+@export var move_speed : float = 100
+@export var do_wall_collisions : bool = true
 @export var sprite_texture_map : Dictionary[ StringName, int ] = {
 	"U" : 1,
 	"UR": 3,
@@ -43,7 +44,7 @@ func initial_operations(spawn_pos: Vector2, spawn_direction: StringName, spawn_o
 	start_offset = spawn_offset
 	var dir : = direction_to_vector[ initDir ]
 	position = spawnPos + dir * start_offset
-	velocity = dir * MOVESPEED
+	velocity = dir * move_speed
 	$Sprite2D.frame = sprite_texture_map[ initDir ]
 	post_init_operations()
 	
@@ -51,5 +52,17 @@ func post_init_operations() -> void:
 	pass
 
 
+func on_entity_hit(_hitbox: Hitbox, _target: Hurtbox) -> void:
+	pass
+
+func on_wall_hit(target: Node2D) -> void:
+	pass
+
 func _on_hitbox_on_hit(_hitbox: Hitbox, _target: Hurtbox) -> void:
+	on_entity_hit(_hitbox, _target)
+
+func _on_hitbox_environment_hit(target: Node2D) -> void:
+	if not do_wall_collisions:
+		return
+	on_wall_hit(target)
 	queue_free()

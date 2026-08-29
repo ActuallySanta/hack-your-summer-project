@@ -16,7 +16,7 @@ floor_stop_on_slope = false
 floor_block_on_wall = false
 platform_floor_layers = 0
 script = ExtResource("1_kokbf")
-MOVESPEED = 1000
+do_wall_collisions = false
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1081961624]
 z_index = 666
@@ -26,7 +26,7 @@ hframes = 2
 vframes = 2
 frame = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=363035512]
+[node name="Collider" type="CollisionShape2D" parent="." unique_id=363035512]
 shape = SubResource("CircleShape2D_bl4by")
 disabled = true
 
@@ -43,3 +43,4 @@ collision_mask = 2
 shape = SubResource("CircleShape2D_b5bhe")
 
 [connection signal="timeout" from="Bullet Lifetime" to="." method="_on_bullet_lifetime_timeout"]
+[connection signal="environment_hit" from="Hitbox" to="." method="_on_hitbox_environment_hit"]

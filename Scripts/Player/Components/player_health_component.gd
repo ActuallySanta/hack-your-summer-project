@@ -106,7 +106,7 @@ func refresh_from_save() -> void:
 ## health go up, so the new point is usable straight away.
 func _on_extender_collected() -> void:
 	max_health = base_max_health + GameManager.get_health_upgrade_count()
-	heal(1)
+	max_out()
 	_announce()
 
 func maximum_health() -> int:

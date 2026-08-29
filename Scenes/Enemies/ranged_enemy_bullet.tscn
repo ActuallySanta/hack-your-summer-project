@@ -1,58 +1,50 @@
 [gd_scene format=3 uid="uid://dmxbgtwmp5c0q"]
 
-[ext_resource type="Texture2D" uid="uid://d2bn5f3iju4g5" path="res://Sprites/Characters/scifi_blasterfire_1.png" id="1_ipo11"]
-[ext_resource type="Script" uid="uid://brqm5b8nf417m" path="res://Scripts/Enemies/ranged_enemy_bullet.gd" id="1_k6rrm"]
-[ext_resource type="Texture2D" uid="uid://cxrd2d61nr7xu" path="res://Sprites/Characters/scifi_blasterfire_2.png" id="2_k6rrm"]
+[ext_resource type="Script" uid="uid://6t1wlfec2sqr" path="res://Scenes/Components/bullet.gd" id="1_1f3k8"]
+[ext_resource type="Texture2D" uid="uid://bxgh8un8uenwd" path="res://Sprites/Bullets/Android_Bullet.png" id="2_1f3k8"]
 [ext_resource type="PackedScene" uid="uid://liprjmtialrh" path="res://Scenes/Components/Hitbox.tscn" id="4_06oib"]
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_e6f28"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("1_ipo11")
-}, {
-"duration": 1.0,
-"texture": ExtResource("2_k6rrm")
-}],
-"loop": 1,
-"name": &"default",
-"speed": 5.0
-}]
+[sub_resource type="CircleShape2D" id="CircleShape2D_bpmhk"]
+radius = 1.5
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_k6rrm"]
-size = Vector2(34, 10)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ipo11"]
-size = Vector2(34, 10)
+[sub_resource type="CircleShape2D" id="CircleShape2D_85ri6"]
+radius = 2.0615528
 
 [node name="Ranged Enemy Bullet" type="CharacterBody2D" unique_id=1138320876]
 collision_layer = 8
-collision_mask = 3
-script = ExtResource("1_k6rrm")
+script = ExtResource("1_1f3k8")
+sprite_texture_map = Dictionary[StringName, int]({
+&"D": 1,
+&"DL": 1,
+&"DR": 0,
+&"L": 1,
+&"R": 0,
+&"U": 0,
+&"UL": 1,
+&"UR": 0
+})
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=742210317]
-z_index = 666
-scale = Vector2(2, 2)
-sprite_frames = SubResource("SpriteFrames_e6f28")
-autoplay = "default"
-frame_progress = 0.31567594
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2046364853]
-position = Vector2(11, 0)
-shape = SubResource("RectangleShape2D_k6rrm")
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=153344789]
+texture = ExtResource("2_1f3k8")
+vframes = 2
 
 [node name="Bullet Lifetime" type="Timer" parent="." unique_id=1057932148]
-wait_time = 3.0
+wait_time = 40.0
 one_shot = true
 autostart = true
 
 [node name="Hitbox" parent="." unique_id=125498642 instance=ExtResource("4_06oib")]
 collision_layer = 8
-collision_mask = 2
+collision_mask = 3
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=2098150402]
-position = Vector2(11, 0)
-shape = SubResource("RectangleShape2D_ipo11")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=274916684]
+position = Vector2(5, 0.5)
+shape = SubResource("CircleShape2D_bpmhk")
+
+[node name="Collider" type="CollisionShape2D" parent="." unique_id=774113725]
+position = Vector2(5, 0.5)
+shape = SubResource("CircleShape2D_85ri6")
+disabled = true
 
 [connection signal="timeout" from="Bullet Lifetime" to="." method="_on_bullet_lifetime_timeout"]
 [connection signal="on_hit" from="Hitbox" to="." method="_on_hitbox_on_hit"]
