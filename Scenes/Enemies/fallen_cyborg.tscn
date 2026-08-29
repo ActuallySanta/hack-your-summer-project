@@ -238,6 +238,8 @@ size = Vector2(45, 51)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bpmhk"]
 size = Vector2(27, 48)
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_bpmhk"]
+
 [node name="Fallen_Cyborg" type="CharacterBody2D" unique_id=2020790701]
 collision_layer = 5
 script = ExtResource("1_65w47")
@@ -325,3 +327,9 @@ shape = SubResource("RectangleShape2D_bpmhk")
 [node name="RepairNode" type="Node2D" parent="." unique_id=1748932073 groups=["Repairable"]]
 script = ExtResource("7_bjx1m")
 repair_timer = 1.2
+can_be_accel = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1473834614]
+position = Vector2(-86757, -73880)
+shape = SubResource("CircleShape2D_bpmhk")
+disabled = true

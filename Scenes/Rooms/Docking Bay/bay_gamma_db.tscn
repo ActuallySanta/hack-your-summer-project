@@ -74,3 +74,15 @@ obstacle_tilemaps = [NodePath("../Foreground")]
 [node name="Fallen_Cyborg2" parent="." unique_id=867978031 instance=ExtResource("10_q2u2h")]
 position = Vector2(1776, 912)
 start_flipped = true
+
+[node name="Repairer2" parent="." unique_id=2066666190 node_paths=PackedStringArray("obstacle_tilemaps") instance=ExtResource("11_meskk")]
+position = Vector2(383, 834)
+obstacle_tilemaps = [NodePath("../Foreground")]
+
+[node name="Repairer3" parent="." unique_id=1730073126 node_paths=PackedStringArray("obstacle_tilemaps") instance=ExtResource("11_meskk")]
+position = Vector2(387, 716)
+obstacle_tilemaps = [NodePath("../Foreground")]
+
+[node name="Repairer4" parent="." unique_id=1451283534 node_paths=PackedStringArray("obstacle_tilemaps") instance=ExtResource("11_meskk")]
+position = Vector2(556, 852)
+obstacle_tilemaps = [NodePath("../Foreground")]

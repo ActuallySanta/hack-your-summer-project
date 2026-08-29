@@ -24,7 +24,7 @@ func begin_repairs() -> void:
 func finish_repairs() -> void:
 	var parent := get_parent()
 	var replacement : Enemy = repaired_scene.instantiate()
-	replacement.global_position = global_position + repaired_position
+	replacement.global_position = global_position + (repaired_position if not isFlipped else Vector2(-repaired_position.x, repaired_position.y))
 	replacement.update_flip(-1 if isFlipped else 1)
 	parent.add_child(replacement)
 	queue_free()
