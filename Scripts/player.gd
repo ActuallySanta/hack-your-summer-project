@@ -305,26 +305,36 @@ func has_headroom() -> bool:
 func _apply_animation() -> void:
 	if animator == null:
 		return
-
 	# Requested every frame even while a one-shot is playing: the animator holds the
 	# pose rather than playing it, so the right thing is already queued for the moment
-	# the swing or the shot ends.
+	# the swing, the shot or the hit ends.
+	animator.request_pose(_pose_for_state())
+
+## The resting look for the state the player is in.
+func _pose_for_state() -> StringName:
 	match move_state:
-		MoveState.Knockback:
-			# The hit itself played the reaction. Asking again here would restart it
-			# every frame for as long as the knockback lasts.
-			pass
 		MoveState.Jumping:
 			if jetpack and jetpack.is_thrusting():
-				animator.request_pose(&"jetpack")
-			elif wall_jump and wall_jump.is_wall_available():
-				animator.request_pose(&"wall_cling")
-			else:
-				animator.request_pose(&"jump")
+				return &"jetpack"
+			if wall_jump and wall_jump.is_wall_available():
+				return &"wall_cling"
+			return &"jump"
 		MoveState.Crouching:
-			animator.request_pose(&"crawl" if _is_moving() else &"crouch")
+			return &"crawl" if _is_moving() else &"crouch"
+		MoveState.Knockback:
+			# Being knocked about outlasts the animation that goes with it: the hit
+			# plays a 0.4s reaction, while the fallen cyborg's knockback holds the
+			# player for a full second. This branch used to ask for nothing at all, on
+			# the grounds that the reaction was already playing -- but a pose is not a
+			# one-shot, and asking for one cannot restart it. All that did was leave
+			# whatever pose was up when the hit landed to come back when the reaction
+			# ended: falling onto an enemy left the player skidding along the floor in
+			# the falling pose, and being hit while crouched left them crawling.
+			if not is_on_floor():
+				return &"jump"
+			return &"run" if _is_moving() else &"idle"
 		_:
-			animator.request_pose(&"run" if _is_moving() else &"idle")
+			return &"run" if _is_moving() else &"idle"
 
 ## Whether the player is actually travelling. Held input alone is not enough: pushing
 ## into a wall is not walking, and playing the walk cycle there is what made the

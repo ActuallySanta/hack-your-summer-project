@@ -752,7 +752,7 @@ _data = {
 size = Vector2(42.007813, 90)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gymyn"]
-size = Vector2(42, 20)
+size = Vector2(42, 46)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_j8xm3"]
 size = Vector2(42, 48)
@@ -781,12 +781,10 @@ libraries/ = SubResource("AnimationLibrary_gymyn")
 script = ExtResource("9_k8qpn")
 
 [node name="WalkingCollision" type="CollisionShape2D" parent="." unique_id=973966651]
-visible = false
 shape = SubResource("RectangleShape2D_xxqkx")
 
 [node name="CrouchCollision" type="CollisionShape2D" parent="." unique_id=684077052]
-visible = false
-position = Vector2(0, 35)
+position = Vector2(0, 22)
 shape = SubResource("RectangleShape2D_gymyn")
 disabled = true
 
@@ -813,6 +811,7 @@ script = ExtResource("21_health")
 collision_layer = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HealthComponent/Hurtbox" unique_id=1301816998]
+visible = false
 scale = Vector2(0.8, 0.93)
 shape = SubResource("CapsuleShape2D_f1ek2")
 

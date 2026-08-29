@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://dr27a447as1vc" path="res://Sprites/Characters/Enemy SpriteSheets/Repair_Drone.png" id="1_h5wbh"]
 [ext_resource type="Script" uid="uid://b6m2ydxjtjcgv" path="res://Scenes/Enemies/repairer_manager.gd" id="1_keg66"]
+[ext_resource type="Script" uid="uid://c3nlkl7nnxe1h" path="res://Scripts/Enemies/enemy_components/repairer_sprite_animator.gd" id="3_keg66"]
 
 [sub_resource type="GDScript" id="GDScript_4vj60"]
 resource_name = "RepairerNav"
@@ -39,11 +40,12 @@ motion_mode = 1
 script = ExtResource("1_keg66")
 transfer_cutoff = 32.0
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=242269428]
+[node name="RepairerSpriteAnimator" type="Sprite2D" parent="." unique_id=242269428]
 scale = Vector2(3, 3)
 texture = ExtResource("1_h5wbh")
-hframes = 2
+hframes = 4
 vframes = 3
+script = ExtResource("3_keg66")
 
 [node name="Navigator" type="Node2D" parent="." unique_id=1912730645 node_paths=PackedStringArray("node_to_move_instead_of_me")]
 script = SubResource("GDScript_4vj60")

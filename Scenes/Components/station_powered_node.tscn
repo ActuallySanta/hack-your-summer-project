@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://b7lnb5mc2cxhl"]
+
+[sub_resource type="GDScript" id="GDScript_bu68p"]
+resource_name = "DeleteIfNotPoweredColonThree"
+script/source = "extends Node2D
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	if not GameManager.is_station_powered():
+		queue_free()
+"
+
+[node name="StationPoweredNode" type="Node2D" unique_id=1319736591]
+script = SubResource("GDScript_bu68p")

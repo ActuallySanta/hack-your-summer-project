@@ -1,28 +1,22 @@
 extends CharacterBody2D
 
-## Step costs kept as ints so the A* search can stay integer only
 const _STRAIGHT_COST : int = 10
 const _DIAGONAL_COST : int = 14
 const _NEIGHBOUR_OFFSETS : Array[ Vector2i ] = [
 	Vector2i( 1, 0 ), Vector2i( -1, 0 ), Vector2i( 0, 1 ), Vector2i( 0, -1 ),
 	Vector2i( 1, 1 ), Vector2i( 1, -1 ), Vector2i( -1, 1 ), Vector2i( -1, -1 ),
 ]
-## How far from a blocked cell we will look for a stand-in cell
 const _NEAREST_WALKABLE_RADIUS : int = 16
 
 @export var obstacle_tilemaps : Array[ TileMapLayer ]
 @export var transfer_cutoff : float = 16.0
-## Fraction of speed kept when we clip a wall; 0.0 just slides along it instead.
-## Middling values grind against the wall, so prefer a firm bounce or none at all
 @export_range( 0.0, 1.0 ) var wall_bounce : float = 0.8
 
 @onready var navigator := $Navigator
-@onready var sprite := $Sprite2D
+@onready var sprite : RepairerSpriteAnimator = $RepairerSpriteAnimator
 
 var room_map : Array[ Array ]
-## Cell coord of room_map[ 0 ][ 0 ] in the reference tilemap's cell space
 var room_map_origin : Vector2i
-## Width / height of room_map in cells
 var room_map_size : Vector2i
 var target_node : RepairNode
 var pathing_in_order : Array[ Vector2 ]
@@ -30,7 +24,6 @@ var pathing_in_order : Array[ Vector2 ]
 func _ready() -> void:
 	navigator.ignore_target = true
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	# Get the target
 	if target_node == null:
@@ -53,6 +46,8 @@ func _process(delta: float) -> void:
 func _physics_process(_delta: float) -> void:
 	var intended : Vector2 = navigator.get_nav_velocity()
 	velocity = intended
+	if sprite:
+		sprite.get_closest_dir(velocity.normalized())
 	move_and_slide()
 
 	var hit := get_last_slide_collision()

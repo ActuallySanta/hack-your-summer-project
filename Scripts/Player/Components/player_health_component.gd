@@ -69,19 +69,19 @@ func _ready() -> void:
 	var player := _player()
 	if player:
 		player.move_state_changed.connect(_on_move_state_changed)
-	_apply_hurtbox_pose(false)
+	_apply_hurtbox_pose(false, false)
 
 func _on_move_state_changed(_from: Player.MoveState, to: Player.MoveState) -> void:
-	_apply_hurtbox_pose(to == Player.MoveState.Crouching)
+	_apply_hurtbox_pose(to == Player.MoveState.Crouching, to == Player.MoveState.Jumping)
 
-func _apply_hurtbox_pose(crouched: bool) -> void:
+func _apply_hurtbox_pose(crouched: bool, jumping: bool) -> void:
 	if _hurt_shape == null:
 		return
 	_hurt_shape.position = crouch_position if crouched else stand_position
 	_hurt_shape.rotation_degrees = crouch_rotation_degrees if crouched else stand_rotation_degrees
 	var capsule := _hurt_shape.shape as CapsuleShape2D
 	if capsule:
-		capsule.height = crouch_height if crouched else stand_height
+		capsule.height = crouch_height if crouched or jumping else stand_height
 
 func _player() -> Player:
 	return get_parent() as Player
