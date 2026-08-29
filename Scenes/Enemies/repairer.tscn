@@ -31,7 +31,7 @@ vframes = 3
 
 [node name="Navigator" type="Node2D" parent="." unique_id=1912730645 node_paths=PackedStringArray("node_to_move_instead_of_me")]
 script = SubResource("GDScript_4vj60")
-steering_max_force = 15.0
-max_speed = 500.0
+steering_max_force = 10.0
+max_speed = 300.0
 node_to_move_instead_of_me = NodePath("..")
 metadata/_custom_type_script = "uid://cs2uowcxd3wpe"

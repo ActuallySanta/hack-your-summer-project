@@ -1,11 +1,13 @@
-[gd_scene format=3 uid="uid://ne13j5tl7gbr"]
+[gd_scene format=4 uid="uid://ne13j5tl7gbr"]
 
 [ext_resource type="Script" uid="uid://utng5u4e7r4p" path="res://Scripts/UI/player_hud.gd" id="1_phud"]
 [ext_resource type="PackedScene" uid="uid://bnwse5pqyludv" path="res://Scenes/UI/dialogue_box.tscn" id="1_vkk4g"]
 [ext_resource type="Script" uid="uid://bx1rfwmx00a2i" path="res://Scripts/UI/hud_minimap.gd" id="2_hudmm"]
 [ext_resource type="PackedScene" uid="uid://dch8dyylb7526" path="res://addons/MetroidvaniaSystem/Template/Nodes/Minimap.tscn" id="2_y31ga"]
 [ext_resource type="PackedScene" uid="uid://c214glttpaw83" path="res://Scenes/UI/player_health.tscn" id="3_jh2mb"]
+[ext_resource type="TileSet" uid="uid://buxceg5xwah17" path="res://Tileset/HUD.tres" id="3_odvir"]
 [ext_resource type="PackedScene" path="res://Scenes/UI/full_map.tscn" id="4_fullmap"]
+[ext_resource type="Script" uid="uid://dpm1m1a7ewttn" path="res://Scripts/LevelTileMap.gd" id="4_out4y"]
 
 [node name="Player HUD" type="Control" unique_id=890844106]
 layout_mode = 3
@@ -18,6 +20,14 @@ script = ExtResource("1_phud")
 
 [node name="Dialogue Box Container" parent="." unique_id=973154834 instance=ExtResource("1_vkk4g")]
 layout_mode = 1
+
+[node name="LevelTileMap" type="TileMapLayer" parent="." unique_id=126558450]
+position = Vector2(64, -32)
+scale = Vector2(3, 3)
+tile_map_data = PackedByteArray("AAATAAIAAAACAAEAAGATAAEAAAADAAEAAAATAAAAAAADAAEAAAAUAAIAAAADAAEAAGAVAAIAAAADAAEAAGAWAAIAAAADAAEAAGAUAAEAAAAAAAAAAAAVAAEAAAAAAAAAAAAWAAEAAAAAAAAAAAAWAAAAAAAAAAAAAAAVAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA=")
+tile_set = ExtResource("3_odvir")
+script = ExtResource("4_out4y")
+metadata/_custom_type_script = "uid://dpm1m1a7ewttn"
 
 [node name="Minimap" parent="." unique_id=651073446 instance=ExtResource("2_y31ga")]
 layout_mode = 1
@@ -37,6 +47,7 @@ area = Vector2i(5, 3)
 [node name="PlayerHealth" parent="." unique_id=1360041974 instance=ExtResource("3_jh2mb")]
 
 [node name="FullMap" parent="." unique_id=1902447311 instance=ExtResource("4_fullmap")]
+visible = false
 custom_minimum_size = Vector2(960, 576)
 layout_mode = 1
 offset_left = 96.0

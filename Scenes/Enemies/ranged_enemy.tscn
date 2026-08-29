@@ -213,6 +213,7 @@ visible = false
 position = Vector2(44, -8)
 
 [node name="Contact Damage Hitbox" type="Area2D" parent="." unique_id=1261742805]
+visible = false
 script = ExtResource("5_sy4jm")
 metadata/_custom_type_script = "uid://ctc17oyja7fup"
 

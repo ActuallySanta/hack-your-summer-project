@@ -1,5 +1,6 @@
 extends Enemy
 @export var repaired_scene : PackedScene
+@export var repaired_position : Vector2 = Vector2(-21,-48)
 @export var fire_check_timer : float = 0.4
 @export var bullet_spawn_offset : Vector2
 @export var start_flipped : bool = false:
@@ -23,7 +24,7 @@ func begin_repairs() -> void:
 func finish_repairs() -> void:
 	var parent := get_parent()
 	var replacement : Enemy = repaired_scene.instantiate()
-	replacement.global_position = global_position
+	replacement.global_position = global_position + repaired_position
 	replacement.update_flip(-1 if isFlipped else 1)
 	parent.add_child(replacement)
 	queue_free()

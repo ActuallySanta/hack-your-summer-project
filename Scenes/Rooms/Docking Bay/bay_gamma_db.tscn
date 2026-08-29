@@ -61,8 +61,12 @@ position = Vector2(168, 1800)
 position = Vector2(168, 984)
 
 [node name="Fallen_Cyborg" parent="." unique_id=2020790701 instance=ExtResource("10_q2u2h")]
-position = Vector2(1632, 480)
+position = Vector2(768, 864)
 
 [node name="Repairer" parent="." unique_id=1078844072 node_paths=PackedStringArray("obstacle_tilemaps") instance=ExtResource("11_meskk")]
-position = Vector2(1883, 713)
+position = Vector2(472, 788)
 obstacle_tilemaps = [NodePath("../Foreground")]
+
+[node name="Fallen_Cyborg2" parent="." unique_id=867978031 instance=ExtResource("10_q2u2h")]
+position = Vector2(1776, 912)
+start_flipped = true
