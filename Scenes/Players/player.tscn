@@ -781,14 +781,17 @@ libraries/ = SubResource("AnimationLibrary_gymyn")
 script = ExtResource("9_k8qpn")
 
 [node name="WalkingCollision" type="CollisionShape2D" parent="." unique_id=973966651]
+visible = false
 shape = SubResource("RectangleShape2D_xxqkx")
 
 [node name="CrouchCollision" type="CollisionShape2D" parent="." unique_id=684077052]
+visible = false
 position = Vector2(0, 35)
 shape = SubResource("RectangleShape2D_gymyn")
 disabled = true
 
 [node name="JumpCollision" type="CollisionShape2D" parent="." unique_id=931990881]
+visible = false
 position = Vector2(0, 21)
 shape = SubResource("RectangleShape2D_j8xm3")
 disabled = true
@@ -798,6 +801,7 @@ visible = false
 max_speed = 800.0
 
 [node name="Animator" type="Node2D" parent="." unique_id=1913136395 node_paths=PackedStringArray("animation_player", "sprite")]
+visible = false
 script = ExtResource("20_anim")
 animation_player = NodePath("../AnimationPlayer")
 sprite = NodePath("../Character")
@@ -813,6 +817,7 @@ scale = Vector2(0.8, 0.93)
 shape = SubResource("CapsuleShape2D_f1ek2")
 
 [node name="Mantle" type="Node2D" parent="." unique_id=1158367714 node_paths=PackedStringArray("mantle_sprite")]
+visible = false
 script = ExtResource("22_mantle")
 mantle_sprite = NodePath("MantleSprite")
 
@@ -824,26 +829,32 @@ sprite_frames = ExtResource("11_xxqkx")
 animation = &"Small Climb"
 
 [node name="PlanarMovement" type="Node2D" parent="." unique_id=1135378168]
+visible = false
 script = ExtResource("23_planar")
 
 [node name="FloorJump" type="Node2D" parent="." unique_id=1510188819]
+visible = false
 script = ExtResource("24_floor_jump")
 
 [node name="WallJump" type="Node2D" parent="." unique_id=1319206084]
+visible = false
 script = ExtResource("25_wall_jump")
 apex_tiles = 4.0
 launch_speed = 700.0
 launch_hold_seconds = 0.05
 
 [node name="Jetpack" type="Node2D" parent="." unique_id=247300595 node_paths=PackedStringArray("jetpack_sprite")]
+visible = false
 script = ExtResource("26_jetpack")
 jetpack_sprite = NodePath("../JetpackAsset")
 
 [node name="WrenchAttack" type="Node2D" parent="." unique_id=1944188833]
+visible = false
 script = ExtResource("27_wrench")
 swing_scene = ExtResource("2_xxqkx")
 
 [node name="Shooting" type="Node2D" parent="." unique_id=1776619862]
+visible = false
 script = ExtResource("28_shooting")
 bullet_scene = ExtResource("3_j8xm3")
 
@@ -882,3 +893,4 @@ attenuation = 1e-05
 panning_strength = 0.0
 
 [node name="Darkness" parent="." unique_id=1231306066 instance=ExtResource("17_m3db5")]
+visible = false

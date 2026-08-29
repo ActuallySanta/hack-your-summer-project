@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://bfdxh46jtantj" path="res://Scenes/Enemies/fallen_cyborg.tscn" id="7_2kqia"]
 [ext_resource type="PackedScene" uid="uid://cy2osx3ogepds" path="res://Scenes/Rooms/Tutorial Area/locked_door.tscn" id="9_55hf3"]
 [ext_resource type="PackedScene" uid="uid://6jbhsdtefk1p" path="res://Scenes/Components/door_tile_map_layer.tscn" id="9_owopv"]
+[ext_resource type="PackedScene" uid="uid://c23c0urqh5mm5" path="res://Scenes/Components/ScaledTileMap.tscn" id="10_55hf3"]
 
 [node name="BayAlphaDB" type="Node2D" unique_id=1161255728]
 
@@ -81,3 +82,7 @@ position = Vector2(1248, 1008)
 
 [node name="LockedDoor" parent="." unique_id=1290327451 instance=ExtResource("9_55hf3")]
 position = Vector2(2136, 1128)
+
+[node name="DoorFrontCover" parent="." unique_id=2101826522 instance=ExtResource("10_55hf3")]
+tile_map_data = PackedByteArray("AAAtAAkAAQABAAIAAAAuAAkAAQABAAIAAAAvAAkAAQABAAIAAAAsAAkAAQAAAAIAAAA=")
+tile_set = ExtResource("2_bu7cl")

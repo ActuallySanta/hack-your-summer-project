@@ -2,30 +2,40 @@
 
 [ext_resource type="Texture2D" uid="uid://dr27a447as1vc" path="res://Sprites/Characters/Enemy SpriteSheets/Repair_Drone.png" id="1_h5wbh"]
 [ext_resource type="Script" uid="uid://b6m2ydxjtjcgv" path="res://Scenes/Enemies/repairer_manager.gd" id="1_keg66"]
-[ext_resource type="PhysicsMaterial" uid="uid://bfliktwattx4t" path="res://Materials/PhysicsMaterials/bounce.tres" id="1_terr0"]
 
 [sub_resource type="GDScript" id="GDScript_4vj60"]
 resource_name = "RepairerNav"
 script/source = "extends Navigator
 
+# The body owns its own position now: this navigator only ever produces a velocity,
+# which repairer_manager.gd hands to move_and_slide so walls can actually stop us.
+
 func set_target_pos(value: Vector2) -> void:
 	_target_current_pos = value
 
-func manual_movement(delta: float) -> void:
-	if max_speed < 0.0:
-		_nav_position = _target_current_pos
+func get_nav_velocity() -> Vector2:
+	return _velocity
+
+func set_nav_velocity(value: Vector2) -> void:
+	_velocity = value
+
+func _process(delta: float) -> void:
+	if ignore_target:
+		manual_movement(delta)
 		return
+	slow_down_and_stop() # Arrived: bleed off speed, the body still applies it
+
+func manual_movement(_delta: float) -> void:
 	set_target_pos(_target_current_pos) # Refresh the steering toward the waypoint we were given
 	_velocity += _steering
-	_nav_position += _velocity * delta
 "
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_npwjr"]
 radius = 19.5
 
-[node name="Repairer" type="RigidBody2D" unique_id=2066666190]
-physics_material_override = ExtResource("1_terr0")
-gravity_scale = 0.0
+[node name="Repairer" type="CharacterBody2D" unique_id=2066666190]
+collision_layer = 4
+motion_mode = 1
 script = ExtResource("1_keg66")
 transfer_cutoff = 32.0
 

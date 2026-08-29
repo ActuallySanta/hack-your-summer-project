@@ -1,4 +1,4 @@
-extends Node2D
+extends CharacterBody2D
 
 ## Step costs kept as ints so the A* search can stay integer only
 const _STRAIGHT_COST : int = 10
@@ -12,6 +12,9 @@ const _NEAREST_WALKABLE_RADIUS : int = 16
 
 @export var obstacle_tilemaps : Array[ TileMapLayer ]
 @export var transfer_cutoff : float = 16.0
+## Fraction of speed kept when we clip a wall; 0.0 just slides along it instead.
+## Middling values grind against the wall, so prefer a firm bounce or none at all
+@export_range( 0.0, 1.0 ) var wall_bounce : float = 0.8
 
 @onready var navigator := $Navigator
 @onready var sprite := $Sprite2D
@@ -45,6 +48,20 @@ func _process(delta: float) -> void:
 		target_node.start_repairs()
 		navigator.ignore_target = false # Causes navigators to slow_stop
 		target_node.on_repair_end.connect( reset )
+
+## The navigator only decides a velocity; the body is what actually moves, so walls stop us
+func _physics_process(_delta: float) -> void:
+	var intended : Vector2 = navigator.get_nav_velocity()
+	velocity = intended
+	move_and_slide()
+
+	var hit := get_last_slide_collision()
+	if hit != null and wall_bounce > 0.0:
+		navigator.set_nav_velocity( intended.bounce( hit.get_normal() ) * wall_bounce )
+	else:
+		# move_and_slide already stripped whatever was heading into the wall
+		navigator.set_nav_velocity( velocity )
+	navigator.set_nav_position( global_position )
 
 func reset() -> void:
 	if is_instance_valid( target_node ) and target_node.on_repair_end.is_connected( reset ):
