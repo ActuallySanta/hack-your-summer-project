@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://dr27a447as1vc" path="res://Sprites/Characters/Enemy SpriteSheets/Repair_Drone.png" id="1_h5wbh"]
 [ext_resource type="Script" uid="uid://b6m2ydxjtjcgv" path="res://Scenes/Enemies/repairer_manager.gd" id="1_keg66"]
+[ext_resource type="PhysicsMaterial" uid="uid://bfliktwattx4t" path="res://Materials/PhysicsMaterials/bounce.tres" id="1_terr0"]
 
 [sub_resource type="GDScript" id="GDScript_4vj60"]
 resource_name = "RepairerNav"
@@ -19,7 +20,12 @@ func manual_movement(delta: float) -> void:
 	_nav_position += _velocity * delta
 "
 
-[node name="Repairer" type="Node2D" unique_id=1078844072]
+[sub_resource type="CircleShape2D" id="CircleShape2D_npwjr"]
+radius = 19.5
+
+[node name="Repairer" type="RigidBody2D" unique_id=2066666190]
+physics_material_override = ExtResource("1_terr0")
+gravity_scale = 0.0
 script = ExtResource("1_keg66")
 transfer_cutoff = 32.0
 
@@ -35,3 +41,7 @@ steering_max_force = 10.0
 max_speed = 300.0
 node_to_move_instead_of_me = NodePath("..")
 metadata/_custom_type_script = "uid://cs2uowcxd3wpe"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2063409704]
+position = Vector2(-1.5, 1.5)
+shape = SubResource("CircleShape2D_npwjr")

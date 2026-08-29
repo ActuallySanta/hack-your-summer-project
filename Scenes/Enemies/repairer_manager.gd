@@ -33,6 +33,7 @@ func _process(delta: float) -> void:
 	if target_node == null:
 		var path = create_path()
 		pathing_in_order = path
+		navigator.ignore_target = true # Waypoint following only happens in manual movement
 	if target_node == null or pathing_in_order.is_empty():
 		return # Nothing to repair
 	# Nav to target

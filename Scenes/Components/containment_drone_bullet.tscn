@@ -8,7 +8,7 @@
 radius = 4.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_scwjh"]
-radius = 4.0
+radius = 3.0
 
 [node name="ContainmentDroneBullet" type="CharacterBody2D" unique_id=560320549]
 script = ExtResource("1_t6o8u")
@@ -45,4 +45,5 @@ collision_layer = 8
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=864651935]
+position = Vector2(-2, 0)
 shape = SubResource("CircleShape2D_scwjh")

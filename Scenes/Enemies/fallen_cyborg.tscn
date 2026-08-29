@@ -245,7 +245,7 @@ size = Vector2(27, 48)
 collision_layer = 5
 script = ExtResource("1_65w47")
 repaired_scene = ExtResource("2_b4axf")
-bullet_spawn_offset = Vector2(60, -20.5)
+bullet_spawn_offset = Vector2(20, -20.5)
 attackCooldown = 0.1
 
 [node name="BTPlayer" type="BTPlayer" parent="." unique_id=635174070]
