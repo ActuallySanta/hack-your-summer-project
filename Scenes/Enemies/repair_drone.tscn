@@ -8,15 +8,16 @@
 [ext_resource type="PackedScene" uid="uid://djmeyycufny61" path="res://Scenes/Components/Hurtbox.tscn" id="5_hrtbx"]
 [ext_resource type="Script" uid="uid://p46g50v8y7y4" path="res://Scripts/Combat/Healths/robot_health_component.gd" id="5_sem7m"]
 [ext_resource type="Script" uid="uid://c3nlkl7nnxe1h" path="res://Scripts/Enemies/enemy_components/repairer_sprite_animator.gd" id="6_anim"]
+[ext_resource type="Script" uid="uid://be0bvug8qsg07" path="res://Scripts/Enemies/enemy_components/rigid_body_navigator.gd" id="7_nav"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_420ha"]
 radius = 20.506096
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_vjkby"]
-radius = 21.505814
-
 [sub_resource type="CircleShape2D" id="CircleShape2D_jc8ds"]
 radius = 17.507141
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_vjkby"]
+radius = 21.505814
 
 [node name="RepairDrone" type="RigidBody2D" unique_id=1318393645]
 collision_layer = 64
@@ -25,9 +26,13 @@ physics_material_override = ExtResource("1_vjkby")
 lock_rotation = true
 script = ExtResource("2_420ha")
 speed = 150.0
-travel_speed = 500.0
-waypoint_cutoff = 32.0
 stun_time = 1.0
+
+[node name="Navigator" type="Node2D" parent="." unique_id=1912730645 node_paths=PackedStringArray("node_to_move_instead_of_me")]
+script = ExtResource("7_nav")
+steering_max_force = 12.0
+max_speed = 300.0
+node_to_move_instead_of_me = NodePath("..")
 
 [node name="Flasher" parent="." unique_id=734208757 instance=ExtResource("3_csvki")]
 
@@ -42,15 +47,6 @@ script = ExtResource("6_anim")
 visible = false
 position = Vector2(-1.5, 1.5)
 shape = SubResource("CircleShape2D_420ha")
-
-[node name="Area2D" type="Area2D" parent="." unique_id=307065976]
-visible = false
-collision_layer = 4
-collision_mask = 8
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1131624557]
-position = Vector2(-1.5, 1.5)
-shape = SubResource("CircleShape2D_vjkby")
 
 [node name="Hitbox" type="Area2D" parent="." unique_id=1768830159]
 visible = false
@@ -78,5 +74,3 @@ collision_layer = 4
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RoboHealth/Hurtbox" unique_id=88918251]
 position = Vector2(-1.5, 1.5)
 shape = SubResource("CircleShape2D_vjkby")
-
-[connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]

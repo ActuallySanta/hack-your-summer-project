@@ -26,10 +26,9 @@ const IDLE_DIRECTIONS := {
 ## The group every [RepairNode] puts itself in.
 const REPAIRABLE_GROUP := &"Repairable"
 
-## How fast a parked drone bleeds off the speed it arrived with, per physics tick,
-## and the speed below which it is simply stopped.
-const _PARK_FRICTION := 0.85
-const _PARK_STOP_SPEED := 4.0
+## Below this the drone counts as stopped: too slow to read a heading off, and too
+## slow for the sprite to be worth turning.
+const _STOPPED_SPEED := 4.0
 
 #endregion
 
@@ -37,21 +36,13 @@ const _PARK_STOP_SPEED := 4.0
 
 @export_enum("UR", "UL", "DR", "DL") var start_direction : String = "UR"
 
-## Drift speed with nothing left to repair. Deliberately separate from
-## [member travel_speed]: idling is the slower, more visible state.
+## Drift speed with nothing left to repair. Idling is the slower, more visible state;
+## the speed it travels to a job at belongs to the [Navigator] child, along with
+## everything else about how it flies there.
 @export var speed : float = 100.0
 
-## Speed while travelling to a repair job.
-@export var travel_speed : float = 200.0
-
-## How much velocity the drone may add per physics tick to turn toward its next
-## waypoint. This is the whole of the wall handling while seeking: the bounce is the
-## physics engine's, and a low steering force means the drone rides that bounce out
-## and curves back onto its route instead of grinding into the wall it just hit.
-@export var steering_max_force : float = 12.0
-
 ## How close to a waypoint counts as having reached it.
-@export var waypoint_cutoff : float = 24.0
+@export var waypoint_cutoff : float = 32.0
 
 ## Seconds spent on the floor after a stun bullet.
 @export var stun_time : float = 5.0
@@ -62,6 +53,7 @@ const _PARK_STOP_SPEED := 4.0
 
 #endregion
 
+@onready var navigator : RigidBodyNavigator = $Navigator
 @onready var sprite : RepairerSpriteAnimator = $Flasher/RepairerSpriteAnimator
 @onready var flasher : Flasher = $Flasher
 @onready var hitbox : CollisionShape2D = $Hitbox/CollisionShape2D
@@ -122,8 +114,6 @@ func _process(delta: float) -> void:
 			if _rescan_left <= 0.0:
 				restart_sequence()
 
-## Walks the route: drop each waypoint on arrival, and start repairing once the last
-## one -- the target itself -- is reached.
 func _advance_path() -> void:
 	if not is_instance_valid(_target):
 		restart_sequence()
@@ -136,9 +126,6 @@ func _advance_path() -> void:
 		if _path.is_empty():
 			_begin_repairs()
 
-## Where the drone is steering right now. The last waypoint is read off the target
-## instead of the route, so a machine that shifted while the drone was crossing the
-## room is still arrived at rather than missed.
 func _destination() -> Vector2:
 	if _path.size() <= 1 and is_instance_valid(_target):
 		return _target.global_position
@@ -153,8 +140,6 @@ func _begin_repairs() -> void:
 func _on_repairs_finished() -> void:
 	restart_sequence()
 
-## Stops counting toward the current target's repair, if we were counting at all.
-## Safe to call in any mode, including from inside the target's own end signal.
 func _release_target() -> void:
 	if not is_instance_valid(_target):
 		_target = null
@@ -165,11 +150,6 @@ func _release_target() -> void:
 		_target.stop_repairing()
 	_target = null
 
-## The nearest repair node still worth flying to.
-##
-## Nodes on their way out are skipped: a node that has just been finished emits its
-## end signal and only frees itself afterwards, so for the rest of that frame it is
-## still in the group and would otherwise be picked as the next job.
 func _find_closest_repair_node() -> RepairNode:
 	var closest : RepairNode = null
 	var closest_distance : float = INF
@@ -187,9 +167,14 @@ func _find_closest_repair_node() -> RepairNode:
 
 #region Movement
 
-## Speed and heading are decided here rather than by applying forces, because every
-## mode wants a fixed speed and the engine has already resolved this tick's bounces
-## into [param state]'s velocity by the time this runs.
+## Velocity is written here rather than pushed with forces, because every mode wants a
+## speed of its own and this is the one place that sees what the engine did with the
+## last one: [param state] arrives holding the velocity that came out of this tick's
+## collisions, so a bounce is already in it before anything below reads it.
+##
+## Pursuit is the [Navigator] child's, which is handed that post-bounce velocity and
+## answers with the next one. Idle drift is not -- it is a fixed diagonal, and there
+## is nothing for a navigator to steer toward.
 func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 	match _mode:
 		Mode.Stunned:
@@ -197,22 +182,10 @@ func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 		Mode.Idle:
 			state.linear_velocity = _snap_to_diagonal(state.linear_velocity) * speed
 		Mode.Seeking:
-			state.linear_velocity = _steer(state.linear_velocity, _destination())
+			state.linear_velocity = navigator.steer_towards(global_position, state.linear_velocity, _destination())
 		Mode.Repairing:
-			state.linear_velocity = _park(state.linear_velocity)
+			state.linear_velocity = navigator.brake(global_position, state.linear_velocity)
 	_face(state.linear_velocity)
-
-## Nudges [param velocity] toward [param destination] by at most
-## [member steering_max_force], holding the result to [member travel_speed].
-func _steer(velocity: Vector2, destination: Vector2) -> Vector2:
-	var desired := (destination - global_position).normalized() * travel_speed
-	var steering := (desired - velocity).limit_length(steering_max_force)
-	return (velocity + steering).limit_length(travel_speed)
-
-func _park(velocity: Vector2) -> Vector2:
-	if velocity.length() <= _PARK_STOP_SPEED:
-		return Vector2.ZERO
-	return velocity * _PARK_FRICTION
 
 ## The diagonal [param velocity] is already closest to, so a bounce off a wall turns
 ## the drone onto the neighbouring diagonal and nothing else. An axis with no speed
@@ -230,7 +203,7 @@ func _start_heading() -> Vector2:
 	return IDLE_DIRECTIONS.get(start_direction, Vector2(1, -1))
 
 func _face(velocity: Vector2) -> void:
-	if velocity.length() > _PARK_STOP_SPEED:
+	if velocity.length() > _STOPPED_SPEED:
 		sprite.get_closest_dir(velocity.normalized())
 
 #endregion
@@ -242,7 +215,7 @@ func _enter_idle() -> void:
 	_rescan_left = idle_rescan_interval
 	# Coming to a stop and then finding nothing to do would leave the drone parked
 	# with no heading to snap, so give it its starting one back.
-	if linear_velocity.length() <= _PARK_STOP_SPEED:
+	if linear_velocity.length() <= _STOPPED_SPEED:
 		linear_velocity = _start_heading().normalized() * speed
 
 func _enable_thrusters() -> void:
@@ -272,10 +245,14 @@ func disable_thrusters() -> void:
 
 #region Being hit
 
-func _on_area_2d_area_entered(area: Area2D) -> void:
-	area.queue_free()
-	disable_thrusters()
-
+## Every hit the drone takes arrives here, through its [Hurtbox], and this is the only
+## place that decides what one means.
+##
+## It used to share that job with a bare [Area2D] watching the bullets collision layer,
+## which stunned on anything it saw and asked no questions. Every projectile in the game
+## sits on that layer, so the drone was stunned by enemy fire as readily as by the stun
+## gun -- and a fallen cyborg it had just repaired into a ranged enemy would then shoot
+## it faster than [member stun_time] could run out, pinning it on the floor for good.
 func _on_hit(_hit_info: HitInfo, source: Hitbox) -> void:
 	if source.has_method("get_damage_type"):
 		var dmg_type : StringName = source.get_damage_type()
