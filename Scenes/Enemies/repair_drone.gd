@@ -26,8 +26,9 @@ const STATE_NAMES := {
 @export var speed : float = 100.0
 @export var stun_time : float = 5.0
 
-@onready var icon := $RepairDroneImage
+@onready var icon := $Flasher/RepairDroneImage
 @onready var hitbox := $Hitbox/CollisionShape2D
+@onready var healthComponent : RoboHealth = $RoboHealth
 
 var was_deactivated : bool = false
 var is_deactivated : float = 0
@@ -38,6 +39,9 @@ func _ready() -> void:
 	physics_material_override = physics_material_override.duplicate()
 	start_dir_as_state = STATE_NAMES.get(start_direction, State.Deactivated)
 	enable_thrusters( start_dir_as_state )
+	healthComponent.on_death_event.connect( on_death )
+	print(healthComponent.name)
+
 
 func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 	if was_deactivated:
@@ -102,6 +106,9 @@ func enable_thrusters(direction: State):
 	check_dir(linear_velocity)
 	set_sprite( old_dir )
 
+func on_death() -> void:
+	queue_free()
+	
 func disable_thrusters():
 	hitbox.set_deferred("disabled", true)
 	is_deactivated = stun_time
@@ -129,6 +136,11 @@ func _on_area_2d_area_entered(area: Area2D) -> void:
 	area.queue_free()
 	disable_thrusters()
 
-## The drone has no health to lose, so any hit just knocks its thrusters out.
-func _on_hurtbox_hit(_hurtbox: Hurtbox, _hit_info: HitInfo, _source: Hitbox) -> void:
-	disable_thrusters()
+func _on_hit(_hit_info: HitInfo, source: Hitbox) -> void:
+	if source.has_method("get_damage_type"):
+		var dmg_type : StringName = source.get_damage_type()
+		if dmg_type == "stun_bullet":
+			disable_thrusters()
+			return
+	$Flasher.flash()
+	

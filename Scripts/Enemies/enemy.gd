@@ -20,6 +20,9 @@ const SPEED:float = 50
 
 var isFlipped : bool
 
+func get_dir() -> StringName:
+	return "L" if isFlipped else "R"
+
 func _ready() -> void:
 	bt_player.blackboard.set_var("canAttack",true)
 	hurtbox.hit.connect(takeDamage)

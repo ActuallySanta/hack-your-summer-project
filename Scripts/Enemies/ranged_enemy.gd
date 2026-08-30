@@ -6,10 +6,8 @@ extends Enemy
 func spawnBullet():
 	velocity = Vector2.ZERO
 	bt_player.blackboard.set_var("canAttack",false)
-	var instance = bulletScene.instantiate()
-	instance.initDir = transform.x
-	instance.spawnPos = firing_point.global_position
-	instance.spawnRot = rotation
+	var instance : Bullet = bulletScene.instantiate()
+	instance.initial_operations(firing_point.global_position, get_dir(), 0)
 	mainScene.add_child.call_deferred(instance)
 	
 	await get_tree().create_timer(attackCooldown).timeout

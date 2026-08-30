@@ -15,6 +15,9 @@ var timer := 0.0
 var state := 0
 var is_dead := false
 
+func _ready() -> void:
+	$RoboHealth.on_death_event( _die )
+
 func _process(delta: float) -> void:
 	if is_dead:
 		return
@@ -84,9 +87,7 @@ func _shoot(at_angle: bool) -> void:
 func _die() -> void:
 	var parent = get_parent()
 	if parent is Path:
-		if parent.remove_node(self):
-			print(" I was removed successfully")
-		else:
+		if not parent.remove_node(self):
 			printerr(" Something has gone terribly, terribly wrong and I have no idea how to fix this")
 	animator.play("Death")
 	gravity_scale = 1.0

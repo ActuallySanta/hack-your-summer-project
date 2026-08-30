@@ -14,7 +14,9 @@ const _NEAREST_WALKABLE_RADIUS : int = 16
 @export_range( 0.0, 1.0 ) var wall_bounce : float = 0.8
 
 @onready var navigator := $Navigator
-@onready var sprite : RepairerSpriteAnimator = $RepairerSpriteAnimator
+@onready var sprite : RepairerSpriteAnimator = $Flasher/RepairerSpriteAnimator
+@onready var stall_graphic : RigidBody2D = $Flasher/StallGraphic
+@onready var stall_graphic_collider : CollisionShape2D = $Flasher/StallGraphic/CollisionShape2D
 
 var room_map : Array[ Array ]
 var room_map_origin : Vector2i
@@ -22,8 +24,29 @@ var room_map_size : Vector2i
 var target_node : RepairNode
 var pathing_in_order : Array[ Vector2 ]
 
+var stalled : bool = false
+
 func _ready() -> void:
 	navigator.ignore_target = true
+	$RoboHealth.on_death_event.connect( on_death )
+
+func on_death() -> void:
+	queue_free()
+
+func _on_hit(hit_info: HitInfo, source: Hitbox) -> void:
+	if source.has_method("get_damage_type"):
+		var dmg_type : StringName = source.get_damage_type()
+		if dmg_type == "stun_bullet":
+			stall()
+			return
+	$Flasher.flash()
+
+func stall() -> void:
+	stalled = true
+	sprite.hide()
+	stall_graphic.show()
+	stall_graphic.position = Vector2.ZERO
+	stall_graphic_collider.set_deferred("disabled", false)
 
 func _process(delta: float) -> void:
 	# Get the target
@@ -46,9 +69,12 @@ func _process(delta: float) -> void:
 ## The navigator only decides a velocity; the body is what actually moves, so walls stop us
 func _physics_process(_delta: float) -> void:
 	var intended : Vector2 = navigator.get_nav_velocity()
-	velocity = intended
+	velocity = intended if not stalled else Vector2.ZERO
 	if sprite:
-		sprite.get_closest_dir(velocity.normalized())
+		if velocity.length() > 0:
+			sprite.get_closest_dir(velocity.normalized())
+		else:
+			return
 	move_and_slide()
 
 	var hit := get_last_slide_collision()

@@ -2,7 +2,10 @@
 
 [ext_resource type="Texture2D" uid="uid://dr27a447as1vc" path="res://Sprites/Characters/Enemy SpriteSheets/Repair_Drone.png" id="1_h5wbh"]
 [ext_resource type="Script" uid="uid://b6m2ydxjtjcgv" path="res://Scenes/Enemies/repairer_manager.gd" id="1_keg66"]
+[ext_resource type="PackedScene" uid="uid://c744kphkhs1tv" path="res://Scenes/Components/flasher.tscn" id="2_l0ics"]
 [ext_resource type="Script" uid="uid://c3nlkl7nnxe1h" path="res://Scripts/Enemies/enemy_components/repairer_sprite_animator.gd" id="3_keg66"]
+[ext_resource type="Script" uid="uid://p46g50v8y7y4" path="res://Scripts/Combat/Healths/robot_health_component.gd" id="4_baxg2"]
+[ext_resource type="Script" uid="uid://dhgcprjrtfobr" path="res://Scripts/Combat/hurtbox.gd" id="5_l0ics"]
 
 [sub_resource type="GDScript" id="GDScript_4vj60"]
 resource_name = "RepairerNav"
@@ -34,18 +37,20 @@ func manual_movement(_delta: float) -> void:
 [sub_resource type="CircleShape2D" id="CircleShape2D_npwjr"]
 radius = 19.5
 
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_bu68p"]
+bounce = 0.4
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_bpmhk"]
+radius = 19.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_85ri6"]
+radius = 19.5
+
 [node name="Repairer" type="CharacterBody2D" unique_id=2066666190]
 collision_layer = 4
 motion_mode = 1
 script = ExtResource("1_keg66")
 transfer_cutoff = 32.0
-
-[node name="RepairerSpriteAnimator" type="Sprite2D" parent="." unique_id=242269428]
-scale = Vector2(3, 3)
-texture = ExtResource("1_h5wbh")
-hframes = 4
-vframes = 3
-script = ExtResource("3_keg66")
 
 [node name="Navigator" type="Node2D" parent="." unique_id=1912730645 node_paths=PackedStringArray("node_to_move_instead_of_me")]
 script = SubResource("GDScript_4vj60")
@@ -57,3 +62,44 @@ metadata/_custom_type_script = "uid://cs2uowcxd3wpe"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2063409704]
 position = Vector2(-1.5, 1.5)
 shape = SubResource("CircleShape2D_npwjr")
+
+[node name="Flasher" parent="." unique_id=734208757 instance=ExtResource("2_l0ics")]
+
+[node name="RepairerSpriteAnimator" type="Sprite2D" parent="Flasher" unique_id=242269428]
+scale = Vector2(3, 3)
+texture = ExtResource("1_h5wbh")
+hframes = 4
+vframes = 3
+script = ExtResource("3_keg66")
+
+[node name="StallGraphic" type="RigidBody2D" parent="Flasher" unique_id=1140793872]
+visible = false
+collision_layer = 4
+physics_material_override = SubResource("PhysicsMaterial_bu68p")
+
+[node name="Sprite2D" type="Sprite2D" parent="Flasher/StallGraphic" unique_id=433783440]
+scale = Vector2(3, 3)
+texture = ExtResource("1_h5wbh")
+hframes = 4
+vframes = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Flasher/StallGraphic" unique_id=818182070]
+position = Vector2(-1.5, 1.5)
+shape = SubResource("CircleShape2D_bpmhk")
+disabled = true
+
+[node name="RoboHealth" type="Node2D" parent="." unique_id=1112391740]
+script = ExtResource("4_baxg2")
+max_health = 3
+start_health = 3
+metadata/_custom_type_script = "uid://p46g50v8y7y4"
+
+[node name="Hurtbox" type="Area2D" parent="RoboHealth" unique_id=1370965649]
+collision_layer = 4
+collision_mask = 10
+script = ExtResource("5_l0ics")
+metadata/_custom_type_script = "uid://dhgcprjrtfobr"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RoboHealth/Hurtbox" unique_id=2004611673]
+position = Vector2(-1.5, 1.5)
+shape = SubResource("CircleShape2D_85ri6")

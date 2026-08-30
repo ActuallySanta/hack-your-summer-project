@@ -6,13 +6,11 @@ func _on_death() -> void:
 	var effects : Node2D = EXPLOSION.instantiate()
 	effects.global_position = global_position
 	get_tree().root.add_child(effects)
-	var parent = get_parent()
-	if parent.has_method("_die"):
-		parent._die()
-	
+	on_death_event.emit()
 
 func _on_hit(_hurtBox: Hurtbox, hit_info: HitInfo, source: Hitbox) -> void:
 	take_damage(hit_info.damage)
 	var parent = get_parent()
 	if parent.has_method("_on_hit"):
 		parent._on_hit(hit_info, source)
+	on_hit_event.emit()
