@@ -44,7 +44,7 @@ func _on_hit(hit_info: HitInfo, source: Hitbox) -> void:
 func stall() -> void:
 	stalled = true
 	sprite.hide()
-	stall_graphic.show()
+	stall_graphic.visible = true
 	stall_graphic.position = Vector2.ZERO
 	stall_graphic_collider.set_deferred("disabled", false)
 
