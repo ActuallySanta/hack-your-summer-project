@@ -27,6 +27,7 @@ MusicManager="*uid://d0sejejpytdhi"
 StationPowerTiles="*uid://bi8odjtxgyfiu"
 MapBorders="*res://00_Globals/map_borders.gd"
 CameraEffects="*res://00_Globals/camera_effects.gd"
+RoomPathfinder="*res://00_Globals/room_pathfinder.gd"
 
 [display]
 

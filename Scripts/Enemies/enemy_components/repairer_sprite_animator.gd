@@ -11,7 +11,11 @@ const SPRITE_COORD_ACCESS_VECTORS : Dictionary[ StringName, Vector2i ] = {
 	"UL": Vector2i(1, 2)
 }
 
-const DIRS_ACCESS : Array[ StringName ] = [ 
+## The drone with its thrusters off. Not a direction, so it is not in the table above
+## and is only ever reached through [method show_deactivated].
+const DEACTIVATED_COORDS := Vector2i(0, 0)
+
+const DIRS_ACCESS : Array[ StringName ] = [
 	"UP",
 	"UR",
 	"RI",
@@ -42,7 +46,13 @@ func _process(delta: float) -> void:
 		dirty = false
 	
 
-## Sets the Direction, minor optimization to 
+## Shows the powered-down frame and clears any direction still waiting to be applied,
+## so a stun that lands in the same frame as a heading change still reads as stunned.
+func show_deactivated() -> void:
+	dirty = false
+	frame_coords = DEACTIVATED_COORDS
+
+## Sets the Direction, minor optimization to
 ## avoid going the full way around the circle when not needed
 func get_closest_dir(normalized_vector: Vector2) -> void:
 	var closest_dist : float = INF
