@@ -1,12 +1,3 @@
-## The health bar.
-##
-## The bar is [i]derived[/i] from the (current, maximum) pair the player reports, not
-## accumulated from events. It used to keep its own [member number_health] counter
-## that only ever went up, on [code]health_extended_by_one[/code], and nothing reset
-## it: loading a save with extenders already collected left the bar at three, and
-## reloading after collecting one left the bar a heart longer than the player's actual
-## maximum. Reading both numbers off the one signal means the bar cannot disagree with
-## the player about how much health they have.
 extends TileMapLayer
 
 const HEALTH_ICON := preload("res://Scenes/UI/health_unit.tscn")
@@ -61,7 +52,7 @@ func _update_display() -> void:
 	var num_tiles : int = ceili( float( number_health ) / ICONS_PER_TILE )
 	extension.global_position.x = tile_width * num_tiles
 
-	var pattern : TileMapPattern = tile_set.get_pattern(0)
+	var pattern : TileMapPattern = tile_set.get_pattern(1)
 	for i in num_tiles:
 		set_pattern( Vector2i(i, 0), pattern )
 	# Rub out any tiles the bar has shrunk past, or they stay on screen under nothing.

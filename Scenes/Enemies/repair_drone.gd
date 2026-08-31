@@ -2,6 +2,11 @@ extends RigidBody2D
 
 #region What the drone is doing
 
+const HIT_WALL_SFX := preload("res://Sounds/Entities/Enemies/Machines/RepairDrone/RD_Hit_wall.wav")
+const HURT_SFX := preload("res://Sounds/Entities/Enemies/Machines/RepairDrone/RD_Hit.wav")
+const DEATH_SFX := preload("res://Sounds/Entities/Enemies/Machines/RepairDrone/RD_DEATH.wav")
+const FOUND_TARGET_SFX :=preload("res://Sounds/Entities/Enemies/Machines/RepairDrone/RD_Found.wav")
+
 enum Mode {
 	## Nothing to repair. Drifting on a diagonal at [member speed], bouncing off
 	## walls, rescanning every [member idle_rescan_interval] seconds.
@@ -13,21 +18,13 @@ enum Mode {
 	## Shot with a stun bullet. Thrusters off, gravity on, falls to the floor.
 	Stunned,
 }
-
-## Headings [member start_direction] can name, and the one an idle drone falls back to
-## when it has no speed to read a heading off.
 const IDLE_DIRECTIONS := {
 	"UR": Vector2(1, -1),
 	"UL": Vector2(-1, -1),
 	"DR": Vector2(1, 1),
 	"DL": Vector2(-1, 1),
 }
-
-## The group every [RepairNode] puts itself in.
 const REPAIRABLE_GROUP := &"Repairable"
-
-## Below this the drone counts as stopped: too slow to read a heading off, and too
-## slow for the sprite to be worth turning.
 const _STOPPED_SPEED := 4.0
 
 #endregion
@@ -51,6 +48,14 @@ const _STOPPED_SPEED := 4.0
 ## machine that breaks later. 0 to idle forever once the room is repaired.
 @export var idle_rescan_interval : float = 2.0
 
+## How sharply a tick has to turn the drone before it counts as having hit something.
+##
+## Compared against the dot of the heading before and after: 1.0 is dead ahead,
+## 0.0 a right-angle turn, -1.0 straight back the way it came. Nothing the drone does
+## under its own power turns it anywhere near this fast -- steering is capped at a
+## fraction of its speed per tick -- so a reading below this was a wall.
+@export_range(-1.0, 1.0) var wall_bounce_dot : float = 0.5
+
 #endregion
 
 @onready var navigator : RigidBodyNavigator = $Navigator
@@ -58,6 +63,8 @@ const _STOPPED_SPEED := 4.0
 @onready var flasher : Flasher = $Flasher
 @onready var hitbox : CollisionShape2D = $Hitbox/CollisionShape2D
 @onready var health_component : RoboHealth = $RoboHealth
+@onready var hover_sfx : AudioStreamPlayer2D = $Hover
+@onready var bang_sfx : AudioStreamPlayer2D = $Bangs
 
 var _mode : Mode = Mode.Idle
 var _target : RepairNode
@@ -65,17 +72,21 @@ var _target : RepairNode
 var _path : Array[Vector2]
 var _stun_left : float = 0.0
 var _rescan_left : float = 0.0
+## Heading at the end of the last powered tick, to measure the next one against.
+## Zero while there is nothing worth comparing: stunned, or too slow to have a heading.
+var _last_heading : Vector2 = Vector2.ZERO
 
 func _ready() -> void:
 	# Bounce and friction are switched between flying and stunned, so this body needs
 	# its own copy of the material rather than the shared resource every drone loads.
 	physics_material_override = physics_material_override.duplicate()
-	health_component.on_death_event.connect(on_death)
+	health_component.on_death_event.connect( on_death )
 	_enable_thrusters()
 	restart_sequence()
 
 func on_death() -> void:
 	_release_target()
+	play_banger( DEATH_SFX )
 	queue_free()
 
 #region The sequence
@@ -176,9 +187,15 @@ func _find_closest_repair_node() -> RepairNode:
 ## answers with the next one. Idle drift is not -- it is a fixed diagonal, and there
 ## is nothing for a navigator to steer toward.
 func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
+	if _mode == Mode.Stunned:
+		return # Falling: gravity and the floor own the velocity
+
+	# Read before anything below writes over it: what arrives here is the drone's own
+	# heading from last tick with this tick's collisions already applied to it, so the
+	# turn between the two is exactly what it hit.
+	_bang_if_deflected(state.linear_velocity)
+
 	match _mode:
-		Mode.Stunned:
-			return # Falling: gravity and the floor own the velocity
 		Mode.Idle:
 			state.linear_velocity = _snap_to_diagonal(state.linear_velocity) * speed
 		Mode.Seeking:
@@ -186,6 +203,15 @@ func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 		Mode.Repairing:
 			state.linear_velocity = navigator.brake(global_position, state.linear_velocity)
 	_face(state.linear_velocity)
+
+	var speed_now := state.linear_velocity.length()
+	_last_heading = state.linear_velocity / speed_now if speed_now > _STOPPED_SPEED else Vector2.ZERO
+
+func _bang_if_deflected(velocity: Vector2) -> void:
+	if _last_heading == Vector2.ZERO or velocity.length() <= _STOPPED_SPEED:
+		return
+	if _last_heading.dot(velocity.normalized()) < wall_bounce_dot:
+		play_banger(HIT_WALL_SFX)
 
 ## The diagonal [param velocity] is already closest to, so a bounce off a wall turns
 ## the drone onto the neighbouring diagonal and nothing else. An axis with no speed
@@ -218,13 +244,25 @@ func _enter_idle() -> void:
 	if linear_velocity.length() <= _STOPPED_SPEED:
 		linear_velocity = _start_heading().normalized() * speed
 
+## Powers the drone back up. A powered drone is never allowed to sleep, which is the
+## whole reason this says so out loud.
+##
+## A [RigidBody2D] that holds still is put to sleep by the physics server, and a
+## sleeping body gets no [method RigidBody2D._integrate_forces] -- which is the only
+## place this drone's velocity is ever written. So it would go to sleep parked at a
+## repair job, or lying stunned on the floor, and then have no way to start moving
+## again: thrusters on, hover sound playing, and completely inert. Stunning it a second
+## time did not help either, because that path never woke it either.
 func _enable_thrusters() -> void:
+	can_sleep = false
+	sleeping = false
 	hitbox.set_deferred("disabled", false)
 	physics_material_override.bounce = 1.0
 	physics_material_override.friction = 0.0
 	gravity_scale = 0.0
 	linear_damp_mode = DAMP_MODE_REPLACE
 	linear_damp = 0.0
+	hover_sfx.play()
 
 ## Cuts the thrusters: the drone stops hurting anything, falls, and lands with a much
 ## deader bounce than it flies with.
@@ -233,26 +271,26 @@ func disable_thrusters() -> void:
 	_path.clear()
 	_mode = Mode.Stunned
 	_stun_left = stun_time
+	_last_heading = Vector2.ZERO # Nothing to compare a bounce against until it flies again
 	hitbox.set_deferred("disabled", true)
+	# Lying on the floor is the one time it may sleep; _enable_thrusters wakes it.
+	can_sleep = true
 	gravity_scale = 1.0
 	physics_material_override.bounce = 0.4
 	physics_material_override.friction = 1.0
 	linear_damp_mode = DAMP_MODE_COMBINE
 	linear_damp = 0.0
 	sprite.show_deactivated()
+	hover_sfx.stop()
+	play_banger(DEATH_SFX)
 
 #endregion
 
-#region Being hit
+func play_banger(stream: AudioStreamWAV) -> void:
+	bang_sfx.stream = stream
+	bang_sfx.play()
 
-## Every hit the drone takes arrives here, through its [Hurtbox], and this is the only
-## place that decides what one means.
-##
-## It used to share that job with a bare [Area2D] watching the bullets collision layer,
-## which stunned on anything it saw and asked no questions. Every projectile in the game
-## sits on that layer, so the drone was stunned by enemy fire as readily as by the stun
-## gun -- and a fallen cyborg it had just repaired into a ranged enemy would then shoot
-## it faster than [member stun_time] could run out, pinning it on the floor for good.
+#region Being hit
 func _on_hit(_hit_info: HitInfo, source: Hitbox) -> void:
 	if source.has_method("get_damage_type"):
 		var dmg_type : StringName = source.get_damage_type()
@@ -260,5 +298,6 @@ func _on_hit(_hit_info: HitInfo, source: Hitbox) -> void:
 			disable_thrusters()
 			return
 	flasher.flash()
+	play_banger(HURT_SFX)
 
 #endregion

@@ -12,6 +12,15 @@
 ## from there instead of the body having to reflect anything by hand.
 class_name RigidBodyNavigator extends Navigator
 
+## [member Navigator.node_to_move_instead_of_me] is cleared however the scene set it.
+## Pointed at the body -- the obvious thing to do, and what the CharacterBody2D version
+## of this did -- it would make every position sync write the body's [code]global_position[/code]
+## from inside [method RigidBody2D._integrate_forces], where the transform belongs to
+## the physics server and a write is refused mid-flush.
+func _ready() -> void:
+	node_to_move_instead_of_me = null
+	super()
+
 ## The base class steers in [method Node._process] by writing [member _nav_position].
 ## Nothing here may move on its own clock, so this replaces that with nothing at all;
 ## [method steer_towards] and [method brake] are the only things that step it.

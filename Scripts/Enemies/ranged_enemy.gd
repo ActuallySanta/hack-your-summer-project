@@ -8,6 +8,7 @@ func spawnBullet():
 	bt_player.blackboard.set_var("canAttack",false)
 	var instance : Bullet = bulletScene.instantiate()
 	instance.initial_operations(firing_point.global_position, get_dir(), 0)
+	instance.scale = Vector2(3,3)
 	mainScene.add_child.call_deferred(instance)
 	
 	await get_tree().create_timer(attackCooldown).timeout

@@ -13,6 +13,7 @@ radius = 0.0
 [node name="Ranged Enemy Bullet" type="CharacterBody2D" unique_id=1138320876]
 collision_layer = 8
 script = ExtResource("1_1f3k8")
+move_speed = 200.0
 sprite_texture_map = Dictionary[StringName, int]({
 &"D": 1,
 &"DL": 1,
@@ -35,7 +36,7 @@ one_shot = true
 autostart = true
 
 [node name="Hitbox" parent="." unique_id=125498642 instance=ExtResource("4_06oib")]
-collision_layer = 8
+collision_layer = 12
 collision_mask = 3
 monitorable = true
 

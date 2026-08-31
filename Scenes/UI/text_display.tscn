@@ -1,7 +1,8 @@
-[gd_resource type="TileSet" format=3 uid="uid://buxceg5xwah17"]
+[gd_scene format=4 uid="uid://c72ewsb5wge47"]
 
-[ext_resource type="Texture2D" uid="uid://b201wdn5apbf4" path="res://Sprites/Game UI/Player HUD/UI1.png" id="1_ntih7"]
-[ext_resource type="Texture2D" uid="uid://p56qjkg3kj2j" path="res://Sprites/Game UI/Player HUD/HYS_Health_icon.png" id="2_fmlb6"]
+[ext_resource type="Script" uid="uid://iayeryu4dvbs" path="res://Scripts/UI/text_display.gd" id="1_5rin0"]
+[ext_resource type="Texture2D" uid="uid://b201wdn5apbf4" path="res://Sprites/Game UI/Player HUD/UI1.png" id="1_savo4"]
+[ext_resource type="Texture2D" uid="uid://p56qjkg3kj2j" path="res://Sprites/Game UI/Player HUD/HYS_Health_icon.png" id="2_5rin0"]
 
 [sub_resource type="TileMapPattern" id="TileMapPattern_ntih7"]
 tile_data = PackedInt32Array(0, 0, 0, 65536, 0, 1)
@@ -9,27 +10,34 @@ tile_data = PackedInt32Array(0, 0, 0, 65536, 0, 1)
 [sub_resource type="TileMapPattern" id="TileMapPattern_fmlb6"]
 tile_data = PackedInt32Array(0, 0, 0, 65536, 0, 2)
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fmlb6"]
-texture = ExtResource("1_ntih7")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nhouo"]
+texture = ExtResource("1_savo4")
 texture_region_size = Vector2i(8, 8)
 0:0/size_in_atlas = Vector2i(2, 2)
 0:0/0 = 0
+0:0/0/texture_origin = Vector2i(-4, -4)
 2:0/size_in_atlas = Vector2i(2, 2)
 2:0/0 = 0
+2:0/0/texture_origin = Vector2i(-4, -4)
 4:0/size_in_atlas = Vector2i(2, 2)
 4:0/0 = 0
+4:0/0/texture_origin = Vector2i(-4, -4)
 4:2/size_in_atlas = Vector2i(2, 2)
 4:2/0 = 0
+4:2/0/texture_origin = Vector2i(-4, -4)
 6:2/size_in_atlas = Vector2i(2, 2)
 6:2/0 = 0
+6:2/0/texture_origin = Vector2i(-4, -4)
 4:4/0 = 0
 5:4/0 = 0
 6:4/0 = 0
 7:4/0 = 0
 2:2/size_in_atlas = Vector2i(2, 2)
 2:2/0 = 0
+2:2/0/texture_origin = Vector2i(-4, -4)
 0:2/size_in_atlas = Vector2i(2, 2)
 0:2/0 = 0
+0:2/0/texture_origin = Vector2i(-4, -4)
 3:4/0 = 0
 2:4/0 = 0
 1:4/0 = 0
@@ -148,11 +156,13 @@ texture_region_size = Vector2i(8, 8)
 14:8/0 = 0
 6:0/size_in_atlas = Vector2i(2, 2)
 6:0/0 = 0
+6:0/0/texture_origin = Vector2i(-4, -4)
 8:0/size_in_atlas = Vector2i(2, 2)
 8:0/0 = 0
+8:0/0/texture_origin = Vector2i(-4, -4)
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_d75cw"]
-texture = ExtResource("2_fmlb6")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_b3q2i"]
+texture = ExtResource("2_5rin0")
 texture_region_size = Vector2i(36, 30)
 0:0/0 = 0
 1:0/0 = 0
@@ -161,8 +171,28 @@ texture_region_size = Vector2i(36, 30)
 4:0/0 = 0
 5:0/0 = 0
 
-[resource]
-sources/0 = SubResource("TileSetAtlasSource_fmlb6")
-sources/1 = SubResource("TileSetAtlasSource_d75cw")
+[sub_resource type="TileSet" id="TileSet_q4men"]
+tile_size = Vector2i(8, 8)
+sources/0 = SubResource("TileSetAtlasSource_nhouo")
+sources/1 = SubResource("TileSetAtlasSource_b3q2i")
 pattern_0 = SubResource("TileMapPattern_ntih7")
 pattern_1 = SubResource("TileMapPattern_fmlb6")
+
+[node name="TextDisplay" type="Control" unique_id=1424382426]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="TileMapLayer" parent="." unique_id=1952244484]
+scale = Vector2(3, 3)
+tile_map_data = PackedByteArray("AAACAAEAAAAEAAAAACAEAAEAAAAEAAAAACAGAAEAAAAEAAAAACAIAAEAAAAEAAAAACAKAAEAAAAGAAAAACAMAAEAAAAIAAAAACAMAAMAAAAGAAAAAGAMAAQAAAAEAAAAAEAMAAYAAAAEAAAAAEAMAAgAAAAEAAAAAEAKAAgAAAAAAAAAAAAIAAgAAAAAAAAAAAAGAAgAAAAAAAAAAAAEAAgAAAAAAAAAAAACAAgAAAAAAAAAAAAAAAgAAAAAAAAAAAABAAYAAAAAAAAAABABAAQAAAAAAAAAABABAAIAAAAAAAAAABADAAIAAAAAAAAAABADAAQAAAAAAAAAABADAAYAAAAAAAAAABAFAAIAAAAAAAAAABAFAAQAAAAAAAAAABAFAAYAAAAAAAAAABAHAAIAAAAAAAAAABAHAAQAAAAAAAAAABAHAAYAAAAAAAAAABAJAAIAAAAAAAAAABAJAAQAAAAAAAAAABAJAAYAAAAAAAAAABALAAIAAAAAAAAAABALAAQAAAAAAAAAABALAAYAAAAAAAAAABAAAAEAAAAEAAAAACA=")
+tile_set = SubResource("TileSet_q4men")
+
+[node name="Text" type="TileMapLayer" parent="." unique_id=715517102]
+scale = Vector2(3, 3)
+tile_map_data = PackedByteArray("AAAKAAgAAAAAAAAAAAAIAAgAAAAAAAAAAAAGAAgAAAAAAAAAAAAEAAgAAAAAAAAAAAACAAgAAAAAAAAAAAADAAQAAAAAAAAAABADAAYAAAAAAAAAABAFAAQAAAAAAAAAABAFAAYAAAAAAAAAABAHAAQAAAAAAAAAABAHAAYAAAAAAAAAABAJAAQAAAAAAAAAABAJAAYAAAAAAAAAABALAAQAAAAAAAAAABALAAYAAAAAAAAAABA=")
+tile_set = SubResource("TileSet_q4men")
+script = ExtResource("1_5rin0")

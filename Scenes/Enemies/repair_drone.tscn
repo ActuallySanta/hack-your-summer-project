@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://p46g50v8y7y4" path="res://Scripts/Combat/Healths/robot_health_component.gd" id="5_sem7m"]
 [ext_resource type="Script" uid="uid://c3nlkl7nnxe1h" path="res://Scripts/Enemies/enemy_components/repairer_sprite_animator.gd" id="6_anim"]
 [ext_resource type="Script" uid="uid://be0bvug8qsg07" path="res://Scripts/Enemies/enemy_components/rigid_body_navigator.gd" id="7_nav"]
+[ext_resource type="AudioStream" uid="uid://o7lwe1b8u2wg" path="res://Sounds/Entities/Enemies/Machines/RepairDrone/RD_Move.wav" id="10_lejhb"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_420ha"]
 radius = 20.506096
@@ -74,3 +75,15 @@ collision_layer = 4
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RoboHealth/Hurtbox" unique_id=88918251]
 position = Vector2(-1.5, 1.5)
 shape = SubResource("CircleShape2D_vjkby")
+
+[node name="Hover" type="AudioStreamPlayer2D" parent="." unique_id=1464114476]
+stream = ExtResource("10_lejhb")
+autoplay = true
+max_distance = 671.0
+attenuation = 1.5691681
+
+[node name="Bangs" type="AudioStreamPlayer2D" parent="." unique_id=344619955]
+attenuation = 0.0
+max_polyphony = 4
+
+[node name="SFX" type="Node" parent="." unique_id=119147471]

@@ -2,6 +2,7 @@ class_name RepairNode extends Node2D
 
 signal on_repair_start
 signal on_repair_end
+signal on_repair_failure
 
 @export var repair_timer : float =  5.0
 @export var can_be_accel : bool = true
@@ -14,6 +15,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	repair_timer -= delta * number_of_repairers
 	if repair_timer <= 0:
+		number_of_repairers += 2 # Quick and easy way to ensure on_repair_failure or on_repair_start cannot be called past this point
 		on_repair_end.emit()
 		queue_free()
 
@@ -26,3 +28,5 @@ func start_repairs() -> void:
 
 func stop_repairing() -> void:
 	number_of_repairers = max(0, number_of_repairers - 1)
+	if number_of_repairers == 0:
+		on_repair_failure.emit()
