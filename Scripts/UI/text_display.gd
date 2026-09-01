@@ -19,8 +19,6 @@ const SPECIAL_OFFSETS : Dictionary[ String, Vector2i ] = {
 ## Debug String used for testing
 const DEBUG_DEEP_OUT : String = "_dot $TAB Testing $HIGH_ON Highlight $HIGH_OFF $NEWLINE ABCDEFGHIJKLMNOPQRSTUVWXYZ?!.,:;/\"()[]1234567890"
 
-const DATA_LOG_ENTRY : String = "_dot $HIGH_ON New Data: $HIGH_OFF $NEWLINE"
-
 ## The maximum rows of text that can be displayed
 @export var max_height := 8
 ## The maximum cols of text that can be displayed
@@ -59,6 +57,9 @@ func get_tile_coords_from_char(char_id: String, is_highlight: bool) -> Vector2i:
 func _place_char_at_position(char_id: String, is_highlighted: bool, position_on_grid: Vector2i) -> void:
 	set_cell(position_on_grid, 0, get_tile_coords_from_char(char_id, is_highlighted))
 
+func get_cursor_height() -> int:
+	return cursor_pos.y + 1
+
 #region Commands
 func turn_on_highlight() -> void:
 	cursor_highlighted = true
@@ -75,6 +76,8 @@ func go_to_next_line() -> void:
 	
 func _parse_command(sub_string: String) -> void:
 	match sub_string:
+		"$":
+			turn_off_highlight()
 		"$HIGH_ON":
 			turn_on_highlight()
 		"$HIGH_OFF":
@@ -129,10 +132,20 @@ func place_deep(string: String) -> void:
 			continue
 		place_string(sub_string)
 		place_char(" ")
+
+func clear_screen() -> void:
+	for y in max_height:
+		for x in max_width:
+			erase_cell(Vector2i(x,y) + tile_map_pos_offset)
+
+func place_deep_fresh(string: String) -> void:
+	reset_cursor()
+	clear_screen()
+	place_deep(string)
 #endregion
 
 func debug_test() -> void:
-	place_deep( DATA_LOG_ENTRY )
+	place_deep( DEBUG_DEEP_OUT )
 
 func _ready() -> void:
 	reset_cursor()

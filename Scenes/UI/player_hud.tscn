@@ -8,6 +8,7 @@
 [ext_resource type="TileSet" uid="uid://buxceg5xwah17" path="res://Tileset/HUD.tres" id="3_odvir"]
 [ext_resource type="PackedScene" path="res://Scenes/UI/full_map.tscn" id="4_fullmap"]
 [ext_resource type="Script" uid="uid://dpm1m1a7ewttn" path="res://Scripts/LevelTileMap.gd" id="4_out4y"]
+[ext_resource type="PackedScene" uid="uid://c72ewsb5wge47" path="res://Scenes/UI/text_display.tscn" id="9_out4y"]
 
 [sub_resource type="GDScript" id="GDScript_bu68p"]
 resource_name = "fps_counter"
@@ -57,6 +58,7 @@ grow_vertical = 2
 script = ExtResource("1_phud")
 
 [node name="Dialogue Box Container" parent="." unique_id=973154834 instance=ExtResource("1_vkk4g")]
+visible = false
 layout_mode = 1
 
 [node name="LevelTileMap" type="TileMapLayer" parent="." unique_id=126558450]
@@ -101,3 +103,8 @@ offset_right = 142.0
 offset_bottom = 670.0
 text = "FPS:"
 script = SubResource("GDScript_bu68p")
+
+[node name="TextDisplay" parent="." unique_id=1424382426 instance=ExtResource("9_out4y")]
+layout_mode = 1
+offset_top = 672.0
+offset_bottom = 672.0
