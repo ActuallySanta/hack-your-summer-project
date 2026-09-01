@@ -45,9 +45,9 @@ signal mantle_finished
 ## Whether the shot leads the vault. The player's body does not move until the vault
 ## ends, so without this the camera sits still and then jumps a tile with them.
 @export var animate_camera := true
-## How long the shot takes to reach where the player will come up. Shorter than the
-## vault, so it has settled before they arrive.
-@export var camera_lead_seconds := 0.25
+## How long the shot takes to reach where the player will come up. Zero matches the
+## vault the player actually sees, so the pan lands exactly as control comes back.
+@export var camera_lead_seconds := 0.0
 
 @export_group("Nodes")
 ## The stand-in sprite played during the vault. Hidden the rest of the time.
@@ -238,7 +238,41 @@ func on_respawn() -> void:
 func _start_camera() -> void:
 	if not animate_camera:
 		return
-	CameraEffects.pan_to(_displacement(), camera_lead_seconds, CameraEffects.Ease.EASE_OUT)
+	# Only as far as the shot can actually go. Against a wall, in a room one screen
+	# wide, or on an axis a region is holding, there is nowhere for it to follow the
+	# vault to, and panning there animates a move that cannot happen.
+	var lead := _camera_lead()
+	if lead.is_zero_approx():
+		return
+	CameraEffects.pan_to(lead, _lead_seconds(), CameraEffects.Ease.EASE_OUT)
+
+## The part of the vault's displacement the camera is allowed to follow.
+##
+## Asked of whoever owns the camera, because the limits are theirs -- the room bounds,
+## every [CameraHardBoundary] cutting into them, and any [CameraAxisRegion] holding an
+## axis -- and because asking one question covers all of them at once rather than
+## listing the cases here and letting them drift apart. Falls back to the whole
+## displacement when there is no game around this: a test harness, or the player scene
+## opened on its own.
+func _camera_lead() -> Vector2:
+	var manager := GameManager.instance
+	if manager == null:
+		return _displacement()
+	return manager.camera_lead_for(player.global_position + _displacement())
+
+## How long the pan runs for.
+##
+## Defaults to the length of the vault as played, so it arrives on the frame
+## [method _hand_back_control] drops it. A fixed 0.25s against a three-frame climb at
+## 12fps, handed back a frame early, was still eleven per cent short when it was
+## dropped -- a few pixels of snap at the end of every vault.
+func _lead_seconds() -> float:
+	if camera_lead_seconds > 0.0:
+		return camera_lead_seconds
+	var speed := 12.0
+	if is_instance_valid(mantle_sprite) and mantle_sprite.sprite_frames != null:
+		speed = maxf(mantle_sprite.sprite_frames.get_animation_speed(mantle_animation), 1.0)
+	return maxf(float(_total_frames() - early_control_frames), 1.0) / speed
 #endregion
 
 #region Frame maths

@@ -339,13 +339,7 @@ func _process(_delta: float) -> void:
 	if(!isInGame):
 		return
 	var bounds := _eased_camera_bounds(_delta)
-	var camPos := _camera_pos
-	var playerPos := _player.position
-	var posDiff := camPos - playerPos
-	if abs(posDiff.x) > cameraDeadzone.x:
-		camPos.x = playerPos.x + (cameraDeadzone.x * sign(posDiff.x))
-	if abs(posDiff.y) > cameraDeadzone.y:
-		camPos.y = playerPos.y + (cameraDeadzone.y * sign(posDiff.y))
+	var camPos := _follow_centre(_player.position)
 	camPos = _apply_camera_axis_regions(camPos, bounds, _delta)
 	_place_camera(camPos, bounds, _bounds_exempt_axes())
 	
@@ -674,6 +668,54 @@ func _bounds_exempt_axes() -> int:
 	if _axis_region != null and _axis_region.ignore_hard_boundaries:
 		exempt |= _axis_locked
 	return exempt | (_release_ignore & _release_axes)
+
+## The centre the camera wants for a player at [param player_position], before the
+## bounds, the boundaries or an axis region have had their say.
+func _follow_centre(player_position: Vector2) -> Vector2:
+	var centre := _camera_pos
+	var diff := centre - player_position
+	if absf(diff.x) > cameraDeadzone.x:
+		centre.x = player_position.x + cameraDeadzone.x * signf(diff.x)
+	if absf(diff.y) > cameraDeadzone.y:
+		centre.y = player_position.y + cameraDeadzone.y * signf(diff.y)
+	return centre
+
+## How far the shot would actually travel if the player were at [param world_position]
+## instead of where they are, per axis.
+##
+## Anything that leads the camera somewhere the player has not gone yet asks this
+## rather than working from the distance the player is about to cover. A vault moves
+## the player a tile across and a tile up; the camera follows only the part of that
+## the room allows. Pressed against a wall it has nowhere to go sideways; in a room one
+## screen wide it never moves sideways at all; a [CameraAxisRegion] holding an axis
+## owns that axis outright and gives back nothing. Every one of those comes back as a
+## zero on that axis, so "no movement", "horizontal only" and "vertical only" all fall
+## out of the same question instead of having to be listed and kept in step.
+##
+## Leading by the raw distance and letting [method _place_camera] clamp it away is not
+## the same thing. That looks identical only when the whole of the lead is allowed:
+## when part of it is, the shot eases against a distance it cannot cover, so it travels
+## at full speed and stops dead against the limit rather than settling into where it is
+## really going.
+func camera_lead_for(world_position: Vector2) -> Vector2:
+	if not isInGame or _player == null or _camera == null:
+		return Vector2.ZERO
+
+	var bounds := _bounds_eased if _bounds_ready else _camera_bounds()
+	var exempt := _bounds_exempt_axes()
+	var half := _half_view()
+	var here := _clamp_view_to_rect(_follow_centre(_player.position), half, bounds, exempt)
+	var there := _clamp_view_to_rect(_follow_centre(world_position), half, bounds, exempt)
+	var lead := there - here
+
+	# An axis a region is driving is not ours to lead. The region decides where that
+	# axis sits and eases it there itself, so a pan laid over the top is a fight the
+	# region wins a moment later.
+	if _axis_region != null:
+		for axis in 2:
+			if _axis_locked & (1 << axis):
+				lead[axis] = 0.0
+	return lead
 
 ## Puts the camera at [param center], with whatever [CameraEffects] is adding folded
 ## in and clamped by the same rules.
