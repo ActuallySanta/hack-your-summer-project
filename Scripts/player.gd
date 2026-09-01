@@ -56,6 +56,9 @@ enum MoveState {
 ## How far below the feet of the active collider the crumbling-floor probe reaches.
 ## Just deep enough to land inside the tile being stood on.
 @export var crumbleProbeDepth := 8.0
+## How long floor snapping stays off after the ground under the player has been set
+## off. Long enough to clear the tile that gave way; see [method _update_floor_snap].
+@export var crumbleSnapPause := 0.25
 
 ## Group every BreakAbles layer joins, so the player can find the ones in the room it
 ## is standing in without the room having to wire them up.
@@ -94,6 +97,8 @@ var knockback_timer := 0.0
 var knockback_force := 0.0
 var gravity_override := -1.0
 var horizontal_lock := 0.0
+## Seconds of floor snapping still to be given up after a crumble gave way underfoot.
+var _crumble_snap_timer := 0.0
 var _visual_offset_nodes: Array[Node2D] = []
 var _visual_offset_bases: PackedVector2Array
 var _dying := false
@@ -165,6 +170,7 @@ func _physics_process(delta: float) -> void:
 			component.physics_update(delta)
 
 	_apply_animation()
+	_update_floor_snap(delta)
 
 	move_and_slide()
 
@@ -477,8 +483,34 @@ func _handle_crumbling_floor() -> void:
 	var feet := maxf(bounds[0].y, bounds[1].y)
 	var probe := Vector2(global_position.x, feet + crumbleProbeDepth)
 	var foreground := PlayerGeometry.foreground(get_tree())
+	var crumbling := false
 	for layer in layers:
-		layer.step_on(probe, foreground)
+		if layer.step_on(probe, foreground):
+			crumbling = true
+	if crumbling:
+		_crumble_snap_timer = crumbleSnapPause
+
+## Floor snapping is given up while the ground under the player is on its way out.
+##
+## Snapping is there for slopes: without it, walking down one is a series of little
+## hops (see [member PlayerPlanarMovement.slope_snap_length]). But it applies to any
+## floor lost from under the body, and it works by [i]moving the body[/i] rather than
+## by letting it fall. So when a crumbling tile gave way the player was pulled the
+## snap length straight down onto whatever was beneath it -- at no speed at all, still
+## reading as on the floor. On a stack of crumbles that repeats every frame: 32px a
+## frame, which is faster than terminal velocity, with none of it coming from falling.
+## That is the teleport, and the sudden speed, in one mechanism.
+##
+## Giving the snap up for a moment turns it back into stepping off a ledge. Slopes are
+## untouched: nothing crumbles under the player there, so the timer never starts.
+func _update_floor_snap(delta: float) -> void:
+	if _crumble_snap_timer <= 0.0:
+		return
+	_crumble_snap_timer -= delta
+	if _crumble_snap_timer > 0.0:
+		floor_snap_length = 0.0
+	elif planar_movement:
+		floor_snap_length = planar_movement.slope_snap_length
 
 func _refresh_cell_group_music() -> void:
 	var groups := MetSys.get_cell_groups(MetSys.get_current_coords())

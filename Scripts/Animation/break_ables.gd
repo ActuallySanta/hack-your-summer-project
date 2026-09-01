@@ -326,10 +326,23 @@ func reveal_tile(coords: Vector2i, foreground: TileMapLayer) -> void:
 	refresh_cover_visibility()
 
 ## Breaks the crumbling tile under a world-space point, if there is one.
-func step_on(global_point: Vector2, foreground: TileMapLayer) -> void:
+##
+## Returns whether the ground at that point is on its way out -- whether this call set
+## it off or it was already going. The player asks so it knows the floor it is standing
+## on cannot be relied on; see Player._update_floor_snap.
+func step_on(global_point: Vector2, foreground: TileMapLayer) -> bool:
 	if not crumbles_underfoot:
-		return
-	destroy_tile( local_to_map( to_local( global_point ) ), STEP_ATTEMPT, foreground )
+		return false
+	var coords := local_to_map( to_local( global_point ) )
+	destroy_tile( coords, STEP_ATTEMPT, foreground )
+	return is_breaking( coords )
+
+## Whether this cell is somewhere in its break-and-repair cycle rather than whole.
+func is_breaking(coords: Vector2i) -> bool:
+	for data in list_of_broken_cords:
+		if data.coord == coords:
+			return true
+	return false
 
 func does_tile_exist(coords: Vector2i) -> bool:
 	return get_cell_source_id( coords ) != -1

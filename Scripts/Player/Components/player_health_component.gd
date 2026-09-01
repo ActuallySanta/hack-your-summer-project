@@ -96,6 +96,12 @@ func refresh_from_save() -> void:
 	_dead = false
 	_invuln_timer = 0.0
 	_blink_timer = 0.0
+	# Same reason as in [method _on_death]: clearing the timer stops the only other
+	# thing that would show the body again, so a spawn that interrupts a blink has to
+	# put it back itself.
+	var player := _player()
+	if player and is_instance_valid(player.animator):
+		player.animator.set_body_hidden_for_blink(false)
 	ignore_effects = false
 	hurtbox.process_mode = Node.PROCESS_MODE_INHERIT
 	max_health = base_max_health + GameManager.get_health_upgrade_count()
@@ -145,6 +151,13 @@ func _on_death() -> void:
 	on_death_event.emit()
 	var player := _player()
 	if player:
+		# The blink ends here, and it has to be put back by hand. Clearing the timer
+		# is what stops [method _process], which is the only other place that shows the
+		# body again -- so without this the body is left on whichever half of the blink
+		# it happened to be on, and dying on a hidden one plays the whole death
+		# animation on a sprite nobody can see. A coin toss, every death.
+		if is_instance_valid(player.animator):
+			player.animator.set_body_hidden_for_blink(false)
 		player.on_death()
 
 func is_dead() -> bool:
