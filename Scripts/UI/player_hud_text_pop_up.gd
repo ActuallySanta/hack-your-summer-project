@@ -9,6 +9,7 @@ extends Control
 var _state : int = 0
 var _goal_height : float = 0
 var _timer : float = 0
+var _last_msg : String = "Null;;;;;;;;"
 
 func _ready() -> void:
 	_state = 0
@@ -25,29 +26,23 @@ func _process(delta: float) -> void:
 func setup_pop_up() -> void:
 	if not MessageDisplay.has_message() or not _state == 0:
 		return
-	
-	text.place_deep_fresh( MessageDisplay.pop_next() )
+	text.place_deep_fresh( MessageDisplay.peak_next() )
 	_goal_height = (text.get_cursor_height() + 1.5)* -tile_height
 	_timer = time_up
 	_state = 1
-	print("shift_up")
 
 func shift_up(delta: float) -> void: 
 	_timer -= delta
 	guide.position.y = maxf(lerpf(_goal_height, 0, _timer/time_up), _goal_height)
 	if _timer > 0 :
 		return
-	
-	
 	_timer = time_held
 	_state = 2
-	print("idle")
 
 func idle(delta: float) -> void:
 	_timer -= delta
 	if _timer > 0 :
 		return
-	print("shift_down")
 	_timer = time_up
 	_state = 3
 
@@ -57,6 +52,7 @@ func shift_down(delta: float) -> void:
 	if _timer > 0 :
 		return
 	
+	_last_msg = MessageDisplay.pop_next()
 	guide.position.y = 0
 	_goal_height = 0
 	_state = 0

@@ -13,6 +13,8 @@
 [ext_resource type="PackedScene" uid="uid://bfdxh46jtantj" path="res://Scenes/Enemies/fallen_cyborg.tscn" id="10_q2u2h"]
 [ext_resource type="PackedScene" uid="uid://b0fyg7kdjcyou" path="res://Scenes/Enemies/repair_drone.tscn" id="12_meskk"]
 [ext_resource type="PackedScene" uid="uid://bnpsyl86ggbjm" path="res://Scenes/Pickups/health_extender.tscn" id="13_6no6h"]
+[ext_resource type="PackedScene" uid="uid://b7lnb5mc2cxhl" path="res://Scenes/Components/station_powered_node.tscn" id="13_y50qf"]
+[ext_resource type="PackedScene" uid="uid://41tgjv6lxsko" path="res://Scenes/Enemies/melee_enemy.tscn" id="14_d4na7"]
 
 [node name="BayGammaDb" type="Node2D" unique_id=1040202241]
 
@@ -79,8 +81,13 @@ position = Vector2(768, 864)
 position = Vector2(1776, 912)
 start_flipped = true
 
-[node name="RepairDrone" parent="." unique_id=1318393645 instance=ExtResource("12_meskk")]
-position = Vector2(429, 718)
-
 [node name="HealthExtender" parent="." unique_id=545634817 instance=ExtResource("13_6no6h")]
 position = Vector2(1927, 1077)
+
+[node name="StationPoweredNode" parent="." unique_id=1319736591 instance=ExtResource("13_y50qf")]
+
+[node name="RepairDrone" parent="StationPoweredNode" unique_id=1318393645 instance=ExtResource("12_meskk")]
+position = Vector2(429, 718)
+
+[node name="Melee Enemy" parent="StationPoweredNode" unique_id=1835408748 instance=ExtResource("14_d4na7")]
+position = Vector2(781, 1675)

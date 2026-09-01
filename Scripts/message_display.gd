@@ -7,9 +7,13 @@ func has_message() -> bool:
 	return _queued_messages.size() > 0
 
 func append_message(new_msg: String) -> void:
+	var size = _queued_messages.size()
+	if size > 0 and _queued_messages[ size - 1 ] == new_msg:
+		print("Duplicate")
+		return
 	_queued_messages.push_back(new_msg)
 
-func get_front_message() -> String:
+func peak_next() -> String:
 	return _queued_messages[ 0 ]
 
 func pop_next() -> String:

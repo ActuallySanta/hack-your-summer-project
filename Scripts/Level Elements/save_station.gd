@@ -48,4 +48,5 @@ func _on_body_entered(body: Node2D) -> void:
 	var player := body as Player
 	if player:
 		player.save_station_used.emit()
+		MessageDisplay.add_saving_data()
 		activate()

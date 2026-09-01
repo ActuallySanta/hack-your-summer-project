@@ -9,7 +9,7 @@ script = ExtResource("1_wrm1d")
 use_custom_save = true
 save_room = "uid://dtkowilv386lj"
 save_pos = Vector2(1000, 1500)
-save_fuse_state = 2
+save_fuse_state = 1
 save_has_gun = true
 save_has_jetpack = true
 
