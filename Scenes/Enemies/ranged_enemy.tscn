@@ -189,6 +189,7 @@ visible = false
 target_position = Vector2(150, 0)
 
 [node name="RoboHealth" type="Node2D" parent="." unique_id=50049372]
+visible = false
 script = ExtResource("5_figc4")
 metadata/_custom_type_script = "uid://p46g50v8y7y4"
 
