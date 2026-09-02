@@ -57,6 +57,15 @@ signal action_finished(action: StringName)
 ## than asked of the wall jump, because it is a fact about how the frames were drawn.
 const WALL_LOOKS: Array[StringName] = [&"wall_slide", &"wall_push", &"wall_cling_shot"]
 
+## One-shots that hold whichever way they started facing for their whole length.
+##
+## The push off a wall is the case: the launch sets the player facing away from the
+## wall, but steering comes back partway through ([member PlayerWallJump.launch_hold_seconds])
+## and turning round mid-push flipped the character while they were still visibly
+## shoving off the wall behind them. Held, the push always reads as leaving the wall
+## it left.
+const FLIP_LOCKED_ACTIONS: Array[StringName] = [&"wall_push", &"wall_cling_shot"]
+
 ## Logs each unresolved name once, so a look that is silently falling back is visible
 ## in the output rather than only on screen.
 @export var warn_on_fallback := true
@@ -100,6 +109,8 @@ var _sprite_anchor := Vector2.ZERO
 var _anchored := false
 ## Set by [method request_held_action]: nothing may replace the look while it is up.
 var _action_held := false
+## Set while a [constant FLIP_LOCKED_ACTIONS] one-shot runs; the flip it started on.
+var _flip_locked := false
 
 func _bind() -> void:
 	if animation_player == null:
@@ -156,6 +167,12 @@ func request_action(action: StringName, min_duration := 0.0, from_time := 0.0, i
 		return false
 
 	_action = resolved
+	_flip_locked = resolved in FLIP_LOCKED_ACTIONS
+	# Settled once, here, rather than left as whatever the last look happened to be:
+	# these are mirrored looks, so the value has to be worked out with the new action
+	# already in place.
+	if _flip_locked and is_instance_valid(sprite):
+		sprite.flip_h = not _sprite_faces_right()
 	_play(resolved, 1.0, from_time)
 	_action_timer = maxf(animation_length(resolved) - from_time, min_duration)
 	return true
@@ -306,7 +323,8 @@ func set_reference_pixel(index: Vector2i, colour: Color) -> void:
 
 func frame_update(delta: float) -> void:
 	if is_instance_valid(sprite):
-		sprite.flip_h = not _sprite_faces_right()
+		if not (_flip_locked and not _action.is_empty()):
+			sprite.flip_h = not _sprite_faces_right()
 		if _anchored:
 			sprite.position = _sprite_anchor
 
