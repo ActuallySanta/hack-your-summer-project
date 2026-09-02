@@ -3,6 +3,8 @@
 [ext_resource type="Script" uid="uid://ji4q20pb7lkf" path="res://Scripts/Enemies/ranged_enemy.gd" id="1_yfht6"]
 [ext_resource type="BehaviorTree" uid="uid://bk3pchousfnbu" path="res://ai/trees/ranged_enemy.tres" id="2_qj8iq"]
 [ext_resource type="Texture2D" uid="uid://k77a80f40w7l" path="res://Sprites/Characters/Enemy SpriteSheets/Android/Ranged_Andriod.png" id="3_sy4jm"]
+[ext_resource type="PackedScene" uid="uid://c744kphkhs1tv" path="res://Scenes/Components/flasher.tscn" id="3_tju6i"]
+[ext_resource type="Script" uid="uid://p46g50v8y7y4" path="res://Scripts/Combat/Healths/robot_health_component.gd" id="5_figc4"]
 [ext_resource type="Script" uid="uid://ctc17oyja7fup" path="res://Scripts/Combat/hitbox.gd" id="5_sy4jm"]
 [ext_resource type="PackedScene" uid="uid://djmeyycufny61" path="res://Scenes/Components/Hurtbox.tscn" id="18_6j4xf"]
 
@@ -13,7 +15,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Visual:frame_coords")
+tracks/0/path = NodePath("Flasher/Visual:frame_coords")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -44,7 +46,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Visual:frame_coords")
+tracks/1/path = NodePath("Flasher/Visual:frame_coords")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -60,7 +62,7 @@ length = 0.4
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Visual:frame_coords")
+tracks/0/path = NodePath("Flasher/Visual:frame_coords")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -77,7 +79,7 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Visual:frame_coords")
+tracks/0/path = NodePath("Flasher/Visual:frame_coords")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -94,7 +96,7 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Visual:frame_coords")
+tracks/0/path = NodePath("Flasher/Visual:frame_coords")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -112,7 +114,7 @@ step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Visual:frame_coords")
+tracks/0/path = NodePath("Flasher/Visual:frame_coords")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -142,10 +144,12 @@ radius = 450.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_6j4xf"]
 radius = 20.0
 
-[node name="Ranged Enemy" type="CharacterBody2D" unique_id=1835408748]
+[node name="Ranged Enemy" type="CharacterBody2D" unique_id=1835408748 node_paths=PackedStringArray("health_component", "hurtbox")]
 collision_layer = 4
 script = ExtResource("1_yfht6")
 attackCooldown = 3.5
+health_component = NodePath("RoboHealth")
+hurtbox = NodePath("RoboHealth/Hurtbox")
 
 [node name="BTPlayer" type="BTPlayer" parent="." unique_id=1291468803]
 behavior_tree = ExtResource("2_qj8iq")
@@ -154,7 +158,9 @@ blackboard_plan = SubResource("BlackboardPlan_be0ij")
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1653717036]
 libraries/ = SubResource("AnimationLibrary_07m26")
 
-[node name="Visual" type="Sprite2D" parent="." unique_id=930293805]
+[node name="Flasher" parent="." unique_id=734208757 instance=ExtResource("3_tju6i")]
+
+[node name="Visual" type="Sprite2D" parent="Flasher" unique_id=930293805]
 scale = Vector2(3, 3)
 texture = ExtResource("3_sy4jm")
 hframes = 7
@@ -182,15 +188,14 @@ collision_mask = 3
 visible = false
 target_position = Vector2(150, 0)
 
-[node name="Hurtbox" parent="." unique_id=470143312 instance=ExtResource("18_6j4xf")]
-visible = false
+[node name="RoboHealth" type="Node2D" parent="." unique_id=50049372]
+script = ExtResource("5_figc4")
+metadata/_custom_type_script = "uid://p46g50v8y7y4"
+
+[node name="Hurtbox" parent="RoboHealth" unique_id=470143312 instance=ExtResource("18_6j4xf")]
 collision_layer = 4
 
-[node name="Shape" type="CollisionShape2D" parent="Hurtbox" unique_id=326280550]
-position = Vector2(8, 3)
-shape = SubResource("CapsuleShape2D_mgs6e")
-
-[node name="Shape2" type="CollisionShape2D" parent="Hurtbox" unique_id=1512523289]
+[node name="Shape" type="CollisionShape2D" parent="RoboHealth/Hurtbox" unique_id=326280550]
 position = Vector2(8, 3)
 shape = SubResource("CapsuleShape2D_mgs6e")
 

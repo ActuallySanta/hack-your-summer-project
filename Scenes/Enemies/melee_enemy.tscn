@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" uid="uid://mg2g6xuu4xeq" path="res://Scripts/Enemies/melee_enemy.gd" id="1_vrdla"]
 [ext_resource type="BehaviorTree" uid="uid://d1xmalrj37niq" path="res://ai/trees/melee_enemy.tres" id="2_ony87"]
+[ext_resource type="PackedScene" uid="uid://c744kphkhs1tv" path="res://Scenes/Components/flasher.tscn" id="3_eyhix"]
+[ext_resource type="Script" uid="uid://p46g50v8y7y4" path="res://Scripts/Combat/Healths/robot_health_component.gd" id="4_vrdla"]
 [ext_resource type="AudioStream" uid="uid://b8jk1ibtjk5cx" path="res://Sounds/Entities/Enemies/Machines/HeavyFootSteps.wav" id="6_0u8ws"]
 [ext_resource type="AudioStream" uid="uid://dlmq2r0g7qa57" path="res://Sounds/Entities/Enemies/Machines/RobotHit.wav" id="6_yxfb2"]
 [ext_resource type="Script" uid="uid://ctc17oyja7fup" path="res://Scripts/Combat/hitbox.gd" id="8_ptuny"]
@@ -16,7 +18,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Visual:frame")
+tracks/0/path = NodePath("Flasher/Visual:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -59,7 +61,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Visual:frame")
+tracks/1/path = NodePath("Flasher/Visual:frame")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -76,7 +78,7 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Visual:frame")
+tracks/0/path = NodePath("Flasher/Visual:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -93,7 +95,7 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Visual:frame")
+tracks/0/path = NodePath("Flasher/Visual:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -110,7 +112,7 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Visual:frame")
+tracks/0/path = NodePath("Flasher/Visual:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -127,7 +129,7 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Visual:frame")
+tracks/0/path = NodePath("Flasher/Visual:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -176,9 +178,11 @@ radius = 20.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_0u8ws"]
 radius = 20.0
 
-[node name="Melee Enemy" type="CharacterBody2D" unique_id=1835408748]
+[node name="Melee Enemy" type="CharacterBody2D" unique_id=1835408748 node_paths=PackedStringArray("health_component", "hurtbox")]
 collision_layer = 4
 script = ExtResource("1_vrdla")
+health_component = NodePath("RoboHealth")
+hurtbox = NodePath("RoboHealth/Hurtbox")
 
 [node name="BTPlayer" type="BTPlayer" parent="." unique_id=1291468803]
 behavior_tree = ExtResource("2_ony87")
@@ -187,7 +191,9 @@ blackboard_plan = SubResource("BlackboardPlan_be0ij")
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1653717036]
 libraries/ = SubResource("AnimationLibrary_07m26")
 
-[node name="Visual" type="Sprite2D" parent="." unique_id=930293805]
+[node name="Flasher" parent="." unique_id=734208757 instance=ExtResource("3_eyhix")]
+
+[node name="Visual" type="Sprite2D" parent="Flasher" unique_id=930293805]
 scale = Vector2(3, 3)
 texture = ExtResource("14_dn20t")
 hframes = 7
@@ -214,11 +220,19 @@ collision_mask = 3
 visible = false
 target_position = Vector2(150, 0)
 
-[node name="Hurtbox" parent="." unique_id=470143312 instance=ExtResource("19_jgjap")]
+[node name="RoboHealth" type="Node2D" parent="." unique_id=750154950]
+script = ExtResource("4_vrdla")
+destroy_on_death = true
+max_health = 5
+start_health = 5
+low_health_boundry = 2
+metadata/_custom_type_script = "uid://p46g50v8y7y4"
+
+[node name="Hurtbox" parent="RoboHealth" unique_id=470143312 instance=ExtResource("19_jgjap")]
 visible = false
 collision_layer = 4
 
-[node name="Shape" type="CollisionShape2D" parent="Hurtbox" unique_id=326280550]
+[node name="Shape" type="CollisionShape2D" parent="RoboHealth/Hurtbox" unique_id=326280550]
 position = Vector2(-2, -2)
 shape = SubResource("CapsuleShape2D_mgs6e")
 
@@ -230,7 +244,6 @@ process_mode = 4
 visible = false
 collision_mask = 2
 knockback_strength = 320.0
-knockback_duration = 0.1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Melee Hitbox" unique_id=1312867447]
 position = Vector2(93, -27)
@@ -258,6 +271,7 @@ stream = ExtResource("6_yxfb2")
 stream = ExtResource("6_0u8ws")
 
 [node name="Contact Damage Hitbox" type="Area2D" parent="." unique_id=504608643]
+visible = false
 script = ExtResource("8_ptuny")
 metadata/_custom_type_script = "uid://ctc17oyja7fup"
 

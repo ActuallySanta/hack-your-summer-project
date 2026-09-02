@@ -54,8 +54,6 @@ visible = false
 collision_layer = 4
 collision_mask = 2
 script = ExtResource("4_jc8ds")
-knockback_strength = 100.0
-knockback_duration = 1.0
 metadata/_custom_type_script = "uid://ctc17oyja7fup"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=184156446]

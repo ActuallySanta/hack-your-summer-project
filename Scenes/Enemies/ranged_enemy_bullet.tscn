@@ -39,6 +39,7 @@ autostart = true
 collision_layer = 12
 collision_mask = 3
 monitorable = true
+knockback_strength = 150.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=274916684]
 shape = SubResource("CircleShape2D_bpmhk")

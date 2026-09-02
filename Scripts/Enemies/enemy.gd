@@ -6,14 +6,16 @@ const SPEED:float = 50
 @export var attackCooldown: float = 1.5
 @export var wanderDistance : float = 50.0
 @export var stunDuration : float = 2.5
+@export var health_component : HealthComponent
+@export var hurtbox: Hurtbox
 @onready var mainScene : Node = get_tree().current_scene
-@onready var visual: Sprite2D = $Visual
+@onready var visual: Sprite2D = $Flasher/Visual
+@onready var flasher : Flasher = $Flasher
 @onready var player_detection_check: ShapeCast2D = $"Player Detection Check"
 @onready var player_obstruction_check: RayCast2D = $"Player Obstruction Check"
 @onready var playerReference : CharacterBody2D = get_tree().get_first_node_in_group("player")
 @onready var target_location_check: RayCast2D = $"Target Location Check"
 @onready var bt_player: BTPlayer = $BTPlayer
-@onready var hurtbox: Hurtbox = $Hurtbox
 @onready var ground_check: ShapeCast2D = $GroundCheck
 @onready var physics_body: CollisionShape2D = $"Physics Body"
 @onready var target_range_check: ShapeCast2D = $"Target Range Check"
@@ -69,8 +71,13 @@ func getValidPos() -> Vector2:
 	else:
 		return Vector2(position.x + currWanderDistance,position.y)
 	
-func takeDamage(_hurtBox: Hurtbox, _hit_info: HitInfo, _source: Hitbox):
-	switch_state("hurt")
+func takeDamage(_hurtBox: Hurtbox, _hit_info: HitInfo, source: Hitbox):
+	if source.has_method("get_damage_type"):
+		var dmg_type : StringName = source.get_damage_type()
+		if dmg_type == "stun_bullet":
+			switch_state("hurt")
+			return
+	flasher.flash()
 
 func can_see_player() -> bool:
 	return player_obstruction_check.is_colliding() and player_obstruction_check.get_collider() == playerReference

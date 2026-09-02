@@ -88,6 +88,7 @@ position = Vector2(1927, 1077)
 
 [node name="RepairDrone" parent="StationPoweredNode" unique_id=1318393645 instance=ExtResource("12_meskk")]
 position = Vector2(429, 718)
+stun_time = 3.0
 
 [node name="Melee Enemy" parent="StationPoweredNode" unique_id=1835408748 instance=ExtResource("14_d4na7")]
 position = Vector2(781, 1675)

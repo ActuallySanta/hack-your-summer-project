@@ -19,8 +19,8 @@ signal on_hit(hitbox: Hitbox, target: Hurtbox)
 signal environment_hit(target: Node2D)
 
 @export var damage: int = 1
-@export var knockback_strength: float
-@export var knockback_duration: float
+@export var knockback_strength: float = 300
+@export var knockback_duration: float = 0.1
 
 ## Seconds before the same target can be hit again by this hitbox.
 ##
@@ -28,7 +28,7 @@ signal environment_hit(target: Node2D)
 ## called. That is right for a hitbox that only exists for one swing, but wrong for
 ## one that stays in the world -- a boss's body, a hazard -- which under that rule
 ## can only ever damage the player once for the whole fight. Give those a value.
-@export var hit_cooldown : float = 0.0
+@export var hit_cooldown_seconds : float = 4
 
 var ignore_hits : bool
 ## Targets already hit and not yet re-armed. Kept as an array because callers read it.
@@ -76,9 +76,9 @@ func _on_area_exited(area: Area2D) -> void:
 func _can_hit(hurtbox: Hurtbox) -> bool:
 	if not previous_hits.has(hurtbox):
 		return true
-	if hit_cooldown <= 0.0:
+	if hit_cooldown_seconds <= 0.0:
 		return false
-	return _now() - _hit_at.get(hurtbox.get_instance_id(), 0.0) >= hit_cooldown
+	return _now() - _hit_at.get(hurtbox.get_instance_id(), 0.0) >= hit_cooldown_seconds
 
 func _now() -> float:
 	return _clock
@@ -90,7 +90,7 @@ func _physics_process(delta: float) -> void:
 	# Game time rather than wall clock, so a cooldown is not spent while the game is
 	# paused and follows Engine.time_scale during a slow-motion moment.
 	_clock += delta
-	if ignore_hits or hit_cooldown <= 0.0 or previous_hits.is_empty():
+	if ignore_hits or hit_cooldown_seconds <= 0.0 or previous_hits.is_empty():
 		return
 	for hurtbox in get_overlapping_areas():
 		var target := hurtbox as Hurtbox
