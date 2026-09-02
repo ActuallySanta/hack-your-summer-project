@@ -41,6 +41,9 @@ const GUN_MODES: Array[StringName] = [&"stun", &"plasma"]
 @export var stand_animation: StringName = &"stand_shoot"
 @export var crouch_animation: StringName = &"crouch_shoot"
 @export var air_animation: StringName = &"jump_shoot"
+## Shooting while crawling. The crouched shot is drawn standing still, so a player
+## moving along the floor needs its own.
+@export var crawl_animation: StringName = &"crawl_shoot"
 
 var _has_gun := false
 var _mode: StringName = &"stun"
@@ -122,7 +125,8 @@ func shoot() -> void:
 func _animation_for_state() -> StringName:
 	match player.move_state:
 		Player.MoveState.Crouching:
-			return crouch_animation
+			var moving: bool = player.planar_movement != null and player.planar_movement.is_walking()
+			return crawl_animation if moving else crouch_animation
 		Player.MoveState.Jumping:
 			return air_animation
 		_:

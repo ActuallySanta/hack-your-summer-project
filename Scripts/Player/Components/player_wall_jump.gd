@@ -60,17 +60,22 @@ extends PlayerComponent
 @export var horizontal_buffer := 10.0
 @export_flags_2d_physics var geometry_layers := 1
 
-## Whether a wall is in reach right now. The animator watches this for the cling pose.
+## Whether a wall is in reach right now. The animator watches this for the wall-slide
+## pose.
 var _available := false
 var _contact_buffer := 0.0
 var _input_buffer := 0.0
 ## Seconds of the launch's horizontal hold still to run.
 var _hold_timer := 0.0
+## Seconds since the last launch, for the push-off frame. See
+## [method launched_recently].
+var _since_launch := 999.0
 
 func on_jump_pressed() -> void:
 	_input_buffer = contact_buffer_seconds
 
 func physics_update(delta: float) -> void:
+	_since_launch += delta
 	var available := _wall_in_reach()
 	if not available:
 		_contact_buffer = maxf(_contact_buffer - delta, 0.0)
@@ -106,6 +111,7 @@ func wall_jump() -> void:
 	# its own launch speed and would make this one enormous.
 	player.gravity_override = gravity
 	_hold_timer = launch_hold_seconds
+	_since_launch = 0.0
 	player.horizontal_lock = _hold_timer
 
 	player.jump_sfx.play()
@@ -181,13 +187,26 @@ func probe_points() -> PackedVector2Array:
 			points.append(Vector2(lead_edge + direction * depth, row))
 	return points
 
+## Whether the player can push off a wall this instant.
+##
+## The contact window counts, because a wall jump fired inside it is a real wall jump;
+## the input buffer does not, because that only remembers a press for a moment and
+## being early is not the same as being able. So the wall-slide frame comes up exactly
+## when the jump would work, and a press queued before then simply runs the slide and
+## the push-off back to back.
 func is_wall_available() -> bool:
-	return _available
+	return _available or _contact_buffer > 0.0
+
+## Whether a launch happened within the last frame or two, so the state machine can
+## tell a push off a wall from an ordinary jump when it sees the player go airborne.
+func launched_recently() -> bool:
+	return _since_launch <= contact_buffer_seconds
 
 func on_respawn() -> void:
 	_available = false
 	_contact_buffer = 0.0
 	_input_buffer = 0.0
 	_hold_timer = 0.0
+	_since_launch = 999.0
 	player.horizontal_lock = 0.0
 	player.gravity_override = -1.0

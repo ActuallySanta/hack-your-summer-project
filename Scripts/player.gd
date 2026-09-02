@@ -121,6 +121,7 @@ func _ready() -> void:
 
 	if health:
 		health.knocked_back.connect(_on_knocked_back)
+	jumped.connect(_on_jumped)
 	for component in _components:
 		component.bind(self)
 
@@ -224,6 +225,31 @@ func _update_move_state() -> void:
 	collision_manager.swap_active_collision(collider)
 	_align_visuals_to_collider(collider)
 	move_state_changed.emit(previous_move_state, move_state)
+	_play_transition_action(previous_move_state, move_state)
+
+## The one-shot that belongs to arriving on the ground rather than to being on it.
+##
+## An action rather than a pose because it plays once and then hands back to whatever
+## the player is actually doing: held as a pose, standing still after a landing would
+## leave them crouched in the landing frame forever.
+func _play_transition_action(from: MoveState, to: MoveState) -> void:
+	if animator == null:
+		return
+	if from == MoveState.Jumping and (to == MoveState.Standing or to == MoveState.Crouching):
+		animator.request_action(&"land")
+
+## The launch frames, played off [signal jumped] rather than off the move state.
+##
+## A wall jump happens while the player is already airborne, so there is no change of
+## state to hang it on -- the state machine sees Jumping before and after. The signal
+## is the moment itself, and both jumps raise it.
+func _on_jumped() -> void:
+	if animator == null:
+		return
+	# The wall jump's own push-off frame carries straight on from the wall slide the
+	# player was already showing; an ordinary jump gets the crouch-and-spring frame.
+	var pushed_off: bool = wall_jump != null and wall_jump.launched_recently()
+	animator.request_action(&"wall_push" if pushed_off else &"jump_start")
 
 ## The state the player is in this frame, which is also the collider they wear.
 ##
@@ -323,7 +349,7 @@ func _pose_for_state() -> StringName:
 			if jetpack and jetpack.is_thrusting():
 				return &"jetpack"
 			if wall_jump and wall_jump.is_wall_available():
-				return &"wall_cling"
+				return &"wall_slide"
 			return &"jump"
 		MoveState.Crouching:
 			return &"crawl" if _is_moving() else &"crouch"
@@ -359,7 +385,7 @@ func _is_moving() -> bool:
 func _cache_visual_offset_nodes() -> void:
 	_visual_offset_nodes = []
 	_visual_offset_bases = PackedVector2Array()
-	for node in [get_node_or_null(^"Character"), get_node_or_null(^"JetpackAsset"), get_node_or_null(^"HealthComponent/Hurtbox")]:
+	for node in [get_node_or_null(^"Character"), get_node_or_null(^"HealthComponent/Hurtbox")]:
 		var node_2d := node as Node2D
 		if node_2d == null:
 			continue

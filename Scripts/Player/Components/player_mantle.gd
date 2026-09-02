@@ -15,13 +15,20 @@
 ## top face, not merely drawn -- [method PlayerGeometry.has_solid_top]. A cell holding
 ## a half-height or sloped tile is drawn like any other and used to pass, which is the
 ## rare vault onto a partial tile that landed the player inside the geometry.
+##
+## [b]The sprite.[/b] The vault used to have its own [AnimatedSprite2D] standing in
+## for the body. It lives on the character sheet now like everything else, so the
+## vault asks the animator for it and pins the sprite to the block while it plays:
+## those frames are drawn around the block, which fills one corner of the frame,
+## rather than around the character.
 class_name PlayerMantle
 extends PlayerComponent
 
 ## Emitted the moment control comes back, which is up to
-## [member early_control_frames] before the animation finishes.
+## [member early_control_frames] before the animation would have finished.
 signal mantle_control_returned
-## Emitted when the vault's animation has played out.
+## Emitted when the vault is over. The same moment as [signal mantle_control_returned]
+## now that no animation outlives it.
 signal mantle_finished
 
 @export_group("Reach")
@@ -33,45 +40,41 @@ signal mantle_finished
 @export_flags_2d_physics var geometry_layers := 1
 
 @export_group("Timing")
-## Animation frames of control handed back before the vault's animation ends.
+## Animation frames cut from the end of the vault, handing control back that much
+## sooner.
 ##
 ## The vault reads a touch slow, and every sprite on the sheet shares one frame rate,
 ## so the choice was cutting a frame (a redraw) or giving the frame back to the
-## player. This gives it back: the player can move or jump while the last frame or
-## two of the vault is still on screen. Set to 0 for the old behaviour.
+## player. This gives it back. Set to 0 to play the vault out in full.
 @export_range(0, 4, 1) var early_control_frames := 1
+## How long one frame of the vault is on screen. Matches the rate the animation was
+## authored at -- see [constant ManualAnim.ANIM_FRAME_SECONDS].
+@export var seconds_per_animation_frame := 0.1
 
 @export_group("Camera")
 ## Whether the shot leads the vault. The player's body does not move until the vault
 ## ends, so without this the camera sits still and then jumps a tile with them.
 @export var animate_camera := true
 ## How long the shot takes to reach where the player will come up. Zero matches the
-## vault the player actually sees, so the pan lands exactly as control comes back.
+## part of the vault the player sits through, so the pan lands exactly as control
+## comes back.
 @export var camera_lead_seconds := 0.0
 
-@export_group("Nodes")
-## The stand-in sprite played during the vault. Hidden the rest of the time.
-@export var mantle_sprite: AnimatedSprite2D
-@export var mantle_animation: StringName = &"Small Climb"
+@export_group("Animation")
+@export var mantle_animation: StringName = &"mantle"
 
 var _active := false
-## Set once control has come back but the animation is still playing.
-var _visual_only := false
 var _direction := 1
-## Where the mantle sprite lives while it plays out the last frames on its own.
-var _sprite_home: Node
-var _sprite_home_position := Vector2.ZERO
+var _elapsed := 0.0
+## The cell being climbed, in world space. The vault's frames are drawn around it.
+var _ledge_rect := Rect2()
 
 func _bind() -> void:
-	if mantle_sprite == null:
-		mantle_sprite = get_node_or_null(^"MantleSprite") as AnimatedSprite2D
-	if mantle_sprite == null:
-		printerr("PlayerMantle: no mantle sprite assigned; vaults will have no visual.")
-		return
-	_sprite_home = mantle_sprite.get_parent()
-	_sprite_home_position = mantle_sprite.position
-	mantle_sprite.visible = false
-	mantle_sprite.animation_finished.connect(_on_animation_finished)
+	# Shown whatever the scene says. Components are logic and get hidden in the editor
+	# to keep the 2D view clear; a hidden [CanvasItem] hides its children too, and this
+	# one used to own the vault's sprite. It does not any more, but keeping this shown
+	# costs nothing and keeps that trap shut.
+	show()
 
 ## True while the player is committed to a vault and nothing else should drive them.
 func is_active() -> bool:
@@ -110,6 +113,7 @@ func try_mantle() -> bool:
 	if not _within_reach(foreground, ledge, direction):
 		return false
 
+	_ledge_rect = PlayerGeometry.cell_rect(foreground, ledge)
 	_begin(direction)
 	return true
 
@@ -125,59 +129,63 @@ func _within_reach(foreground: TileMapLayer, ledge: Vector2i, direction: int) ->
 
 #region Running the vault
 func _begin(direction: int) -> void:
-	# The previous vault's stand-in may still be playing out its last frames, parked in
-	# the world where it was handed back. Take it home before setting it up again:
-	# otherwise the position set below is written in world space rather than the
-	# player's, the sprite is left behind wherever the last vault ended, and the body
-	# sprite it hides stays hidden -- so the character simply vanishes for a few frames.
-	# Two vaults in quick succession is exactly what early control invites, so this has
-	# to be handled rather than prevented.
-	if _visual_only:
-		_end_visual()
-
 	_active = true
-	_visual_only = false
 	_direction = direction
+	_elapsed = 0.0
 	player.velocity = Vector2.ZERO
 	player.facing_right = direction > 0
 
-	player.animator.set_body_visible(false)
-	if is_instance_valid(mantle_sprite):
-		mantle_sprite.flip_h = direction < 0
-		mantle_sprite.position = Vector2(_sprite_home_position.x * direction, _sprite_home_position.y)
-		mantle_sprite.visible = true
-		mantle_sprite.frame = 0
-		mantle_sprite.play(mantle_animation)
-
+	player.animator.request_action(mantle_animation)
+	player.animator.set_sprite_anchor(_sprite_anchor())
 	_start_camera()
 
-func physics_update(_delta: float) -> void:
-	if not _active or early_control_frames <= 0:
+func physics_update(delta: float) -> void:
+	if not _active:
 		return
-	if _elapsed_frames() >= _total_frames() - early_control_frames:
+	_elapsed += delta
+	if _elapsed >= _control_seconds():
 		_hand_back_control()
+
+## Where the sprite sits for the length of the vault, in the player's own space.
+##
+## The frames are drawn around the block rather than around the character: the block
+## fills the quarter of the frame the player is climbing towards, and the character is
+## drawn up and back from it. Placing that quarter exactly on the cell being climbed
+## lines the vault up whether the player started flush against the ledge or
+## [member reach_distance] short of it.
+##
+## The frame is two tiles across and two down at the sprite's scale and is centred on
+## the sprite, so the corner quarter starts at the sprite's own position -- which
+## makes the anchor simply the corner of the ledge cell, mirrored with the character.
+func _sprite_anchor() -> Vector2:
+	var corner_x := _ledge_rect.position.x if _direction > 0 else _ledge_rect.end.x
+	return Vector2(corner_x, _ledge_rect.position.y) - player.global_position
 
 ## Where the player ends up, relative to where they started.
 func _displacement() -> Vector2:
 	return Vector2(player.tile_size * _direction, -player.tile_size * mantle_height_tiles)
 
-## Moves the player onto the ledge and gives them back to their own components,
-## leaving the vault's sprite to finish on its own.
+## The vault as authored.
+func _vault_seconds() -> float:
+	return maxf(player.animator.animation_length(mantle_animation), seconds_per_animation_frame)
+
+## The part of it the player actually sits through.
+func _control_seconds() -> float:
+	var cut := early_control_frames * seconds_per_animation_frame
+	return maxf(_vault_seconds() - cut, seconds_per_animation_frame)
+
+## Moves the player onto the ledge and gives them back to their own components.
 func _hand_back_control() -> void:
-	if not _active or _visual_only:
+	if not _active:
 		return
-	_visual_only = true
 	_active = false
 
-	# Where the stand-in is standing right now, read before the player moves out from
-	# under it. The climb animation draws the whole vault -- feet on the lower ledge in
-	# the first frame, standing on the upper one in the last -- so every frame of it
-	# belongs at the position the vault started from. Reparenting after the teleport
-	# kept the sprite's *new* global transform instead, which carried the last frame a
-	# tile up and across with the player: a mid-climb pose hanging in the air above the
-	# ledge for the rest of the animation.
-	var stand_in_playing := is_instance_valid(mantle_sprite) and mantle_sprite.is_playing()
-	var stand_in_anchor := mantle_sprite.global_transform if stand_in_playing else Transform2D()
+	# The sprite comes off the block and the vault ends together. It used to play its
+	# last frames on a second sprite left behind in the world, which is what the
+	# stand-in existed for; on one sheet there is nothing to leave behind, so the cut
+	# frames are simply not shown.
+	player.animator.clear_sprite_anchor()
+	player.animator.cancel_action()
 
 	player.position += _displacement()
 	# The camera was led to exactly this offset, so dropping it in the same frame the
@@ -185,56 +193,31 @@ func _hand_back_control() -> void:
 	if animate_camera:
 		CameraEffects.set_pan(Vector2.ZERO)
 
-	# The stand-in is still playing. Left as a child it would be dragged along by the
-	# teleport and by whatever the player does next, so it is handed to the world for
-	# its last frames and taken back when it is done.
-	if stand_in_playing:
-		var world_parent := player.get_parent()
-		if world_parent != null:
-			mantle_sprite.reparent(world_parent, true)
-			mantle_sprite.global_transform = stand_in_anchor
-	else:
-		_end_visual()
-
 	# Come out of the vault crouched. Where there is headroom the player stands up on
 	# the very next frame anyway; where there is not, a one-tile gap keeps them down
 	# instead of standing them into the ceiling.
 	player.enter_state(Player.MoveState.Crouching)
 	mantle_control_returned.emit()
-
-func _on_animation_finished() -> void:
-	if _active:
-		# early_control_frames is 0, so the animation ending is the vault ending.
-		_hand_back_control()
-	_end_visual()
-
-func _end_visual() -> void:
-	_visual_only = false
-	if is_instance_valid(mantle_sprite):
-		if mantle_sprite.get_parent() != _sprite_home and _sprite_home != null:
-			mantle_sprite.reparent(_sprite_home, false)
-		mantle_sprite.visible = false
-		mantle_sprite.position = _sprite_home_position
-	player.animator.set_body_visible(true)
 	mantle_finished.emit()
 
 func on_respawn() -> void:
-	if _active or _visual_only:
-		_active = false
-		_end_visual()
-		if animate_camera:
-			CameraEffects.set_pan(Vector2.ZERO)
+	if not _active:
+		return
+	_active = false
+	player.animator.clear_sprite_anchor()
+	player.animator.cancel_action()
+	if animate_camera:
+		CameraEffects.set_pan(Vector2.ZERO)
 #endregion
 
 #region Camera
 ## Leads the shot to where the player is about to come up.
 ##
 ## The body does not move until the vault ends, so the camera has nothing to follow;
-## it is pushed there by hand over [member camera_lead_seconds] and the offset is
-## dropped the instant the player actually covers the same distance. This lives in
-## [CameraEffects] rather than here because the camera belongs to the whole game --
-## a boss, a cutscene and a vault all want to move the shot, and only one of them
-## should own how.
+## it is pushed there by hand and the offset is dropped the instant the player
+## actually covers the same distance. This lives in [CameraEffects] rather than here
+## because the camera belongs to the whole game -- a boss, a cutscene and a vault all
+## want to move the shot, and only one of them should own how.
 func _start_camera() -> void:
 	if not animate_camera:
 		return
@@ -260,29 +243,10 @@ func _camera_lead() -> Vector2:
 		return _displacement()
 	return manager.camera_lead_for(player.global_position + _displacement())
 
-## How long the pan runs for.
-##
-## Defaults to the length of the vault as played, so it arrives on the frame
-## [method _hand_back_control] drops it. A fixed 0.25s against a three-frame climb at
-## 12fps, handed back a frame early, was still eleven per cent short when it was
-## dropped -- a few pixels of snap at the end of every vault.
+## How long the pan runs for. Defaults to the part of the vault the player sits
+## through, so it arrives on the frame [method _hand_back_control] drops it.
 func _lead_seconds() -> float:
 	if camera_lead_seconds > 0.0:
 		return camera_lead_seconds
-	var speed := 12.0
-	if is_instance_valid(mantle_sprite) and mantle_sprite.sprite_frames != null:
-		speed = maxf(mantle_sprite.sprite_frames.get_animation_speed(mantle_animation), 1.0)
-	return maxf(float(_total_frames() - early_control_frames), 1.0) / speed
-#endregion
-
-#region Frame maths
-func _total_frames() -> int:
-	if not is_instance_valid(mantle_sprite) or mantle_sprite.sprite_frames == null:
-		return 0
-	return mantle_sprite.sprite_frames.get_frame_count(mantle_animation)
-
-func _elapsed_frames() -> float:
-	if not is_instance_valid(mantle_sprite):
-		return 0.0
-	return mantle_sprite.frame + mantle_sprite.frame_progress
+	return _control_seconds()
 #endregion

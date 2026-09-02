@@ -5,10 +5,9 @@
 ## tried to vault. It now runs on its own action ([member thrust_action], bound to
 ## Ctrl), so mantling and thrusting are separate decisions the player gets to make.
 ##
-## [b]Its own look.[/b] Thrusting asks the animator for [code]jetpack[/code] rather
-## than reusing the jump pose. Until that animation is drawn the animator falls back
-## to the jump, so nothing looks broken in the meantime and adding the real one is
-## just adding it to the [AnimationPlayer].
+## [b]Its own look.[/b] Thrusting asks the animator for [code]jetpack[/code], which is
+## a frame of the character sheet like everything else. There used to be a second
+## sprite worn over the player for the pack itself; the sheet draws it now.
 class_name PlayerJetpack
 extends PlayerComponent
 
@@ -23,10 +22,6 @@ signal thrust_stopped
 ## Speed the thrust fades out at, so the climb tops out rather than running away.
 @export var max_speed := 800.0
 
-@export_group("Nodes")
-## The worn jetpack sprite, which switches to its lit texture while thrusting.
-@export var jetpack_sprite: JetpackAsset
-
 @export_group("Animation")
 @export var thrust_animation: StringName = &"jetpack"
 
@@ -37,8 +32,6 @@ var _suppressed := false
 var _thrusting := false
 
 func _bind() -> void:
-	if jetpack_sprite == null:
-		jetpack_sprite = player.get_node_or_null(^"JetpackAsset") as JetpackAsset
 	set_unlocked(false)
 
 ## Whether the player has the jetpack at all.
@@ -49,8 +42,6 @@ func set_unlocked(unlocked: bool) -> void:
 	_unlocked = unlocked
 	if not unlocked:
 		_stop()
-	if is_instance_valid(jetpack_sprite):
-		jetpack_sprite.visible = unlocked
 
 func is_thrusting() -> bool:
 	return _thrusting
@@ -67,8 +58,6 @@ func physics_update(delta: float) -> void:
 
 	if wanted != _thrusting:
 		_thrusting = wanted
-		if is_instance_valid(jetpack_sprite):
-			jetpack_sprite.set_lit(wanted)
 		if wanted:
 			thrust_started.emit()
 		else:
@@ -87,8 +76,6 @@ func _stop() -> void:
 	if not _thrusting:
 		return
 	_thrusting = false
-	if is_instance_valid(jetpack_sprite):
-		jetpack_sprite.set_lit(false)
 	thrust_stopped.emit()
 
 func on_respawn() -> void:

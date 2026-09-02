@@ -41,15 +41,21 @@ signal action_finished(action: StringName)
 @export var fallbacks: Dictionary[StringName, StringName] = {
 	&"walk": &"run",
 	&"crawl_turn": &"crawl",
-	&"swing_crouch": &"crouch",
-	&"swing_jump": &"swing_standing",
-	&"jump_shoot": &"cover_shoot",
-	&"jetpack": &"jump",
+	&"crawl_shoot": &"crouch_shoot",
+	&"wall_cling_shot": &"jump_shoot",
+	&"wall_slide": &"jump",
+	&"wall_push": &"jump_start",
+	&"jump_start": &"jump",
 	&"jetpack_idle": &"jetpack",
-	&"wall_cling": &"jump",
-	&"mantle": &"idle",
 	&"land": &"idle",
 }
+
+## Looks drawn holding a wall in front of the character.
+##
+## The player faces [i]away[/i] from the wall they are about to push off, so these
+## read backwards under the ordinary flip and are mirrored back. Kept as a set rather
+## than asked of the wall jump, because it is a fact about how the frames were drawn.
+const WALL_LOOKS: Array[StringName] = [&"wall_slide", &"wall_push", &"wall_cling_shot"]
 
 ## Logs each unresolved name once, so a look that is silently falling back is visible
 ## in the output rather than only on screen.
@@ -88,6 +94,12 @@ var _warned: Dictionary[StringName, bool] = {}
 ## neither can undo the other.
 var _body_hidden_by_owner := false
 var _body_hidden_by_blink := false
+## Where the sprite sits when nothing has pinned it somewhere else.
+var _sprite_home := Vector2.ZERO
+var _sprite_anchor := Vector2.ZERO
+var _anchored := false
+## Set by [method request_held_action]: nothing may replace the look while it is up.
+var _action_held := false
 
 func _bind() -> void:
 	if animation_player == null:
@@ -98,6 +110,8 @@ func _bind() -> void:
 		printerr("PlayerAnimator: needs both an AnimationPlayer and a Sprite2D.")
 		return
 
+	_sprite_home = sprite.position
+	_anchored = false
 	animation_player.animation_finished.connect(_on_animation_finished)
 	if use_reference_textures:
 		_reference = PlayerReferenceSprite.new()
@@ -128,6 +142,12 @@ func request_pose(pose: StringName, speed_scale := 1.0) -> void:
 ## Returns false when [param action] is already running and [param interrupt] is off,
 ## so a caller can tell a refused re-fire from an accepted one.
 func request_action(action: StringName, min_duration := 0.0, from_time := 0.0, interrupt := true) -> bool:
+	# A held look is the last word until something explicitly takes it back. Death is
+	# the one that uses it, and everything else the player does carries on happening
+	# around a corpse: landing on the ground a frame after dying used to play the
+	# landing frames straight over the death pose.
+	if _action_held:
+		return false
 	if not _action.is_empty() and not interrupt:
 		return false
 
@@ -151,20 +171,56 @@ func request_action(action: StringName, min_duration := 0.0, from_time := 0.0, i
 ## Held until [method cancel_action], the next [method request_action], or
 ## [method on_respawn].
 func request_held_action(action: StringName) -> bool:
+	_action_held = false
 	if not request_action(action):
 		return false
 	_action_timer = INF
+	_action_held = true
 	return true
 
 ## Ends the running one-shot early and puts the pose back.
 func cancel_action() -> void:
 	if _action.is_empty():
 		return
+	_action_held = false
 	var was := _action
 	_action = &""
 	_action_timer = 0.0
 	_play(_pose)
 	action_finished.emit(was)
+
+## Pins the sprite to a spot in the player's own space, for an animation drawn around
+## something in the world rather than around the player.
+##
+## The vault is the one that needs it: its frames are drawn with the block being
+## climbed filling the bottom quarter of the frame, so the sprite belongs on the block
+## and not on the player, who does not move until the vault ends.
+func set_sprite_anchor(local_position: Vector2) -> void:
+	# Where it was is remembered on the way in rather than cached once, because the
+	# manager moves the sprite too: the air collider is shorter than the walking one
+	# and the visuals follow it down (see Player._align_visuals_to_collider).
+	if not _anchored:
+		_sprite_home = sprite.position
+	_sprite_anchor = local_position
+	_anchored = true
+	if is_instance_valid(sprite):
+		sprite.position = _sprite_anchor
+
+## Puts the sprite back where the manager had it.
+func clear_sprite_anchor() -> void:
+	if _anchored and is_instance_valid(sprite):
+		sprite.position = _sprite_home
+	_anchored = false
+
+## Which way the sprite should face this frame.
+##
+## The way the player is facing, except for the looks drawn holding a wall: see
+## [constant WALL_LOOKS].
+func _sprite_faces_right() -> bool:
+	var look := _action if not _action.is_empty() else _pose
+	if look in WALL_LOOKS:
+		return not player.facing_right
+	return player.facing_right
 
 func is_action_playing(action: StringName = &"") -> bool:
 	if action.is_empty():
@@ -250,7 +306,9 @@ func set_reference_pixel(index: Vector2i, colour: Color) -> void:
 
 func frame_update(delta: float) -> void:
 	if is_instance_valid(sprite):
-		sprite.flip_h = not player.facing_right
+		sprite.flip_h = not _sprite_faces_right()
+		if _anchored:
+			sprite.position = _sprite_anchor
 
 	if _action.is_empty():
 		return
@@ -262,6 +320,8 @@ func frame_update(delta: float) -> void:
 		action_finished.emit(was)
 
 func on_respawn() -> void:
+	clear_sprite_anchor()
+	_action_held = false
 	_action = &""
 	_action_timer = 0.0
 	_pose = &""
@@ -284,6 +344,7 @@ func _play(name: StringName, speed_scale := 1.0, from_time := 0.0) -> void:
 func _on_animation_finished(finished: StringName) -> void:
 	if _action.is_empty() or finished != _action or _action_timer > 0.0:
 		return
+	_action_held = false
 	var was := _action
 	_action = &""
 	_play(_pose)
