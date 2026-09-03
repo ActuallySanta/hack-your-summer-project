@@ -227,16 +227,24 @@ func _update_move_state() -> void:
 	move_state_changed.emit(previous_move_state, move_state)
 	_play_transition_action(previous_move_state, move_state)
 
-## The one-shot that belongs to arriving on the ground rather than to being on it.
+## The one-shots that belong to a change of state rather than to being in one.
 ##
-## An action rather than a pose because it plays once and then hands back to whatever
-## the player is actually doing: held as a pose, standing still after a landing would
-## leave them crouched in the landing frame forever.
+## Actions rather than poses because they play once and then hand back to whatever the
+## player is actually doing. Held as poses they would never end: standing still after a
+## landing would leave the player stuck in the landing frame.
+##
+## [b]Going down.[/b] The crouch frames are a settle -- upright, bending, down -- not a
+## resting crouch, so the resting pose is only the last of them and getting there is
+## this. Looping the whole thing left the player standing upright for the first half of
+## every crouch, which reads as the crouch not working at all; and replaying it every
+## time they stopped crawling stood them back up for a moment.
 func _play_transition_action(from: MoveState, to: MoveState) -> void:
 	if animator == null:
 		return
 	if from == MoveState.Jumping and (to == MoveState.Standing or to == MoveState.Crouching):
 		animator.request_action(&"land")
+	elif to == MoveState.Crouching:
+		animator.request_action(&"crouch_down")
 
 ## The launch frames, played off [signal jumped] rather than off the move state.
 ##

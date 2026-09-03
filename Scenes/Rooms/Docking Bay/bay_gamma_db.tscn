@@ -92,3 +92,7 @@ stun_time = 3.0
 
 [node name="Melee Enemy" parent="StationPoweredNode" unique_id=1835408748 instance=ExtResource("14_d4na7")]
 position = Vector2(781, 1675)
+
+[node name="SuperForward" parent="." unique_id=1269612951 instance=ExtResource("2_tjqdu")]
+tile_map_data = PackedByteArray("AAAAABcAAQACABUAAAABABcAAQACABUAAAACABcAAQACABUAAAADABcAAQADABUAAAADAAkAAQADABUAAAACAAkAAQACABUAAAABAAkAAQACABUAAAAAAAkAAQACABUAAAA=")
+tile_set = ExtResource("3_8wirl")

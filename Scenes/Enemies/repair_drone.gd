@@ -177,22 +177,10 @@ func _find_closest_repair_node() -> RepairNode:
 #endregion
 
 #region Movement
-
-## Velocity is written here rather than pushed with forces, because every mode wants a
-## speed of its own and this is the one place that sees what the engine did with the
-## last one: [param state] arrives holding the velocity that came out of this tick's
-## collisions, so a bounce is already in it before anything below reads it.
-##
-## Pursuit is the [Navigator] child's, which is handed that post-bounce velocity and
-## answers with the next one. Idle drift is not -- it is a fixed diagonal, and there
-## is nothing for a navigator to steer toward.
 func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 	if _mode == Mode.Stunned:
 		return # Falling: gravity and the floor own the velocity
 
-	# Read before anything below writes over it: what arrives here is the drone's own
-	# heading from last tick with this tick's collisions already applied to it, so the
-	# turn between the two is exactly what it hit.
 	_bang_if_deflected(state.linear_velocity)
 
 	match _mode:
@@ -213,9 +201,6 @@ func _bang_if_deflected(velocity: Vector2) -> void:
 	if _last_heading.dot(velocity.normalized()) < wall_bounce_dot:
 		play_banger(HIT_WALL_SFX)
 
-## The diagonal [param velocity] is already closest to, so a bounce off a wall turns
-## the drone onto the neighbouring diagonal and nothing else. An axis with no speed
-## worth reading keeps the sign it had, falling back to [member start_direction].
 func _snap_to_diagonal(velocity: Vector2) -> Vector2:
 	var fallback := _start_heading()
 	var epsilon := maxf(speed, 1.0) * 0.001
@@ -244,15 +229,6 @@ func _enter_idle() -> void:
 	if linear_velocity.length() <= _STOPPED_SPEED:
 		linear_velocity = _start_heading().normalized() * speed
 
-## Powers the drone back up. A powered drone is never allowed to sleep, which is the
-## whole reason this says so out loud.
-##
-## A [RigidBody2D] that holds still is put to sleep by the physics server, and a
-## sleeping body gets no [method RigidBody2D._integrate_forces] -- which is the only
-## place this drone's velocity is ever written. So it would go to sleep parked at a
-## repair job, or lying stunned on the floor, and then have no way to start moving
-## again: thrusters on, hover sound playing, and completely inert. Stunning it a second
-## time did not help either, because that path never woke it either.
 func _enable_thrusters() -> void:
 	can_sleep = false
 	sleeping = false
@@ -264,8 +240,6 @@ func _enable_thrusters() -> void:
 	linear_damp = 0.0
 	hover_sfx.play()
 
-## Cuts the thrusters: the drone stops hurting anything, falls, and lands with a much
-## deader bounce than it flies with.
 func disable_thrusters() -> void:
 	_release_target()
 	_path.clear()

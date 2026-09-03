@@ -41,6 +41,7 @@ signal action_finished(action: StringName)
 @export var fallbacks: Dictionary[StringName, StringName] = {
 	&"walk": &"run",
 	&"crawl_turn": &"crawl",
+	&"crouch_down": &"crouch",
 	&"crawl_shoot": &"crouch_shoot",
 	&"wall_cling_shot": &"jump_shoot",
 	&"wall_slide": &"jump",

@@ -21,6 +21,10 @@ func begin_repairs() -> void:
 	repair_sprite.show()
 	repair_sprite.play("Repair")
 
+func failed_repairs() -> void:
+	print("Failed to repair")
+	health_component._on_death()
+
 func finish_repairs() -> void:
 	var parent := get_parent()
 	var replacement : Enemy = repaired_scene.instantiate()
@@ -32,6 +36,12 @@ func finish_repairs() -> void:
 func _ready() -> void:
 	repair_node.on_repair_start.connect(begin_repairs)
 	repair_node.on_repair_end.connect(finish_repairs)
+	repair_node.on_repair_failure.connect(failed_repairs)
+	# RoboHealth._on_death only plays the explosion and announces itself; taking the
+	# body away is the enemy's own job, and every other robot in the game does it here.
+	# Without this the cyborg survives being shot as readily as it survives a repair
+	# that was abandoned half way through.
+	health_component.on_death_event.connect(queue_free)
 	bt_player.blackboard.set_var("canAttack",true)
 	hurtbox.hit.connect(takeDamage)
 	if start_flipped:

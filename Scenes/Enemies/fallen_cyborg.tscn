@@ -329,7 +329,6 @@ shape = SubResource("RectangleShape2D_5afkt")
 collision_layer = 4
 collision_mask = 2
 script = ExtResource("6_tos5j")
-hit_cooldown = 2.0
 metadata/_custom_type_script = "uid://ctc17oyja7fup"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=902140327]
