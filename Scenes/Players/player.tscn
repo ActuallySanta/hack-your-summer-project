@@ -290,6 +290,7 @@ tracks/0/keys = {
 resource_name = "run"
 length = 0.8
 loop_mode = 1
+step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -318,7 +319,7 @@ tracks/1/keys = {
 "start_offset": 0.0,
 "stream": ExtResource("8_fuwcu")
 }],
-"times": PackedFloat32Array(0, 0.466667)
+"times": PackedFloat32Array(0, 0.4)
 }
 tracks/1/use_blend = true
 
@@ -560,6 +561,13 @@ swing_scene = ExtResource("2_xxqkx")
 visible = false
 script = ExtResource("28_shooting")
 bullet_scene = ExtResource("3_j8xm3")
+muzzle_offset = Dictionary[int, Vector2]({
+0: Vector2(10, -20),
+1: Vector2(10, 4),
+2: Vector2(70, 25),
+3: Vector2(10, 0),
+4: Vector2(10, 0)
+})
 
 [node name="SFX" type="Node" parent="." unique_id=2019288501]
 
@@ -583,7 +591,7 @@ attenuation = 1e-05
 panning_strength = 0.0
 
 [node name="WalkSFX" type="AudioStreamPlayer2D" parent="SFX" unique_id=658475621]
-volume_db = 10.0
+volume_db = 15.0
 max_distance = 100000.0
 attenuation = 1e-05
 panning_strength = 0.0

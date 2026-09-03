@@ -35,23 +35,27 @@ enum Stance { STANDING, CROUCHING, CRAWLING, AIRBORNE, KNOCKBACK }
 @export var auto_fire_on_hold := true
 
 @export_group("Muzzle")
-## Where the muzzle sits for each stance, relative to the player's origin.
+## Where the muzzle sits for each [enum Stance], relative to the player's origin.
 ##
 ## [b]X is how far in front[/b], mirrored with the player, so a positive number always
 ## reaches the way they are facing whichever way that is. [b]Y is height[/b], negative
-## being up. Both are per stance because the gun is not in the same place in the
-## crouched frames as in the standing ones -- it used to be one shared reach for every
-## stance, with only the height tunable, so a crouched shot came out of the player's
-## middle however the frames were drawn.
+## being up.
+##
+## Keys are [enum Stance] values, which the inspector shows as plain numbers:
+## [b]0[/b] standing, [b]1[/b] crouching, [b]2[/b] crawling, [b]3[/b] airborne,
+## [b]4[/b] knocked back. Crawling is its own row because the gun is carried
+## differently once the player is down and moving, which is the case the shared
+## crouched offset could never fit.
 ##
 ## Measured from the origin rather than from the sprite, and the height picks up
 ## [member Player.visual_offset] so it follows the sprite down while the shorter air
 ## collider is in.
 @export var muzzle_offset: Dictionary[int, Vector2] = {
-	Player.MoveState.Standing: Vector2(10.0, -20.0),
-	Player.MoveState.Crouching: Vector2(10.0, 4.0),
-	Player.MoveState.Jumping: Vector2(10.0, 0.0),
-	Player.MoveState.Knockback: Vector2(10.0, 0.0),
+	Stance.STANDING: Vector2(10.0, -20.0),
+	Stance.CROUCHING: Vector2(10.0, 4.0),
+	Stance.CRAWLING: Vector2(10.0, 4.0),
+	Stance.AIRBORNE: Vector2(10.0, 0.0),
+	Stance.KNOCKBACK: Vector2(10.0, 0.0),
 }
 
 @export_group("Animation")
@@ -112,8 +116,9 @@ func shoot() -> void:
 	if bullet_scene == null or not _has_gun:
 		return
 
+	var stance := _stance()
 	var bullet := bullet_scene.instantiate() as PlayerBullet
-	var offset: Vector2 = muzzle_offset.get(player.move_state, Vector2.ZERO)
+	var offset: Vector2 = muzzle_offset.get(stance, Vector2.ZERO)
 	if not player.facing_right:
 		offset.x *= -1.0
 		bullet.scale.x = -1.0
@@ -136,15 +141,34 @@ func shoot() -> void:
 	# cancelled straight into a swing.
 	player.wrench.block_for(cooldown)
 
-	player.animator.request_action(_animation_for_state())
+	player.animator.request_action(_animation_for_stance(stance))
 	fired.emit(_mode)
 
-func _animation_for_state() -> StringName:
+## How the gun is being held right now.
+##
+## Crawling is the one the move state cannot answer on its own: crouched and crawling
+## are both [constant Player.MoveState.Crouching], and what separates them is whether
+## the player is travelling. Real travel, not held input -- pushing into a wall while
+## crouched is not crawling, and the frames should not say it is.
+func _stance() -> Stance:
 	match player.move_state:
 		Player.MoveState.Crouching:
 			var moving: bool = player.planar_movement != null and player.planar_movement.is_walking()
-			return crawl_animation if moving else crouch_animation
+			return Stance.CRAWLING if moving else Stance.CROUCHING
 		Player.MoveState.Jumping:
+			return Stance.AIRBORNE
+		Player.MoveState.Knockback:
+			return Stance.KNOCKBACK
+		_:
+			return Stance.STANDING
+
+func _animation_for_stance(stance: Stance) -> StringName:
+	match stance:
+		Stance.CRAWLING:
+			return crawl_animation
+		Stance.CROUCHING:
+			return crouch_animation
+		Stance.AIRBORNE:
 			return air_animation
 		_:
 			return stand_animation

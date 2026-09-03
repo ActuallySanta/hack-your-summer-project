@@ -331,6 +331,7 @@ func start_intro_cutscene() -> void:
 	health_component.ignore_effects = true
 	enter_tunnel("closest")
 	
+	
 	# Temp timer to get around lack of intro cutscene
 	await get_tree().create_timer(1.0).timeout
 	leave_intro_cutscene()
@@ -340,6 +341,7 @@ func leave_intro_cutscene() -> void:
 	health_component.ignore_effects = false
 	prefightNodes.rawr()
 	CameraEffects.shake(17, 1.4, CameraEffects.Axis.BOTH, CameraEffects.Ease.EASE_IN_OUT)
+	MessageDisplay.add_log_pop_up("Containment Drone")
 	await prefightNodes.audioStream.finished
 	MusicManager.set_background_track_from_name("BOSS", "Containment Drone")
 

@@ -2,14 +2,14 @@ extends Control
 
 @export var tile_height : int = 24
 @export var time_up : float = 0.5
-@export var time_held : float = 5.0
+@export var time_held : float = 3.5
 @onready var text : TextDisplay = $Guide/Text
 @onready var guide : Node2D = $Guide
 
 var _state : int = 0
 var _goal_height : float = 0
 var _timer : float = 0
-var _last_msg : String = "Null;;;;;;;;"
+var _last_msg : String = "Gay little gay boy, gay gay gay. Got I hope this game doesn't end up getting datamined... Do you think tkn heard you? No I doubt it, niether of us would be here if that were the case."
 
 func _ready() -> void:
 	_state = 0
