@@ -16,6 +16,14 @@ signal fired(mode: StringName)
 ## Gun modes the player can carry.
 const GUN_MODES: Array[StringName] = [&"stun", &"plasma"]
 
+## How the gun is being held, which is not quite the player's move state.
+##
+## Crouching and crawling are one [enum Player.MoveState] -- they are told apart by
+## whether the player is actually travelling -- but the gun sits somewhere different in
+## each, and each has its own frames. This is the distinction both of those need, worked
+## out once in [method _stance] rather than twice.
+enum Stance { STANDING, CROUCHING, CRAWLING, AIRBORNE, KNOCKBACK }
+
 @export_group("Gun")
 @export var bullet_scene: PackedScene
 ## Seconds between shots, and the rate a held trigger fires at.
@@ -23,18 +31,27 @@ const GUN_MODES: Array[StringName] = [&"stun", &"plasma"]
 ## How long a press keeps counting after it lands, so a shot fired a hair early still
 ## goes off rather than being dropped.
 @export var buffer_time := 0.15
-## How far in front of the player bullets appear.
-@export var bullet_offset := 10.0
 ## Whether holding the button keeps firing. Off, each shot needs its own press.
 @export var auto_fire_on_hold := true
 
-@export_group("Aim height")
-## Where the muzzle sits for each stance, relative to the sprite.
-@export var muzzle_height: Dictionary[int, float] = {
-	Player.MoveState.Standing: -20.0,
-	Player.MoveState.Crouching: 4.0,
-	Player.MoveState.Jumping: 0.0,
-	Player.MoveState.Knockback: 0.0,
+@export_group("Muzzle")
+## Where the muzzle sits for each stance, relative to the player's origin.
+##
+## [b]X is how far in front[/b], mirrored with the player, so a positive number always
+## reaches the way they are facing whichever way that is. [b]Y is height[/b], negative
+## being up. Both are per stance because the gun is not in the same place in the
+## crouched frames as in the standing ones -- it used to be one shared reach for every
+## stance, with only the height tunable, so a crouched shot came out of the player's
+## middle however the frames were drawn.
+##
+## Measured from the origin rather than from the sprite, and the height picks up
+## [member Player.visual_offset] so it follows the sprite down while the shorter air
+## collider is in.
+@export var muzzle_offset: Dictionary[int, Vector2] = {
+	Player.MoveState.Standing: Vector2(10.0, -20.0),
+	Player.MoveState.Crouching: Vector2(10.0, 4.0),
+	Player.MoveState.Jumping: Vector2(10.0, 0.0),
+	Player.MoveState.Knockback: Vector2(10.0, 0.0),
 }
 
 @export_group("Animation")
@@ -96,13 +113,13 @@ func shoot() -> void:
 		return
 
 	var bullet := bullet_scene.instantiate() as PlayerBullet
-	var offset_x := bullet_offset
+	var offset: Vector2 = muzzle_offset.get(player.move_state, Vector2.ZERO)
 	if not player.facing_right:
-		offset_x *= -1.0
+		offset.x *= -1.0
 		bullet.scale.x = -1.0
 	# The tuned heights are relative to the sprite, so they follow it while airborne.
-	var offset_y: float = muzzle_height.get(player.move_state, 0.0) + player.visual_offset
-	var muzzle := player.global_position + Vector2(offset_x, offset_y)
+	offset.y += player.visual_offset
+	var muzzle := player.global_position + offset
 	bullet.direction = Vector2.RIGHT if player.facing_right else Vector2.LEFT
 	bullet.set_mode(_mode)
 

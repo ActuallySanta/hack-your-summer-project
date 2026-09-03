@@ -289,13 +289,13 @@ func yelp_in_agony() -> void:
 	vocalizer.stream = yelp
 	vocalizer.play()
 	visuals.flash()
-	if health_component.current_health() > 9:
+	if health_component.current_health() > 23:
 		pass
-	elif health_component.current_health() > 7:
+	elif health_component.current_health() > 18:
 		sprite_sheet_swapper.set_sprite_level(1)
-	elif health_component.current_health() > 5:
+	elif health_component.current_health() > 13:
 		sprite_sheet_swapper.set_sprite_level(2)
-	elif health_component.current_health() > 3:
+	elif health_component.current_health() > 7:
 		sprite_sheet_swapper.set_sprite_level(3)
 	if do_intro_cutscene:
 		start_intro_cutscene()
