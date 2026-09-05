@@ -2,6 +2,7 @@ extends Enemy
 
 const STUN_SFX := preload("res://Sounds/Entities/Enemies/Machines/RobotHit.wav")
 const HURT_SFX := preload("res://Sounds/Entities/Enemies/Machines/RobotOuch.wav")
+const REPAIR_SFX := preload("res://Sounds/Entities/Enemies/Machines/FallenAndroidRepair.wav")
 
 @export var repaired_scene : PackedScene
 @export var repaired_position : Vector2 = Vector2(-21,-48)
@@ -17,6 +18,7 @@ const HURT_SFX := preload("res://Sounds/Entities/Enemies/Machines/RobotOuch.wav"
 @onready var animator := $AnimationPlayer
 @onready var repair_node : RepairNode = $RepairNode
 @onready var ouch_sfx : AudioStreamPlayer2D = $OuchSFX
+@onready var banger_sfx : AudioStreamPlayer2D = $Bangers
 
 var is_weapon_raised : bool = false
 var timer := 0.0
@@ -24,7 +26,8 @@ var timer := 0.0
 func begin_repairs() -> void:
 	visual.hide()
 	repair_sprite.show()
-	repair_sprite.play("Repair")
+	repair_sprite.play( "Repair" )
+	play_banger( REPAIR_SFX )
 
 func failed_repairs() -> void:
 	print("Failed to repair")
@@ -37,6 +40,10 @@ func finish_repairs() -> void:
 	replacement.update_flip(-1 if isFlipped else 1)
 	parent.add_child(replacement)
 	queue_free()
+
+func play_banger(stream: AudioStreamWAV) -> void:
+	banger_sfx.stream = stream
+	banger_sfx.play()
 
 func _ready() -> void:
 	repair_node.on_repair_start.connect(begin_repairs)

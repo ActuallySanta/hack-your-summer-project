@@ -64,7 +64,7 @@ tracks/1/keys = {
 tracks/2/type = "audio"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("AudioTrack")
+tracks/2/path = NodePath("Bangers")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -129,7 +129,7 @@ tracks/0/keys = {
 tracks/1/type = "audio"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("AudioTrack")
+tracks/1/path = NodePath("Bangers")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -375,6 +375,6 @@ position = Vector2(-86757, -73880)
 shape = SubResource("CircleShape2D_bpmhk")
 disabled = true
 
-[node name="AudioTrack" type="AudioStreamPlayer2D" parent="." unique_id=255187624]
+[node name="Bangers" type="AudioStreamPlayer2D" parent="." unique_id=255187624]
 
 [node name="OuchSFX" type="AudioStreamPlayer2D" parent="." unique_id=1636576835]

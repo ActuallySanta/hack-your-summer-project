@@ -81,7 +81,6 @@ max_distance = 671.0
 attenuation = 1.5691681
 
 [node name="Bangs" type="AudioStreamPlayer2D" parent="." unique_id=344619955]
-attenuation = 0.0
+max_distance = 624.0
+attenuation = 1.8025012
 max_polyphony = 4
-
-[node name="SFX" type="Node" parent="." unique_id=119147471]

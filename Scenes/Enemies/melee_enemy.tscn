@@ -266,6 +266,7 @@ stream = ExtResource("6_yxfb2")
 
 [node name="MoveSFX" type="AudioStreamPlayer2D" parent="." unique_id=1798124624]
 stream = ExtResource("6_0u8ws")
+max_distance = 643.0
 
 [node name="Contact Damage Hitbox" type="Area2D" parent="." unique_id=504608643]
 visible = false
