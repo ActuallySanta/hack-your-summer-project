@@ -174,6 +174,7 @@ func _physics_process(delta: float) -> void:
 	_update_floor_snap(delta)
 
 	move_and_slide()
+	_release_wall_floor()
 
 	for component in _components:
 		if component.component_enabled:
@@ -283,7 +284,7 @@ func _determine_move_state() -> MoveState:
 func _wanted_move_state() -> MoveState:
 	if knockback_timer > 0.0:
 		return MoveState.Knockback
-	if not is_on_floor() and (floor_jump == null or not floor_jump.can_jump()):
+	if not is_grounded() and (floor_jump == null or not floor_jump.can_jump()):
 		return MoveState.Jumping
 	if crouch_input:
 		return MoveState.Crouching
@@ -318,6 +319,67 @@ func _collider_for_state(state: MoveState) -> CollisionManager.State:
 			return CollisionManager.State.CROUCH
 		_:
 			return CollisionManager.State.WALK
+
+## Lets go of a wall the body has decided is a floor.
+##
+## [member CharacterBody2D.floor_block_on_wall] is Godot's default and worth keeping:
+## it is what stops a body walking up a surface it is only pressing against. The way it
+## does that is to count a wall as floor when the body was on the floor and ran into it,
+## so the body is blocked rather than sliding down.
+##
+## That costs nothing while there is real ground underfoot. It costs everything when the
+## ground goes in the same frame -- a crumbling tile at the foot of a wall, which bay
+## gamma has a corner full of. The wall is then the only contact, the body still reports
+## [method CharacterBody2D.is_on_floor], and [method CharacterBody2D.move_and_slide]
+## cancels the fall into it. The player hangs on the wall in the idle pose, creeping down
+## a fraction of a pixel a frame as the physics engine works them free, with the odd 32px
+## lurch when floor snapping finds something.
+##
+## So the setting is dropped for exactly as long as the lie lasts -- there is a floor
+## reported but no contact that is one -- and put back the moment the body is honestly
+## grounded again. Walking into ordinary walls is untouched, because there is real floor
+## underfoot the whole time.
+func _release_wall_floor() -> void:
+	if is_on_floor() and not _has_floor_contact():
+		floor_block_on_wall = false
+	elif planar_movement:
+		floor_block_on_wall = planar_movement.block_on_wall
+
+## Whether anything the body actually touched this frame was a floor.
+func _has_floor_contact() -> bool:
+	for i in get_slide_collision_count():
+		if get_slide_collision(i).get_normal().angle_to(up_direction) <= floor_max_angle + 0.01:
+			return true
+	return false
+
+## Whether the player is standing on something they could actually stand on.
+##
+## [method CharacterBody2D.is_on_floor] is not always that.
+## [member CharacterBody2D.floor_block_on_wall] -- Godot's default, and the setting
+## that stops a body climbing a surface it is only pressing against -- makes a body
+## that was on the floor last frame report a [i]wall[/i] it walks into as floor, so it
+## cannot slide down it. Harmless while there is real ground underfoot.
+##
+## It stops being harmless when the ground goes at the same moment, which is what a
+## crumbling tile at the foot of a wall does: the wall is the only contact left, the
+## body still says it is standing, and so gravity is never applied. The player hangs
+## there in the idle pose, sinking a fraction of a pixel a frame -- clinging to the
+## wall as though it were a floor.
+##
+## So everything that means "are they on the ground" asks this instead, and it checks
+## that what is holding them up is within [member CharacterBody2D.floor_max_angle] of
+## level. Slopes still pass: the tilesets' are 45 degrees against a 50 degree limit.
+func is_grounded() -> bool:
+	if not is_on_floor():
+		return false
+	var normal := get_floor_normal()
+	if normal.is_zero_approx():
+		return true
+	# Against up, not against down: a floor's normal points away from the surface, so
+	# level ground reads (0, -1), the same way [member CharacterBody2D.up_direction]
+	# points. A hair of slack, so a surface drawn exactly at the limit is not decided
+	# by floating point.
+	return normal.angle_to(up_direction) <= floor_max_angle + 0.01
 
 ## Whether the standing collider would fit where the player is right now.
 ##
@@ -370,7 +432,7 @@ func _pose_for_state() -> StringName:
 			# whatever pose was up when the hit landed to come back when the reaction
 			# ended: falling onto an enemy left the player skidding along the floor in
 			# the falling pose, and being hit while crouched left them crawling.
-			if not is_on_floor():
+			if not is_grounded():
 				return &"jump"
 			return &"run" if _is_moving() else &"idle"
 		_:
@@ -506,7 +568,7 @@ func reset_all_inputs() -> void:
 ## player counts, which is what keeps the edges of a crumbling floor forgiving:
 ## clipping a corner of one is not standing on it.
 func _handle_crumbling_floor() -> void:
-	if not is_on_floor():
+	if not is_grounded():
 		return
 
 	var layers := get_tree().get_nodes_in_group(BREAKABLE_GROUP)

@@ -88,7 +88,7 @@ func physics_update(delta: float) -> void:
 			player.horizontal_lock = 0.0
 	player.horizontal_lock = _hold_timer
 
-	if player.is_on_floor():
+	if player.is_grounded():
 		return
 	if _input_buffer > 0.0 and _contact_buffer > 0.0:
 		wall_jump()
@@ -122,7 +122,7 @@ func post_move_update(_delta: float) -> void:
 		return
 	# The rise is what needed protecting. Once it is over -- apex reached, or cut short
 	# by a ceiling or a landing -- gravity goes back to whoever normally owns it.
-	if player.velocity.y >= 0.0 or player.is_on_floor() or player.is_on_ceiling():
+	if player.velocity.y >= 0.0 or player.is_grounded() or player.is_on_ceiling():
 		player.gravity_override = -1.0
 
 ## The launch speed that brings the arc to rest exactly [member apex_tiles] above
@@ -153,7 +153,7 @@ func _arc_gravity() -> float:
 ## Whether a wall is close enough to launch from, and refreshes the contact window
 ## while one is.
 func _wall_in_reach() -> bool:
-	if not component_enabled or player.is_on_floor() or is_zero_approx(player.move_input):
+	if not component_enabled or player.is_grounded() or is_zero_approx(player.move_input):
 		return false
 
 	for point in probe_points():

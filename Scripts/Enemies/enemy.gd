@@ -52,25 +52,36 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 		return
 	
-	ground_check.force_shapecast_update() # A cast that just entered the tree has no result yet
-	if ground_check.get_collision_count() == 0:
-		update_flip(1.0 if isFlipped else -1.0) # Turn away from the ledge
-		switch_state("idle")
-	
-	switch_state("patrolling" if not can_see_player() else "attacking")
+	switch_state(read_state())
 	move_and_slide()
 
-func getValidPos() -> Vector2:
-	var currWanderDistance : float = randf_range(-wanderDistance,wanderDistance)
-	target_location_check.target_position.x = currWanderDistance
-	
-	var collisionPoint : Vector2 = target_location_check.get_collision_point()
-	var collisionWidth = (physics_body.shape as CapsuleShape2D).radius
+func read_state() -> String:
+	if not can_see_player():
+		return "patrolling"
+	target_range_check.force_shapecast_update()
+	return "attacking" if shapeCast_hit_playerRef(target_range_check) else "chasing"
+
+func has_ground_ahead() -> bool:
+	ground_check.force_shapecast_update() # A cast that just entered the tree has no result yet
+	return ground_check.get_collision_count() > 0
+
+func get_patrol_target() -> Vector2:
+	var distance : float = randf_range(wanderDistance * 0.5, wanderDistance)
+
+	# The cast is a child of a body that mirrors itself to turn, so a positive local
+	# target_position.x always points the way the enemy is facing
+	target_location_check.target_position.x = distance
+	target_location_check.force_raycast_update()
+
+	var reach : float = distance
 	if target_location_check.is_colliding():
-		return collisionPoint + (collisionPoint.direction_to(position) * collisionWidth/2)
-	else:
-		return Vector2(position.x + currWanderDistance,position.y)
-	
+		var body_radius : float = (physics_body.shape as CapsuleShape2D).radius
+		var wall_gap : float = absf(target_location_check.get_collision_point().x - global_position.x)
+		reach = maxf(wall_gap - body_radius, 0.0)
+
+	var facing : float = -1.0 if isFlipped else 1.0
+	return Vector2(global_position.x + facing * reach, global_position.y)
+
 func takeDamage(_hurtBox: Hurtbox, _hit_info: HitInfo, source: Hitbox):
 	if source.has_method("get_damage_type"):
 		var dmg_type : StringName = source.get_damage_type()
@@ -95,4 +106,3 @@ func shapeCast_hit_playerRef(variable: ShapeCast2D) -> bool:
 
 func switch_state(state_name: String) -> void:
 	bt_player.blackboard.set_var("state", state_name)
-	bt_player.restart()

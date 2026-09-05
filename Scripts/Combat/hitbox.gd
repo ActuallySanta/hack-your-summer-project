@@ -19,8 +19,8 @@ signal on_hit(hitbox: Hitbox, target: Hurtbox)
 signal environment_hit(target: Node2D)
 
 @export var damage: int = 1
-@export var knockback_strength: float = 300
-@export var knockback_duration: float = 0.1
+@export var knockback_strength: float = 150
+@export var knockback_duration: float = 0.01
 
 ## Seconds before the same target can be hit again by this hitbox.
 ##

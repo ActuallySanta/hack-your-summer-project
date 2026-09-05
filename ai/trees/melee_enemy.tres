@@ -1,9 +1,10 @@
 [gd_resource type="BehaviorTree" format=3 uid="uid://d1xmalrj37niq"]
 
-[ext_resource type="Script" uid="uid://q3siycoeq6oo" path="res://ai/tasks/get_hurt.gd" id="1_qcf87"]
-[ext_resource type="Script" uid="uid://mskj25u3nnh8" path="res://ai/tasks/get_target_pos.gd" id="2_mlqlw"]
-[ext_resource type="Script" uid="uid://be1l2we8eqoly" path="res://ai/tasks/get_rand_pos.gd" id="2_uji1f"]
-[ext_resource type="Script" uid="uid://bynkqarx8hbgc" path="res://ai/tasks/move_to_pos.gd" id="3_mlqlw"]
+[ext_resource type="Script" uid="uid://q3siycoeq6oo" path="res://ai/tasks/get_hurt.gd" id="1_hurt"]
+[ext_resource type="Script" uid="uid://mskj25u3nnh8" path="res://ai/tasks/get_target_pos.gd" id="2_seek"]
+[ext_resource type="Script" uid="uid://be1l2we8eqoly" path="res://ai/tasks/get_rand_pos.gd" id="3_wander"]
+[ext_resource type="Script" uid="uid://bynkqarx8hbgc" path="res://ai/tasks/move_to_pos.gd" id="4_walk"]
+[ext_resource type="Script" uid="uid://b4dwxlwmdch1g" path="res://ai/tasks/turn_around.gd" id="5_turn"]
 
 [sub_resource type="BlackboardPlan" id="BlackboardPlan_0enjg"]
 var/state/name = &"state"
@@ -17,155 +18,133 @@ var/canAttack/value = false
 var/canAttack/hint = 0
 var/canAttack/hint_string = ""
 
-[sub_resource type="BBVariant" id="BBVariant_bu68p"]
+[sub_resource type="BBVariant" id="BBVariant_hurt"]
 type = 4
 saved_value = "hurt"
 resource_name = "hurt"
 
-[sub_resource type="BTCheckVar" id="BTCheckVar_fxqlo"]
+[sub_resource type="BTCheckVar" id="BTCheckVar_hurt"]
 variable = &"state"
-value = SubResource("BBVariant_bu68p")
+value = SubResource("BBVariant_hurt")
 
-[sub_resource type="BBNode" id="BBNode_vs3e3"]
+[sub_resource type="BBNode" id="BBNode_hurtanim"]
 saved_value = NodePath("AnimationPlayer")
 resource_name = "AnimationPlayer"
 
-[sub_resource type="BTPlayAnimation" id="BTPlayAnimation_mlekb"]
-animation_player = SubResource("BBNode_vs3e3")
+[sub_resource type="BTPlayAnimation" id="BTPlayAnimation_hurt"]
+animation_player = SubResource("BBNode_hurtanim")
 animation_name = &"hurt"
 
-[sub_resource type="BTAction" id="BTAction_bu68p"]
-script = ExtResource("1_qcf87")
+[sub_resource type="BTAction" id="BTAction_hurt"]
+script = ExtResource("1_hurt")
 
-[sub_resource type="BTSequence" id="BTSequence_o5b5o"]
+[sub_resource type="BTSequence" id="BTSequence_hurt"]
 custom_name = "Hurt"
-children = [SubResource("BTCheckVar_fxqlo"), SubResource("BTPlayAnimation_mlekb"), SubResource("BTAction_bu68p")]
+children = [SubResource("BTCheckVar_hurt"), SubResource("BTPlayAnimation_hurt"), SubResource("BTAction_hurt")]
 
-[sub_resource type="BBVariant" id="BBVariant_tfyug"]
+[sub_resource type="BBVariant" id="BBVariant_attacking"]
 type = 4
 saved_value = "attacking"
 resource_name = "attacking"
 
-[sub_resource type="BTCheckVar" id="BTCheckVar_153fj"]
+[sub_resource type="BTCheckVar" id="BTCheckVar_attacking"]
 variable = &"state"
-value = SubResource("BBVariant_tfyug")
+value = SubResource("BBVariant_attacking")
 
-[sub_resource type="BBVariant" id="BBVariant_153fj"]
+[sub_resource type="BBVariant" id="BBVariant_true"]
 type = 1
 saved_value = true
 resource_name = "true"
 
-[sub_resource type="BTCheckVar" id="BTCheckVar_bu68p"]
+[sub_resource type="BTCheckVar" id="BTCheckVar_canattack"]
 variable = &"canAttack"
-value = SubResource("BBVariant_153fj")
+value = SubResource("BBVariant_true")
 
-[sub_resource type="BBNode" id="BBNode_bu68p"]
+[sub_resource type="BBNode" id="BBNode_atkplay"]
 saved_value = NodePath("AnimationPlayer")
 resource_name = "AnimationPlayer"
 
-[sub_resource type="BTPlayAnimation" id="BTPlayAnimation_fxqlo"]
-animation_player = SubResource("BBNode_bu68p")
+[sub_resource type="BTPlayAnimation" id="BTPlayAnimation_attack"]
+animation_player = SubResource("BBNode_atkplay")
 animation_name = &"attack"
 
-[sub_resource type="BBNode" id="BBNode_153fj"]
+[sub_resource type="BBNode" id="BBNode_atkawait"]
 saved_value = NodePath("AnimationPlayer")
 resource_name = "AnimationPlayer"
 
-[sub_resource type="BTAwaitAnimation" id="BTAwaitAnimation_bu68p"]
-animation_player = SubResource("BBNode_153fj")
+[sub_resource type="BTAwaitAnimation" id="BTAwaitAnimation_attack"]
+animation_player = SubResource("BBNode_atkawait")
 animation_name = &"attack"
+max_time = 2.0
 
-[sub_resource type="BTSequence" id="BTSequence_42kop"]
+[sub_resource type="BTSequence" id="BTSequence_attack"]
 custom_name = "Attack Player"
-children = [SubResource("BTCheckVar_153fj"), SubResource("BTCheckVar_bu68p"), SubResource("BTPlayAnimation_fxqlo"), SubResource("BTAwaitAnimation_bu68p")]
+children = [SubResource("BTCheckVar_attacking"), SubResource("BTCheckVar_canattack"), SubResource("BTPlayAnimation_attack"), SubResource("BTAwaitAnimation_attack")]
 
-[sub_resource type="BBVariant" id="BBVariant_qcf87"]
+[sub_resource type="BBVariant" id="BBVariant_chasing"]
 type = 4
 saved_value = "chasing"
 resource_name = "chasing"
 
-[sub_resource type="BTCheckVar" id="BTCheckVar_uji1f"]
+[sub_resource type="BTCheckVar" id="BTCheckVar_chasing"]
 variable = &"state"
-value = SubResource("BBVariant_qcf87")
+value = SubResource("BBVariant_chasing")
 
-[sub_resource type="BTAction" id="BTAction_pitpp"]
-script = ExtResource("2_mlqlw")
+[sub_resource type="BTAction" id="BTAction_seek"]
+script = ExtResource("2_seek")
 
-[sub_resource type="BBNode" id="BBNode_qcf87"]
+[sub_resource type="BBNode" id="BBNode_chaserun"]
 saved_value = NodePath("AnimationPlayer")
 resource_name = "AnimationPlayer"
 
-[sub_resource type="BTPlayAnimation" id="BTPlayAnimation_uji1f"]
-animation_player = SubResource("BBNode_qcf87")
+[sub_resource type="BTPlayAnimation" id="BTPlayAnimation_chaserun"]
+animation_player = SubResource("BBNode_chaserun")
 animation_name = &"run"
 
-[sub_resource type="BTAction" id="BTAction_plt0x"]
-script = ExtResource("3_mlqlw")
+[sub_resource type="BTAction" id="BTAction_chasewalk"]
+script = ExtResource("4_walk")
 
-[sub_resource type="BTSequence" id="BTSequence_qcf87"]
+[sub_resource type="BTDynamicSequence" id="BTDynamicSequence_chase"]
 custom_name = "Chase"
-children = [SubResource("BTCheckVar_uji1f"), SubResource("BTAction_pitpp"), SubResource("BTPlayAnimation_uji1f"), SubResource("BTAction_plt0x")]
+children = [SubResource("BTCheckVar_chasing"), SubResource("BTAction_seek"), SubResource("BTPlayAnimation_chaserun"), SubResource("BTAction_chasewalk")]
 
-[sub_resource type="BBNode" id="BBNode_42kop"]
+[sub_resource type="BTAction" id="BTAction_wander"]
+script = ExtResource("3_wander")
+
+[sub_resource type="BBNode" id="BBNode_patrolrun"]
 saved_value = NodePath("AnimationPlayer")
 resource_name = "AnimationPlayer"
 
-[sub_resource type="BTPlayAnimation" id="BTPlayAnimation_tfyug"]
-animation_player = SubResource("BBNode_42kop")
-animation_name = &"idle"
-
-[sub_resource type="BTRandomWait" id="BTRandomWait_153fj"]
-
-[sub_resource type="BTSequence" id="BTSequence_bu68p"]
-custom_name = "Wait"
-children = [SubResource("BTPlayAnimation_tfyug"), SubResource("BTRandomWait_153fj")]
-
-[sub_resource type="BTProbability" id="BTProbability_0enjg"]
-children = [SubResource("BTSequence_bu68p")]
-
-[sub_resource type="BTAction" id="BTAction_tfyug"]
-script = ExtResource("2_uji1f")
-moveRange = 50.0
-
-[sub_resource type="BBNode" id="BBNode_tfyug"]
-saved_value = NodePath("AnimationPlayer")
-resource_name = "AnimationPlayer"
-
-[sub_resource type="BTPlayAnimation" id="BTPlayAnimation_153fj"]
-animation_player = SubResource("BBNode_tfyug")
+[sub_resource type="BTPlayAnimation" id="BTPlayAnimation_patrolrun"]
+animation_player = SubResource("BBNode_patrolrun")
 animation_name = &"run"
 
-[sub_resource type="BTAction" id="BTAction_153fj"]
-script = ExtResource("3_mlqlw")
+[sub_resource type="BTAction" id="BTAction_patrolwalk"]
+script = ExtResource("4_walk")
 
-[sub_resource type="BTSequence" id="BTSequence_fxqlo"]
-custom_name = "Move"
-children = [SubResource("BTAction_tfyug"), SubResource("BTPlayAnimation_153fj"), SubResource("BTAction_153fj")]
-
-[sub_resource type="BTSequence" id="BTSequence_0enjg"]
-custom_name = "Patrol"
-children = [SubResource("BTProbability_0enjg"), SubResource("BTSequence_fxqlo")]
-
-[sub_resource type="BBNode" id="BBNode_0enjg"]
+[sub_resource type="BBNode" id="BBNode_patrolidle"]
 saved_value = NodePath("AnimationPlayer")
 resource_name = "AnimationPlayer"
 
-[sub_resource type="BTPlayAnimation" id="BTPlayAnimation_42kop"]
-animation_player = SubResource("BBNode_0enjg")
+[sub_resource type="BTPlayAnimation" id="BTPlayAnimation_patrolidle"]
+animation_player = SubResource("BBNode_patrolidle")
 animation_name = &"idle"
 
-[sub_resource type="BTRandomWait" id="BTRandomWait_0enjg"]
+[sub_resource type="BTRandomWait" id="BTRandomWait_patrol"]
+min_duration = 1.5
+max_duration = 3.0
 
-[sub_resource type="BTSequence" id="BTSequence_153fj"]
-children = [SubResource("BTPlayAnimation_42kop"), SubResource("BTRandomWait_0enjg")]
+[sub_resource type="BTAction" id="BTAction_turn"]
+script = ExtResource("5_turn")
 
-[sub_resource type="BTSequence" id="BTSequence_tfyug"]
-custom_name = "Idle"
-children = [SubResource("BTSequence_153fj")]
+[sub_resource type="BTSequence" id="BTSequence_patrol"]
+custom_name = "Patrol"
+children = [SubResource("BTAction_wander"), SubResource("BTPlayAnimation_patrolrun"), SubResource("BTAction_patrolwalk"), SubResource("BTPlayAnimation_patrolidle"), SubResource("BTRandomWait_patrol"), SubResource("BTAction_turn")]
 
-[sub_resource type="BTSelector" id="BTSelector_42kop"]
-children = [SubResource("BTSequence_o5b5o"), SubResource("BTSequence_42kop"), SubResource("BTSequence_qcf87"), SubResource("BTSequence_0enjg"), SubResource("BTSequence_tfyug")]
+[sub_resource type="BTDynamicSelector" id="BTDynamicSelector_root"]
+custom_name = "Enemy Behaviour"
+children = [SubResource("BTSequence_hurt"), SubResource("BTSequence_attack"), SubResource("BTDynamicSequence_chase"), SubResource("BTSequence_patrol")]
 
 [resource]
 blackboard_plan = SubResource("BlackboardPlan_0enjg")
-root_task = SubResource("BTSelector_42kop")
+root_task = SubResource("BTDynamicSelector_root")

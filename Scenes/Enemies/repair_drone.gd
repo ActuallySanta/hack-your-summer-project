@@ -44,16 +44,7 @@ const _STOPPED_SPEED := 4.0
 ## Seconds spent on the floor after a stun bullet.
 @export var stun_time : float = 5.0
 
-## Seconds between scans while idle, so a drone that ran out of work picks up a
-## machine that breaks later. 0 to idle forever once the room is repaired.
 @export var idle_rescan_interval : float = 2.0
-
-## How sharply a tick has to turn the drone before it counts as having hit something.
-##
-## Compared against the dot of the heading before and after: 1.0 is dead ahead,
-## 0.0 a right-angle turn, -1.0 straight back the way it came. Nothing the drone does
-## under its own power turns it anywhere near this fast -- steering is capped at a
-## fraction of its speed per tick -- so a reading below this was a wall.
 @export_range(-1.0, 1.0) var wall_bounce_dot : float = 0.5
 
 #endregion
@@ -264,7 +255,6 @@ func play_banger(stream: AudioStreamWAV) -> void:
 	bang_sfx.stream = stream
 	bang_sfx.play()
 
-#region Being hit
 func _on_hit(_hit_info: HitInfo, source: Hitbox) -> void:
 	if source.has_method("get_damage_type"):
 		var dmg_type : StringName = source.get_damage_type()
@@ -273,5 +263,3 @@ func _on_hit(_hit_info: HitInfo, source: Hitbox) -> void:
 			return
 	flasher.flash()
 	play_banger(HURT_SFX)
-
-#endregion

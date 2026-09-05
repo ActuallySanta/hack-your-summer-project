@@ -90,7 +90,7 @@ func _walk() -> void:
 	# extra off rather than cutting to walking speed. Without this a wall jump's push
 	# vanished the instant its hold ended, which is most of why one read as a hop
 	# straight up rather than as a leap across.
-	if not player.is_on_floor() \
+	if not player.is_grounded() \
 			and absf(player.velocity.x) > absf(target) \
 			and signf(player.velocity.x) == signf(target):
 		player.velocity.x = move_toward(player.velocity.x, target, move_speed * air_momentum_decay)

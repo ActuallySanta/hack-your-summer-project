@@ -26,8 +26,6 @@ var _curr_health : int:
 	set(value):
 		if ignore_effects:
 			return
-		# Clamped at both ends. An overkill hit used to leave health negative, which
-		# every readout of it (the HUD, a death check) then had to know about.
 		_curr_health = clampi(value, 0, max_health)
 		if _curr_health <= 0:
 			_on_death()
@@ -57,12 +55,6 @@ func max_out() -> void:
 	_curr_health = max_health
 	_check_low_health()
 
-## Fires the low-health signals on the crossing only.
-##
-## They used to be raised by whoever changed the health, each in its own way, and the
-## damage path raised entry on every hit taken while already below the line rather
-## than on the hit that took it there -- so a listener that meant to switch behaviour
-## once (the containment drone's attack table) was re-run on every later hit.
 func _check_low_health() -> void:
 	var low := _curr_health < low_health_boundry
 	if low == _was_low:

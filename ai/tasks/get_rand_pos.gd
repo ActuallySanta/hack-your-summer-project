@@ -1,11 +1,5 @@
 extends BTAction
 
-@export var moveRange : float = 10.0
-
-func _tick(delta: float) -> Status:
-	
-	var pos: Vector2 = agent.getValidPos()
-	
-	blackboard.set_var("Position",pos)
-	
+func _tick(_delta: float) -> Status:
+	blackboard.set_var("Position", agent.get_patrol_target())
 	return SUCCESS

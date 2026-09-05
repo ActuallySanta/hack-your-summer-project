@@ -1,5 +1,5 @@
 extends BTAction
 
 func _tick(_delta: float) -> Status:
-	blackboard.set_var("Position", agent.playerReference.global_position)
+	agent.update_flip(1.0 if agent.isFlipped else -1.0)
 	return SUCCESS

@@ -83,7 +83,7 @@ func is_active() -> bool:
 ## Tries to start a vault in the direction the player is pushing. Returns whether one
 ## started, so the jump can go ahead unchanged when it did not.
 func try_mantle() -> bool:
-	if not component_enabled or _active or not player.is_on_floor():
+	if not component_enabled or _active or not player.is_grounded():
 		return false
 	# Vault the way the player is pushing, not the way they happen to face, so
 	# standing still against a ledge and tapping jump is an ordinary jump.

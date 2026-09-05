@@ -28,7 +28,6 @@ tracks/0/keys = {
 [sub_resource type="Animation" id="Animation_xtnlt"]
 resource_name = "attack"
 length = 0.2
-loop_mode = 1
 tracks/0/type = "method"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -148,6 +147,7 @@ radius = 20.0
 collision_layer = 4
 script = ExtResource("1_yfht6")
 attackCooldown = 3.5
+wanderDistance = 500.0
 health_component = NodePath("RoboHealth")
 hurtbox = NodePath("RoboHealth/Hurtbox")
 
@@ -207,7 +207,6 @@ shape = SubResource("CapsuleShape2D_mgs6e")
 visible = false
 position = Vector2(48, 52)
 shape = SubResource("CircleShape2D_6j4xf")
-collide_with_areas = true
 
 [node name="Target Range Check" type="ShapeCast2D" parent="." unique_id=294550597]
 visible = false

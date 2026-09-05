@@ -85,7 +85,7 @@ func _bind() -> void:
 func can_jump() -> bool:
 	return component_enabled \
 		and _grounded_since_jump \
-		and (player.is_on_floor() or _coyote > 0.0)
+		and (player.is_grounded() or _coyote > 0.0)
 
 func is_rising() -> bool:
 	return player.velocity.y < 0.0
@@ -127,7 +127,7 @@ func post_move_update(_delta: float) -> void:
 	if player.is_on_ceiling() and player.velocity.y < 0.0:
 		player.velocity.y = 0.0
 
-	if player.is_on_floor() and player.velocity.y >= 0.0:
+	if player.is_grounded() and player.velocity.y >= 0.0:
 		_grounded_since_jump = true
 
 func on_respawn() -> void:
@@ -143,7 +143,7 @@ func _on_external_jump() -> void:
 
 #region Gravity
 func _apply_gravity(delta: float) -> void:
-	if player.is_on_floor():
+	if player.is_grounded():
 		_coyote = coyote_time
 		return
 
@@ -182,6 +182,6 @@ func _gravity_for_apex(tiles: float) -> float:
 	return (jump_force * jump_force) / (2.0 * maxf(height - step_overshoot, 1.0))
 
 func _track_ground(delta: float) -> void:
-	if not player.is_on_floor():
+	if not player.is_grounded():
 		_coyote -= delta
 #endregion

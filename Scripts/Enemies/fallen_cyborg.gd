@@ -1,4 +1,8 @@
 extends Enemy
+
+const STUN_SFX := preload("res://Sounds/Entities/Enemies/Machines/RobotHit.wav")
+const HURT_SFX := preload("res://Sounds/Entities/Enemies/Machines/RobotOuch.wav")
+
 @export var repaired_scene : PackedScene
 @export var repaired_position : Vector2 = Vector2(-21,-48)
 @export var fire_check_timer : float = 0.4
@@ -12,6 +16,7 @@ extends Enemy
 @onready var repair_sprite := $RepairSprite
 @onready var animator := $AnimationPlayer
 @onready var repair_node : RepairNode = $RepairNode
+@onready var ouch_sfx : AudioStreamPlayer2D = $OuchSFX
 
 var is_weapon_raised : bool = false
 var timer := 0.0
@@ -36,12 +41,9 @@ func finish_repairs() -> void:
 func _ready() -> void:
 	repair_node.on_repair_start.connect(begin_repairs)
 	repair_node.on_repair_end.connect(finish_repairs)
-	repair_node.on_repair_failure.connect(failed_repairs)
-	# RoboHealth._on_death only plays the explosion and announces itself; taking the
-	# body away is the enemy's own job, and every other robot in the game does it here.
-	# Without this the cyborg survives being shot as readily as it survives a repair
-	# that was abandoned half way through.
-	health_component.on_death_event.connect(queue_free)
+	repair_node.on_repair_failure.connect( health_component.kill_self )
+	#health_component.on_hit_event.connect( func(): ouch_sfx.play() )
+	#health_component.on_death_event.connect(queue_free)
 	bt_player.blackboard.set_var("canAttack",true)
 	hurtbox.hit.connect(takeDamage)
 	if start_flipped:
@@ -76,4 +78,16 @@ func spawnBullet():
 
 func set_weapon_raised(val: bool) -> void:
 	is_weapon_raised = val
-	
+
+func play_sfx_at_hurt(stream: AudioStreamWAV) -> void:
+	ouch_sfx.stream = stream
+	ouch_sfx.play()
+
+func _on_hit(_hit_info: HitInfo, source: Hitbox) -> void:
+	if source.has_method("get_damage_type"):
+		var dmg_type : StringName = source.get_damage_type()
+		if dmg_type == "stun_bullet":
+			play_sfx_at_hurt(STUN_SFX)
+			return
+	flasher.flash()
+	play_sfx_at_hurt(HURT_SFX)

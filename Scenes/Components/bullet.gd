@@ -43,7 +43,10 @@ func initial_operations(spawn_pos: Vector2, spawn_direction: StringName, spawn_o
 	var dir : = direction_to_vector[ initDir ]
 	position = spawnPos + dir * start_offset
 	velocity = dir * move_speed
-	$Sprite2D.frame = sprite_texture_map[ initDir ]
+	if $Sprite2D is ManualAnim:
+		($Sprite2D as ManualAnim).anim_offset = Vector2(0, sprite_texture_map[ initDir ])
+	else:
+		$Sprite2D.frame = sprite_texture_map[ initDir ]
 	$Sprite2D.position *= dir
 	post_init_operations()
 	

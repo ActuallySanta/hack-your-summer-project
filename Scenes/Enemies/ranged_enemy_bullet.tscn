@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://6t1wlfec2sqr" path="res://Scenes/Components/bullet.gd" id="1_1f3k8"]
 [ext_resource type="Texture2D" uid="uid://bxgh8un8uenwd" path="res://Sprites/Bullets/Android_Bullet.png" id="2_1f3k8"]
+[ext_resource type="Script" uid="uid://mrhr0yu4i7jh" path="res://Scripts/Animation/ManualAnim.gd" id="3_06oib"]
 [ext_resource type="PackedScene" uid="uid://liprjmtialrh" path="res://Scenes/Components/Hitbox.tscn" id="4_06oib"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_bpmhk"]
@@ -28,7 +29,11 @@ sprite_texture_map = Dictionary[StringName, int]({
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=153344789]
 position = Vector2(-4, 0)
 texture = ExtResource("2_1f3k8")
+hframes = 4
 vframes = 2
+frame = 2
+script = ExtResource("3_06oib")
+anim_speed_adjust = 0.0
 
 [node name="Bullet Lifetime" type="Timer" parent="." unique_id=1057932148]
 wait_time = 40.0
@@ -39,7 +44,6 @@ autostart = true
 collision_layer = 12
 collision_mask = 3
 monitorable = true
-knockback_strength = 150.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=274916684]
 shape = SubResource("CircleShape2D_bpmhk")

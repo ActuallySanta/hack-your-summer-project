@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://dmxbgtwmp5c0q" path="res://Scenes/Enemies/ranged_enemy_bullet.tscn" id="3_262vs"]
 [ext_resource type="Texture2D" uid="uid://bj2k402u2ldji" path="res://Sprites/Characters/Enemy SpriteSheets/Android/Faulty_Android.png" id="3_bjx1m"]
 [ext_resource type="Script" uid="uid://b38rxpp8gn23u" path="res://Scripts/Resources/Tools/Fallen_Cyborg_Sprite_Connector_For_Debugging.gd" id="4_a7tiw"]
+[ext_resource type="AudioStream" uid="uid://dvkkioewfi3nx" path="res://Sounds/Entities/Enemies/Machines/AndroidShoot.wav" id="5_0ds4t"]
 [ext_resource type="PackedScene" uid="uid://c744kphkhs1tv" path="res://Scenes/Components/flasher.tscn" id="5_p04j3"]
 [ext_resource type="Texture2D" uid="uid://d2uib44ihookd" path="res://Sprites/Characters/Enemy SpriteSheets/Android/Faulty_Android_Repiar.png" id="6_6koa2"]
 [ext_resource type="Script" uid="uid://ctc17oyja7fup" path="res://Scripts/Combat/hitbox.gd" id="6_tos5j"]
@@ -60,6 +61,21 @@ tracks/1/keys = {
 "method": &"spawnBullet"
 }]
 }
+tracks/2/type = "audio"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AudioTrack")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("5_0ds4t")
+}],
+"times": PackedFloat32Array(0.1)
+}
+tracks/2/use_blend = true
 
 [sub_resource type="Animation" id="Animation_tos5j"]
 resource_name = "bear_arms"
@@ -110,6 +126,17 @@ tracks/0/keys = {
 "update": 1,
 "values": [Vector2i(0, 3), Vector2i(1, 3)]
 }
+tracks/1/type = "audio"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AudioTrack")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"clips": [],
+"times": PackedFloat32Array()
+}
+tracks/1/use_blend = true
 
 [sub_resource type="Animation" id="Animation_a7tiw"]
 resource_name = "idle"
@@ -276,6 +303,8 @@ position = Vector2(-12, -30.000002)
 scale = Vector2(3, 3)
 sprite_frames = SubResource("SpriteFrames_bpmhk")
 animation = &"Repair"
+frame = 11
+frame_progress = 1.0
 
 [node name="Player Detection Check" type="ShapeCast2D" parent="." unique_id=1009719527]
 visible = false
@@ -345,3 +374,7 @@ can_be_accel = false
 position = Vector2(-86757, -73880)
 shape = SubResource("CircleShape2D_bpmhk")
 disabled = true
+
+[node name="AudioTrack" type="AudioStreamPlayer2D" parent="." unique_id=255187624]
+
+[node name="OuchSFX" type="AudioStreamPlayer2D" parent="." unique_id=1636576835]
