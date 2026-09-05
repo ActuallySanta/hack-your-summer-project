@@ -90,7 +90,7 @@ func _can_open_map() -> bool:
 	if PlayerManager.inDialogue:
 		return false
 
-	var game_hud := get_parent() as GameHUD
+	var game_hud := _game_hud()
 	if game_hud:
 		for menu in game_hud.menus:
 			if menu.visible:
@@ -110,3 +110,13 @@ func _setup_pause_exemptions() -> void:
 		if child != minimap and child != full_map:
 			child.process_mode = Node.PROCESS_MODE_PAUSABLE
 	process_mode = Node.PROCESS_MODE_ALWAYS
+
+# The menus sit on a CanvasLayer above this one, so the GameHUD is no longer our
+# direct parent.
+func _game_hud() -> GameHUD:
+	var node := get_parent()
+	while node:
+		if node is GameHUD:
+			return node
+		node = node.get_parent()
+	return null

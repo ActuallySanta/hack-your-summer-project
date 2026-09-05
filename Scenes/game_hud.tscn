@@ -11,9 +11,13 @@
 font_size = 48
 
 [node name="HUD" type="CanvasLayer" unique_id=242806123 groups=["HUD"]]
+layer = 2
 script = ExtResource("1_qmln0")
 
-[node name="Player HUD" parent="." unique_id=890844106 instance=ExtResource("2_qecdm")]
+[node name="Player HUD Layer" type="CanvasLayer" parent="." unique_id=1470028351]
+layer = 1
+
+[node name="Player HUD" parent="Player HUD Layer" unique_id=890844106 instance=ExtResource("2_qecdm")]
 
 [node name="LoadingScreen" type="ColorRect" parent="." unique_id=647268922]
 visible = false

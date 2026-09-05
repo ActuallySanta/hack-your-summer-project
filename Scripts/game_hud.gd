@@ -15,7 +15,7 @@ signal quit_game()
 @onready var game_over_menu: EndMenu = $"Game Over Menu"
 @onready var game_complete_menu: EndMenu = $"Game Complete Menu"
 @onready var pause_menu : PauseMenu = $"Pause Menu"
-@onready var player_hud : PlayerHUD = $"Player HUD"
+@onready var player_hud : PlayerHUD = $"Player HUD Layer/Player HUD"
 @onready var menus: Array[Control] = [main_menu, game_over_menu, game_complete_menu, pause_menu]
 
 @export var load_screen_fade_time := 0.8
