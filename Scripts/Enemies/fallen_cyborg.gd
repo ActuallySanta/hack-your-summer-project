@@ -37,7 +37,7 @@ func finish_repairs() -> void:
 	var parent := get_parent()
 	var replacement : Enemy = repaired_scene.instantiate()
 	replacement.global_position = global_position + (repaired_position if not isFlipped else Vector2(-repaired_position.x, repaired_position.y))
-	replacement.update_flip(-1 if isFlipped else 1)
+	replacement.isFlipped = isFlipped
 	parent.add_child(replacement)
 	queue_free()
 
@@ -49,13 +49,12 @@ func _ready() -> void:
 	repair_node.on_repair_start.connect(begin_repairs)
 	repair_node.on_repair_end.connect(finish_repairs)
 	repair_node.on_repair_failure.connect( health_component.kill_self )
-	#health_component.on_hit_event.connect( func(): ouch_sfx.play() )
 	#health_component.on_death_event.connect(queue_free)
 	bt_player.blackboard.set_var("canAttack",true)
 	hurtbox.hit.connect(takeDamage)
 	if start_flipped:
 		bullet_spawn_offset.x *= -1
-		update_flip(-1)
+		isFlipped = true
 	switch_state("idle")
 
 func _physics_process(delta: float) -> void:
@@ -96,5 +95,4 @@ func _on_hit(_hit_info: HitInfo, source: Hitbox) -> void:
 		if dmg_type == "stun_bullet":
 			play_sfx_at_hurt(STUN_SFX)
 			return
-	flasher.flash()
 	play_sfx_at_hurt(HURT_SFX)

@@ -150,6 +150,7 @@ attackCooldown = 3.5
 wanderDistance = 500.0
 health_component = NodePath("RoboHealth")
 hurtbox = NodePath("RoboHealth/Hurtbox")
+retaliation_method = "face threat"
 
 [node name="BTPlayer" type="BTPlayer" parent="." unique_id=1291468803]
 behavior_tree = ExtResource("2_qj8iq")

@@ -99,6 +99,11 @@ var gravity_override := -1.0
 var horizontal_lock := 0.0
 ## Seconds of floor snapping still to be given up after a crumble gave way underfoot.
 var _crumble_snap_timer := 0.0
+## Seconds the wall-as-floor release is still held; see [method _release_wall_floor].
+var _wall_floor_release := 0.0
+## Height at the end of the last move, so [method _release_wall_floor] can tell a body
+## that is standing from one that is slowly losing its grip.
+var _last_ground_y := 0.0
 var _visual_offset_nodes: Array[Node2D] = []
 var _visual_offset_bases: PackedVector2Array
 var _dying := false
@@ -174,7 +179,7 @@ func _physics_process(delta: float) -> void:
 	_update_floor_snap(delta)
 
 	move_and_slide()
-	_release_wall_floor()
+	_release_wall_floor(delta)
 
 	for component in _components:
 		if component.component_enabled:
@@ -339,18 +344,50 @@ func _collider_for_state(state: MoveState) -> CollisionManager.State:
 ## reported but no contact that is one -- and put back the moment the body is honestly
 ## grounded again. Walking into ordinary walls is untouched, because there is real floor
 ## underfoot the whole time.
-func _release_wall_floor() -> void:
-	if is_on_floor() and not _has_floor_contact():
-		floor_block_on_wall = false
-	elif planar_movement:
-		floor_block_on_wall = planar_movement.block_on_wall
+## The release is held for a moment rather than decided fresh each frame. Wedged in a
+## corner, the body reports a floor contact on alternate frames as it works itself
+## free, so a per-frame decision switches the setting on and off and the player creeps
+## instead of falling. Long enough to drop clear of the corner.
+const WALL_FLOOR_RELEASE_SECONDS := 0.2
+
+func _release_wall_floor(delta: float) -> void:
+	# Sinking is the third part of the test, and it is what keeps the release rare.
+	# Standing still against an ordinary wall also reports a floor with no floor
+	# contact -- nothing moved, so nothing collided downwards -- and dropping the
+	# setting there would give up the protection every time the player leant on a wall.
+	# A body that is genuinely standing does not descend; one hanging on a wall does.
+	var sinking := global_position.y - _last_ground_y > 0.001
+	_last_ground_y = global_position.y
+
+	if is_on_floor() and sinking and not _has_floor_contact():
+		_wall_floor_release = WALL_FLOOR_RELEASE_SECONDS
+	else:
+		_wall_floor_release = maxf(_wall_floor_release - delta, 0.0)
+
+	var wanted: bool = planar_movement.block_on_wall if planar_movement else true
+	floor_block_on_wall = wanted and _wall_floor_release <= 0.0
 
 ## Whether anything the body actually touched this frame was a floor.
 func _has_floor_contact() -> bool:
 	for i in get_slide_collision_count():
-		if get_slide_collision(i).get_normal().angle_to(up_direction) <= floor_max_angle + 0.01:
+		if _is_floor_normal(get_slide_collision(i).get_normal()):
 			return true
 	return false
+
+
+## Whether a contact normal belongs to something the player could stand on.
+##
+## Measured against up, because a floor's normal points away from its surface, so level
+## ground reads (0, -1) the same way [member CharacterBody2D.up_direction] does.
+##
+## The absolute value is the part that is easy to leave out and hard to see:
+## [method Vector2.angle_to] is signed, so of the two vertical walls one comes back as
+## +90 degrees and the other as -90, and a plain "is it under the limit" test quietly
+## accepts the second. That is a wall-cling that only happens facing one way.
+func _is_floor_normal(normal: Vector2) -> bool:
+	# A hair of slack, so a surface drawn exactly at the limit is not decided by
+	# floating point.
+	return absf(normal.angle_to(up_direction)) <= floor_max_angle + 0.01
 
 ## Whether the player is standing on something they could actually stand on.
 ##
@@ -373,13 +410,7 @@ func is_grounded() -> bool:
 	if not is_on_floor():
 		return false
 	var normal := get_floor_normal()
-	if normal.is_zero_approx():
-		return true
-	# Against up, not against down: a floor's normal points away from the surface, so
-	# level ground reads (0, -1), the same way [member CharacterBody2D.up_direction]
-	# points. A hair of slack, so a surface drawn exactly at the limit is not decided
-	# by floating point.
-	return normal.angle_to(up_direction) <= floor_max_angle + 0.01
+	return normal.is_zero_approx() or _is_floor_normal(normal)
 
 ## Whether the standing collider would fit where the player is right now.
 ##

@@ -92,7 +92,7 @@ animation_name = &"idle"
 
 [sub_resource type="BTRandomWait" id="BTRandomWait_a61s3"]
 
-[sub_resource type="BTSequence" id="BTSequence_keixm"]
+[sub_resource type="BTDynamicSequence" id="BTSequence_keixm"]
 custom_name = "Idle"
 children = [SubResource("BTCheckVar_keixm"), SubResource("BTCallMethod_6gtj3"), SubResource("BTPlayAnimation_keixm"), SubResource("BTRandomWait_a61s3")]
 

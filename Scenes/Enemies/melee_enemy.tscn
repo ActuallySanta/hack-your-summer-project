@@ -180,8 +180,10 @@ radius = 20.0
 [node name="Melee Enemy" type="CharacterBody2D" unique_id=1835408748 node_paths=PackedStringArray("health_component", "hurtbox")]
 collision_layer = 4
 script = ExtResource("1_vrdla")
+wanderDistance = 400.0
 health_component = NodePath("RoboHealth")
 hurtbox = NodePath("RoboHealth/Hurtbox")
+retaliation_method = "face threat"
 
 [node name="BTPlayer" type="BTPlayer" parent="." unique_id=1291468803]
 behavior_tree = ExtResource("2_ony87")

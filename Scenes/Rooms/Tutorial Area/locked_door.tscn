@@ -10,9 +10,11 @@ size = Vector2(28, 144)
 script = ExtResource("1_s354b")
 
 [node name="Door1" type="AnimatedSprite2D" parent="." unique_id=439037326]
-scale = Vector2(1.5, 1.5)
+scale = Vector2(3, 3)
 sprite_frames = ExtResource("2_s354b")
 animation = &"Opening"
+frame = 9
+frame_progress = 1.0
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=308923604]
 

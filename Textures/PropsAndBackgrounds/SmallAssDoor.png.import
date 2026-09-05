@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cfogrwwfcw6xv"
-path="res://.godot/imported/SmallAssDoor.png-d064b9d5a78aa91c23695115010cea9a.ctex"
+uid="uid://m67ph4a2i7kb"
+path="res://.godot/imported/SmallassDoor.png-d40d306899b5c0d9f50d0b349ff0a10e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Textures/PropsAndBackgrounds/SmallAssDoor.png"
-dest_files=["res://.godot/imported/SmallAssDoor.png-d064b9d5a78aa91c23695115010cea9a.ctex"]
+source_file="res://Textures/PropsAndBackgrounds/SmallassDoor.png"
+dest_files=["res://.godot/imported/SmallassDoor.png-d40d306899b5c0d9f50d0b349ff0a10e.ctex"]
 
 [params]
 
