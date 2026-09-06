@@ -202,14 +202,18 @@ func _on_pickup_collected(pickup: Pickup) -> void:
 			pass
 		Pickup.PickupType.StunGun:
 			PlayerManager.player.enable_gun()
-			PlayerManager.player.set_gun("stun")
+			PlayerManager.player.set_gun(&"stun")
 		Pickup.PickupType.PlasmaGun:
-			PlayerManager.player.set_gun("plasma")
+			# Enabled as well as swapped, so an upgrade taken before the thing it
+			# upgrades still leaves the player holding something.
+			PlayerManager.player.enable_gun()
+			PlayerManager.player.set_gun(&"plasma")
+		Pickup.PickupType.Wrench:
+			PlayerManager.player.enable_wrench()
+			PlayerManager.player.set_wrench(&"basic")
 		Pickup.PickupType.AllenWrench:
-			# Nothing to switch on: the wrench reads its damage back out of the save
-			# when the player respawns, and taking the pickup was recorded by the
-			# pickup itself.
-			pass
+			PlayerManager.player.enable_wrench()
+			PlayerManager.player.set_wrench(&"allen")
 		_:
 			printerr("No action defined for pickup " + pickup.get_type_as_str())
 

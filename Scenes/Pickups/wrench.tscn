@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://b6kh65uke0ao6"]
+
+[ext_resource type="Script" uid="uid://cnrub5aht5y2k" path="res://Scripts/pickup.gd" id="1_wrench"]
+[ext_resource type="Texture2D" uid="uid://cdjinjn33snoa" path="res://Sprites/Pickups/Wrench.png" id="2_1hbgo"]
+[ext_resource type="Script" uid="uid://whdtoijov1so" path="res://Scripts/occilator.gd" id="3_wrench"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_4vj60"]
+radius = 6.0
+
+[node name="Wrench" type="Area2D" unique_id=265764009]
+collision_layer = 16
+collision_mask = 2
+script = ExtResource("1_wrench")
+type = 7
+destroy_on_pickup = true
+use_custom_id = true
+custom_id = &"Wrench"
+metadata/_custom_type_script = "uid://cnrub5aht5y2k"
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1235136346]
+texture = ExtResource("2_1hbgo")
+script = ExtResource("3_wrench")
+occilations_per_second = 0.25
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1974299292]
+visible = false
+shape = SubResource("CircleShape2D_4vj60")

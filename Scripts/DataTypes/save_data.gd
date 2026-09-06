@@ -23,8 +23,10 @@ const START_POS := Vector2(158, 834)
 ## Which gun the player owns. Ordered, so [code]>= Stun[/code] reads as "owns a gun".
 enum GunState { None, Stun, Plasma }
 
-## Which wrench the player swings. There is no "none" -- they start with one.
-enum WrenchState { Basic, Allen }
+## Which wrench the player swings. Ordered, so [code]>= Basic[/code] reads as "has a
+## wrench at all" -- the player starts the game with nothing and is handed one in the
+## tutorial, the same shape as [enum GunState].
+enum WrenchState { None, Basic, Allen }
 
 #region The file's keys
 const KEY_SAVE_NAME := "save_name"
@@ -62,7 +64,7 @@ var station_powered := false
 var has_fuse := false
 var has_jetpack := false
 var gun := GunState.None
-var wrench := WrenchState.Basic
+var wrench := WrenchState.None
 #endregion
 
 ## Everything recorded through [SaveManager]'s value wrappers: logbook entries, room

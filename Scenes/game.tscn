@@ -3,9 +3,12 @@
 [ext_resource type="Script" uid="uid://bo6qgt11s8q53" path="res://00_Globals/game.gd" id="1_wrm1d"]
 [ext_resource type="PackedScene" uid="uid://dohmyoeiilp0v" path="res://Scenes/Players/player.tscn" id="2_qxrlw"]
 [ext_resource type="PackedScene" uid="uid://c4thct0jgtock" path="res://Scenes/game_hud.tscn" id="3_wrm1d"]
+[ext_resource type="Resource" uid="uid://dd30177okkcfg" path="res://Resources/CustomSaves/service_crossroads.tres" id="4_custsave"]
 
 [node name="Game" type="Node" unique_id=651801150]
 script = ExtResource("1_wrm1d")
+use_custom_save = true
+custom_save_data = ExtResource("4_custsave")
 
 [node name="Player" parent="." unique_id=862395343 instance=ExtResource("2_qxrlw")]
 position = Vector2(2493, 399)

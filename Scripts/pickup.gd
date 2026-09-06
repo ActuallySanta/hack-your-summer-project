@@ -1,7 +1,9 @@
 class_name Pickup
 extends Area2D
 
-enum PickupType { Coin, HealthRune, PlasmaGun, Jetpack, Fuse, StunGun, AllenWrench }
+## New types go on the [b]end[/b]. The scenes store the number, not the name, so
+## inserting one in the middle re-labels every pickup already placed in a room.
+enum PickupType { Coin, HealthRune, PlasmaGun, Jetpack, Fuse, StunGun, AllenWrench, Wrench }
 
 @export var type : PickupType
 @export var destroy_on_pickup := false

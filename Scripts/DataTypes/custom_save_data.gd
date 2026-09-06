@@ -31,7 +31,7 @@ enum FuseState { Uncollected, Collected, Powered }
 @export_group("What the player has")
 @export var fuse := FuseState.Uncollected
 @export var gun := SaveData.GunState.None
-@export var wrench := SaveData.WrenchState.Basic
+@export var wrench := SaveData.WrenchState.None
 @export var has_jetpack := false
 ## How many health extenders to count as already collected.
 @export_range(0, 32) var health_upgrades := 0

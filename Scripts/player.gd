@@ -449,6 +449,18 @@ func set_gun(mode: StringName) -> void:
 	if shooting:
 		shooting.set_gun(mode)
 
+func enable_wrench() -> void:
+	if wrench:
+		wrench.enable_wrench()
+
+func disable_wrench() -> void:
+	if wrench:
+		wrench.disable_wrench()
+
+func set_wrench(mode: StringName) -> void:
+	if wrench:
+		wrench.set_wrench(mode)
+
 ## Holds the jetpack off while the player is somewhere it must not fire (a ladder),
 ## without touching whether they own one.
 func set_jetpack_suppressed(suppressed: bool) -> void:

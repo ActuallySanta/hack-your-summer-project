@@ -1,9 +1,18 @@
 ## The wrench swing on the attack button.
 ##
+## [b]Carrying one.[/b] The player starts with no wrench and is handed one in the
+## tutorial, so the button does nothing until [method enable_wrench] says otherwise --
+## the same gate [PlayerShooting] puts on the gun, and driven from the same place:
+## [SaveManager] hands both out when a save is loaded, and the pickup announces itself
+## through [signal Player.pickup_collected] when one is taken mid-run. Which wrench is
+## being swung is [method set_wrench], mirroring the gun's modes.
+##
 ## [b]Damage.[/b] The wrench is meant to get stronger later, so its damage is
 ## [member base_damage] plus a bonus that lives in the save file rather than in this
 ## node. [method set_damage_bonus] is the only way in, so an upgrade picked up in one
 ## room and a reload three rooms later cannot disagree about how hard the wrench hits.
+## The bonus is what the Allen wrench should be paying out; [method wrench_mode] says
+## which wrench is in hand if you would rather read the damage off that.
 ##
 ## [b]Swinging while crouched.[/b] The swing no longer stands the player up. It keeps
 ## the crouch, drops the hitbox to crouch height, and asks the animator for
@@ -14,6 +23,9 @@ class_name PlayerWrenchAttack
 extends PlayerComponent
 
 signal attacked(crouched: bool)
+
+## Wrenches the player can carry.
+const WRENCH_MODES: Array[StringName] = [&"basic", &"allen"]
 
 @export_group("Swing")
 @export var swing_scene: PackedScene
@@ -36,6 +48,8 @@ signal attacked(crouched: bool)
 @export var crouch_animation: StringName = &"swing_crouch"
 @export var air_animation: StringName = &"swing_jump"
 
+var _has_wrench := false
+var _mode: StringName = &"basic"
 ## Extra damage from upgrades. Mirrored from the save; never written to directly.
 var _damage_bonus := 0
 var _cooldown_timer := 0.0
@@ -43,6 +57,26 @@ var _buffer_timer := 0.0
 
 func _bind() -> void:
 	refresh_from_save()
+
+#region Wrench state
+func has_wrench() -> bool:
+	return _has_wrench
+
+func enable_wrench() -> void:
+	_has_wrench = true
+
+func disable_wrench() -> void:
+	_has_wrench = false
+
+func set_wrench(mode: StringName) -> void:
+	if not mode in WRENCH_MODES:
+		printerr("PlayerWrenchAttack: \"%s\" is not a wrench mode." % mode)
+		return
+	_mode = mode
+
+func wrench_mode() -> StringName:
+	return _mode
+#endregion
 
 #region Damage
 func damage() -> int:
@@ -60,6 +94,8 @@ func refresh_from_save() -> void:
 #endregion
 
 func on_attack_pressed() -> void:
+	if not _has_wrench:
+		return
 	_buffer_timer = buffer_time
 
 func physics_update(delta: float) -> void:
@@ -73,7 +109,7 @@ func physics_update(delta: float) -> void:
 		_buffer_timer -= delta
 
 func attack() -> void:
-	if swing_scene == null:
+	if swing_scene == null or not _has_wrench:
 		return
 
 	var crouched := player.move_state == Player.MoveState.Crouching

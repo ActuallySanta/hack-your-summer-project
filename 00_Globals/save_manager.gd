@@ -59,6 +59,7 @@ const ITEM_FUSE := "Fuse"
 const ITEM_GUN := "Gun"
 const ITEM_PLASMA_GUN := "PlasmaGun"
 const ITEM_JETPACK := "Jetpack"
+const ITEM_WRENCH := "Wrench"
 const ITEM_STRONG_WRENCH := "StrongWrench"
 #endregion
 
@@ -420,6 +421,7 @@ func _apply_carried_items() -> void:
 	_set_item_stored(ITEM_JETPACK, _data.has_jetpack)
 	_set_item_stored(ITEM_GUN, _data.gun >= SaveData.GunState.Stun)
 	_set_item_stored(ITEM_PLASMA_GUN, _data.gun == SaveData.GunState.Plasma)
+	_set_item_stored(ITEM_WRENCH, _data.wrench >= SaveData.WrenchState.Basic)
 	_set_item_stored(ITEM_STRONG_WRENCH, _data.wrench == SaveData.WrenchState.Allen)
 
 func _set_item_stored(id: String, stored: bool) -> void:
@@ -445,12 +447,17 @@ func _apply_to_player() -> void:
 	else:
 		player.disable_gun()
 
+	if _data.wrench >= SaveData.WrenchState.Basic:
+		player.enable_wrench()
+		player.set_wrench(&"allen" if _data.wrench == SaveData.WrenchState.Allen else &"basic")
+	else:
+		player.disable_wrench()
+
 ## Reads the running game back into the save, ready to be written down.
 func _capture_world_state(use_checkpoint: bool) -> void:
 	_data.metsys = MetSys.get_save_data()
 	_data.has_fuse = is_item_id_collected(ITEM_FUSE)
 	_data.has_jetpack = is_item_id_collected(ITEM_JETPACK)
-	_data.wrench = SaveData.WrenchState.Allen if is_item_id_collected(ITEM_STRONG_WRENCH) else SaveData.WrenchState.Basic
 
 	if is_item_id_collected(ITEM_PLASMA_GUN):
 		_data.gun = SaveData.GunState.Plasma
@@ -458,6 +465,13 @@ func _capture_world_state(use_checkpoint: bool) -> void:
 		_data.gun = SaveData.GunState.Stun
 	else:
 		_data.gun = SaveData.GunState.None
+
+	if is_item_id_collected(ITEM_STRONG_WRENCH):
+		_data.wrench = SaveData.WrenchState.Allen
+	elif is_item_id_collected(ITEM_WRENCH):
+		_data.wrench = SaveData.WrenchState.Basic
+	else:
+		_data.wrench = SaveData.WrenchState.None
 
 	var room := MetSys.get_current_room_name()
 	if not room.is_empty():
