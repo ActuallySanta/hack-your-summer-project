@@ -8,6 +8,7 @@ const SaveManager = preload("res://addons/MetroidvaniaSystem/Template/Scripts/Sa
 const PICKUP_FUSE_ID = "Fuse"
 const PICKUP_GUN_ID = "Gun"
 const PICKUP_JETPACK_ID = "Jetpack"
+const PICKUP_WRENCH_ID = "Wrench"
 
 @onready var _player : Player = $Player
 @onready var _camera : Camera2D = $Camera2D
@@ -27,9 +28,9 @@ const PICKUP_JETPACK_ID = "Jetpack"
 ## matching [member save_spawn_id].
 @export var save_pos := Vector2(3000, 483)
 @export_enum("Uncollected", "Collected", "Powered") var save_fuse_state : int
-@export var save_has_gun : bool
+@export_enum("Uncollected", "Basic", "Allen") var wrench_collection_state : String
+@export_enum("Uncollected", "Stun", "Plasma") var gun_collection_state : String
 @export var save_has_jetpack : bool
-@export var save_has_plasma_gun : bool
 
 ## Player speeds above this (pixels/second) are teleports (room change, respawn),
 ## not travel, so they never claim a camera region.
@@ -221,37 +222,17 @@ func _load_custom_save() -> void:
 	
 	if save_fuse_state > 0:
 		MetSys.save_data.stored_objects[PICKUP_FUSE_ID] = true
-	if save_has_gun:
+	if gun_collection_state.contains("Stun"):
 		MetSys.save_data.stored_objects[PICKUP_GUN_ID] = true
 	if save_has_jetpack:
 		MetSys.save_data.stored_objects[PICKUP_JETPACK_ID] = true
 	
-	save.set_value("plasma_gun_collected", save_has_plasma_gun)
+	save.set_value("plasma_gun_collected", gun_collection_state.contains("Plasma"))
 
 func get_save_path(save_index: int) -> StringName:
 	return "user://save" + str(save_index) +".sav"
 
 #region Restoring the world to the last save
-## Puts everything that is not the player back to what the loaded save says.
-##
-## Death is meant to cost the player everything they did since the last save station,
-## and it does -- the facts all live in the save and the save has just been re-read.
-## What did not happen was anyone being [i]told[/i]. The map panels in particular
-## cache the cells they have drawn and only redraw when MetSys announces a change, and
-## installing save data announces nothing. So after a reload the map went on showing
-## the run that had just ended, until the player walked into a new cell and the whole
-## thing snapped to the truth at once -- which read as the map being wiped as a
-## punishment for exploring, rather than as the reload it actually was.
-## Clears the run-time state a previous run may have left behind, [b]before[/b] the
-## room is built.
-##
-## The order matters, and getting it wrong is what broke the boss music. A room's own
-## nodes claim things as they enter the tree -- the containment drone takes the music
-## in its [method Node._ready] so the arena plays its ambiance instead of the docking
-## bay's track -- so anything a room might want to own has to be reset before the room
-## exists, never after. Cleared afterwards, the drone's claim was wiped a moment after
-## it was made, and the player's per-frame cell-group call then put the ordinary
-## location track back over the top of it.
 func _reset_world_state() -> void:
 	MusicManager.restore_automatic_assignment()
 
@@ -316,15 +297,17 @@ func _on_room_changed(new_room: String) -> void:
 func _on_pickup_collected(pickup: Pickup) -> void:
 	match pickup.type:
 		Pickup.PickupType.Jetpack:
-			_player.enable_jetpack()
+			PlayerManager.player.enable_jetpack()
 		Pickup.PickupType.Fuse:
 			pass
 		Pickup.PickupType.StunGun:
-			_player.enable_gun()
+			PlayerManager.player.enable_gun()
 			PlayerManager.player.set_gun("stun")
 		Pickup.PickupType.PlasmaGun:
 			save.set_value("plasma_gun_collected", true)
 			PlayerManager.player.set_gun("plasma")
+		Pickup.PickupType.AllenWrench:
+			save.set_value("allen_wrench_collected", true)
 		_:
 			printerr("No action defined for pickup " + pickup.get_type_as_str())
 
@@ -335,7 +318,6 @@ func _restore_station_power() -> void:
 	save.set_value("station_powered", true)
 
 func _process(_delta: float) -> void:
-	
 	if(!isInGame):
 		return
 	var bounds := _eased_camera_bounds(_delta)

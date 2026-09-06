@@ -1,27 +1,8 @@
-## Base for every piece of the player that used to be a region of player.gd.
-##
-## The player is the manager: it owns the shared state (inputs, move state, facing,
-## the collider swap) and calls into its components in a fixed order each physics
-## frame. A component owns one behaviour and nothing else, reads the player for the
-## state it needs, and writes back only through the player's own API.
-##
-## Components are found by type rather than by node name, so re-ordering or renaming
-## them in the scene changes nothing, and a component that is simply deleted from the
-## scene takes its whole feature out with it -- see [method Player.get_component].
-##
-## [Node2D] rather than [Node] because several of them need a transform (the mantle's
-## stand-in sprite, the health component's hurtbox); the ones that do not pay nothing
-## for having one.
 class_name PlayerComponent
 extends Node2D
 
-## The player this component belongs to. Set by [method bind] before any of the
-## update hooks run, so it is safe to read from all of them.
 var player: Player
 
-## Whether this component does anything. A disabled component keeps its state but is
-## skipped by every update hook, which is how a feature is switched off for testing
-## without taking the node out of the scene.
 @export var component_enabled := true
 
 ## Called once by the player, from its own [method Node._ready], before anything has

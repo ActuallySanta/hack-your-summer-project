@@ -1,7 +1,7 @@
 class_name Pickup
 extends Area2D
 
-enum PickupType { Coin, HealthRune, PlasmaGun, Jetpack, Fuse, StunGun }
+enum PickupType { Coin, HealthRune, PlasmaGun, Jetpack, Fuse, StunGun, AllenWrench }
 
 @export var type : PickupType
 @export var destroy_on_pickup := false

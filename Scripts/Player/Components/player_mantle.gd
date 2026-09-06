@@ -139,7 +139,7 @@ func _begin(direction: int) -> void:
 	player.animator.set_sprite_anchor(_sprite_anchor())
 	_start_camera()
 
-func physics_update(delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	if not _active:
 		return
 	_elapsed += delta

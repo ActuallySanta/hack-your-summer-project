@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://cnni21xjkgr7b"]
+
+[ext_resource type="Script" uid="uid://cnrub5aht5y2k" path="res://Scripts/pickup.gd" id="1_xbfu7"]
+[ext_resource type="Texture2D" uid="uid://pwkp2p1f0ays" path="res://Sprites/Pickups/AllenWrench.png" id="2_7v4hh"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_bpmhk"]
+
+[node name="StrongWrench" type="Area2D" unique_id=1586302829]
+script = ExtResource("1_xbfu7")
+type = 6
+destroy_on_pickup = true
+use_custom_id = true
+custom_id = &"StrongWrench"
+metadata/_custom_type_script = "uid://cnrub5aht5y2k"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1347965352]
+shape = SubResource("CircleShape2D_bpmhk")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=656039835]
+texture = ExtResource("2_7v4hh")

@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://dthceys0n1k5a" path="res://Sprites/EnvironmentalDamages/TeethGrab.png" id="1_41lnf"]
 [ext_resource type="Script" uid="uid://bkmhqrn0opt6q" path="res://Scripts/EnvironmentalHazards/teeth_grab_animator.gd" id="2_e1dqu"]
 [ext_resource type="Script" uid="uid://xsw7bjwjsoj5" path="res://Scripts/Level Elements/damage_area.gd" id="3_j8vek"]
+[ext_resource type="AudioStream" uid="uid://dxsj32uy4p1u4" path="res://Sounds/Entities/Enemies/Machines/EnvironmentalDmg/BitingTeeth.wav" id="4_wkqec"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1mn30"]
 size = Vector2(14, 5.666666)
@@ -59,6 +60,21 @@ tracks/3/keys = {
 "update": 1,
 "values": [Vector2(14, 5.666666), Vector2(14, 21.166668), Vector2(14, 30.166666), Vector2(14, 26.833334), Vector2(14, 22.5), Vector2(14, 19.5)]
 }
+tracks/4/type = "audio"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("BiteSfx")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("4_wkqec")
+}],
+"times": PackedFloat32Array(0)
+}
+tracks/4/use_blend = true
 
 [sub_resource type="Animation" id="Animation_wkqec"]
 length = 0.001
@@ -110,6 +126,17 @@ tracks/3/keys = {
 "update": 0,
 "values": [Vector2(14, 5.666666)]
 }
+tracks/4/type = "audio"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("BiteSfx")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"clips": [],
+"times": PackedFloat32Array()
+}
+tracks/4/use_blend = true
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_1b3dk"]
 _data = {
@@ -138,3 +165,7 @@ shape = SubResource("RectangleShape2D_1mn30")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1097877680]
 libraries/ = SubResource("AnimationLibrary_1b3dk")
+
+[node name="BiteSfx" type="AudioStreamPlayer2D" parent="." unique_id=629039209]
+max_distance = 1215.0
+attenuation = 2.462286

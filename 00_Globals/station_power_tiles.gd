@@ -1,37 +1,9 @@
-## The unpowered station, in tiles.
-##
-## The tilesets are authored powered — lights on, indicators lit — because that is
-## the state the station spends most of the game in. This swaps the handful of tiles
-## that have an unpowered twin drawn for them while the fuse is still missing, and
-## puts them back when it goes in.
-##
-## Two things live here, and nothing else needs to know about either: the record of
-## which tiles have a twin ([constant UNPOWERED_TILES]), and the swapping itself.
-##
-## [b]To give another tile an unpowered form:[/b] draw it into the same texture as
-## the lit one, add it to the tileset, and add one line to the table below. It does
-## not matter which atlas source the lit tile was placed from — the twin is found in
-## whichever source of that tileset holds it (see [method _source_with_tile]).
-##
-## [b]Scope.[/b] Only tilesets listed in [constant UNPOWERED_TILES] are ever touched,
-## and only the docking bay is listed. The rest of the station is unreachable until
-## the power is back on, so its tiles are only ever seen lit and need no twins.
-##
-## Nothing here is saved. The swap is applied to room scenes as they load and read
-## back off them on the way out, so the only thing on disk is the fuse itself — see
-## [Darkness], which handles the other half of the same moment the same way.
 extends Node
 
 #region Which tiles have an unpowered form
 
-## The docking bay's tileset, and the only one with unpowered artwork so far.
 const DOCKING_BAY_TILESET := preload("res://Tileset/DockingBay.tres")
 
-## Powered tile [b]->[/b] its unpowered twin, as atlas coordinates into the docking
-## bay terrain texture ([code]Textures/Tiles/MVPSprites/DockingBay.png[/code]).
-##
-## Coordinates are the ones shown in the TileSet editor's atlas grid, so a pair can
-## be read straight off the texture.
 const DOCKING_BAY_UNPOWERED := {
 	Vector2i(6, 2): Vector2i(21, 5), # wall panel with an indicator light
 	Vector2i(8, 5): Vector2i(20, 5), # small light, left-hand mount
@@ -41,6 +13,7 @@ const DOCKING_BAY_UNPOWERED := {
 	Vector2i(5, 12): Vector2i(14, 14),
 	Vector2i(4, 13): Vector2i(13, 15),
 	Vector2i(5, 13): Vector2i(14, 15),
+	Vector2i(16, 17): Vector2i(20, 15),
 }
 
 ## Every tileset that has unpowered artwork, and the tiles in it that have it. A

@@ -12,6 +12,8 @@ const REPAIR_SFX := preload("res://Sounds/Entities/Enemies/Machines/FallenAndroi
 	set(value):
 		start_flipped = value
 
+func get_start_flipped() -> bool: return start_flipped
+
 @export var bulletScene := preload("uid://dx27csn4jx8c3")
 
 @onready var repair_sprite := $RepairSprite

@@ -147,13 +147,6 @@ func _order_of(component: PlayerComponent) -> int:
 	if component is PlayerAnimator: return 8
 	return 7
 
-## The first component of [param type] under this node, or null.
-func get_component(type: Variant) -> PlayerComponent:
-	for component in _components:
-		if is_instance_of(component, type):
-			return component
-	return null
-
 #region Frame
 func _process(delta: float) -> void:
 	_read_inputs()
@@ -166,7 +159,6 @@ func _physics_process(delta: float) -> void:
 	# A vault owns the whole body: no gravity, no steering, no attacks until it hands
 	# control back. It still gets its own update so it can decide when that is.
 	if mantle and mantle.is_active():
-		mantle.physics_update(delta)
 		return
 
 	_update_move_state()
@@ -233,17 +225,6 @@ func _update_move_state() -> void:
 	move_state_changed.emit(previous_move_state, move_state)
 	_play_transition_action(previous_move_state, move_state)
 
-## The one-shots that belong to a change of state rather than to being in one.
-##
-## Actions rather than poses because they play once and then hand back to whatever the
-## player is actually doing. Held as poses they would never end: standing still after a
-## landing would leave the player stuck in the landing frame.
-##
-## [b]Going down.[/b] The crouch frames are a settle -- upright, bending, down -- not a
-## resting crouch, so the resting pose is only the last of them and getting there is
-## this. Looping the whole thing left the player standing upright for the first half of
-## every crouch, which reads as the crouch not working at all; and replaying it every
-## time they stopped crawling stood them back up for a moment.
 func _play_transition_action(from: MoveState, to: MoveState) -> void:
 	if animator == null:
 		return
@@ -252,40 +233,18 @@ func _play_transition_action(from: MoveState, to: MoveState) -> void:
 	elif to == MoveState.Crouching:
 		animator.request_action(&"crouch_down")
 
-## The launch frames, played off [signal jumped] rather than off the move state.
-##
-## A wall jump happens while the player is already airborne, so there is no change of
-## state to hang it on -- the state machine sees Jumping before and after. The signal
-## is the moment itself, and both jumps raise it.
 func _on_jumped() -> void:
 	if animator == null:
 		return
-	# The wall jump's own push-off frame carries straight on from the wall slide the
-	# player was already showing; an ordinary jump gets the crouch-and-spring frame.
 	var pushed_off: bool = wall_jump != null and wall_jump.launched_recently()
 	animator.request_action(&"wall_push" if pushed_off else &"jump_start")
 
-## The state the player is in this frame, which is also the collider they wear.
-##
-## [b]Room to be in it.[/b] The walking collider is 90px tall against the air
-## collider's 48 and the crouch box's 20, so a state is only available where its shape
-## fits. Swapping a tall one in where it does not buries half of it in the ceiling, and
-## the engine throws the player sideways getting it back out -- the "caught in the
-## corner, then stood up" of a ledge under an overhang.
-##
-## Asking per collider rather than per situation is what closes that off for good. The
-## first go at this asked "are they landing, or already crouched", which left standing
-## itself as a way in: for [member PlayerFloorJump.coyote_time] after walking off a
-## ledge the player counts as neither jumping nor on the floor, so they were briefly
-## Standing in mid-air -- tall collider and all -- under the very overhang they had
-## just crouched to get under.
 func _determine_move_state() -> MoveState:
 	var wanted := _wanted_move_state()
 	if _needs_headroom(wanted) and not has_headroom():
 		return MoveState.Crouching
 	return wanted
 
-## What the player would be if there were room for it.
 func _wanted_move_state() -> MoveState:
 	if knockback_timer > 0.0:
 		return MoveState.Knockback
@@ -295,18 +254,9 @@ func _wanted_move_state() -> MoveState:
 		return MoveState.Crouching
 	return MoveState.Standing
 
-## Whether [param state] can only be entered somewhere the player could stand up.
-##
-## Two ways to need it. The state wears the walking collider -- standing, and being
-## knocked about -- or the player is crouched and would be coming up out of it, where
-## even the air collider has to fit: a crawl space is one tile high and so is that
-## shape, which is exactly the fit that wedges.
 func _needs_headroom(state: MoveState) -> bool:
-	return _collider_for_state(state) == CollisionManager.State.WALK \
-		or (previous_move_state == MoveState.Crouching and state != MoveState.Crouching)
+	return _collider_for_state(state) == CollisionManager.State.WALK or (previous_move_state == MoveState.Crouching and state != MoveState.Crouching)
 
-## Puts the player into [param state] and swaps the collider to match, for the moments
-## something else decides the state outright (coming out of a vault).
 func enter_state(state: MoveState) -> void:
 	previous_move_state = move_state
 	move_state = state
@@ -325,29 +275,6 @@ func _collider_for_state(state: MoveState) -> CollisionManager.State:
 		_:
 			return CollisionManager.State.WALK
 
-## Lets go of a wall the body has decided is a floor.
-##
-## [member CharacterBody2D.floor_block_on_wall] is Godot's default and worth keeping:
-## it is what stops a body walking up a surface it is only pressing against. The way it
-## does that is to count a wall as floor when the body was on the floor and ran into it,
-## so the body is blocked rather than sliding down.
-##
-## That costs nothing while there is real ground underfoot. It costs everything when the
-## ground goes in the same frame -- a crumbling tile at the foot of a wall, which bay
-## gamma has a corner full of. The wall is then the only contact, the body still reports
-## [method CharacterBody2D.is_on_floor], and [method CharacterBody2D.move_and_slide]
-## cancels the fall into it. The player hangs on the wall in the idle pose, creeping down
-## a fraction of a pixel a frame as the physics engine works them free, with the odd 32px
-## lurch when floor snapping finds something.
-##
-## So the setting is dropped for exactly as long as the lie lasts -- there is a floor
-## reported but no contact that is one -- and put back the moment the body is honestly
-## grounded again. Walking into ordinary walls is untouched, because there is real floor
-## underfoot the whole time.
-## The release is held for a moment rather than decided fresh each frame. Wedged in a
-## corner, the body reports a floor contact on alternate frames as it works itself
-## free, so a per-frame decision switches the setting on and off and the player creeps
-## instead of falling. Long enough to drop clear of the corner.
 const WALL_FLOOR_RELEASE_SECONDS := 0.2
 
 func _release_wall_floor(delta: float) -> void:
@@ -374,49 +301,17 @@ func _has_floor_contact() -> bool:
 			return true
 	return false
 
-
-## Whether a contact normal belongs to something the player could stand on.
-##
-## Measured against up, because a floor's normal points away from its surface, so level
-## ground reads (0, -1) the same way [member CharacterBody2D.up_direction] does.
-##
-## The absolute value is the part that is easy to leave out and hard to see:
-## [method Vector2.angle_to] is signed, so of the two vertical walls one comes back as
-## +90 degrees and the other as -90, and a plain "is it under the limit" test quietly
-## accepts the second. That is a wall-cling that only happens facing one way.
 func _is_floor_normal(normal: Vector2) -> bool:
 	# A hair of slack, so a surface drawn exactly at the limit is not decided by
 	# floating point.
 	return absf(normal.angle_to(up_direction)) <= floor_max_angle + 0.01
 
-## Whether the player is standing on something they could actually stand on.
-##
-## [method CharacterBody2D.is_on_floor] is not always that.
-## [member CharacterBody2D.floor_block_on_wall] -- Godot's default, and the setting
-## that stops a body climbing a surface it is only pressing against -- makes a body
-## that was on the floor last frame report a [i]wall[/i] it walks into as floor, so it
-## cannot slide down it. Harmless while there is real ground underfoot.
-##
-## It stops being harmless when the ground goes at the same moment, which is what a
-## crumbling tile at the foot of a wall does: the wall is the only contact left, the
-## body still says it is standing, and so gravity is never applied. The player hangs
-## there in the idle pose, sinking a fraction of a pixel a frame -- clinging to the
-## wall as though it were a floor.
-##
-## So everything that means "are they on the ground" asks this instead, and it checks
-## that what is holding them up is within [member CharacterBody2D.floor_max_angle] of
-## level. Slopes still pass: the tilesets' are 45 degrees against a 50 degree limit.
 func is_grounded() -> bool:
 	if not is_on_floor():
 		return false
 	var normal := get_floor_normal()
 	return normal.is_zero_approx() or _is_floor_normal(normal)
 
-## Whether the standing collider would fit where the player is right now.
-##
-## Asked of the shape itself rather than of the tiles above the crouch box: a tile
-## check counts a cell as blocking whether or not what is in it has a collider, and
-## misses anything that is not a tile at all.
 func has_headroom() -> bool:
 	var shape_node := collision_manager.collider_for(CollisionManager.State.WALK)
 	if shape_node == null or shape_node.shape == null:
@@ -432,15 +327,9 @@ func has_headroom() -> bool:
 #endregion
 
 #region Animation
-## Turns the frame's state into one request to the animator. This is the only place
-## the resting pose is chosen, so there is one answer per frame rather than several
-## components each having an opinion.
 func _apply_animation() -> void:
 	if animator == null:
 		return
-	# Requested every frame even while a one-shot is playing: the animator holds the
-	# pose rather than playing it, so the right thing is already queued for the moment
-	# the swing, the shot or the hit ends.
 	animator.request_pose(_pose_for_state())
 
 ## The resting look for the state the player is in.
@@ -455,23 +344,12 @@ func _pose_for_state() -> StringName:
 		MoveState.Crouching:
 			return &"crawl" if _is_moving() else &"crouch"
 		MoveState.Knockback:
-			# Being knocked about outlasts the animation that goes with it: the hit
-			# plays a 0.4s reaction, while the fallen cyborg's knockback holds the
-			# player for a full second. This branch used to ask for nothing at all, on
-			# the grounds that the reaction was already playing -- but a pose is not a
-			# one-shot, and asking for one cannot restart it. All that did was leave
-			# whatever pose was up when the hit landed to come back when the reaction
-			# ended: falling onto an enemy left the player skidding along the floor in
-			# the falling pose, and being hit while crouched left them crawling.
 			if not is_grounded():
 				return &"jump"
 			return &"run" if _is_moving() else &"idle"
 		_:
 			return &"run" if _is_moving() else &"idle"
 
-## Whether the player is actually travelling. Held input alone is not enough: pushing
-## into a wall is not walking, and playing the walk cycle there is what made the
-## player look like they were jogging on the spot.
 func _is_moving() -> bool:
 	if planar_movement:
 		return planar_movement.is_walking()
@@ -479,10 +357,6 @@ func _is_moving() -> bool:
 #endregion
 
 #region Collider-aligned visuals
-## The air collider is shorter than the walking one and is pushed down in the editor
-## so every collider shares the same bottom edge, which keeps the body origin (and so
-## the camera) at one height through a jump and landing. The visuals have to make the
-## same trip or the sprite hops up when the jump starts and drops when it ends.
 func _cache_visual_offset_nodes() -> void:
 	_visual_offset_nodes = []
 	_visual_offset_bases = PackedVector2Array()
@@ -617,19 +491,6 @@ func _handle_crumbling_floor() -> void:
 	if crumbling:
 		_crumble_snap_timer = crumbleSnapPause
 
-## Floor snapping is given up while the ground under the player is on its way out.
-##
-## Snapping is there for slopes: without it, walking down one is a series of little
-## hops (see [member PlayerPlanarMovement.slope_snap_length]). But it applies to any
-## floor lost from under the body, and it works by [i]moving the body[/i] rather than
-## by letting it fall. So when a crumbling tile gave way the player was pulled the
-## snap length straight down onto whatever was beneath it -- at no speed at all, still
-## reading as on the floor. On a stack of crumbles that repeats every frame: 32px a
-## frame, which is faster than terminal velocity, with none of it coming from falling.
-## That is the teleport, and the sudden speed, in one mechanism.
-##
-## Giving the snap up for a moment turns it back into stepping off a ledge. Slopes are
-## untouched: nothing crumbles under the player there, so the timer never starts.
 func _update_floor_snap(delta: float) -> void:
 	if _crumble_snap_timer <= 0.0:
 		return

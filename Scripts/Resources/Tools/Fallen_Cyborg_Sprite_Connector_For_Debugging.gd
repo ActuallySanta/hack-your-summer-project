@@ -1,7 +1,7 @@
 @tool
 extends Sprite2D
 
-@onready var enemy = get_parent()
+@onready var enemy = get_parent().get_parent()
 
 func _process(_delta: float) -> void:
 	if not Engine.is_editor_hint():
@@ -9,6 +9,7 @@ func _process(_delta: float) -> void:
 		return
 
 	if enemy and "start_flipped" in enemy:
+		print(enemy.start_flipped)
 		if enemy.start_flipped:
 			flip_h = true
 		else:
