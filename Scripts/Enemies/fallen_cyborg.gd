@@ -32,7 +32,6 @@ func begin_repairs() -> void:
 	play_banger( REPAIR_SFX )
 
 func failed_repairs() -> void:
-	print("Failed to repair")
 	health_component._on_death()
 
 func finish_repairs() -> void:

@@ -4,7 +4,7 @@ extends Area2D
 @onready var sprite : Sprite2D = $Sprite2D
 
 func _ready() -> void:
-	if GameManager.is_station_powered():
+	if SaveManager.is_station_powered():
 		switch_to_powered_sprite()
 	body_entered.connect(_on_body_entered)
 
@@ -13,8 +13,8 @@ func switch_to_powered_sprite() -> void:
 	electrical.animate_open()
 
 func try_insert_fuse() -> void:
-	if GameManager.is_object_collected(GameManager.PICKUP_FUSE_ID) \
-	and !GameManager.is_station_powered():
+	if SaveManager.is_item_id_collected(SaveManager.ITEM_FUSE) \
+	and !SaveManager.is_station_powered():
 		GlobalSignals.RestoreStationPower.emit()
 		switch_to_powered_sprite()
 

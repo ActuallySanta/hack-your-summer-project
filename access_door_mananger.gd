@@ -13,27 +13,28 @@ extends Door
 @onready var sound_players = [ $DoorSFX, $DoorSFX2, $DoorSFX3 ]
 
 func should_be_opened_check() -> bool:
-	return MetSys.register_storable_object_with_marker(self, func(): return)
+	SaveManager.register_item(self, func(): return)
+	return SaveManager.is_item_collected(self)
 
 func animate_open() -> void:
 	# Check if door is already open
-	if MetSys.save_data.stored_objects.get(door_name, false):
+	if SaveManager.is_item_id_collected(door_name):
 		return
-		
+
 	# Get number of doors to open
 	var num_to_open = 0
 	for button in button_names:
-		if MetSys.save_data.stored_objects.get(button, false):
+		if SaveManager.is_item_id_collected(button):
 			num_to_open += 1
-	
+
 	for i in num_to_open:
 		play_animation( "Opening", i )
 		sound_players[i].play()
 		$DoorCollider.move_to_next_door()
 		await get_tree().create_timer( door_opening_delta_seconds ).timeout
-	
+
 	if (num_to_open == door_controls.size()):
-		MetSys.store_object(self)	
+		SaveManager.save_item(self)
 
 func play_animation(anim_name: String, door_index: int = 0) -> void: 
 	if door_index >= door_controls.size():

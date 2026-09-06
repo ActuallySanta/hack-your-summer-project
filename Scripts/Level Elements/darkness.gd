@@ -102,10 +102,9 @@ func _on_room_changed(_new_room: String) -> void:
 
 ## Clears the darkness when the fuse goes in.
 ##
-## This deliberately does not re-read [method GameManager.is_station_powered]. We sit
-## deeper in the tree than [GameManager] and so connect to this signal first, which
-## means we run while the save still says the station is unpowered. The signal itself
-## is the fact; the save catches up a moment later.
+## This deliberately does not re-read [method SaveManager.is_station_powered]. We are
+## one of several listeners on this signal and the order it reaches us in is not ours
+## to depend on. The signal itself is the fact.
 func _on_station_power_restored() -> void:
 	if _held:
 		return
@@ -139,7 +138,7 @@ func is_held() -> bool:
 
 ## Whether the darkness belongs on screen right now.
 func _should_be_dark() -> bool:
-	return not GameManager.is_station_powered() and _is_in_station()
+	return not SaveManager.is_station_powered() and _is_in_station()
 
 func _is_in_station() -> bool:
 	var room := MetSys.get_current_room_name()

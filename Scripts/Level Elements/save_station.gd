@@ -47,6 +47,9 @@ func _on_body_entered(body: Node2D) -> void:
 		return
 	var player := body as Player
 	if player:
+		# The whole of saving, from here: the station names the file and [SaveManager]
+		# works out what goes in it.
+		SaveManager.save_data_to_file(GameManager.current_save_name)
 		player.save_station_used.emit()
 		MessageDisplay.add_saving_data()
 		activate()

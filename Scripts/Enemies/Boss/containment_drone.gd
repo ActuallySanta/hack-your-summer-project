@@ -235,7 +235,7 @@ func face_left() -> void:
 	mini_gun.is_flipped = false
 
 func _ready() -> void:
-	if GameManager.is_object_collected("Gun"):
+	if SaveManager.is_item_id_collected(SaveManager.ITEM_GUN):
 		queue_free()
 		return
 	
@@ -264,7 +264,6 @@ func _ready() -> void:
 	pause_sprite_animations = true
 
 func _swap_charge_chances() -> void:
-	print("Swapping to more deadly version")
 	chances_for_attack = {
 	"CHARGE_LASER": 0.69,
 	"MINIGUN": 0.30,

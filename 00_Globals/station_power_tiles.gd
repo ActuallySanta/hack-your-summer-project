@@ -46,10 +46,10 @@ const TRANSFORM_MASK := TileSetAtlasSource.TRANSFORM_FLIP_H \
 	| TileSetAtlasSource.TRANSFORM_FLIP_V \
 	| TileSetAtlasSource.TRANSFORM_TRANSPOSE
 
-## True from the moment the fuse goes in. Only ever ahead of the save, never behind
-## it: [signal GlobalSignals.RestoreStationPower] reaches us before [GameManager] has
-## written it down, and every spawn re-reads the save as the authority (see
-## [method _on_player_spawned]), so a new game or a load cannot leave this stale.
+## True from the moment the fuse goes in. Never behind the save: the signal that sets
+## it is the same one [SaveManager] writes the power down on, and every spawn re-reads
+## the save as the authority (see [method _on_player_spawned]), so a new game or a
+## load cannot leave this stale.
 var _power_restored := false
 
 ## Bumped by everything that starts or invalidates a flicker, so a run that is no
@@ -68,7 +68,7 @@ func _ready() -> void:
 
 ## Whether the station has power, and so whether tiles belong in their lit form.
 func is_powered() -> bool:
-	return _power_restored or GameManager.is_station_powered()
+	return _power_restored or SaveManager.is_station_powered()
 
 ## Puts every loaded tile into the form the current power state calls for. Called on
 ## spawn, and available to anything that changes the world under us.
@@ -88,14 +88,14 @@ func _on_node_added(node: Node) -> void:
 ## follows both a load and a new game, and it lands before the load screen lifts, so
 ## a room that streamed in while we thought otherwise is corrected unseen.
 func _on_player_spawned() -> void:
-	_power_restored = GameManager.is_station_powered()
+	_power_restored = SaveManager.is_station_powered()
 	refresh()
 
 ## Runs the lights up when the fuse goes in.
 ##
-## Like [Darkness], this does not re-read [method GameManager.is_station_powered]:
-## being an autoload we are connected to this signal before [GameManager] is, so the
-## save still says unpowered while we run. The signal is the fact.
+## Like [Darkness], this does not re-read [method SaveManager.is_station_powered].
+## Both of us are listening to the same signal and the order we are called in is not
+## ours to depend on. The signal is the fact.
 func _on_station_power_restored() -> void:
 	_power_restored = true
 	_flicker_on()

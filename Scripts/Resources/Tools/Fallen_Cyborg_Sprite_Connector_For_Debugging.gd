@@ -9,7 +9,6 @@ func _process(_delta: float) -> void:
 		return
 
 	if enemy and "start_flipped" in enemy:
-		print(enemy.start_flipped)
 		if enemy.start_flipped:
 			flip_h = true
 		else:

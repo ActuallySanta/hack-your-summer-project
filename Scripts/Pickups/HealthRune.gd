@@ -15,5 +15,5 @@ func _ready_after_setup() -> void:
 ## a no-op, and it is the same set the health component measures itself from, so the
 ## two can no longer drift apart.
 func _on_collect() -> void:
-	if GameManager.register_health_upgrade(MetSys.get_object_id(self)):
+	if SaveManager.register_health_upgrade(MetSys.get_object_id(self)):
 		GlobalSignals.health_extended_by_one.emit()

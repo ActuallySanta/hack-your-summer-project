@@ -26,9 +26,10 @@
 ## shut forever and says so in a warning (see [method _validate_table]).
 ##
 ## [b]Saving.[/b] There is no save format here. A revealed passage and an opened lock
-## are each a flag in MetSys' [code]stored_objects[/code], which is written with the
-## rest of the save and read back with it, and every spawn rebuilds the map from those
-## flags. That is what makes the two things the player expects fall out for free: a
+## are each a flag [SaveManager] keeps ([method SaveManager.reveal_map_secret] and
+## [method SaveManager.open_map_lock]), written with the rest of the save and read
+## back with it, and every spawn rebuilds the map from those flags. That is what makes
+## the two things the player expects fall out for free: a
 ## passage found and then died on before saving is a wall again on the reload, and a
 ## save whose locks were open comes back with them open — including in rooms the
 ## player has not returned to yet, since none of this needs the room to be loaded.
@@ -114,12 +115,6 @@ const DIR_NAMES : Array[String] = ["R", "D", "L", "U"]
 ## [method _set_both_sides].
 const NO_BORDER := -1
 
-## Namespaces for the save flags, so they cannot collide with the ids
-## [method MetroidvaniaSystem.get_object_id] makes for pickups, doors and buttons —
-## those share the same [code]stored_objects[/code] dictionary.
-const REVEALED_FLAG := "map_secret/"
-const LOCK_FLAG := "map_lock/"
-
 ## Every secret passage in the map, by border name. Read out of the map once, at
 ## startup, since the map itself never changes at runtime.
 var _secrets : Dictionary[String, Vector4i]
@@ -168,15 +163,13 @@ func reveal_secret(coords: Vector3i, direction: int) -> void:
 	if not id in _secrets:
 		push_warning("MapBorders: no secret passage at %s, so there is nothing to reveal." % id)
 		return
-	if is_secret_revealed(coords, direction):
-		return
-	if not _set_flag(REVEALED_FLAG + id):
+	if not SaveManager.reveal_map_secret(id):
 		return
 	_apply_secret(id)
 
 ## Whether the secret passage on the given side of the given cell has been revealed.
 func is_secret_revealed(coords: Vector3i, direction: int) -> bool:
-	return _flag_set(REVEALED_FLAG + _name_of(_canonical(coords, direction)))
+	return SaveManager.is_map_secret_revealed(_name_of(_canonical(coords, direction)))
 
 ## Opens a lock, and with it every latch [constant LOCKS] files under it. Saved from
 ## this moment with the rest of the game, so it survives a save and is taken back if
@@ -189,7 +182,7 @@ func open_lock(lock: StringName) -> void:
 		return
 	if is_lock_open(lock):
 		return
-	if not _set_flag(LOCK_FLAG + lock):
+	if not SaveManager.open_map_lock(lock):
 		return
 	for text: String in LOCKS[lock]:
 		var border := _parse_name(text)
@@ -198,14 +191,14 @@ func open_lock(lock: StringName) -> void:
 
 ## Whether a lock has been opened.
 func is_lock_open(lock: StringName) -> bool:
-	if _flag_set(LOCK_FLAG + lock):
+	if SaveManager.is_map_lock_open(lock):
 		return true
-	# The station's power is a fact the save has always kept for itself, and the debug
-	# save in [GameManager] sets that and nothing else, so it is read as well as the
-	# flag. Without this, powering the station through either of those routes would
-	# light the bay up and leave its doors drawn shut.
+	# The station's power is a fact the save keeps for itself, and a [CustomSaveData]
+	# can set that and nothing else, so it is read as well as the flag. Without this,
+	# powering the station that way would light the bay up and leave its doors drawn
+	# shut.
 	if lock == STATION_POWER:
-		return GameManager.is_station_powered()
+		return SaveManager.is_station_powered()
 	return false
 
 #endregion
@@ -264,7 +257,7 @@ func _player_cell() -> Vector3i:
 ## game has just started, just loaded, or just watched a door open, so nothing can
 ## drift out of step with the save.
 func _apply_all() -> void:
-	if MetSys.save_data == null:
+	if not SaveManager.is_loaded():
 		return
 	for id in _secrets:
 		_apply_secret(id)
@@ -282,7 +275,7 @@ func _apply_all() -> void:
 ## Draws a secret passage as itself once it has been found, and as a plain wall until
 ## then.
 func _apply_secret(id: String) -> void:
-	_set_both_sides(_secrets[id], SECRET if _flag_set(REVEALED_FLAG + id) else WALL)
+	_set_both_sides(_secrets[id], SECRET if SaveManager.is_map_secret_revealed(id) else WALL)
 
 ## Draws a security latch as open or shut.
 func _apply_latch(id: String, open: bool) -> void:
@@ -321,23 +314,6 @@ func _set_side(coords: Vector3i, direction: int, value: int) -> void:
 	if override == null:
 		override = MetSys.get_cell_override(coords)
 	override.set_border(direction, value)
-
-#endregion
-
-#region Save flags
-
-func _flag_set(flag: String) -> bool:
-	if MetSys.save_data == null:
-		return false
-	return MetSys.save_data.stored_objects.get(flag, false)
-
-## Writes a save flag, reporting whether there was save data to write it to.
-func _set_flag(flag: String) -> bool:
-	if MetSys.save_data == null:
-		push_warning("MapBorders: no save data yet, so \"%s\" cannot be recorded." % flag)
-		return false
-	MetSys.save_data.stored_objects[flag] = true
-	return true
 
 #endregion
 

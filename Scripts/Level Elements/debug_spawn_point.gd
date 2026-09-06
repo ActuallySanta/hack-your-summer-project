@@ -8,7 +8,7 @@
 ## it landed.
 ##
 ## Drop one of these in the room instead and drag it where you want to start. Give it
-## an [member id] and put the same id in [member GameManager.save_spawn_id]; several
+## an [member id] and put the same id in [member CustomSaveData.spawn_id]; several
 ## can sit in one room so you can keep a few useful starts and switch between them
 ## with one word.
 ##
@@ -19,7 +19,7 @@ extends Marker2D
 
 const GROUP := &"debug_spawn_point"
 
-## Which spawn this is. [member GameManager.save_spawn_id] names the one to use.
+## Which spawn this is. [member CustomSaveData.spawn_id] names the one to use.
 @export var id : StringName = &"default":
 	set(value):
 		id = value
@@ -53,5 +53,5 @@ func _draw() -> void:
 
 func _get_configuration_warnings() -> PackedStringArray:
 	if String(id).is_empty():
-		return ["Give this spawn point an id, so GameManager.save_spawn_id can name it."]
+		return ["Give this spawn point an id, so CustomSaveData.spawn_id can name it."]
 	return []

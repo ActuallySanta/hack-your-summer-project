@@ -14,19 +14,18 @@ func setup() -> void:
 		collider = colliders[0]
 
 func should_be_opened_check() -> bool:
-	if MetSys.register_storable_object( self, func(): return ):
+	SaveManager.register_item( self, func(): return, SaveManager.MapIcon.None )
+	if SaveManager.is_item_collected(self):
 		return true
-	if MetSys.save_data == null:
-		return false
-	
+
 	for button_name in button_names:
-		if not MetSys.save_data.stored_objects.get(button_name, false):
+		if not SaveManager.is_item_id_collected(button_name):
 			return false
 	return true
 
 func animate_open() -> void:
 	# Check if the door is already open
-	if MetSys.save_data.stored_objects.get(door_name, false):
+	if SaveManager.is_item_id_collected(door_name):
 		return
 	
 	# Remove the collider
@@ -38,7 +37,7 @@ func animate_open() -> void:
 	# Do animation and save door as open
 	for door in door_controls: door.play( "Opening" )
 	sound_player.play()
-	MetSys.store_object(self)
+	SaveManager.save_item(self, SaveManager.MapIcon.None)
 
 func immediate_open() -> void:
 	for door in door_controls: door.play( "IdleOpen" )

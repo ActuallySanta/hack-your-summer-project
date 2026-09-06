@@ -33,7 +33,7 @@ script/source = "extends GPUParticles2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	if not GameManager.is_station_powered():
+	if not SaveManager.is_station_powered():
 		speed_scale = 0.0
 "
 

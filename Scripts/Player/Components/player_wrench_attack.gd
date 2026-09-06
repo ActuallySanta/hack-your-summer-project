@@ -50,13 +50,13 @@ func damage() -> int:
 
 func set_damage_bonus(bonus: int) -> void:
 	_damage_bonus = maxi(bonus, 0)
-	GameManager.set_saved_value(save_key, _damage_bonus)
+	SaveManager.set_value(save_key, _damage_bonus)
 
 func add_damage_bonus(amount: int) -> void:
 	set_damage_bonus(_damage_bonus + amount)
 
 func refresh_from_save() -> void:
-	_damage_bonus = int(GameManager.get_saved_value(save_key, 0))
+	_damage_bonus = int(SaveManager.get_value(save_key, 0))
 #endregion
 
 func on_attack_pressed() -> void:

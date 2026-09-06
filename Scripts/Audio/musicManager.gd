@@ -165,7 +165,7 @@ func _get_current_cell_group_music(groups: PackedInt32Array) -> AudioStream:
 
 func _parse_music_effect(condition: String) -> AudioStream:
 	if condition == "DockPower":
-		return DOCKING_BAY if GameManager.is_station_powered() else DOCKING_BAY_UNPOWERED
+		return DOCKING_BAY if SaveManager.is_station_powered() else DOCKING_BAY_UNPOWERED
 	return NONE
 
 func _parse_special_room(type: String, special_name: String) -> AudioStream:

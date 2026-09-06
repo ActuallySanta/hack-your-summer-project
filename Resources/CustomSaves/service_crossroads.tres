@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="CustomSaveData" format=3 uid="uid://dd30177okkcfg"]
+
+[ext_resource type="Script" uid="uid://cc3yvafs1yvnj" path="res://Scripts/DataTypes/custom_save_data.gd" id="1_customsave"]
+
+[resource]
+script = ExtResource("1_customsave")
+start_room = "uid://dtkowilv386lj"
+start_position = Vector2(1000, 1500)
+fuse = 2
+gun = 1
+has_jetpack = true

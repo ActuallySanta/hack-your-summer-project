@@ -9,7 +9,6 @@ func has_message() -> bool:
 func append_message(new_msg: String) -> void:
 	var size = _queued_messages.size()
 	if size > 0 and _queued_messages[ size - 1 ] == new_msg:
-		print("Duplicate")
 		return
 	_queued_messages.push_back(new_msg)
 

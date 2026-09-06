@@ -12,9 +12,10 @@
 [ext_resource type="PackedScene" uid="uid://c23c0urqh5mm5" path="res://Scenes/Components/ScaledTileMap.tscn" id="8_sod7b"]
 [ext_resource type="PackedScene" uid="uid://bfdxh46jtantj" path="res://Scenes/Enemies/fallen_cyborg.tscn" id="9_ydc0m"]
 [ext_resource type="PackedScene" uid="uid://cy2osx3ogepds" path="res://Scenes/Rooms/Tutorial Area/locked_door.tscn" id="10_l2g7j"]
-[ext_resource type="PackedScene" uid="uid://bnpsyl86ggbjm" path="res://Scenes/Pickups/health_extender.tscn" id="11_tnlk3"]
 [ext_resource type="PackedScene" uid="uid://b0fyg7kdjcyou" path="res://Scenes/Enemies/repair_drone.tscn" id="13_gp64u"]
 [ext_resource type="PackedScene" uid="uid://usl0ryav6sdi" path="res://Scenes/Components/door_blocker.tscn" id="14_5p3vb"]
+[ext_resource type="PackedScene" uid="uid://b7lnb5mc2cxhl" path="res://Scenes/Components/station_powered_node.tscn" id="14_tnlk3"]
+[ext_resource type="Script" uid="uid://ppq0y0iwxyc2" path="res://Scripts/Level Elements/debug_spawn_point.gd" id="16_qf1ib"]
 
 [node name="ServiceCrossroads" type="Node2D" unique_id=1037229723]
 
@@ -77,99 +78,6 @@ tile_set = ExtResource("5_qf1ib")
 tile_map_data = PackedByteArray("AAAKABoAAgAAAAAAAAAMABoAAgACAAAAAAAKABsAAgAAAAIAAAAMABsAAgACAAIAAAALABoAAgABAAAAAAALABsAAgABAAIAAAAQABwAAgAAAAAAAAAQAB0AAgAAAAIAAAARABwAAgABAAAAAAARAB0AAgABAAIAAAASABwAAgACAAAAAAASAB0AAgACAAIAAAADAAkAAgAAAAAAAAADAAoAAgAAAAIAAAAEAAkAAgABAAAAAAAEAAoAAgABAAIAAAAFAAkAAgABAAAAAAAFAAoAAgABAAIAAAAGAAkAAgACAAAAAAAGAAoAAgACAAIAAAANAAoAAgACAAAAAAAMAAoAAgAAAAAAAAAMAA4AAgAAAAIAAAAPAA4AAgACAAIAAAAOAA4AAgABAAIAAAANAA4AAgABAAIAAAAMAA0AAgAAAAEAAAAMAAwAAgAAAAEAAAAMAAsAAgAAAAEAAAANAAwAAgACAAEAAAANAAsAAgACAAEAAAAOAA0AAgABAAAAAAANAA0AAgABAAYAAAAPAA0AAgACAAAAAAAMABYAAgACAAIAAAAMABUAAgACAAAAAAALABUAAgAAAAAAAAALABYAAgAAAAIAAAAJAB8AAgAAAAAAAAAJACEAAgAAAAIAAAANAB8AAgACAAAAAAANACEAAgACAAIAAAAMACEAAgABAAIAAAALACEAAgABAAIAAAAKACEAAgABAAIAAAAJACAAAgAAAAEAAAANACAAAgACAAEAAAAMAB8AAgABAAAAAAALAB8AAgABAAAAAAAKAB8AAgABAAAAAAAFABgAAQABABYAAAAGABgAAQACABYAAAAHABgAAQADABYAAAAPABcAAQABABYAAAAQABcAAQACABYAAAARABcAAQACABYAAAASABcAAQADABYAAAAPABIAAQABABYAAAAQABIAAQACABYAAAARABIAAQACABYAAAASABIAAQACABYAAAATABIAAQACABYAAAAUABIAAQADABYAAAADACAAAQAAABYAAAAUACAAAQAAABYAAAA=")
 tile_set = ExtResource("5_qf1ib")
 
-[node name="HealthExtender" parent="VisualAssets" unique_id=545634817 instance=ExtResource("11_tnlk3")]
-position = Vector2(961, 1515)
-
-[node name="HealthExtender2" parent="VisualAssets" unique_id=1044052516 instance=ExtResource("11_tnlk3")]
-position = Vector2(930, 1504)
-
-[node name="HealthExtender3" parent="VisualAssets" unique_id=719811855 instance=ExtResource("11_tnlk3")]
-position = Vector2(943, 1492)
-
-[node name="HealthExtender4" parent="VisualAssets" unique_id=1391687412 instance=ExtResource("11_tnlk3")]
-position = Vector2(951, 1494)
-
-[node name="HealthExtender5" parent="VisualAssets" unique_id=1002110272 instance=ExtResource("11_tnlk3")]
-position = Vector2(976, 1511)
-
-[node name="HealthExtender6" parent="VisualAssets" unique_id=1337006309 instance=ExtResource("11_tnlk3")]
-position = Vector2(961, 1498)
-
-[node name="HealthExtender7" parent="VisualAssets" unique_id=1769646829 instance=ExtResource("11_tnlk3")]
-position = Vector2(965, 1506)
-
-[node name="HealthExtender9" parent="VisualAssets" unique_id=2002122218 instance=ExtResource("11_tnlk3")]
-position = Vector2(961, 1515)
-
-[node name="HealthExtender10" parent="VisualAssets" unique_id=231699315 instance=ExtResource("11_tnlk3")]
-position = Vector2(930, 1504)
-
-[node name="HealthExtender11" parent="VisualAssets" unique_id=1761218970 instance=ExtResource("11_tnlk3")]
-position = Vector2(943, 1492)
-
-[node name="HealthExtender12" parent="VisualAssets" unique_id=1877398373 instance=ExtResource("11_tnlk3")]
-position = Vector2(951, 1494)
-
-[node name="HealthExtender13" parent="VisualAssets" unique_id=1842503285 instance=ExtResource("11_tnlk3")]
-position = Vector2(976, 1511)
-
-[node name="HealthExtender14" parent="VisualAssets" unique_id=1183058427 instance=ExtResource("11_tnlk3")]
-position = Vector2(961, 1498)
-
-[node name="HealthExtender15" parent="VisualAssets" unique_id=1093098753 instance=ExtResource("11_tnlk3")]
-position = Vector2(965, 1506)
-
-[node name="HealthExtender16" parent="VisualAssets" unique_id=121854728 instance=ExtResource("11_tnlk3")]
-position = Vector2(963, 1513)
-
-[node name="HealthExtender17" parent="VisualAssets" unique_id=932635723 instance=ExtResource("11_tnlk3")]
-position = Vector2(961, 1515)
-
-[node name="HealthExtender18" parent="VisualAssets" unique_id=353223318 instance=ExtResource("11_tnlk3")]
-position = Vector2(930, 1504)
-
-[node name="HealthExtender19" parent="VisualAssets" unique_id=1253026533 instance=ExtResource("11_tnlk3")]
-position = Vector2(943, 1492)
-
-[node name="HealthExtender20" parent="VisualAssets" unique_id=1685420119 instance=ExtResource("11_tnlk3")]
-position = Vector2(951, 1494)
-
-[node name="HealthExtender21" parent="VisualAssets" unique_id=1643349457 instance=ExtResource("11_tnlk3")]
-position = Vector2(976, 1511)
-
-[node name="HealthExtender22" parent="VisualAssets" unique_id=1389839298 instance=ExtResource("11_tnlk3")]
-position = Vector2(961, 1498)
-
-[node name="HealthExtender23" parent="VisualAssets" unique_id=891166610 instance=ExtResource("11_tnlk3")]
-position = Vector2(965, 1506)
-
-[node name="HealthExtender24" parent="VisualAssets" unique_id=278916663 instance=ExtResource("11_tnlk3")]
-position = Vector2(963, 1513)
-
-[node name="HealthExtender25" parent="VisualAssets" unique_id=394223742 instance=ExtResource("11_tnlk3")]
-position = Vector2(961, 1515)
-
-[node name="HealthExtender26" parent="VisualAssets" unique_id=1467121646 instance=ExtResource("11_tnlk3")]
-position = Vector2(930, 1504)
-
-[node name="HealthExtender27" parent="VisualAssets" unique_id=1665900263 instance=ExtResource("11_tnlk3")]
-position = Vector2(943, 1492)
-
-[node name="HealthExtender28" parent="VisualAssets" unique_id=841170490 instance=ExtResource("11_tnlk3")]
-position = Vector2(951, 1494)
-
-[node name="HealthExtender29" parent="VisualAssets" unique_id=2057557878 instance=ExtResource("11_tnlk3")]
-position = Vector2(976, 1511)
-
-[node name="HealthExtender30" parent="VisualAssets" unique_id=1498730718 instance=ExtResource("11_tnlk3")]
-position = Vector2(961, 1498)
-
-[node name="HealthExtender31" parent="VisualAssets" unique_id=1123779515 instance=ExtResource("11_tnlk3")]
-position = Vector2(965, 1506)
-
-[node name="HealthExtender32" parent="VisualAssets" unique_id=799841246 instance=ExtResource("11_tnlk3")]
-position = Vector2(963, 1513)
-
 [node name="Fallen_Cyborg2" parent="." unique_id=708168055 instance=ExtResource("9_ydc0m")]
 position = Vector2(192, 1392)
 
@@ -195,9 +103,6 @@ z_index = 10
 tile_map_data = PackedByteArray("AAAAAAMAAQABAAIAAAABAAMAAQABAAIAAAACAAMAAQACAAIAAAAWABcAAQABAAIAAAAXABcAAQABAAIAAAAVABcAAQAAAAIAAAAWACUAAQADAAAAAAAXACUAAQAEAAAAAAAUACUAAQAEAAUAAAAVACUAAQAEAAYAAAATACUAAQAEAAYAAAARACUAAQAEAAYAAAASACUAAQAFAAYAAAAPACUAAQAEAAYAAAAQACUAAQAFAAYAAAANACUAAQAEAAYAAAAOACUAAQAFAAYAAAALACUAAQAEAAYAAAAMACUAAQAFAAYAAAAJACUAAQAEAAYAAAAKACUAAQAFAAYAAAAHACUAAQAEAAYAAAAIACUAAQAFAAYAAAAFACUAAQAEAAYAAAAGACUAAQAFAAYAAAAEACUAAQAEAAEAAAAAACUAAQAEAAYAAAABACUAAQADAAAAAAACACUAAQAEAAAAAAADACUAAQADAAEAAAA=")
 tile_set = ExtResource("5_qf1ib")
 
-[node name="RepairDrone" parent="." unique_id=1318393645 instance=ExtResource("13_gp64u")]
-position = Vector2(569, 1692)
-
 [node name="DoorBlocker" parent="." unique_id=1139906443 instance=ExtResource("14_5p3vb")]
 position = Vector2(1121, 1650)
 
@@ -209,3 +114,13 @@ position = Vector2(26, 989)
 
 [node name="DoorBlocker4" parent="." unique_id=684208486 instance=ExtResource("14_5p3vb")]
 position = Vector2(27, 355)
+
+[node name="StationPoweredNode" parent="." unique_id=1319736591 instance=ExtResource("14_tnlk3")]
+
+[node name="RepairDrone" parent="StationPoweredNode" unique_id=1318393645 instance=ExtResource("13_gp64u")]
+position = Vector2(569, 1692)
+
+[node name="DebugSpawnPoint" type="Marker2D" parent="." unique_id=653883645]
+position = Vector2(107, 988)
+script = ExtResource("16_qf1ib")
+metadata/_custom_type_script = "uid://ppq0y0iwxyc2"

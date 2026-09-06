@@ -104,14 +104,14 @@ func refresh_from_save() -> void:
 		player.animator.set_body_hidden_for_blink(false)
 	ignore_effects = false
 	hurtbox.process_mode = Node.PROCESS_MODE_INHERIT
-	max_health = base_max_health + GameManager.get_health_upgrade_count()
+	max_health = base_max_health + SaveManager.get_health_upgrade_count()
 	max_out()
 	_announce()
 
 ## An extender was collected for the first time. Both the ceiling and the current
 ## health go up, so the new point is usable straight away.
 func _on_extender_collected() -> void:
-	max_health = base_max_health + GameManager.get_health_upgrade_count()
+	max_health = base_max_health + SaveManager.get_health_upgrade_count()
 	max_out()
 	_announce()
 

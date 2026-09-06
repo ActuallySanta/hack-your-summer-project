@@ -13,20 +13,29 @@ enum PickupType { Coin, HealthRune, PlasmaGun, Jetpack, Fuse, StunGun, AllenWren
 @export var use_custom_id := false
 @export var custom_id : StringName
 
-## Index for the icon to use, leave at -1 for no icon
-@export var use_icon := 0
+## The marker this leaves on the world map while it is still here. It becomes the
+## collected marker once taken; "None" keeps the pickup off the map altogether.
+## [br][br]The list mirrors [enum SaveManager.MapIcon] and has to stay in its order.
+@export_enum("None", "Uncollected", "Collected", "Alarm", "Save", "Map", "Boss")
+var map_icon: int = SaveManager.MapIcon.Uncollected
 
 func _ready() -> void:
 	body_entered.connect(_on_body_entered)
 	if use_custom_id:
 		set_meta(&"object_id", custom_id)
-	if not respawn_on_load:
-		var already_collected = MetSys.register_storable_object_with_marker(self, _on_load_if_collected, use_icon)
-		# MetSys automatically despawns the object if it was already collected
-		if already_collected:
-			return
-	
-	_ready_after_setup() 
+
+	if respawn_on_load:
+		_ready_after_setup()
+		return
+
+	SaveManager.register_item(self, _on_load_if_collected, map_icon)
+	# Asked out loud, rather than read off the call above. Registering records the
+	# pickup; whether it had already been taken is a separate question, and the
+	# answer arrives here rather than hidden in a return value.
+	if SaveManager.is_item_collected(self):
+		return
+
+	_ready_after_setup()
 
 func _on_load_if_collected() -> void:
 	queue_free()
@@ -49,8 +58,8 @@ func _on_body_entered(body: Node2D) -> void:
 	_on_collect()
 	
 	if not respawn_on_load:
-		MetSys.store_object(self)
-	
+		SaveManager.save_item(self)
+
 	queue_free()
 
 func get_type_as_str() -> StringName:

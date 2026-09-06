@@ -3,7 +3,7 @@
 ## What it reveals is recorded twice on purpose. The station itself is a MetSys
 ## storable object, so a used station stays used; and the region codes go in the save
 ## under their own key, so a load can replay the reveal directly (see
-## [method GameManager.register_map_region_revealed]). The replay is what makes the
+## [method SaveManager.register_map_region_revealed]). The replay is what makes the
 ## revealed map survive a reload rather than depending on MetSys' per-cell discovery
 ## data surviving the trip through the save file intact.
 ##
@@ -25,7 +25,10 @@ var _is_on = false
 var _has_been_interacted_with = false
 
 func _ready() -> void:
-	if MetSys.register_storable_object(self, turn_off):
+	# No marker, as before -- a station is drawn on the map by the room it is in.
+	# [constant SaveManager.MapIcon.Map] is here whenever it should have one.
+	SaveManager.register_item(self, turn_off, SaveManager.MapIcon.None)
+	if SaveManager.is_item_collected(self):
 		return
 
 	for i in what_to_keep:
@@ -55,9 +58,9 @@ func _on_interaction_entered(body: Node2D) -> void:
 	_has_been_interacted_with = true
 	for code in what_to_keep:
 		# Recorded first, so the save knows what to put back on a reload, then applied.
-		GameManager.register_map_region_revealed( code )
+		SaveManager.register_map_region_revealed( code )
 		MapRegions.reveal( code )
-	MetSys.store_object(self)
+	SaveManager.save_item(self, SaveManager.MapIcon.None)
 	animator.play("Active")
 
 func turn_off() -> void:
