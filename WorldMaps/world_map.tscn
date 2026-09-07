@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://bgwc4emcqyj3l" path="res://WorldMaps/world_map_db.tscn" id="2_boi75"]
 [ext_resource type="PackedScene" uid="uid://cx11mafvqsiv0" path="res://WorldMaps/world_map_cq.tscn" id="3_boi75"]
 [ext_resource type="PackedScene" uid="uid://1ysa7uo7e1kp" path="res://WorldMaps/world_map_rs.tscn" id="5_bj1wo"]
+[ext_resource type="PackedScene" uid="uid://dnnol5yqyl8gb" path="res://WorldMaps/world_map_limbo.tscn" id="6_w76ui"]
 
 [node name="WorldMap" type="Node2D" unique_id=1287662466]
 script = ExtResource("1_v4sft")
@@ -20,3 +21,6 @@ position = Vector2(5897, 3479)
 
 [node name="WorldMapDB" parent="." unique_id=19893736 instance=ExtResource("2_boi75")]
 position = Vector2(-7224, -194)
+
+[node name="WorldMapLimbo" parent="." unique_id=1902216411 instance=ExtResource("6_w76ui")]
+position = Vector2(-12367, 94)

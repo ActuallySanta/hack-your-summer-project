@@ -1,0 +1,22 @@
+[gd_scene format=4 uid="uid://2e3qlr0u0f4e"]
+
+[ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="1_7fy3l"]
+[ext_resource type="Texture2D" uid="uid://dnntcfx11lbpm" path="res://Textures/Tiles/MVPSprites/SpaceShip0.png" id="2_qpe46"]
+[ext_resource type="PackedScene" uid="uid://c23c0urqh5mm5" path="res://Scenes/Components/ScaledTileMap.tscn" id="3_ju1rp"]
+[ext_resource type="PackedScene" uid="uid://6jbhsdtefk1p" path="res://Scenes/Components/door_tile_map_layer.tscn" id="4_epj01"]
+
+[node name="StorageAndOperations" type="Node2D" unique_id=1723050400]
+
+[node name="RoomInstance" parent="." unique_id=1702004714 instance=ExtResource("1_7fy3l")]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=873445313]
+position = Vector2(1152, 672)
+scale = Vector2(3, 3)
+texture = ExtResource("2_qpe46")
+hframes = 2
+
+[node name="TileMapLayer" parent="." unique_id=2101826522 instance=ExtResource("3_ju1rp")]
+tile_map_data = PackedByteArray("AAAtABUAAAABAAAAAAAtABYAAAABAAEAAAAtABcAAAABAAIAAAAuABUAAAACAAAAAAAuABYAAAACAAEAAAAuABcAAAACAAIAAAAvABUAAAADAAAAAAAvABYAAAADAAEAAAAvABcAAAADAAIAAAA=")
+
+[node name="DoorTileMapLayer" parent="." unique_id=197313074 instance=ExtResource("4_epj01")]
+tile_map_data = PackedByteArray("AAAuABUAAQAAAAAAAAAuABYAAQAAAAEAAAAuABcAAQAAAAIAAAAvABUAAQABAAAAAAAvABYAAQABAAEAAAAvABcAAQABAAIAAAA=")
