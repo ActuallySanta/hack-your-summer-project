@@ -9,6 +9,9 @@
 [node name="WorldMapLimbo" type="Node2D" unique_id=1902216411]
 script = ExtResource("1_3hy5d")
 
+[node name="CrewQuarters" parent="." unique_id=1014041974 instance=ExtResource("4_l66lb")]
+position = Vector2(2304, 0)
+
 [node name="StorageAndOperations" parent="." unique_id=1723050400 instance=ExtResource("5_qr63h")]
 
 [node name="BoardingTunnel" parent="." unique_id=1273514519 instance=ExtResource("2_ack45")]
@@ -16,6 +19,3 @@ position = Vector2(3456, 672)
 
 [node name="ControlRoom" parent="." unique_id=1746851613 instance=ExtResource("3_8wifq")]
 position = Vector2(3456, 0)
-
-[node name="CrewQuarters" parent="." unique_id=1014041974 instance=ExtResource("4_l66lb")]
-position = Vector2(2304, 0)
