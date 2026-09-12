@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="CustomSaveData" format=3 uid="uid://dci76v6q5aje8"]
+
+[ext_resource type="Script" uid="uid://cc3yvafs1yvnj" path="res://Scripts/DataTypes/custom_save_data.gd" id="1_6bd8t"]
+
+[resource]
+script = ExtResource("1_6bd8t")
+start_room = "uid://2e3qlr0u0f4e"
+metadata/_custom_type_script = "uid://cc3yvafs1yvnj"

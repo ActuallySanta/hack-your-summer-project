@@ -9,6 +9,7 @@ const INTERNALS = DEBUG
 const LABS = preload("res://Sounds/Music/Jetpack Joyride DEMO.ogg")
 const BRS = preload("res://Sounds/Music/BRS.ogg")
 const LOWER_BRS = preload("res://Sounds/Music/Lower Biological Zone.ogg")
+const LIMBO = DEBUG
 
 const MAIN_MENU = DEBUG
 
@@ -38,6 +39,7 @@ const NONE = preload("res://Sounds/Music/issue.wav")
 	"Maintainence Hidden": LABS,
 	"BRS": LOWER_BRS,
 	"BRS Hidden": BRS,
+	"Limbo": LIMBO,
 }
 
 @onready var boss_ost := {

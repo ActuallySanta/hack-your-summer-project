@@ -147,7 +147,8 @@ func _is_in_station() -> bool:
 		return false
 	# MetSys names rooms relative to its map root while @export_file hands us a
 	# res:// path, so accept either form.
-	var full_path := MetSys.get_full_room_path(room)
+	var full_path := ResourceUID.id_to_text(ResourceLoader.get_resource_uid(MetSys.get_full_room_path(room)))
+	room = ResourceUID.id_to_text(ResourceLoader.get_resource_uid(room))
 	for excluded in non_station_rooms:
 		if excluded == full_path or excluded == room:
 			return false

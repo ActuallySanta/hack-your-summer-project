@@ -605,3 +605,4 @@ panning_strength = 0.0
 
 [node name="Darkness" parent="." unique_id=1231306066 instance=ExtResource("17_m3db5")]
 visible = false
+non_station_rooms = Array[String](["uid://62rpaogaavce", "uid://btkjsoc08g7tv", "uid://3w16hi8fr5n", "uid://2e3qlr0u0f4e"])

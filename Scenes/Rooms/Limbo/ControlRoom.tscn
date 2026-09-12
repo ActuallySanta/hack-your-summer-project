@@ -1,24 +1,58 @@
 [gd_scene format=4 uid="uid://btkjsoc08g7tv"]
 
 [ext_resource type="PackedScene" uid="uid://bsg0351mx3b4u" path="res://addons/MetroidvaniaSystem/Nodes/RoomInstance.tscn" id="1_jubvm"]
-[ext_resource type="Texture2D" uid="uid://dnntcfx11lbpm" path="res://Textures/Tiles/MVPSprites/SpaceShip0.png" id="2_kpiv2"]
+[ext_resource type="Texture2D" uid="uid://d065mmnlkauoh" path="res://Textures/Tiles/MVPSprites/SpaceShip/Background.png" id="2_8mvxd"]
+[ext_resource type="PackedScene" uid="uid://sjty08w4065m" path="res://Scenes/Rooms/CommonRoomComponents/space_background.tscn" id="2_dfvwi"]
 [ext_resource type="PackedScene" uid="uid://c23c0urqh5mm5" path="res://Scenes/Components/ScaledTileMap.tscn" id="3_8mvxd"]
 [ext_resource type="PackedScene" uid="uid://6jbhsdtefk1p" path="res://Scenes/Components/door_tile_map_layer.tscn" id="4_a73hs"]
+[ext_resource type="Texture2D" uid="uid://b4js25vthq40a" path="res://Textures/Tiles/MVPSprites/SpaceShip/Foreground.png" id="4_ddtw0"]
+[ext_resource type="TileSet" uid="uid://4kj7b55i4dg8" path="res://Tileset/SpaceShip.tres" id="6_ddtw0"]
+[ext_resource type="PackedScene" uid="uid://cup5x5rhhgpr1" path="res://Scenes/Components/limbo_heated_rod.tscn" id="8_qp35y"]
+[ext_resource type="TileSet" uid="uid://c6crhgmkjugi7" path="res://Tileset/Textureless.tres" id="9_ilmr1"]
 
 [node name="ControlRoom" type="Node2D" unique_id=1746851613]
 
 [node name="RoomInstance" parent="." unique_id=654008620 instance=ExtResource("1_jubvm")]
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1035454331]
+[node name="SpaceBackground" parent="." unique_id=1411061257 instance=ExtResource("2_dfvwi")]
+position = Vector2(576, 336)
+
+[node name="Background" type="Sprite2D" parent="." unique_id=1035454331]
 position = Vector2(576, 336)
 scale = Vector2(3, 3)
-texture = ExtResource("2_kpiv2")
+texture = ExtResource("2_8mvxd")
+hframes = 4
+vframes = 2
+frame = 3
+
+[node name="Foreground" type="Sprite2D" parent="." unique_id=932358164]
+position = Vector2(576, 336)
+scale = Vector2(3, 3)
+texture = ExtResource("4_ddtw0")
 hframes = 4
 vframes = 2
 frame = 3
 
 [node name="TileMapLayer" parent="." unique_id=2101826522 instance=ExtResource("3_8mvxd")]
-tile_map_data = PackedByteArray("AAAAAAkAAAABAAAAAAAAAAoAAAABAAEAAAAAAAsAAAABAAIAAAABAAkAAAACAAAAAAABAAoAAAACAAEAAAABAAsAAAACAAIAAAACAAkAAAADAAAAAAACAAoAAAADAAEAAAACAAsAAAADAAIAAAA=")
+tile_map_data = PackedByteArray("AAAAAAkAAAAJAAQAAAAAAAoAAAAJAAQAAAAAAAsAAAAJAAQAAAABAAkAAAAKAAQAAAABAAoAAAAKAAQAAAABAAsAAAAKAAQAAAACAAkAAAALAAQAAAACAAoAAAALAAQAAAACAAsAAAALAAQAAAATAAIAAAAGAAYAABA=")
+tile_set = ExtResource("6_ddtw0")
 
 [node name="DoorTileMapLayer" parent="." unique_id=197313074 instance=ExtResource("4_a73hs")]
 tile_map_data = PackedByteArray("AAABAAkAAQAAAAAAABAAAAkAAQABAAAAABABAAoAAQAAAAEAABAAAAoAAQABAAEAABABAAsAAQAAAAIAABAAAAsAAQABAAIAABA=")
+
+[node name="LimboHeatedRod" parent="." unique_id=81421569 instance=ExtResource("8_qp35y")]
+position = Vector2(255, 189)
+cycle_seconds = 5.0
+
+[node name="LimboHeatedRod2" parent="." unique_id=1162618607 instance=ExtResource("8_qp35y")]
+position = Vector2(285, 189)
+cycle_seconds = 5.0
+
+[node name="LimboHeatedRod3" parent="." unique_id=933814320 instance=ExtResource("8_qp35y")]
+position = Vector2(315, 189)
+cycle_seconds = 5.0
+
+[node name="TileMapLayer2" parent="." unique_id=1698720756 instance=ExtResource("3_8mvxd")]
+visible = false
+tile_map_data = PackedByteArray("AAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAAgAAAAAAAAAAAABAAAAAAAAAAAAAAABAAEAAAAAAAAAAAABAAIAAAAAAAAAAAABAAMAAAAAAAAAAAABAAQAAAAAAAAAAAABAAUAAAAAAAAAAAABAAYAAAAAAAAAAAABAAcAAAAAAAAAAAABAAgAAAAAAAAAAAACAAAAAAAAAAAAAAACAAEAAAAAAAAAAAACAAIAAAAAAAAAAAACAAMAAAAAAAAAAAACAAQAAAAAAAAAAAACAAUAAAAAAAAAAAACAAYAAAAAAAAAAAACAAcAAAAAAAAAAAACAAgAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA0AAAAAAAAAAAABAAwAAAAAAAAAAAABAA0AAAAAAAAAAAACAAwAAAAAAAAAAAACAA0AAAAAAAAAAAADAAwAAAAAAAAAAAADAA0AAAAAAAAAAAAEAAwAAAAAAAAAAAAEAA0AAAAAAAAAAAAFAAwAAAAAAAAAAAAFAA0AAAAAAAAAAAAGAAwAAAAAAAAAAAAGAA0AAAAAAAAAAAAHAAwAAAAAAAAAAAAHAA0AAAAAAAAAAAAIAAwAAAAAAAAAAAAIAA0AAAAAAAAAAAAJAAwAAAAAAAAAAAAJAA0AAAAAAAAAAAAKAAwAAAAAAAAAAAALAAwAAAAAAAAAAAAMAAwAAAAAAAAAAAANAAwAAAAAAAAAAAAOAAwAAAAAAAAAAAAPAAwAAAAAAAAAAAAQAAwAAAAAAAAAAAAUAAIAAAAAAAAAAAAUAAMAAAAAAAAAAAAUAAQAAAAAAAAAAAAUAAUAAAAAAAAAAAAUAAYAAAAAAAAAAAAUAAcAAAAAAAAAAAAUAAgAAAAAAAAAAAADAAAAAAAAAAAAAAADAAEAAAAAAAAAAAAEAAAAAAAAAAAAAAAEAAEAAAAAAAAAAAAFAAAAAAAAAAAAAAAFAAEAAAAAAAAAAAAGAAAAAAAAAAAAAAAGAAEAAAAAAAAAAAAHAAAAAAAAAAAAAAAHAAEAAAAAAAAAAAAIAAAAAAAAAAAAAAAIAAEAAAAAAAAAAAAJAAAAAAAAAAAAAAAJAAEAAAAAAAAAAAAKAAAAAAAAAAAAAAAKAAEAAAAAAAAAAAALAAAAAAAAAAAAAAALAAEAAAAAAAAAAAAMAAAAAAAAAAAAAAAMAAEAAAAAAAAAAAANAAAAAAAAAAAAAAANAAEAAAAAAAAAAAAOAAAAAAAAAAAAAAAOAAEAAAAAAAAAAAAPAAAAAAAAAAAAAAAPAAEAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAEAAAAAAAAAAAARAAAAAAAAAAAAAAARAAEAAAAAAAAAAAASAAAAAAAAAAAAAAASAAEAAAAAAAAAAAATAAAAAAAAAAAAAAATAAEAAAAAAAAAAAAUAAAAAAAAAAAAAAAUAAEAAAAAAAAAAAADAAMAAAAEAAAAAGAEAAIAAAAEAAAAABADAAIAAAABAAAAAGARAAwAAAAAAAAAAAASAAwAAAAAAAAAAAAUAAkAAAAAAAAAAAAUAAoAAAAAAAAAAAAUAAsAAAAAAAAAAAAUAAwAAAAAAAAAAAATAAwAAAAAAAAAAAARAAsAAAAEAAAAACASAAsAAAAFAAAAACATAAkAAAAEAAAAAFATAAoAAAAFAAAAAFATAAsAAAAAAAAAAAA=")
+tile_set = ExtResource("9_ilmr1")

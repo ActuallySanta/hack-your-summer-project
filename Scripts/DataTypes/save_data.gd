@@ -14,19 +14,13 @@
 class_name SaveData
 extends RefCounted
 
-## Where a save that has never been written puts the player: the start of the game.
-## A [code]SaveData.new()[/code] is a new game, which is why these live here rather
-## than in [GameManager].
 const START_ROOM_UID := "uid://djrq87v0sx3lq" # Docking Station
 const START_POS := Vector2(158, 834)
 
-## Which gun the player owns. Ordered, so [code]>= Stun[/code] reads as "owns a gun".
 enum GunState { None, Stun, Plasma }
-
-## Which wrench the player swings. Ordered, so [code]>= Basic[/code] reads as "has a
-## wrench at all" -- the player starts the game with nothing and is handed one in the
-## tutorial, the same shape as [enum GunState].
 enum WrenchState { None, Basic, Allen }
+
+enum AirLockState { LimboClosed, LimboOpen, ClosedForever }
 
 #region The file's keys
 const KEY_SAVE_NAME := "save_name"
@@ -40,27 +34,18 @@ const KEY_GUN := "gun"
 const KEY_WRENCH := "wrench"
 const KEY_VALUES := "values"
 const KEY_METSYS := "metsys"
+const KEY_AIRLOCK := "airlock"
 #endregion
 
 ## The file this was written as, without the directory or the extension.
 var save_name := ""
-
-## The room to load and the position to put the player at when this save is loaded.
 var current_room := START_ROOM_UID
 var player_pos := START_POS
 
-## The ids of every health extender collected, rather than a count of them --
-## see [method SaveManager.register_health_upgrade] for why.
-var health_upgrades: Array[String] = []
-
-## Whether the fuse has been put in the fusebox and the station brought back to life.
-var station_powered := false
-
 #region What the player is carrying
-## These mirror MetSys' stored objects, which is where collection is actually
-## recorded while the game runs. They are filled in when a save is written and read
-## back out when one is loaded, so that a file says what the player has in plain
-## words and a [CustomSaveData] can hand out a kit without naming pickup ids.
+var health_upgrades: Array[String] = []
+var station_powered := false
+var airlock_state := AirLockState.LimboClosed
 var has_fuse := false
 var has_jetpack := false
 var gun := GunState.None
@@ -70,14 +55,7 @@ var wrench := WrenchState.None
 ## Everything recorded through [SaveManager]'s value wrappers: logbook entries, room
 ## events, revealed map secrets, opened locks, and any other flag a wrapper invents.
 var values: Dictionary = {}
-
-## MetSys' own save data, exactly as [method MetroidvaniaSystem.get_save_data]
-## returns it.
 var metsys: Dictionary = {}
-
-## Whether this came off disk. False for a new game and for a [CustomSaveData], which
-## is what lets [SaveManager] tell "no save yet" from "a save that happens to look
-## like the beginning of the game".
 var loaded_from_file := false
 
 ## Reads the save at [param path]. Leave [param path] empty for a new game: the
@@ -120,6 +98,7 @@ func to_dict() -> Dictionary:
 		KEY_WRENCH: wrench,
 		KEY_VALUES: values,
 		KEY_METSYS: metsys,
+		KEY_AIRLOCK: airlock_state,
 	}
 
 func _apply_dict(dict: Dictionary) -> void:
@@ -131,6 +110,7 @@ func _apply_dict(dict: Dictionary) -> void:
 	has_jetpack = bool(dict.get(KEY_HAS_JETPACK, has_jetpack))
 	gun = int(dict.get(KEY_GUN, gun)) as GunState
 	wrench = int(dict.get(KEY_WRENCH, wrench)) as WrenchState
+	airlock_state = int(dict.get(KEY_AIRLOCK, airlock_state)) as AirLockState
 
 	# assign() rather than assignment: what comes back out of the file is an untyped
 	# Array, and a typed one will not take it whole.

@@ -295,6 +295,19 @@ func _restore_map_regions() -> void:
 #endregion
 
 #region The station
+func is_airlock_open() -> bool:
+	return _data.airlock_state == _data.AirLockState.LimboOpen
+
+func open_airlock() -> void:
+	if _data == null or _data.airlock_state == _data.AirLockState.ClosedForever:
+		return
+	_data.airlock_state = _data.AirLockState.LimboOpen
+
+func seal_truth() -> void:
+	if _data == null:
+		return
+	_data.airlock_state = _data.AirLockState.ClosedForever
+
 ## Whether the fuse has gone in and the station has power.
 func is_station_powered() -> bool:
 	return _data.station_powered if _data else false

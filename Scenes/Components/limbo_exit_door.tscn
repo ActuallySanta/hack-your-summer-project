@@ -1,0 +1,63 @@
+[gd_scene format=4 uid="uid://0ked6ikwavah"]
+
+[ext_resource type="TileSet" uid="uid://chq502fexv5m" path="res://Tileset/DockingBay.tres" id="1_4eqyx"]
+
+[sub_resource type="GDScript" id="GDScript_4vj60"]
+resource_name = "limbo_exit_door"
+script/source = "# Limbo exit door should never be opened / closed in the room it exists; it should only rely on reading save data
+extends Node2D
+
+@export var open_out : bool
+
+@onready var collider := $Collider/CollisionShape2D
+@onready var closed_image := $ClosedImage
+@onready var open_image_out := $OpenImageExtrusion
+@onready var open_image_in := $OpenImageInlet
+@onready var open_image := $OpenImage
+
+func _ready() -> void:
+	if SaveManager.is_airlock_open():
+		collider.set_deferred(\"disabled\", true)
+		open_image.visible = true
+		if open_out:
+			open_image_out.visible = true
+			return
+		
+		open_image_in.visible = true
+		return
+	
+	closed_image.visible = true
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bpmhk"]
+size = Vector2(48, 48)
+
+[node name="LimboExitDoor" type="Node2D" unique_id=618844697]
+script = SubResource("GDScript_4vj60")
+
+[node name="Collider" type="StaticBody2D" parent="." unique_id=349155916]
+collision_mask = 14
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Collider" unique_id=1826633555]
+position = Vector2(24, 24)
+shape = SubResource("RectangleShape2D_bpmhk")
+
+[node name="ClosedImage" type="TileMapLayer" parent="." unique_id=750702452]
+visible = false
+tile_map_data = PackedByteArray("AAAAAAAABAAHAAQAAAAAAAEABAAHAAUAAAAAAAIABAAHAAYAAAABAAAABAAIAAQAAAABAAEABAAIAAUAAAABAAIABAAIAAYAAAACAAAABAAJAAQAAAACAAEABAAJAAUAAAACAAIABAAJAAYAAAA=")
+tile_set = ExtResource("1_4eqyx")
+
+[node name="OpenImageExtrusion" type="TileMapLayer" parent="." unique_id=936523340]
+visible = false
+tile_map_data = PackedByteArray("AAAAAAAABAAAAAQAAAAAAAEABAAAAAUAAAAAAAIABAAAAAYAAAABAAAABAABAAQAAAABAAEABAABAAUAAAABAAIABAABAAYAAAACAAAABAACAAQAAAACAAEABAACAAUAAAACAAIABAACAAYAAAA=")
+tile_set = ExtResource("1_4eqyx")
+
+[node name="OpenImageInlet" type="TileMapLayer" parent="." unique_id=106392412]
+visible = false
+tile_map_data = PackedByteArray("AAAAAAAABAABAAQAAAAAAAEABAABAAUAAAAAAAIABAABAAYAAAABAAAABAACAAQAAAABAAEABAACAAUAAAABAAIABAACAAYAAAACAAIABAADAAYAAAACAAEABAADAAUAAAACAAAABAADAAQAAAA=")
+tile_set = ExtResource("1_4eqyx")
+
+[node name="OpenImage" type="TileMapLayer" parent="." unique_id=1549955249]
+visible = false
+tile_map_data = PackedByteArray("AAAAAAAABAAEAAQAAAAAAAIABAAEAAYAAAABAAAABAAFAAQAAAABAAIABAAFAAYAAAACAAAABAAGAAQAAAACAAIABAAGAAYAAAA=")
+tile_set = ExtResource("1_4eqyx")

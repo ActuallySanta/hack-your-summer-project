@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://cup5x5rhhgpr1"]
+
+[ext_resource type="TileSet" uid="uid://4kj7b55i4dg8" path="res://Tileset/SpaceShip.tres" id="1_yx8in"]
+[ext_resource type="Script" uid="uid://4myeaurm5pnx" path="res://Scripts/Animation/color_occilator.gd" id="2_c7a3k"]
+
+[node name="LimboHeatedRod" type="TileMapLayer" unique_id=81421569]
+scale = Vector2(3, 3)
+tile_map_data = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 9, 0, 0, 0)
+tile_set = ExtResource("1_yx8in")
+script = ExtResource("2_c7a3k")
+start_color = Color(1, 1, 1, 0.3529412)
+end_color = Color(1, 1, 1, 0)
