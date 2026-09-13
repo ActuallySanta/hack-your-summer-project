@@ -18,6 +18,7 @@ custom_id = &"Wrench"
 metadata/_custom_type_script = "uid://cnrub5aht5y2k"
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1235136346]
+scale = Vector2(3, 3)
 texture = ExtResource("2_1hbgo")
 script = ExtResource("3_wrench")
 occilations_per_second = 0.25

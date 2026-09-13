@@ -22,8 +22,8 @@ scale = Vector2(3, 3)
 texture = ExtResource("2_twqiq")
 hframes = 2
 script = ExtResource("3_hxj0y")
-start_brightness = 0.8
-end_brightness = 0.75
+start_brightness = 0.7
+end_brightness = 0.65
 cycle_seconds = 4.0
 
 [node name="Foreground" type="Sprite2D" parent="." unique_id=873445313]
@@ -49,7 +49,6 @@ metadata/_custom_type_script = "uid://dpm1m1a7ewttn"
 
 [node name="Wrench" parent="." unique_id=265764009 instance=ExtResource("10_wlcmy")]
 position = Vector2(1203, 819.00006)
-scale = Vector2(3, 3)
 
 [node name="DebugSpawnPoint" type="Marker2D" parent="." unique_id=1561380723]
 position = Vector2(2016, 1060)

@@ -23,6 +23,10 @@ const TOP_PROBE_DEPTH := 3.0
 ## its neighbour is empty and the query lands a hair over the seam.
 const TOP_PROBE_SPREAD : Array[ float ] = [ 0.12, 0.3, 0.5, 0.7, 0.88 ]
 
+## How many overlaps [method shape_is_blocked] will look through. More than one,
+## because the first few can all be one-way platforms it has to see past.
+const MAX_SHAPE_HITS := 8
+
 static func foreground(tree: SceneTree) -> TileMapLayer:
 	return tree.get_first_node_in_group(GEOMETRY_GROUP) as TileMapLayer
 
@@ -70,13 +74,55 @@ static func is_blocking_wall(world: World2D, global_point: Vector2, mask: int, e
 			return true
 	return false
 
+## True when [param shape], placed at [param transform], overlaps anything that could
+## actually hold the player out of that space.
+##
+## The shape-sized [method is_blocking_wall], and it exists for the same reason: a
+## one-way platform is a collider like any other, so a plain
+## [method PhysicsDirectSpaceState2D.intersect_shape] counts the underside of a crate
+## as a ceiling. That is what put the player into a crawl every time they walked past a
+## shelf of them.
+##
+## A tile hit is answered by the cells the shape covers rather than by the hit itself,
+## because a [TileMapLayer] reports the whole quadrant as one body -- see
+## [method _coords_for_tile_hit] for the same problem in the point version.
+static func shape_is_blocked(world: World2D, shape: Shape2D, transform: Transform2D, mask: int, exclude: Array[RID] = []) -> bool:
+	var query := PhysicsShapeQueryParameters2D.new()
+	query.shape = shape
+	query.transform = transform
+	query.collision_mask = mask
+	query.collide_with_areas = false
+	query.exclude = exclude
+
+	var bounds := transform * shape.get_rect()
+	for hit in world.direct_space_state.intersect_shape(query, MAX_SHAPE_HITS):
+		var tiles := hit.get("collider") as TileMapLayer
+		if tiles == null:
+			if not _hit_shape_is_one_way(hit):
+				return true
+		elif _layer_blocks_rect(tiles, bounds):
+			return true
+	return false
+
+static func _layer_blocks_rect(layer: TileMapLayer, bounds: Rect2) -> bool:
+	var first := map_coords(layer, bounds.position)
+	var last := map_coords(layer, bounds.end)
+	for x in range(first.x, last.x + 1):
+		for y in range(first.y, last.y + 1):
+			var coords := Vector2i(x, y)
+			# Borders excluded, so a collider resting exactly on a cell's edge is
+			# beside that cell rather than inside it.
+			if tile_blocks(layer, coords) and cell_rect(layer, coords).intersects(bounds):
+				return true
+	return false
+
 static func _hit_blocks_sideways(hit: Dictionary, global_point: Vector2) -> bool:
 	var tiles := hit.get("collider") as TileMapLayer
 	if tiles == null:
 		# A plain body. One-way is a per-shape flag on CollisionShape2D/CollisionPolygon2D;
 		# a body whose hit shape is one-way is no more a wall than a one-way tile is.
 		return not _hit_shape_is_one_way(hit)
-	return not tile_is_all_one_way(tiles, _coords_for_tile_hit(tiles, hit, global_point))
+	return tile_blocks(tiles, _coords_for_tile_hit(tiles, hit, global_point))
 
 ## Which cell a tile hit actually came from.
 ##
@@ -104,23 +150,23 @@ static func _hit_shape_is_one_way(hit: Dictionary) -> bool:
 	var shape_node := body.shape_owner_get_owner(owner_id)
 	return shape_node != null and shape_node.get("one_way_collision") == true
 
-## True when every collision polygon on the tile at [param coords] is one-way, so the
-## tile cannot block anything approaching from the side or from below.
+## True when the tile at [param coords] carries collision that can stop something from
+## any direction -- a wall, a ceiling, a floor you cannot pass through.
 ##
-## An empty cell answers false: there is nothing there to be one-way, and callers
-## already have [method is_cell_empty] for that question.
-static func tile_is_all_one_way(layer: TileMapLayer, coords: Vector2i) -> bool:
+## Two kinds of cell answer false, for different reasons. A one-way tile only ever
+## stops a body coming at it from its one blocking direction, so it is not a wall to
+## stand against and not a ceiling to crouch under. A tile drawn with no collision
+## polygon at all is decoration, and blocks nothing whatever it looks like.
+static func tile_blocks(layer: TileMapLayer, coords: Vector2i) -> bool:
 	var data := layer.get_cell_tile_data(coords)
 	if data == null or layer.tile_set == null:
 		return false
 
-	var found_any := false
 	for physics_layer in layer.tile_set.get_physics_layers_count():
 		for polygon in data.get_collision_polygons_count(physics_layer):
-			found_any = true
 			if not data.is_collision_polygon_one_way(physics_layer, polygon):
-				return false
-	return found_any
+				return true
+	return false
 
 ## True when the cell at [param coords] is solid right across its top face.
 ##

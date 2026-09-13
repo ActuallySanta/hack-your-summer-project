@@ -317,13 +317,11 @@ func has_headroom() -> bool:
 	if shape_node == null or shape_node.shape == null:
 		return true
 
-	var query := PhysicsShapeQueryParameters2D.new()
-	query.shape = shape_node.shape
-	query.transform = shape_node.global_transform
-	query.collision_mask = geometry_layers
-	query.collide_with_areas = false
-	query.exclude = [get_rid()]
-	return get_world_2d().direct_space_state.intersect_shape(query, 1).is_empty()
+	# Not a plain overlap test: a one-way platform is a collider, and standing up
+	# through one is something the player can always do, so it is not a ceiling.
+	return not PlayerGeometry.shape_is_blocked(
+		get_world_2d(), shape_node.shape, shape_node.global_transform,
+		geometry_layers, [get_rid()])
 #endregion
 
 #region Animation
