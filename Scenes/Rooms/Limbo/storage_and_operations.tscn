@@ -24,7 +24,7 @@ hframes = 2
 script = ExtResource("3_hxj0y")
 start_brightness = 0.7
 end_brightness = 0.65
-cycle_seconds = 4.0
+occilations_per_second = 0.25
 
 [node name="Foreground" type="Sprite2D" parent="." unique_id=873445313]
 position = Vector2(1152, 672)

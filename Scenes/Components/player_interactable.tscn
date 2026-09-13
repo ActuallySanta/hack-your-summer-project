@@ -1,0 +1,45 @@
+[gd_scene format=3 uid="uid://dbrol0aebyxca"]
+
+[ext_resource type="Script" uid="uid://da73sthcbtjnw" path="res://Scripts/EnvironmentalHazards/player_interactable.gd" id="1_86hug"]
+[ext_resource type="Texture2D" uid="uid://crvb6dqqqahew" path="res://Textures/Tiles/MVPSprites/Glow.png" id="1_p3fm1"]
+[ext_resource type="Script" uid="uid://cm6l33eccrqq5" path="res://Scenes/Components/height_occilator.gd" id="2_86hug"]
+[ext_resource type="Script" uid="uid://4myeaurm5pnx" path="res://Scripts/Animation/color_occilator.gd" id="2_ygthk"]
+
+[sub_resource type="Gradient" id="Gradient_p3fm1"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_bpmhk"]
+gradient = SubResource("Gradient_p3fm1")
+
+[node name="PlayerInteractable" type="Area2D" unique_id=754245965]
+script = ExtResource("1_86hug")
+
+[node name="Image controller" type="Node2D" parent="." unique_id=472089186]
+script = ExtResource("2_86hug")
+peak = 1.1
+dip = 0.9
+occilations_per_second = 0.25
+
+[node name="ColorOccilator" type="Node2D" parent="Image controller" unique_id=621635498]
+script = ExtResource("2_ygthk")
+start_color = Color(1, 1, 1, 0.3372549)
+end_color = Color(1, 1, 1, 0.1254902)
+occilations_per_second = 0.3
+metadata/_custom_type_script = "uid://4myeaurm5pnx"
+
+[node name="Sprite2D" type="Sprite2D" parent="Image controller/ColorOccilator" unique_id=1012800956]
+position = Vector2(0, -72)
+scale = Vector2(3, 3)
+texture = ExtResource("1_p3fm1")
+
+[node name="TextureRect" type="TextureRect" parent="Image controller/ColorOccilator" unique_id=1660673552]
+offset_left = 24.000002
+offset_top = -110.99601
+offset_right = 135.0
+offset_bottom = -62.99601
+rotation = 1.5707964
+texture = SubResource("GradientTexture1D_bpmhk")
+expand_mode = 1
+flip_h = true
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
