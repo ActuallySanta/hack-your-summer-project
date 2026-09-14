@@ -14,25 +14,27 @@ gradient = SubResource("Gradient_p3fm1")
 [node name="PlayerInteractable" type="Area2D" unique_id=754245965]
 script = ExtResource("1_86hug")
 
-[node name="Image controller" type="Node2D" parent="." unique_id=472089186]
+[node name="ImageScaler" type="Node2D" parent="." unique_id=692136345]
+
+[node name="Image controller" type="Node2D" parent="ImageScaler" unique_id=472089186]
 script = ExtResource("2_86hug")
 peak = 1.1
 dip = 0.9
 occilations_per_second = 0.25
 
-[node name="ColorOccilator" type="Node2D" parent="Image controller" unique_id=621635498]
+[node name="ColorOccilator" type="Node2D" parent="ImageScaler/Image controller" unique_id=621635498]
 script = ExtResource("2_ygthk")
 start_color = Color(1, 1, 1, 0.3372549)
-end_color = Color(1, 1, 1, 0.1254902)
+end_color = Color(1, 1, 1, 0.19607843)
 occilations_per_second = 0.3
 metadata/_custom_type_script = "uid://4myeaurm5pnx"
 
-[node name="Sprite2D" type="Sprite2D" parent="Image controller/ColorOccilator" unique_id=1012800956]
+[node name="Sprite2D" type="Sprite2D" parent="ImageScaler/Image controller/ColorOccilator" unique_id=1012800956]
 position = Vector2(0, -72)
 scale = Vector2(3, 3)
 texture = ExtResource("1_p3fm1")
 
-[node name="TextureRect" type="TextureRect" parent="Image controller/ColorOccilator" unique_id=1660673552]
+[node name="TextureRect" type="TextureRect" parent="ImageScaler/Image controller/ColorOccilator" unique_id=1660673552]
 offset_left = 24.000002
 offset_top = -110.99601
 offset_right = 135.0
