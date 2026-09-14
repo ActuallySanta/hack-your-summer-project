@@ -13,12 +13,10 @@ var _target_floor : int:
 	set(new_value):
 		# Purify evil
 		if new_value < 0 or new_value >= floors.size():
-			print("Evil: ", new_value)
 			return
 		_target_platform_height = floors[ new_value ]
 		_target_floor = new_value
-		print(_target_floor)
-		
+
 var _target_platform_height : float
 var _tile_tall : int:
 	set(new_value):
