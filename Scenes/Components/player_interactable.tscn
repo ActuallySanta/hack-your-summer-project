@@ -12,6 +12,7 @@ colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 gradient = SubResource("Gradient_p3fm1")
 
 [node name="PlayerInteractable" type="Area2D" unique_id=754245965]
+collision_mask = 2
 script = ExtResource("1_86hug")
 
 [node name="ImageScaler" type="Node2D" parent="." unique_id=692136345]

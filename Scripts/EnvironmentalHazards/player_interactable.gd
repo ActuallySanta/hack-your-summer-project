@@ -15,6 +15,7 @@ var _player_in_interactable : bool
 var _successfully_interacted : bool
 var _timer : float 
 var _init_y_scale : float
+var _hold_off : bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -22,10 +23,11 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	# If we can't interact with this node in the future, we shouldn't waste time doing logic for it
-	if not _can_interact():
+	if not _can_interact() or _hold_off:
 		return
-	if _player_reference.velocity.length() <= velocity_cutoff_point and _can_interact() and _timer >= 1:
+	if _player_reference != null and (_player_reference.velocity.length() <= velocity_cutoff_point) and _can_interact() and _timer >= 1:
 		confirm_interaction()
+		_hold_off = true
 		return
 	
 	# Increment the timer/weight and update accordingly
@@ -36,23 +38,27 @@ func _process(delta: float) -> void:
 	update_visuals()
 
 func confirm_interaction() -> void:
+	print("Player successfully interacted")
 	on_player_confirm_interaction.emit()
 	_successfully_interacted = true
 
 func update_visuals() -> void:
-	node_to_scale.y = lerp(_init_y_scale, 0, _timer)
+	node_to_scale.scale.y = lerp(_init_y_scale, 0.0, _timer)
 
 func _can_interact() -> bool:
 	return not interact_once or not _successfully_interacted
 
 func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player") and _can_interact():
+		print("Player is in")
 		_player_in_interactable = true
 		on_player_start_interaction.emit()
 
 func _on_body_exited(body: Node2D) -> void:
 	if body.is_in_group("player"):
+		print("Player is out")
 		_player_reference = body as Player
 		_player_in_interactable = false
+		_hold_off = false
 		if not _successfully_interacted:
 			on_player_fail_interaction.emit()

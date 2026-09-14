@@ -11,6 +11,9 @@
 [ext_resource type="TileSet" uid="uid://b0n86hn6rv2od" path="res://Tileset/CrewQuarters.tres" id="8_nryqe"]
 [ext_resource type="PackedScene" uid="uid://dbrol0aebyxca" path="res://Scenes/Components/player_interactable.tscn" id="10_303br"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bpmhk"]
+size = Vector2(48, 52)
+
 [node name="CrewQuarters" type="Node2D" unique_id=1014041974]
 
 [node name="RoomInstance" parent="." unique_id=89982200 instance=ExtResource("1_b4cnp")]
@@ -50,4 +53,9 @@ tile_map_data = PackedByteArray("AAAKAAUAAQAAAAQAAAAKAAYAAQAAAAUAAAAEAAQAAQAJAAA
 tile_set = ExtResource("8_nryqe")
 
 [node name="PlayerInteractable" parent="." unique_id=754245965 instance=ExtResource("10_303br")]
-position = Vector2(217, 314)
+position = Vector2(888, 960)
+interact_once = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerInteractable" unique_id=1350092026]
+position = Vector2(0, -26)
+shape = SubResource("RectangleShape2D_bpmhk")
