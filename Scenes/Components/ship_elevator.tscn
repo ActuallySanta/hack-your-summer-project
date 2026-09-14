@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://ue2pc405n1vj" path="res://Textures/Tiles/MVPSprites/ShipEvlevator.png" id="1_a55xs"]
 [ext_resource type="Script" uid="uid://c0uolodbtd2l3" path="res://Scripts/Animation/SpriteExtender.gd" id="1_jihq5"]
+[ext_resource type="Script" uid="uid://y7bulhl5dica" path="res://Scripts/Animation/ship_elevator.gd" id="1_o63ng"]
 [ext_resource type="PackedScene" uid="uid://dbrol0aebyxca" path="res://Scenes/Components/player_interactable.tscn" id="3_bjen6"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jihq5"]
@@ -15,27 +16,37 @@ texture = ExtResource("1_a55xs")
 [sub_resource type="TileSet" id="TileSet_bpmhk"]
 sources/0 = SubResource("TileSetAtlasSource_jihq5")
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_bpmhk"]
-size = Vector2(144, 30)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_85ri6"]
+size = Vector2(48, 39)
 
 [node name="ShipElevator" type="Node2D" unique_id=1029898382]
+script = ExtResource("1_o63ng")
+move_speed = 100.0
 
 [node name="Body" type="AnimatableBody2D" parent="." unique_id=1569974256]
 
 [node name="Platform" type="TileMapLayer" parent="Body" unique_id=1426028286]
 scale = Vector2(3, 3)
-tile_map_data = PackedByteArray(0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 2, 0, 1, 0, 0, 0)
+tile_map_data = PackedByteArray(0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0)
 tile_set = SubResource("TileSet_bpmhk")
 script = ExtResource("1_jihq5")
+tile_map_index = Vector2i(2, 1)
+init_pos = Vector2i(1, 0)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Body" unique_id=1640319627]
-position = Vector2(72, 15)
-shape = SubResource("RectangleShape2D_bpmhk")
+[node name="PlayerInteractable" parent="Body" unique_id=754245965 instance=ExtResource("3_bjen6")]
+position = Vector2(72, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Body/PlayerInteractable" unique_id=1707973652]
+position = Vector2(0, -19.5)
+shape = SubResource("RectangleShape2D_85ri6")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Body" unique_id=2047780365]
+polygon = PackedVector2Array(0, 0, 144, 0, 153, 9, 144, 9, 102, 30, 42, 30, 0, 9, -9, 9)
+one_way_collision = true
+one_way_collision_margin = 3.0
+one_way_collision_direction = Vector2(0, -1)
 
 [node name="Base" type="TileMapLayer" parent="." unique_id=1332316576]
 scale = Vector2(3, 3)
 tile_map_data = PackedByteArray(0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0)
 tile_set = SubResource("TileSet_bpmhk")
-
-[node name="PlayerInteractable" parent="." unique_id=754245965 instance=ExtResource("3_bjen6")]
-position = Vector2(72, 0)

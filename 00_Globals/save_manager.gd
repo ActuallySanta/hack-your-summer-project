@@ -296,6 +296,8 @@ func _restore_map_regions() -> void:
 
 #region The station
 func is_airlock_open() -> bool:
+	if _data == null:
+		return false
 	return _data.airlock_state == _data.AirLockState.LimboOpen
 
 func open_airlock() -> void:

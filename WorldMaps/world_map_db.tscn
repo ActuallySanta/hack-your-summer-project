@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://bgwc4emcqyj3l"]
 
+[ext_resource type="Script" uid="uid://cphcuqed0ttgm" path="res://WorldMaps/world_map_viewer.gd" id="1_e6yji"]
 [ext_resource type="PackedScene" uid="uid://dseaj8gec1u4l" path="res://Scenes/Rooms/Docking Bay/maintenence_room.tscn" id="2_5jwjo"]
 [ext_resource type="PackedScene" uid="uid://dtkowilv386lj" path="res://Scenes/Rooms/Docking Bay/service_crossroads.tscn" id="4_0giw4"]
 [ext_resource type="PackedScene" uid="uid://domh0f8q1n87x" path="res://Scenes/Rooms/Docking Bay/service_hall.tscn" id="5_rf76t"]
@@ -11,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://b1iin7ex3hk0m" path="res://Scenes/Rooms/Docking Bay/save_room_db.tscn" id="9_rf76t"]
 
 [node name="WorldMapDB" type="Node2D" unique_id=19893736]
+script = ExtResource("1_e6yji")
 
 [node name="MaintenenceRoom" parent="." unique_id=1690497050 instance=ExtResource("2_5jwjo")]
 position = Vector2(1770, -384)

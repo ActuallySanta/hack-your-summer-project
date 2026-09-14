@@ -1,4 +1,4 @@
-extends TileMapLayer
+class_name SpriteExtender extends TileMapLayer
 
 @export var tile_map_index : Vector2i
 @export var init_pos : Vector2i
@@ -9,15 +9,14 @@ var _cursor_pos : Vector2i
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	_cursor_pos = init_pos
-	increment()
 
 func increment_for(length: int) -> void:
 	for i in length:
 		increment()
 
 func increment() -> void:
-	set_cell(_cursor_pos, 0, tile_map_index)
 	_cursor_pos += offset
+	set_cell(_cursor_pos, 0, tile_map_index)
 
 func decrement() -> void:
 	set_cell(_cursor_pos)

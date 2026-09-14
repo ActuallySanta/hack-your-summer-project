@@ -15,9 +15,9 @@ var _player_in_interactable : bool
 var _successfully_interacted : bool
 var _timer : float 
 var _init_y_scale : float
+## Used to stop repeated firings of confirm_interaction when the criteria are met
 var _hold_off : bool = false
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	_init_y_scale = node_to_scale.scale.y
 
@@ -37,26 +37,26 @@ func _process(delta: float) -> void:
 	_timer = clamp(_timer + increment, 0, 1)
 	update_visuals()
 
+## Sends the signal that the player is interacting with this interactable
 func confirm_interaction() -> void:
-	print("Player successfully interacted")
 	on_player_confirm_interaction.emit()
 	_successfully_interacted = true
 
+## Does stuff with _timer after it's calcuated
 func update_visuals() -> void:
 	node_to_scale.scale.y = lerp(_init_y_scale, 0.0, _timer)
 
+## Can this node be interacted with?
 func _can_interact() -> bool:
 	return not interact_once or not _successfully_interacted
 
 func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player") and _can_interact():
-		print("Player is in")
 		_player_in_interactable = true
 		on_player_start_interaction.emit()
 
 func _on_body_exited(body: Node2D) -> void:
 	if body.is_in_group("player"):
-		print("Player is out")
 		_player_reference = body as Player
 		_player_in_interactable = false
 		_hold_off = false
