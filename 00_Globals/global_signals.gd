@@ -18,3 +18,5 @@ signal RestoreStationPower
 signal player_spawned
 
 signal OnBossDie
+
+signal room_transition

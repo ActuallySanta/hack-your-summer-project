@@ -9,7 +9,7 @@ const INTERNALS = DEBUG
 const LABS = preload("res://Sounds/Music/Jetpack Joyride DEMO.ogg")
 const BRS = preload("res://Sounds/Music/BRS.ogg")
 const LOWER_BRS = preload("res://Sounds/Music/Lower Biological Zone.ogg")
-const LIMBO = DEBUG
+const LIMBO = preload("res://Sounds/Music/Limbo.ogg")
 
 const MAIN_MENU = DEBUG
 

@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" path="res://Scenes/UI/full_map.tscn" id="4_fullmap"]
 [ext_resource type="Script" uid="uid://dpm1m1a7ewttn" path="res://Scripts/LevelTileMap.gd" id="4_out4y"]
 [ext_resource type="PackedScene" uid="uid://c72ewsb5wge47" path="res://Scenes/UI/text_display.tscn" id="9_out4y"]
+[ext_resource type="Script" uid="uid://cglok4irgmrj7" path="res://Scripts/Animation/transition_fade.gd" id="10_tquq1"]
 
 [sub_resource type="GDScript" id="GDScript_bu68p"]
 resource_name = "fps_counter"
@@ -111,7 +112,9 @@ offset_bottom = 672.0
 
 [node name="TransitionFade" type="ColorRect" parent="." unique_id=1599312904]
 visible = false
+modulate = Color(0, 0, 0, 1)
 layout_mode = 0
 offset_right = 1152.0
 offset_bottom = 672.0
 color = Color(0, 0, 0, 1)
+script = ExtResource("10_tquq1")
