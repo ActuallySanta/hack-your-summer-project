@@ -35,17 +35,22 @@ var _current_platform_height : float:
 		_tile_tall = int(-(_current_platform_height / 48)) + 1
 
 func change_floor() -> void:
+	if _in_transit():
+		return
 	_target_floor = 1 if _target_floor == 0 else 0
 
+func _in_transit() -> bool:
+	return _current_platform_height != _target_platform_height
+
 func _ready() -> void:
-	_target_floor = 0
 	_init_platform_height = body_node.position.y
 	interactable.on_player_confirm_interaction.connect( change_floor )
 	for i in height_markers:
 		floors.append( i.global_position.y - global_position.y)
+	_target_floor = 0
 
 func _process(delta: float) -> void:
-	if _current_platform_height == _target_platform_height:
+	if not _in_transit():
 		interactable.disable_pause()
 		return
 	

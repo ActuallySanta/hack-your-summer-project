@@ -43,7 +43,10 @@ func enable_pause() -> void:
 	_paused = true
 
 func disable_pause() -> void:
+	if not _paused:
+		return
 	_paused = false
+	_hold_off = _player_in_interactable
 
 ## Sends the signal that the player is interacting with this interactable
 func confirm_interaction() -> void:
@@ -60,7 +63,8 @@ func _can_interact() -> bool:
 
 func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player") and _can_interact():
-		_player_reference = body as Player
+		if _player_reference == null:
+			_player_reference = body as Player
 		_player_in_interactable = true
 		on_player_start_interaction.emit()
 
