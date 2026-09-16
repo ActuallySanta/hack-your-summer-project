@@ -77,5 +77,3 @@ frame = 202
 [node name="Floor2" type="Marker2D" parent="." unique_id=490607075]
 position = Vector2(672, 576)
 
-[connection signal="body_entered" from="ShipElevator/TopFloor" to="ShipElevator" method="_on_top_floor_body_entered"]
-[connection signal="body_entered" from="ShipElevator/BottomFloor" to="ShipElevator" method="_on_bottom_floor_body_entered"]
