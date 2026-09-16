@@ -46,7 +46,10 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	if _current_platform_height == _target_platform_height:
+		interactable.disable_pause()
 		return
+	
+	interactable.enable_pause()
 	var movement_delta = move_speed * delta
 	if _target_platform_height < _current_platform_height: movement_delta *= -1
 	# If the amount we're trying to move is greater than we need to, don't overshoot
