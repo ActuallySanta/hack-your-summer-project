@@ -108,3 +108,10 @@ script = SubResource("GDScript_bu68p")
 layout_mode = 1
 offset_top = 672.0
 offset_bottom = 672.0
+
+[node name="TransitionFade" type="ColorRect" parent="." unique_id=1599312904]
+visible = false
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 672.0
+color = Color(0, 0, 0, 1)
