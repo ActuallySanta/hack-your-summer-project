@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://dbrol0aebyxca" path="res://Scenes/Components/player_interactable.tscn" id="3_bjen6"]
 [ext_resource type="AudioStream" uid="uid://bcxm88kje4cf8" path="res://Sounds/EnvSFX/Elevator.wav" id="5_vt0jb"]
 [ext_resource type="AudioStream" uid="uid://bs3x0bd442ni1" path="res://Sounds/EnvSFX/ElevStart.wav" id="6_xlcn2"]
+[ext_resource type="AudioStream" uid="uid://br6iv8v7qaifp" path="res://Sounds/EnvSFX/ElevEnd.wav" id="7_mgxrc"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jihq5"]
 texture = ExtResource("1_a55xs")
@@ -53,6 +54,9 @@ stream = ExtResource("5_vt0jb")
 
 [node name="StartAnnouncer" type="AudioStreamPlayer2D" parent="Body" unique_id=787505662]
 stream = ExtResource("6_xlcn2")
+
+[node name="EndAnnouncer" type="AudioStreamPlayer2D" parent="Body" unique_id=511096335]
+stream = ExtResource("7_mgxrc")
 
 [node name="Base" type="TileMapLayer" parent="." unique_id=1332316576]
 scale = Vector2(3, 3)

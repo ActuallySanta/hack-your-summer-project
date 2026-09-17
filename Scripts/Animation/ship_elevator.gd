@@ -5,6 +5,7 @@ class_name ShipElevator extends Elevator
 @onready var bottom_floor_collider : Area2D = $BottomFloor
 @onready var audio_player : AudioStreamPlayer2D = $Body/AudioPlayer
 @onready var start_player : AudioStreamPlayer2D = $Body/StartAnnouncer
+@onready var end_player : AudioStreamPlayer2D = $Body/EndAnnouncer
 
 var _top_shapes : Array = []
 var _bottom_shapes : Array = []
@@ -27,6 +28,7 @@ func change_floor() -> void:
 func reached_floor() -> void:
 	CameraEffects.shake(6, 0.3, CameraEffects.Axis.VERTICAL, CameraEffects.Ease.EASE_OUT)
 	audio_player.stop()
+	end_player.play()
 
 func _snap_to_player() -> void:
 	if not is_inside_tree():
