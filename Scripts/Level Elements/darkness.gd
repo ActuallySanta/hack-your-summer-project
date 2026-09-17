@@ -93,12 +93,21 @@ func _ready() -> void:
 func _on_player_spawned() -> void:
 	if _held:
 		return
-	_set_dark(_should_be_dark(), false)
+	# A spawn puts the player in a room that is already loaded, so unlike a room
+	# change, the room MetSys reports is the one they are standing in.
+	_set_dark(_should_be_dark(MetSys.get_current_room_name()), false)
 
-func _on_room_changed(_new_room: String) -> void:
+## [param new_room] is the room being entered, and is the only place it exists yet.
+##
+## MetSys emits this from visit_cell() the moment the player crosses the cell
+## boundary, before the new room's scene is loaded and before current_room is swapped
+## for it. Asking MetSys which room we are in here names the room being *left*, which
+## runs the whole test one room behind the player: stepping out of the ship clears the
+## darkness and stepping back into the ship raises it.
+func _on_room_changed(new_room: String) -> void:
 	if _held:
 		return
-	_set_dark(_should_be_dark(), true)
+	_set_dark(_should_be_dark(new_room), true)
 
 ## Clears the darkness when the fuse goes in.
 ##
@@ -129,30 +138,47 @@ func release(animate := true) -> void:
 	if not _held:
 		return
 	_held = false
-	_set_dark(_should_be_dark(), animate)
+	_set_dark(_should_be_dark(MetSys.get_current_room_name()), animate)
 
 ## Whether something is currently driving the darkness by hand.
 func is_held() -> bool:
 	return _held
 #endregion
 
-## Whether the darkness belongs on screen right now.
-func _should_be_dark() -> bool:
-	return not SaveManager.is_station_powered() and _is_in_station()
+## Whether the darkness belongs on screen with the player in [param room].
+func _should_be_dark(room: String) -> bool:
+	return not SaveManager.is_station_powered() and _is_in_station(room)
 
-func _is_in_station() -> bool:
-	var room := MetSys.get_current_room_name()
+func _is_in_station(room: String) -> bool:
 	if room.is_empty():
-		# No room loaded: the menu, or a transition mid-swap. Nothing to be dark in.
+		# No room: the menu, or asked before one is loaded. Nothing to be dark in.
 		return false
-	# MetSys names rooms relative to its map root while @export_file hands us a
-	# res:// path, so accept either form.
-	var full_path := ResourceUID.id_to_text(ResourceLoader.get_resource_uid(MetSys.get_full_room_path(room)))
-	room = ResourceUID.id_to_text(ResourceLoader.get_resource_uid(room))
+	# MetSys names a room either by a path relative to its map root or by a ":uid"
+	# form; get_uid_room() gives back the relative path either way, and @export_file
+	# hands us a res:// one. Accept every spelling.
+	var relative := MetSys.map_data.get_uid_room(room)
+	var full_path := MetSys.get_full_room_path(relative)
+	var uid := _room_uid(full_path)
 	for excluded in non_station_rooms:
-		if excluded == full_path or excluded == room:
+		if excluded == full_path or excluded == relative:
+			return false
+		# By UID as well, because an exported path is plain text: moving the ship
+		# scene on disk would leave the path here stale while the UID still points at
+		# it, and the ship would quietly start going dark.
+		if not uid.is_empty() and uid == _room_uid(excluded):
 			return false
 	return true
+
+## The UID text of the scene at [param path], or "" when it has none.
+##
+## ResourceUID reports every path it cannot resolve as the same invalid id, so that is
+## returned as "" and never compared: two rooms it both fails to resolve are not the
+## same room, but the sentinel would say they were.
+static func _room_uid(path: String) -> String:
+	var id := ResourceLoader.get_resource_uid(path)
+	if id == ResourceUID.INVALID_ID:
+		return ""
+	return ResourceUID.id_to_text(id)
 
 ## Moves the darkness to [param dark], fading if [param animate] and the relevant
 ## fade is enabled, snapping otherwise.

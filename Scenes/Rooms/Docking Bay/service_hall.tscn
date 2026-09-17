@@ -16,6 +16,23 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bpmhk"]
 size = Vector2(1179, 257)
 
+[sub_resource type="GDScript" id="GDScript_vvqfl"]
+resource_name = "you_have_sealed_your_fate"
+script/source = "extends Area2D
+
+func _ready() -> void:
+	if not SaveManager.is_airlock_open():
+		queue_free()
+
+func _on_body_entered(body: Node2D) -> void:
+	if body.is_in_group(\"player\"):
+		SaveManager.seal_truth()
+		print(\"Point of no return\")
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_85ri6"]
+size = Vector2(252.5, 176)
+
 [node name="ServiceHall" type="Node2D" unique_id=1846424740]
 
 [node name="RoomInstance" parent="." unique_id=1389708185 instance=ExtResource("1_t3orv")]
@@ -110,3 +127,13 @@ offsetTime = 0.5
 
 [node name="TeethPersistant" parent="." unique_id=424263396 instance=ExtResource("12_vvqfl")]
 tile_map_data = PackedByteArray("AAAJAAkAAwAAAAAAATAKAAkAAwAAAAAAATALAAkAAwAAAAAAATAMAAkAAwAAAAAAATANAAkAAwAAAAAAATAIAAkAAwAAAAAAATAOAAkAAwAAAAAAATA=")
+
+[node name="Point of no return" type="Area2D" parent="." unique_id=772440480]
+collision_mask = 2
+script = SubResource("GDScript_vvqfl")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Point of no return" unique_id=1893882989]
+position = Vector2(120.25, 482)
+shape = SubResource("RectangleShape2D_85ri6")
+
+[connection signal="body_entered" from="Point of no return" to="Point of no return" method="_on_body_entered"]

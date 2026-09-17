@@ -43,6 +43,7 @@ tile_map_data = PackedByteArray("AAABAAMAAQAAAAAAABAAAAMAAQABAAAAABABAAQAAQAAAAE
 [node name="LimboExitDoor" parent="." unique_id=618844697 instance=ExtResource("8_j2xof")]
 position = Vector2(1008, 144)
 scale = Vector2(3, 3)
+open_out = true
 
 [node name="TileMapLayer2" parent="." unique_id=854369688 instance=ExtResource("3_vc1p6")]
 visible = false

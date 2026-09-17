@@ -49,6 +49,7 @@ position = Vector2(225, 334)
 
 [node name="HealthExtender" parent="." unique_id=545634817 instance=ExtResource("10_eelfb")]
 position = Vector2(769, 528)
+map_icon = 0
 
 [node name="Suplimentary gotter" parent="." unique_id=1651001730 instance=ExtResource("5_mvkse")]
 
