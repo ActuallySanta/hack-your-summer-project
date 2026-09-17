@@ -114,17 +114,6 @@ loopTimeSeconds = 1.0
 startWaiting = true
 offsetTime = 0.25
 
-[node name="TeethGrab6" parent="." unique_id=19499685 instance=ExtResource("11_rdmj2")]
-position = Vector2(408.00003, 600)
-loopTimeSeconds = 1.0
-startWaiting = true
-
-[node name="TeethGrab7" parent="." unique_id=258860384 instance=ExtResource("11_rdmj2")]
-position = Vector2(696, 600)
-loopTimeSeconds = 1.0
-startWaiting = true
-offsetTime = 0.5
-
 [node name="TeethPersistant" parent="." unique_id=424263396 instance=ExtResource("12_vvqfl")]
 tile_map_data = PackedByteArray("AAAJAAkAAwAAAAAAATAKAAkAAwAAAAAAATALAAkAAwAAAAAAATAMAAkAAwAAAAAAATANAAkAAwAAAAAAATAIAAkAAwAAAAAAATAOAAkAAwAAAAAAATA=")
 
