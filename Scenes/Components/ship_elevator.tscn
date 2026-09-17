@@ -4,6 +4,8 @@
 [ext_resource type="Script" uid="uid://c0uolodbtd2l3" path="res://Scripts/Animation/SpriteExtender.gd" id="1_jihq5"]
 [ext_resource type="Script" uid="uid://y7bulhl5dica" path="res://Scripts/Animation/ship_elevator.gd" id="1_o63ng"]
 [ext_resource type="PackedScene" uid="uid://dbrol0aebyxca" path="res://Scenes/Components/player_interactable.tscn" id="3_bjen6"]
+[ext_resource type="AudioStream" uid="uid://bcxm88kje4cf8" path="res://Sounds/EnvSFX/Elevator.wav" id="5_vt0jb"]
+[ext_resource type="AudioStream" uid="uid://bs3x0bd442ni1" path="res://Sounds/EnvSFX/ElevStart.wav" id="6_xlcn2"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jihq5"]
 texture = ExtResource("1_a55xs")
@@ -45,6 +47,12 @@ polygon = PackedVector2Array(0, 0, 144, 0, 153, 9, 144, 9, 102, 30, 42, 30, 0, 9
 one_way_collision = true
 one_way_collision_margin = 3.0
 one_way_collision_direction = Vector2(0, -1)
+
+[node name="AudioPlayer" type="AudioStreamPlayer2D" parent="Body" unique_id=965145795]
+stream = ExtResource("5_vt0jb")
+
+[node name="StartAnnouncer" type="AudioStreamPlayer2D" parent="Body" unique_id=787505662]
+stream = ExtResource("6_xlcn2")
 
 [node name="Base" type="TileMapLayer" parent="." unique_id=1332316576]
 scale = Vector2(3, 3)
