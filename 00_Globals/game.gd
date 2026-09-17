@@ -5,6 +5,10 @@ extends "res://addons/MetroidvaniaSystem/Template/Scripts/MetSysGame.gd"
 ## the one file; when there is one, this becomes whichever file the player chose.
 const current_save_name := "demo"
 
+## The MetSys module that moves the player between rooms. Ours rather than the addon's
+## stock RoomTransitions.gd, because a transition here waits on the screen fade.
+const TRANSITIONS_MODULE := "res://Scripts/Level Elements/faded_room_transitions.gd"
+
 @onready var _player : Player = $Player
 @onready var _camera : Camera2D = $Camera2D
 @onready var _hud : GameHUD = $HUD
@@ -96,8 +100,8 @@ func _ready() -> void:
 func _init_metsys_and_objects() -> void:
 	MetSys.reset_state()
 	set_player(_player)
-	add_module("RoomTransitions.gd")
-	MetSys.room_changed.connect(_on_room_changed)
+	add_module(TRANSITIONS_MODULE)
+	GlobalSignals.room_transition_complete.connect(_on_room_swapped)
 	_player.pickup_collected.connect(_on_pickup_collected)
 	_player.death_start.connect(_on_player_death)
 	#prevent player from acting while game is loading
@@ -189,9 +193,14 @@ func resume_game() -> void:
 	_hud.hide_menus()
 	paused = false
 
-func _on_room_changed(_new_room: String) -> void:
-	# The old room's regions are about to be freed, and the player teleports across
-	# the boundary, so drop all camera state instead of easing across the seam.
+## The room swap has just happened, behind a black screen.
+##
+## The old room's regions have been freed and the player has teleported across the
+## boundary, so all camera state is dropped rather than eased across the seam. This
+## waits for the swap rather than for the crossing that begins it: between the two the
+## screen is fading but the old room is still the one being played, and re-resolving
+## the camera against it would jolt the shot just as the fade starts.
+func _on_room_swapped() -> void:
 	reset_camera_axis_state()
 
 func _on_pickup_collected(pickup: Pickup) -> void:
