@@ -27,7 +27,7 @@ func _process(delta: float) -> void:
 	# If we can't interact with this node in the future, we shouldn't waste time doing logic for it
 	if _paused or not _can_interact() or _hold_off:
 		return
-	if _player_reference != null and (_player_reference.velocity.length() <= velocity_cutoff_point) and _can_interact() and _timer >= 1:
+	if _player_in_interactable and _player_reference != null and (_player_reference.velocity.length() <= velocity_cutoff_point) and _can_interact() and _timer >= 1:
 		confirm_interaction()
 		_hold_off = true
 		return
@@ -52,6 +52,11 @@ func disable_pause() -> void:
 func confirm_interaction() -> void:
 	on_player_confirm_interaction.emit()
 	_successfully_interacted = true
+	# Spend the charge. Left full, it fires again the moment anything clears _hold_off
+	# -- the player stepping off, or an elevator handing control back when it arrives --
+	# instead of asking for another hold.
+	_timer = 0
+	update_visuals()
 
 ## Does stuff with _timer after it's calcuated
 func update_visuals() -> void:

@@ -55,12 +55,14 @@ height_markers = [NodePath("../Floor2")]
 floors = Array[float]([0.0])
 
 [node name="TopFloor" type="Area2D" parent="ShipElevator" unique_id=1428087949]
+visible = false
 collision_mask = 2
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="ShipElevator/TopFloor" unique_id=574535464]
 polygon = PackedVector2Array(-635, -361, 489, -365, 497, -994, -697, -992)
 
 [node name="BottomFloor" type="Area2D" parent="ShipElevator" unique_id=1916720545]
+visible = false
 collision_mask = 2
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="ShipElevator/BottomFloor" unique_id=71404671]
@@ -76,4 +78,3 @@ frame = 202
 
 [node name="Floor2" type="Marker2D" parent="." unique_id=490607075]
 position = Vector2(672, 576)
-

@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://q5q152xvydxb" path="res://Scripts/brightness_oscillator.gd" id="3_1btmx"]
 [ext_resource type="Script" uid="uid://chbj0tshh45ox" path="res://Scripts/background_paralax.gd" id="3_d5qch"]
 [ext_resource type="TileSet" uid="uid://hkvfy5by8aqr" path="res://Tileset/Main_Level.tres" id="4_lw307"]
+[ext_resource type="PackedScene" uid="uid://b7xmyerf0u271" path="res://Scenes/Components/object_flyer.tscn" id="6_y056p"]
 [ext_resource type="PackedScene" uid="uid://bfdxh46jtantj" path="res://Scenes/Enemies/fallen_cyborg.tscn" id="7_2kqia"]
 [ext_resource type="PackedScene" uid="uid://cy2osx3ogepds" path="res://Scenes/Rooms/Tutorial Area/locked_door.tscn" id="9_55hf3"]
 [ext_resource type="PackedScene" uid="uid://6jbhsdtefk1p" path="res://Scenes/Components/door_tile_map_layer.tscn" id="9_owopv"]
@@ -34,7 +35,6 @@ tile_set = ExtResource("2_bu7cl")
 script = ExtResource("3_1btmx")
 start_brightness = 0.6
 end_brightness = 0.45
-cycle_seconds = 6.0
 
 [node name="BackgroundFront" type="TileMapLayer" parent="Node2D" unique_id=1116371195]
 modulate = Color(0.7233511, 0.7233511, 0.7233511, 1)
@@ -44,7 +44,11 @@ tile_set = ExtResource("2_bu7cl")
 script = ExtResource("3_1btmx")
 start_brightness = 0.6
 end_brightness = 0.45
-cycle_seconds = 6.0
+
+[node name="ObjectFlyer" parent="Node2D" unique_id=447494354 instance=ExtResource("6_y056p")]
+position = Vector2(0, 1471.333)
+scale = Vector2(2, 2)
+amount = 64
 
 [node name="Foreground Secondary" type="TileMapLayer" parent="." unique_id=1921194212]
 scale = Vector2(3, 3)
@@ -64,7 +68,6 @@ tile_set = ExtResource("4_lw307")
 script = ExtResource("3_1btmx")
 start_brightness = 0.6
 end_brightness = 0.45
-cycle_seconds = 6.0
 
 [node name="DoorTileMapLayer" parent="." unique_id=197313074 instance=ExtResource("9_owopv")]
 tile_map_data = PackedByteArray("AAAsAAoAAQAAAAgAAAAtAAoAAQABAAgAAAAuAAoAAQACAAgAAAAvAAoAAQABAAgAAAAuABYAAQAAAAAAAAAuABcAAQAAAAEAAAAuABgAAQAAAAIAAAAvABYAAQABAAAAAAAvABcAAQABAAEAAAAvABgAAQABAAIAAAA=")
