@@ -22,6 +22,9 @@ var player: Node2D
 ## itself either way.
 var _transitioning := false
 
+## What [code]PlayerManager.canMove[/code] was before the transition took it.
+var _could_move := true
+
 func _initialize() -> void:
 	player = game.player
 	assert(player)
@@ -35,14 +38,14 @@ func _on_room_changed(target_room: String) -> void:
 		return
 
 	_transitioning = true
-	_set_invulnerable(true)
+	_suspend_player(true)
 
 	GlobalSignals.room_transition.emit()
 	await GlobalSignals.room_transition_faded_out
 
 	await _swap_room(target_room)
 
-	_set_invulnerable(false)
+	_suspend_player(false)
 	_transitioning = false
 	GlobalSignals.room_transition_complete.emit()
 
@@ -60,8 +63,32 @@ func _swap_room(target_room: String) -> void:
 		player.position -= MetSys.get_current_room_instance().get_room_position_offset(prev_room_instance)
 		prev_room_instance.queue_free()
 
-func _set_invulnerable(invulnerable: bool) -> void:
+## Takes the player out of play for the duration of a transition, and gives them back
+## afterwards.
+##
+## Two things go, for the same reason: nothing that happens between the crossing and
+## the new room being up is something the player could have played. They cannot be hurt
+## by what they can no longer see, and they cannot steer. The crossing is a commitment
+## -- without this they can turn round inside the fade and walk back out of the doorway
+## they just went through, and arrive in the new room positioned as if they had not.
+##
+## Input is what stops rather than the whole node: the body still falls, still carries
+## its momentum, and still plays its walk out as the world winds down, which is the
+## half of the effect that makes the stop read as time stopping rather than as the game
+## dropping a frame.
+func _suspend_player(suspended: bool) -> void:
+	# Borrowed and handed back rather than set to true, because the full map borrows the
+	# same flag (see PlayerHUD) and is entitled to still be holding it afterwards.
+	if suspended:
+		_could_move = PlayerManager.canMove
+	PlayerManager.canMove = false if suspended else _could_move
+
 	var p := player as Player
-	if p == null or not is_instance_valid(p.health):
+	if p == null:
 		return
-	p.health.ignore_effects = invulnerable
+	if suspended:
+		# can_act() only stops new input being read; whatever was held at the crossing
+		# would otherwise still be held all the way through the fade.
+		p.reset_all_inputs()
+	if is_instance_valid(p.health):
+		p.health.ignore_effects = suspended

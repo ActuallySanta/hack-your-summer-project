@@ -113,6 +113,7 @@ offset_bottom = 672.0
 [node name="TransitionFade" type="ColorRect" parent="." unique_id=1599312904]
 visible = false
 modulate = Color(0, 0, 0, 1)
+z_index = 4096
 layout_mode = 0
 offset_right = 1152.0
 offset_bottom = 672.0
