@@ -9,6 +9,10 @@
 [ext_resource type="TileSet" uid="uid://4kj7b55i4dg8" path="res://Tileset/SpaceShip.tres" id="6_ddtw0"]
 [ext_resource type="PackedScene" uid="uid://cup5x5rhhgpr1" path="res://Scenes/Components/limbo_heated_rod.tscn" id="8_qp35y"]
 [ext_resource type="TileSet" uid="uid://c6crhgmkjugi7" path="res://Tileset/Textureless.tres" id="9_ilmr1"]
+[ext_resource type="Texture2D" uid="uid://b7e8ovpjs0g5f" path="res://Sprites/Console.png" id="10_dpjwi"]
+[ext_resource type="Script" uid="uid://mrhr0yu4i7jh" path="res://Scripts/Animation/ManualAnim.gd" id="11_o7wvg"]
+[ext_resource type="Script" uid="uid://p46g50v8y7y4" path="res://Scripts/Combat/Healths/robot_health_component.gd" id="12_vxf5n"]
+[ext_resource type="Script" uid="uid://dhgcprjrtfobr" path="res://Scripts/Combat/hurtbox.gd" id="13_e3dmx"]
 
 [sub_resource type="GDScript" id="GDScript_85ri6"]
 resource_name = "_debug_script_to_trigger_transfer"
@@ -33,6 +37,9 @@ func _on_body_entered(body: Node2D) -> void:
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bpmhk"]
 size = Vector2(726.5, 501.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_85ri6"]
+size = Vector2(102, 96)
 
 [node name="ControlRoom" type="Node2D" unique_id=1746851613]
 
@@ -83,7 +90,36 @@ collision_mask = 2
 script = SubResource("GDScript_85ri6")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="_DebugAirLockOpener" unique_id=951307211]
+visible = false
 position = Vector2(603.75, 329.75)
 shape = SubResource("RectangleShape2D_bpmhk")
+
+[node name="Console" type="Sprite2D" parent="." unique_id=1166478367]
+position = Vector2(288, 528)
+scale = Vector2(3, 3)
+texture = ExtResource("10_dpjwi")
+hframes = 6
+vframes = 2
+script = ExtResource("11_o7wvg")
+frames_in_sequence = 6
+anim_speed_adjust = 0.1
+
+[node name="RoboHealth" type="Node2D" parent="Console" unique_id=1233447614]
+script = ExtResource("12_vxf5n")
+destroy_on_death = true
+max_health = 1
+start_health = 1
+metadata/_custom_type_script = "uid://p46g50v8y7y4"
+
+[node name="Hurtbox" type="Area2D" parent="Console/RoboHealth" unique_id=1500592216]
+position = Vector2(-96, -176)
+scale = Vector2(0.33333334, 0.33333334)
+collision_mask = 2
+script = ExtResource("13_e3dmx")
+metadata/_custom_type_script = "uid://dhgcprjrtfobr"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Console/RoboHealth/Hurtbox" unique_id=1998227726]
+position = Vector2(288, 528)
+shape = SubResource("RectangleShape2D_85ri6")
 
 [connection signal="body_entered" from="_DebugAirLockOpener" to="_DebugAirLockOpener" method="_on_body_entered"]
