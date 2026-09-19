@@ -149,7 +149,9 @@ func _get_current_cell_group_music(groups: PackedInt32Array) -> AudioStream:
 	for group in groups:
 		var group_name = MetSys.get_group_name(group)
 		var type = MSGroups.parse_special( group_name )
-		if type.is_empty(): continue;
+		if type.is_empty(): continue
+		# "_NONE" has no second half, so this has to come before type[1] is read.
+		if type.size() < 2 or type[ 0 ] == "NONE": return NONE
 		return _parse_special_room(type[ 0 ], type[ 1 ])
 	
 	best_guess = location_ost.get(MSGroups.get_region_from_groups( groups ))
