@@ -143,6 +143,34 @@ func draw_text_at(string: String, top_left: Vector2i, dimensions: Vector2i, star
 		cursor_pos.x += 1
 	cursor_pos = old_cursor
 	return true
+
+func draw_smart_text_at(string: String, top_left: Vector2i, dimensions: Vector2i) -> bool:
+	var strings = string.split(" ")
+	var cursor : Vector2i = top_left
+	var end_cursor : Vector2i
+	for sub_string in strings:
+		if sub_string.length() >= dimensions.x:
+			print("Used too big a word!")
+			return false
+		
+		end_cursor = cursor + Vector2i(sub_string.length(),0)
+		
+		# Check if word is too long
+		if end_cursor.x - top_left.x >= dimensions.x:
+			cursor.x = top_left.x
+			cursor.y += 1
+			if cursor.y - top_left.y >= dimensions.y:
+				print("To many lines tall! ", cursor.y - top_left.y, " is more than ", dimensions.y)
+				return false # We ran out of space while printing
+		
+		# Draw word
+		for character in sub_string:
+			draw_char_at(character, cursor)
+			cursor.x += 1
+		
+		# Add space
+		cursor.x += 1
+	return true
 #endregion
 
 # Placing is when you are treating the textDisplay like it is a text box, one char left to right, top to bottom
