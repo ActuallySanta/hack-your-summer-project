@@ -5,7 +5,7 @@ class_name TextDisplay extends TileMapLayer
 
 
 ## The order chars appear in the texture
-const LETTER_OFFSETS : String = "ABCDEFGHIJKLMNOPQRSTUVWXYZ?!.,:;/\"()[]1234567890 "
+const LETTER_OFFSETS : String = "ABCDEFGHIJKLMNOPQRSTUVWXYZ?!.,:;/\"()[]1234567890-+%*#@`' "
 ## 'Tab' input
 const INDENT : String = "   "
 ## A list of cordinates that have special chars in the tilemaplayer
@@ -45,12 +45,13 @@ func get_tile_coords_from_char(char_id: String, is_highlight: bool) -> Vector2i:
 	if char_id.begins_with("_"):
 		return SPECIAL_OFFSETS[ char_id ]
 	var index := LETTER_OFFSETS.findn( char_id )
+	if index == -1:
+		return Vector2i(12,2)
 	var x := index % tile_texture_width + tile_index_offset.x
 	@warning_ignore("integer_division")
 	var y := (index / tile_texture_width) + tile_index_offset.y
 	if not is_highlight:
 		x += tile_texture_width
-		
 	
 	return Vector2i(x, y)
 
@@ -100,7 +101,7 @@ func is_string_too_wide(string: String) -> bool:
 #region Placing output
 func place_char(char_id: String) -> void:
 	if cursor_pos.y == max_height:
-		printerr("WARNING: Max hight reached")
+		printerr("WARNING (text_display: 103): Max hight reached")
 		return
 	
 	_place_char_at_position(char_id, cursor_highlighted, cursor_pos + tile_map_pos_offset)
