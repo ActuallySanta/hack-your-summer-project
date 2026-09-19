@@ -14,8 +14,8 @@
 class_name SaveData
 extends RefCounted
 
-const START_ROOM_UID := "uid://djrq87v0sx3lq" # Docking Station
-const START_POS := Vector2(158, 834)
+const START_ROOM_UID := "uid://3w16hi8fr5n"
+const START_POS := Vector2(383.0, 313.0)
 
 enum GunState { None, Stun, Plasma }
 enum WrenchState { None, Basic, Allen }

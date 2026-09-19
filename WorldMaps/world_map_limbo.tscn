@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://3w16hi8fr5n" path="res://Scenes/Rooms/Limbo/crew_quarters.tscn" id="4_l66lb"]
 [ext_resource type="PackedScene" uid="uid://2e3qlr0u0f4e" path="res://Scenes/Rooms/Limbo/storage_and_operations.tscn" id="5_qr63h"]
 
-[node name="WorldMapLimbo" type="Node2D" unique_id=1902216411]
+[node name="WorldMapLimbo" type="Node2D" unique_id=1715978964]
 script = ExtResource("1_3hy5d")
 
 [node name="CrewQuarters" parent="." unique_id=1014041974 instance=ExtResource("4_l66lb")]

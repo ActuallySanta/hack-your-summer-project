@@ -30,6 +30,7 @@ MapBorders="*res://00_Globals/map_borders.gd"
 CameraEffects="*res://00_Globals/camera_effects.gd"
 RoomPathfinder="*res://00_Globals/room_pathfinder.gd"
 MessageDisplay="*uid://2iwqcdxi45gp"
+LogBookManager="*uid://wah8b4yecbfv"
 
 [display]
 
@@ -178,4 +179,5 @@ textures/canvas_textures/default_texture_filter=0
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+viewport/hdr_2d=true
 2d/snap/snap_2d_transforms_to_pixel=true
