@@ -2,7 +2,7 @@
 ## 
 ## Can be used on any TileMapLayer, mess with the settings if you dare, by default equiped to handle the notification pop-up
 class_name TextDisplay extends TileMapLayer
-
+# It is okay for this class to be highly malluable at the expence of performance because optimally this should only do one pass through for a block of text
 
 ## The order chars appear in the texture
 const LETTER_OFFSETS : String = "ABCDEFGHIJKLMNOPQRSTUVWXYZ?!.,:;/\"()[]1234567890-+%*#@`' "
@@ -10,14 +10,22 @@ const LETTER_OFFSETS : String = "ABCDEFGHIJKLMNOPQRSTUVWXYZ?!.,:;/\"()[]12345678
 const INDENT : String = "   "
 ## A list of cordinates that have special chars in the tilemaplayer
 const SPECIAL_OFFSETS : Dictionary[ String, Vector2i ] = {
-	"_dot": Vector2i(8,2),
-	"_circ": Vector2i(8,3),
-	"_box": Vector2i(12,3),
-	"_ ": Vector2i.ZERO,
+	"_dot": Vector2i(16,4),
+	"_circ": Vector2i(16,5),
+	"_box": Vector2i(16,6),
+	"_list_show" : Vector2i(16,7),
+	"_list_hide" : Vector2i(17,7),
+	"_list_entry" : Vector2i(16,8),
+	"_list_pass" : Vector2i(16,9),
+	"_list_last" : Vector2i(16,10),
+	"_": INVALID_CHAR,
 }
 
+## Used for evil chars, or other visual assets that are pushed to the cursor
+const INVALID_CHAR := Vector2i(18,7)
+
 ## Debug String used for testing
-const DEBUG_DEEP_OUT : String = "_dot $TAB Testing $HIGH_ON Highlight $HIGH_OFF $NEWLINE ABCDEFGHIJKLMNOPQRSTUVWXYZ?!.,:;/\"()[]1234567890"
+const DEBUG_DEEP_OUT : String = "_dot $TAB Testing $HIGH_ON Highlight $HIGH_OFF $NEWLINE ABCDEFGHIJKLMNOPQRSTUVWXYZ?!.,:;/\"()[]1234567890-+%*#@`' "
 
 ## The maximum rows of text that can be displayed
 @export var max_height := 8
@@ -40,13 +48,15 @@ func reset_cursor() -> void:
 	cursor_pos = Vector2i.ZERO
 	cursor_highlighted = false
 
+func get_special(char_id: String) -> Vector2i:
+	return SPECIAL_OFFSETS[ char_id ] if SPECIAL_OFFSETS.has( char_id ) else INVALID_CHAR
+
 ## Converts a char to a cordinate on the tileset
 func get_tile_coords_from_char(char_id: String, is_highlight: bool) -> Vector2i:
-	if char_id.begins_with("_"):
-		return SPECIAL_OFFSETS[ char_id ]
+	if char_id.begins_with("_"): return get_special( char_id )
 	var index := LETTER_OFFSETS.findn( char_id )
-	if index == -1:
-		return Vector2i(12,2)
+	if index == -1: return INVALID_CHAR
+	
 	var x := index % tile_texture_width + tile_index_offset.x
 	@warning_ignore("integer_division")
 	var y := (index / tile_texture_width) + tile_index_offset.y
@@ -98,6 +108,44 @@ func cursor_at_title() -> bool:
 func is_string_too_wide(string: String) -> bool:
 	return cursor_pos.x + string.length() > (max_width_title if cursor_at_title() else max_width)
 
+# Drawing is when you put stuff directly to the screen like images, manual texts, or list items
+#region Drawing output
+func draw_char_at(char_id: String, position_on_grid: Vector2i) -> void:
+	set_cell(position_on_grid, 0, get_tile_coords_from_char(char_id, cursor_highlighted))
+	
+func draw_text_at(string: String, top_left: Vector2i, dimensions: Vector2i, start_offset: Vector2i = Vector2i.ZERO) -> bool:
+	# Example usage:
+	#  +---+
+	#  |   |
+	#  +---+
+	# Above is a textbox with top_left = (1,0), dimensions = (5,3)
+	# The text "This is an example" would then display the following without error:
+	#  This 
+	#  is an
+	#  examp
+	# ---------
+	# Alternatively, a box with these params: ("A second one wraps", (0,0),(7,4),(1,1)) does this:
+	# +-----+ ->        
+	# |     | ->  A Seco
+	# |     | -> nd one 
+	# +-----+ -> wraps   
+	var old_cursor = cursor_pos
+	cursor_pos = top_left + start_offset
+	for character in string:
+		# If we need to wrap
+		if cursor_pos.x - top_left.x >= dimensions.x:
+			cursor_pos.x = top_left.x
+			cursor_pos.y += 1
+			if cursor_pos.y - top_left.y >= dimensions.y:
+				print("To many lines tall!")
+				return false # We ran out of space while printing
+		draw_char_at(character, cursor_pos)
+		cursor_pos.x += 1
+	cursor_pos = old_cursor
+	return true
+#endregion
+
+# Placing is when you are treating the textDisplay like it is a text box, one char left to right, top to bottom
 #region Placing output
 func place_char(char_id: String) -> void:
 	if cursor_pos.y == max_height:
@@ -148,9 +196,9 @@ func place_deep_fresh(string: String) -> void:
 	place_deep(string)
 #endregion
 
-func debug_test() -> void:
+func __debug_test() -> void:
 	place_deep( DEBUG_DEEP_OUT )
 
 func _ready() -> void:
 	reset_cursor()
-	debug_test()
+	__debug_test()
