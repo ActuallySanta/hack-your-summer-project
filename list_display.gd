@@ -15,7 +15,6 @@ func _ready() -> void:
 		TextListItem.new("Child 3", 15),
 	]
 
-	root = TextListItem.new("Test label that I am going to use as the root node", 15, children)
+	root = TextListItem.new("Test node that is long and is root node what is going on here", 15, children)
 	root.show_children()
 	root.display_list( self )
-	print("drawed", root.drop_down)

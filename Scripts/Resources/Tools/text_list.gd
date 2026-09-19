@@ -36,10 +36,10 @@ var height : int:
 	get():
 		var space_to_fill := list_max_width - hoizontal_offset - 1 # Minus one for list characters
 		var raw_width := item_name.length()
-		return (raw_width + space_to_fill - 1) / space_to_fill 	# A 22 character wide string with 4 wide space will be split across 8 lines, 
-																# this is because 1 of those 4 spaces need to be used by a list char each line, limiting 
-																# the width to only 3 per line. 22/3 is ~7.333, adding (space_to_fill - 1) extends this 
-																# to the needed 8 lines while still letting 21/3 = 7 clean lines.
+		return ((raw_width + space_to_fill - 1) / space_to_fill)	# A 22 character wide string with 4 wide space will be split across 8 lines, 
+																	# this is because 1 of those 4 spaces need to be used by a list char each line, limiting 
+																	# the width to only 3 per line. 22/3 is ~7.333, adding (space_to_fill - 1) extends this 
+																	# to the needed 8 lines while still letting 21/3 = 7 clean lines.
 
 ## What should be the horizontal offset what the left side of the screen
 var hoizontal_offset : int
@@ -111,30 +111,28 @@ func display_list(display: TextDisplay) -> void:
 	display.set_hightlight( display_hightlight_cache )
 
 func _display_plain_label(display: TextDisplay) -> void:
-	display.draw_smart_text_at(item_name, start_pos, Vector2i(list_max_width, 100))
+	display.draw_smart_text_at(item_name, start_pos + DROP_DOWN_OFFSET, Vector2i(list_max_width, 100))
 
 func _display_list_connectors(display: TextDisplay, start_height: int, distance: int) -> void:
-	print("Called")
 	var start = start_pos + Vector2i(0,start_height)
 	display.draw_char_at("_list_entry", start)
 	for i in distance:
 		display.draw_char_at("_list_pass", start + Vector2i(0,i+1))
-		print(start_height + i+1)
 
 func _display_expanded(display: TextDisplay) -> void:
 	# Display the header
 	_display_list_connectors(display, 0, height - 1)
 	display.draw_char_at("_list_show", start_pos)
 	display.draw_smart_text_at(item_name, start_pos + DROP_DOWN_OFFSET, Vector2i(list_max_width - 1, 100))
-	# Display the children's list bar
+	
+	# Display the children
 	var total_height_travelled : int = height
 	for child in sub_lists:
 		_display_list_connectors(display, total_height_travelled, child.height - 1)
-		total_height_travelled += child.height
-	display.draw_char_at("_list_last", start_pos + Vector2i(0,total_height_travelled - 1))
-	# Display the children themselves
-	for child in sub_lists:
 		child.display_list(display)
+		total_height_travelled += child.height
+	
+	display.draw_char_at("_list_last", start_pos + Vector2i(0,total_height_travelled - 1))
 	
 func _display_collasped(display: TextDisplay) -> void:
 	display.draw_char_at("_list_hide", start_pos)
