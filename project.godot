@@ -31,6 +31,7 @@ CameraEffects="*res://00_Globals/camera_effects.gd"
 RoomPathfinder="*res://00_Globals/room_pathfinder.gd"
 MessageDisplay="*uid://2iwqcdxi45gp"
 LogBookManager="*uid://wah8b4yecbfv"
+MSGroups="*uid://b2kr6jak1b8l5"
 
 [display]
 

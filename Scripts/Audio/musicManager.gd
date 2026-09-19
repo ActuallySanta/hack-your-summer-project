@@ -30,15 +30,10 @@ const NONE = preload("res://Sounds/Music/issue.wav")
 
 @onready var location_ost := {
 	"Docking Bay": DOCKING_BAY,
-	"Docking Bay Hidden": DOCKING_BAY,
 	"Crew Quarters": CREW_QUARTERS,
-	"Crew Quarters Hidden": CREW_QUARTERS,
 	"Internals": INTERNALS,
-	"Internals Hidden": INTERNALS,
 	"Maintainence": LABS,
-	"Maintainence Hidden": LABS,
 	"BRS": LOWER_BRS,
-	"BRS Hidden": BRS,
 	"Limbo": LIMBO,
 }
 
@@ -139,7 +134,7 @@ func set_background_track_from_room_instance() -> void:
 	if ignore_cell_groups_flag:
 		return
 	
-	var groups := get_current_room_instance_groups()
+	var groups := MSGroups.get_current_room_groups()
 	if groups.is_empty():
 		return
 	
@@ -153,15 +148,13 @@ func _get_current_cell_group_music(groups: PackedInt32Array) -> AudioStream:
 	var best_guess: AudioStream
 	for group in groups:
 		var group_name = MetSys.get_group_name(group)
-		if group_name.begins_with( "_" ):
-			var type = group_name.split("_", false, 1)
-			if type[ 0 ] == "NONE":
-				return NONE
-			return _parse_special_room(type[ 0 ], type[ 1 ])
-		else:
-			best_guess = location_ost.get(group_name)
-			if best_guess == null:
-				printerr("Music Manager (_get_current_cell_group_music) cannot find an ost for this zone, there is probably no entry in the regions dictionary.")
+		var type = MSGroups.parse_special( group_name )
+		if type.is_empty(): continue;
+		return _parse_special_room(type[ 0 ], type[ 1 ])
+	
+	best_guess = location_ost.get(MSGroups.get_region_from_groups( groups ))
+	if best_guess == null:
+		printerr("Music Manager (_get_current_cell_group_music) cannot find an ost for this zone, there is probably no entry in the regions dictionary.")
 	
 	return best_guess
 
@@ -171,11 +164,9 @@ func _parse_music_effect(condition: String) -> AudioStream:
 	return NONE
 
 func _parse_special_room(type: String, special_name: String) -> AudioStream:
-	if type == "MUSEFFECT":
-		return _parse_music_effect(special_name)
-		
-	var dictionary = osts[type]
-	return dictionary.get(special_name)
+	if type == "NONE": return NONE
+	if type == "MUSEFFECT": return _parse_music_effect(special_name)
+	return osts[type].get(special_name)
 
 func override_automatic_assignment(restore_when_leaving_room) -> void:
 	ignore_cell_groups_flag = true
@@ -192,7 +183,6 @@ func update_ignore(_new_room: String) -> void:
 #endregion
 
 #region Pause Audio
-
 func try_mute_volume(requester: String) -> bool:
 	if list_of_pausers.has(requester):
 		return false

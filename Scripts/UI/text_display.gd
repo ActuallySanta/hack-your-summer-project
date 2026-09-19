@@ -67,6 +67,9 @@ func turn_on_highlight() -> void:
 func turn_off_highlight() -> void:
 	cursor_highlighted = false
 
+func _destylize() -> void:
+	turn_off_highlight()
+
 func set_hightlight(state: bool) -> void:
 	cursor_highlighted = state
 
@@ -77,7 +80,7 @@ func go_to_next_line() -> void:
 func _parse_command(sub_string: String) -> void:
 	match sub_string:
 		"$":
-			turn_off_highlight()
+			_destylize()
 		"$HIGH_ON":
 			turn_on_highlight()
 		"$HIGH_OFF":
