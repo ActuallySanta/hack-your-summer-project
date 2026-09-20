@@ -99,7 +99,7 @@ func __out_constructor_error(msg: String) -> void:
 	printerr("WARNING (TextListItem _make_child_of): ", msg)
 	printerr("                                Data : Label: ", item_name, ", Parent: ", super_list.item_name if super_list else "NONE", " Max width: ", list_max_width)
 
-func _init(label: String, max_width: int, child_lists: Array[ TextListItem ] = []) -> void:
+func _init(label: String, max_width: int, child_lists: Array = []) -> void:
 	is_last_item = true
 	base_max_width = max_width
 
@@ -109,7 +109,10 @@ func _init(label: String, max_width: int, child_lists: Array[ TextListItem ] = [
 	super_list = null
 	
 	for child in child_lists:
-		make_parent_of( child )
+		if child is TextListItem:
+			make_parent_of( child )
+		elif child is String:
+			insert_new_list_item_at( child )
 
 func make_parent_of(child: TextListItem) -> void:
 	if child == null: return
