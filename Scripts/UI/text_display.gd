@@ -32,6 +32,10 @@ const INVALID_CHAR := Vector2i(18,7)
 
 const EMPTY_CHAR = Vector2i(19,7)
 
+## The left end, middle and right end pieces of a horizontal rule
+const LINE_PIECES : Array[ String ] = [ "_line_start", "_line_continue", "_line_end" ]
+const LINE_PIECES_HIGH : Array[ String ] = [ "_line_start_high", "_line_continue_high", "_line_end_high" ]
+
 ## Debug String used for testing
 const DEBUG_DEEP_OUT : String = "_dot $TAB Testing $HIGH_ON Highlight $HIGH_OFF $NEWLINE ABCDEFGHIJKLMNOPQRSTUVWXYZ?!.,:;/\"()[]1234567890-+%*#@`' "
 
@@ -97,10 +101,17 @@ func go_to_next_line() -> void:
 	cursor_pos.y += 1
 
 func place_line(size: int) -> void:
-	var order : Array = [ "_line_start_high", "_line_continue_high", "_line_end_high" ] if cursor_highlighted else ["_line_start", "_line_continue", "_line_end"]
+	var order := LINE_PIECES_HIGH if cursor_highlighted else LINE_PIECES
+	if size <= 0: return
+	if size == 1:									# Too short for a start and an end, so just the middle piece
+		place_char(order[ 1 ])
+		return
 	place_char(order[ 0 ])
 	for i in size - 2: place_char(order[ 1 ])
 	place_char(order[ 2 ])
+
+func __out_command_error(command: String, expected: String) -> void:
+	printerr("WARNING (text_display _parse_command): '", command, "' is missing a parameter, ", expected)
 
 func _parse_command(sub_string: String) -> void:
 	var split = sub_string.split("_")
@@ -111,12 +122,18 @@ func _parse_command(sub_string: String) -> void:
 		"$":
 			_destylize()
 		"$HIGH":
+			if cmd_prmt.is_empty():
+				__out_command_error(sub_string, "expected $HIGH_ON or $HIGH_OFF")
+				return
 			set_hightlight(cmd_prmt[ 0 ] == "ON")
 		"$NEWLINE":
 			go_to_next_line()
 		"$TAB":
 			place_string( INDENT )
 		"$HORIZONTALLINE":
+			if cmd_prmt.is_empty():
+				__out_command_error(sub_string, "expected a width, like $HORIZONTALLINE_12")
+				return
 			place_line( cmd_prmt[ 0 ].to_int())
 #endregion
 
@@ -131,6 +148,21 @@ func is_string_too_wide(string: String) -> bool:
 func draw_char_at(char_id: String, position_on_grid: Vector2i) -> void:
 	set_cell(position_on_grid, 0, get_tile_coords_from_char(char_id, cursor_highlighted))
 	
+## Draws a horizontal rule [param size] cells wide with its left end at [param start].
+## The drawing twin of place_line(): straight to the grid, so the text box rules the placing cursor
+## obeys - the narrower title row, wrapping at max_width, max_height and tile_map_pos_offset - do not
+## apply. Anything positioning itself absolutely wants this one.
+func draw_line_at(start: Vector2i, size: int) -> void:
+	var order := LINE_PIECES_HIGH if cursor_highlighted else LINE_PIECES
+	if size <= 0: return
+	if size == 1:									# Too short for a start and an end, so just the middle piece
+		draw_char_at(order[ 1 ], start)
+		return
+	draw_char_at(order[ 0 ], start)
+	for i in size - 2:
+		draw_char_at(order[ 1 ], start + Vector2i(i + 1, 0))
+	draw_char_at(order[ 2 ], start + Vector2i(size - 1, 0))
+
 func draw_text_at(string: String, top_left: Vector2i, dimensions: Vector2i, start_offset: Vector2i = Vector2i.ZERO) -> bool:
 	# Example usage:
 	#  +---+
@@ -151,7 +183,7 @@ func draw_text_at(string: String, top_left: Vector2i, dimensions: Vector2i, star
 	cursor_pos = top_left + start_offset
 	for character in string:
 		# If we need to wrap
-		if cursor_pos.x - top_left.x >= dimensions.x:
+		if cursor_pos.x - top_left.x > dimensions.x:
 			cursor_pos.x = top_left.x
 			cursor_pos.y += 1
 			if cursor_pos.y - top_left.y >= dimensions.y:
@@ -169,12 +201,12 @@ static func count_smart_text_lines(string: String, width: int) -> int:
 	if width <= 0: return 0
 
 	var lines := 1
-	var line_x := 0								# Where the next word would start, relative to the left edge
+	var line_x := 0
 	for sub_string in string.split(" "):
-		if line_x + sub_string.length() >= width:	# Same wrap test draw_smart_text_at() uses
+		if line_x + sub_string.length() >= width:
 			line_x = 0
 			lines += 1
-		line_x += sub_string.length() + 1		# The word, plus the space that follows it
+		line_x += sub_string.length() + 1
 	return lines
 
 func draw_smart_text_at(string: String, top_left: Vector2i, dimensions: Vector2i) -> bool:

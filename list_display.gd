@@ -1,34 +1,56 @@
 extends TextDisplay
 
+@export var scroll_speed : float = 5.0
+
+const WIDTH := 15
+const DISPLAY_HEIGHT := 28
+
+var scroll_offset : float:
+	set(new_value):
+		new_value = clamp(new_value, -(root.total_height - DISPLAY_HEIGHT) * 48, 0)
+		position.y = new_value
+		scroll_offset = new_value
+		print(scroll_offset)
+
 var root : TextListItem
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	var double_nested_children : Array[ TextListItem ] = [
-		TextListItem.new("Chp 1", 15),
-		TextListItem.new("Chp 2", 15),
-		TextListItem.new("Chp 3", 15),
-		TextListItem.new("Chp 4", 15),
-		TextListItem.new("Chp 5", 15),
-		TextListItem.new("Chp 6", 15),
+	var garbage : Array[ TextListItem ] = [ 
+		TextListItem.new("a", WIDTH),
+		TextListItem.new("b", WIDTH),
+		TextListItem.new("c", WIDTH),
+		TextListItem.new("d", WIDTH),
+		TextListItem.new("e", WIDTH),
+		TextListItem.new("f", WIDTH),
+		TextListItem.new("g", WIDTH),
+		TextListItem.new("h", WIDTH),
+		TextListItem.new("i", WIDTH),
+		TextListItem.new("j", WIDTH),
+		TextListItem.new("k", WIDTH),
+		TextListItem.new("l", WIDTH),
+		TextListItem.new("m", WIDTH),
+		TextListItem.new("n", WIDTH),
+		TextListItem.new("o", WIDTH),
+		TextListItem.new("p", WIDTH),
+		TextListItem.new("q", WIDTH),
+		TextListItem.new("r", WIDTH),
+		TextListItem.new("s", WIDTH),
+		TextListItem.new("t", WIDTH),
+		TextListItem.new("u", WIDTH),
+		TextListItem.new("v", WIDTH),
+		TextListItem.new("w", WIDTH),
+		TextListItem.new("x", WIDTH),
+		TextListItem.new("y", WIDTH),
+		TextListItem.new("z", WIDTH),
 	]
-	var monsters_children : Array[ TextListItem ] = [
-		TextListItem.new("The", 15),
-		TextListItem.new("Quick", 15),
-		TextListItem.new("Brown", 15),
-		TextListItem.new("Fox", 15),
-		TextListItem.new("_dot error Test?", 15),
-		TextListItem.new("Jumped over the lazy dog", 15),
+	var groups : Array[ TextListItem ] = [
+		TextListItem.new("Entities", WIDTH, garbage),
+		TextListItem.new("Regions", WIDTH),
+		TextListItem.new("General", WIDTH),
 	]
-	var children : Array[ TextListItem ] = [
-		TextListItem.new("Monsters", 15, monsters_children),
-		TextListItem.new("Book", 15, double_nested_children),
-		TextListItem.new("Regions", 15),
-	]
-
-	root = TextListItem.new("Log Book", 15, children)
+	root = TextListItem.new("Log Book", WIDTH, groups)
 	root.show_children()
-	children[1].show_children()
 	root.display_list( self )
 
 func _process(_delta: float) -> void:
@@ -38,7 +60,16 @@ func _process(_delta: float) -> void:
 		root.display_list( self )
 
 func _input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-		var local_pos = to_local(get_global_mouse_position())
-		var tile_coords = local_to_map( local_pos )
+	if not event is InputEventMouseButton or not event.pressed:
+		return
+	var local_pos = to_local(get_global_mouse_position())
+	var tile_coords = local_to_map( local_pos )
+	if root.mouse_not_over_map( tile_coords ):
+		return
+	
+	if event.button_index == MOUSE_BUTTON_LEFT:
 		root.on_mouse_click( tile_coords )
+	elif event.button_index == MOUSE_BUTTON_WHEEL_UP:
+		scroll_offset += scroll_speed
+	elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+		scroll_offset -= scroll_speed

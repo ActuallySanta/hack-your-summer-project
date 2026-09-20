@@ -31,6 +31,7 @@ class_name TextListItem extends RefCounted
 signal on_click
 const DROP_DOWN_OFFSET := Vector2i(1,0)
 enum DropDownState { NOT, SHOW, HIDE }
+enum MouseScrollDirection { UP, DOWN }
 
 var super_list : TextListItem
 var sub_lists : Array[ TextListItem ]
@@ -123,6 +124,39 @@ func _make_child_of(parent: TextListItem) -> void:
 	is_last_item = super_list.sub_lists.back() == self
 	if label_width <= 0: __out_constructor_error("You are making a list too nested for it's own good.")
 
+func remove_label_at(label: String) -> TextListItem:
+	var last_path_marker = label.rfind("/")
+	var path = label.substr(0, last_path_marker)
+	var label_name = label.substr(last_path_marker + 1)
+	var nodes := parse_path(path).sub_lists if last_path_marker != -1 else sub_lists
+	
+	for i in nodes.size():
+		if nodes[ i ].item_name == label_name:
+			var target = nodes[ i ]
+			target.super_list = null
+			nodes.remove_at( i )
+			return target
+	return null
+
+func insert_new_list_item_at(label: String) -> TextListItem:
+	var last_path_marker = label.rfind("/")
+	if last_path_marker == -1:
+		return insert_new_list_item(label)
+	var path = label.substr(0, last_path_marker)
+	var label_name = label.substr(last_path_marker + 1)
+	return parse_path( path ).insert_new_list_item( label_name )
+
+func insert_new_list_item(label: String) -> TextListItem:
+	var child := new(label, base_max_width)
+	make_parent_of( child )
+	dirty = true
+	return child
+
+func insert_list_item(child: TextListItem) -> TextListItem:
+	make_parent_of(child)
+	dirty = true
+	return child
+
 #endregion
 
 #region Displayers
@@ -145,12 +179,7 @@ func display_list(display: TextDisplay) -> void:
 	display.set_hightlight( display_hightlight_cache )
 
 func _display_end_line(display: TextDisplay) -> void:
-	var old_cursor = display.cursor_pos
-	display.cursor_pos = start_pos + Vector2i(0,height - 2)
-	var instruction = "$HORIZONTALLINE_{max_width}".format({"max_width": list_max_width})
-	print(instruction)
-	display._parse_command(instruction)
-	display.cursor_pos = old_cursor
+	display.draw_line_at(start_pos + Vector2i(0,height - 1), list_max_width)	# height reserves one row past the label for this
 
 func _display_plain_label(display: TextDisplay) -> void:
 	display.draw_smart_text_at(item_name, start_pos + DROP_DOWN_OFFSET, Vector2i(label_width, 100))
@@ -184,9 +213,12 @@ func _display_collasped(display: TextDisplay) -> void:
 #endregion
 
 #region Mouse Click Handling
+func mouse_over_map(mouse_position: Vector2i) -> bool:
+	return not(mouse_not_over_map(mouse_position))
+func mouse_not_over_map(mouse_position: Vector2i) -> bool:
+	return mouse_position.y < 0 or mouse_position.y >= lines.size() or mouse_position.x < 0 or mouse_position.x >= base_max_width
+
 func on_mouse_click(click_position: Vector2i) -> void:
-	if click_position.y < 0 or click_position.y >= lines.size() or click_position.x < 0 or click_position.x >= base_max_width:
-		return
 	var item_clicked = lines[ click_position.y ]
 	if item_clicked.drop_down != DropDownState.NOT:
 		item_clicked.toggle_children()
@@ -196,6 +228,32 @@ func on_mouse_click(click_position: Vector2i) -> void:
 #endregion
 
 #region Helpers
+func parse_path(path: String) -> TextListItem:
+	#Example:
+	# Input: (../../Something/Else/Here) called on "Is here*" node, given:
+	#
+	# Root
+	#  Something
+	#   Else
+	#    Here*
+	#  A thing
+	#   Is here*
+	#
+	# would return "Here*" node
+	var nodes := path.split("/", false)
+	var current_node := self
+	for node in nodes:
+		current_node = current_node.super_list if node == ".." else current_node.find_child( node )
+		if current_node == null:
+			return null
+	return current_node
+
+func find_child(label: String) -> TextListItem:
+	for child in sub_lists:
+		if child.item_name == label:
+			return child
+	return null
+
 func show_children() -> void:
 	if drop_down == DropDownState.HIDE: drop_down = DropDownState.SHOW
 func hide_children() -> void:
