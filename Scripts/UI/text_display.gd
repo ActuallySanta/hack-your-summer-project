@@ -18,11 +18,19 @@ const SPECIAL_OFFSETS : Dictionary[ String, Vector2i ] = {
 	"_list_entry" : Vector2i(16,8),
 	"_list_pass" : Vector2i(16,9),
 	"_list_last" : Vector2i(16,10),
+	"_line_start_high" : Vector2i(17,8),
+	"_line_continue_high" : Vector2i(18,8),
+	"_line_end_high" : Vector2i(19,8),
+	"_line_start" : Vector2i(17,9),
+	"_line_continue" : Vector2i(18,9),
+	"_line_end" : Vector2i(19,9),
 	"_": INVALID_CHAR,
 }
 
 ## Used for evil chars, or other visual assets that are pushed to the cursor
 const INVALID_CHAR := Vector2i(18,7)
+
+const EMPTY_CHAR = Vector2i(19,7)
 
 ## Debug String used for testing
 const DEBUG_DEEP_OUT : String = "_dot $TAB Testing $HIGH_ON Highlight $HIGH_OFF $NEWLINE ABCDEFGHIJKLMNOPQRSTUVWXYZ?!.,:;/\"()[]1234567890-+%*#@`' "
@@ -87,19 +95,29 @@ func set_hightlight(state: bool) -> void:
 func go_to_next_line() -> void:
 	cursor_pos.x = 0
 	cursor_pos.y += 1
-	
+
+func place_line(size: int) -> void:
+	var order : Array = [ "_line_start_high", "_line_continue_high", "_line_end_high" ] if cursor_highlighted else ["_line_start", "_line_continue", "_line_end"]
+	place_char(order[ 0 ])
+	for i in size - 2: place_char(order[ 1 ])
+	place_char(order[ 2 ])
+
 func _parse_command(sub_string: String) -> void:
-	match sub_string:
+	var split = sub_string.split("_")
+	var cmd_name = split[ 0 ]
+	split.remove_at( 0 )
+	var cmd_prmt = split
+	match cmd_name:
 		"$":
 			_destylize()
-		"$HIGH_ON":
-			turn_on_highlight()
-		"$HIGH_OFF":
-			turn_off_highlight()
+		"$HIGH":
+			set_hightlight(cmd_prmt[ 0 ] == "ON")
 		"$NEWLINE":
 			go_to_next_line()
 		"$TAB":
 			place_string( INDENT )
+		"$HORIZONTALLINE":
+			place_line( cmd_prmt[ 0 ].to_int())
 #endregion
 
 func cursor_at_title() -> bool:
@@ -143,6 +161,21 @@ func draw_text_at(string: String, top_left: Vector2i, dimensions: Vector2i, star
 		cursor_pos.x += 1
 	cursor_pos = old_cursor
 	return true
+
+## How many lines draw_smart_text_at() will take to write [param string] into a box [param width] wide.
+## Word wrapping means the raw length of the string no longer predicts this, so anything that needs to
+## reserve vertical space has to ask here. Must be kept in step with draw_smart_text_at() below.
+static func count_smart_text_lines(string: String, width: int) -> int:
+	if width <= 0: return 0
+
+	var lines := 1
+	var line_x := 0								# Where the next word would start, relative to the left edge
+	for sub_string in string.split(" "):
+		if line_x + sub_string.length() >= width:	# Same wrap test draw_smart_text_at() uses
+			line_x = 0
+			lines += 1
+		line_x += sub_string.length() + 1		# The word, plus the space that follows it
+	return lines
 
 func draw_smart_text_at(string: String, top_left: Vector2i, dimensions: Vector2i) -> bool:
 	var strings = string.split(" ")
