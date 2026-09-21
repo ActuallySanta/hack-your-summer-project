@@ -239,8 +239,14 @@ func display_list(display: TextDisplay) -> void:
 	else: _display_collasped( display )
 	display.set_hightlight( display_hightlight_cache )
 
+## The rule under an open header, closing off everything it is holding. It is drawn lit whether or
+## not the header itself is: this bar and a label's are the same mark in the same shade otherwise,
+## and keeping it bright is what tells the two apart at a glance.
 func _display_end_line(display: TextDisplay) -> void:
+	var display_hightlight_cache = display.cursor_highlighted
+	display.set_hightlight( true )
 	display.draw_line_at(start_pos + Vector2i(0,height - 1), list_max_width)
+	display.set_hightlight( display_hightlight_cache )
 
 ## Draws a label, and on the active one the rule that ties it to the right edge of the list.
 ## A label has no arrow of its own, so the rule opens in that empty column and picks up again where
@@ -315,17 +321,19 @@ func on_mouse_pressed(click_position: Vector2i) -> void:
 	pressed_item = item
 	dirty = true
 
-## Finishes a click. Press and release have to land on the same item, so sliding off one before
-## letting go calls the click off the way every other button does.
-func on_mouse_released(click_position: Vector2i) -> void:
+## Finishes a click, and answers whether one actually landed. Press and release have to land on
+## the same item, so sliding off one before letting go calls the click off the way every other
+## button does - and the caller is told, because a click that never happened should not be heard.
+func on_mouse_released(click_position: Vector2i) -> bool:
 	var item := pressed_item
 	cancel_press()
-	if item == null or item != item_at( click_position ): return
+	if item == null or item != item_at( click_position ): return false
 
 	if item.is_header: item.toggle_children()
 	else: _set_active_item( item )	# Only a label brings up a screen, so only a label moves where the player is
 	item.on_click.emit()		# Emitted after the move, so a listener opening its screen finds the list already agreeing with it
 	dirty = true
+	return true
 
 ## Forgets a press without acting on it, for when the list stops taking input mid-click
 func cancel_press() -> void:

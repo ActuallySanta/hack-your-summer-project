@@ -70,7 +70,8 @@ var touchable : bool:
 func _ready() -> void:
 	menu_state = MenuState.MENU_REST_HIDDEN
 	menu_goal = MenuState.MENU_REST_SHOWN
-	
+	_open_audio_mixer()
+
 	var options = TextListItem.new("Options", WIDTH, [
 		TextListItem.new("Visuals", WIDTH, []),
 		TextListItem.new("Audio", WIDTH, []),
@@ -147,12 +148,15 @@ func update_hover() -> void:
 		root.cancel_press()
 		return
 
+	var was_hovering := root.hovered_item
 	var tile_coords := mouse_tile_coords()
-	if mouse_over_display( tile_coords ): 
-		root.on_mouse_moved( tile_coords )
-		stream_playback = audio_source.get_stream_playback()
-		stream_playback.play_stream( hover_sfx )
+	if mouse_over_display( tile_coords ): root.on_mouse_moved( tile_coords )
 	else: root.on_mouse_exited()
+
+	# Only the moment the cursor lands on a new row is worth a sound. This runs every frame, so
+	# playing on "the cursor is over something" would fire sixty times a second into the mixer.
+	if root.hovered_item != null and root.hovered_item != was_hovering:
+		play_sfx( hover_sfx )
 
 func _input(event: InputEvent) -> void:
 	if not touchable or not event is InputEventMouseButton:
@@ -162,7 +166,7 @@ func _input(event: InputEvent) -> void:
 	# A release is taken wherever it happens, so a press dragged off the list is called off rather
 	# than left stuck down waiting for a button that already came up.
 	if event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
-		root.on_mouse_released( tile_coords )
+		if root.on_mouse_released( tile_coords ): play_sfx( click_sfx )	# Silence is the right answer for a click that was called off, or one on inert text
 		return
 
 	if not event.pressed or not mouse_over_display( tile_coords ):
@@ -174,6 +178,26 @@ func _input(event: InputEvent) -> void:
 		scroll_offset -= scroll_speed
 	elif event.button_index == MOUSE_BUTTON_LEFT:
 		root.on_mouse_pressed( tile_coords )
+
+#region Audio
+## Starts the one stream the list's sounds all ride on. An AudioStreamPolyphonic makes no sound of
+## its own - it is an empty mixer with room for several voices - so the player has to be playing it
+## before there is a playback to hand sounds to, and get_stream_playback() answers null until then.
+## The player is then left running for the node's whole life; nothing here ever calls play() again.
+func _open_audio_mixer() -> void:
+	audio_source.play()
+	stream_playback = audio_source.get_stream_playback() as AudioStreamPlaybackPolyphonic
+	if stream_playback == null:
+		printerr("WARNING (list_display _open_audio_mixer): ", audio_source.name, " needs an AudioStreamPolyphonic as its stream, so the list will be silent")
+
+## Feeds [param sfx] into the mixer as a voice of its own, which is the point of the polyphonic
+## stream: a click landing while a hover is still ringing lays over it instead of cutting it off,
+## the way a plain player calling play() twice would.
+func play_sfx(sfx: AudioStream) -> void:
+	if not audio_source.playing: _open_audio_mixer()	# Something stopped the player, so the old playback is deaf now
+	if stream_playback == null: return
+	stream_playback.play_stream( sfx )
+#endregion
 
 #region Debug
 const DEBUG_DEAD_LABEL := "Shut Down/Confirm:"
