@@ -1,5 +1,8 @@
 extends TextDisplay
 
+const hover_sfx := preload("res://Sounds/UI/menuHover.wav")
+const click_sfx := preload("res://Sounds/UI/menuSelect.wav")
+
 ## Pixels the list travels per notch of the mouse wheel
 @export_group("Scrolling")
 @export var scroll_speed : float = 20.0
@@ -14,6 +17,10 @@ const WIDTH := 15
 const DISPLAY_HEIGHT := 28
 
 enum MenuState { MENU_REST_HIDDEN, MENU_REST_SHOWN, MENU_MOVE_TO_HIDDEN, MENU_MOVE_TO_SHOWN }
+
+@onready var audio_source : AudioStreamPlayer2D = $AudioStreamPlayer2D
+
+var stream_playback : AudioStreamPlaybackPolyphonic
 
 ## One line of the list in screen pixels, the node's scale included
 var line_height : float:
@@ -63,6 +70,7 @@ var touchable : bool:
 func _ready() -> void:
 	menu_state = MenuState.MENU_REST_HIDDEN
 	menu_goal = MenuState.MENU_REST_SHOWN
+	
 	var options = TextListItem.new("Options", WIDTH, [
 		TextListItem.new("Visuals", WIDTH, []),
 		TextListItem.new("Audio", WIDTH, []),
@@ -140,7 +148,10 @@ func update_hover() -> void:
 		return
 
 	var tile_coords := mouse_tile_coords()
-	if mouse_over_display( tile_coords ): root.on_mouse_moved( tile_coords )
+	if mouse_over_display( tile_coords ): 
+		root.on_mouse_moved( tile_coords )
+		stream_playback = audio_source.get_stream_playback()
+		stream_playback.play_stream( hover_sfx )
 	else: root.on_mouse_exited()
 
 func _input(event: InputEvent) -> void:

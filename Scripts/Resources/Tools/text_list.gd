@@ -79,14 +79,14 @@ var display_state : ItemState:
 		if root.hovered_item == self: return ItemState.HOVER
 		return state
 
-## Whether this item draws lit. The highlight answers one question - what is the cursor on - so
-## the active label does not get to keep it: a lit label the player is not pointing at would have
-## them guessing at what a click is about to hit. An open header is the exception, where the
-## highlight is part of being open rather than a reply to the cursor.
+## Whether this item draws lit. The highlight answers one question - what is the cursor on - and
+## nothing else earns it: not the active label, which has its rule to say where the player is
+## standing, and not an open header, which has its arrow. A row reads the same way wherever it is
+## in the list, so a lit one is always the one a click is about to hit.
 var is_highlighted : bool:
 	get():
 		var shown := display_state
-		return shown == ItemState.HOVER or shown == ItemState.CLICK or shown == ItemState.SHOW
+		return shown == ItemState.HOVER or shown == ItemState.CLICK
 
 ## Whether this item draws the rule that runs out to the right edge. That is the other question -
 ## where in the list the player is standing - and it belongs to the active label whether or not
