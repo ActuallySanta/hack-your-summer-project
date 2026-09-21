@@ -31,12 +31,13 @@ class_name TextListItem extends RefCounted
 signal on_click
 const DROP_DOWN_OFFSET := Vector2i(1,0)
 enum DropDownState { NOT, SHOW, HIDE }
-enum MouseScrollDirection { UP, DOWN }
+enum ItemDisplayState { Inactive, Hover, Click, Active }
 
 var super_list : TextListItem
 var sub_lists : Array[ TextListItem ]
 var item_name : String
 var drop_down : DropDownState
+var item_state : ItemDisplayState
 var is_last_item : bool
 var dirty : bool = false
 
@@ -174,7 +175,7 @@ func display_clear(display: TextDisplay) -> void:
 	
 func display_list(display: TextDisplay) -> void:
 	var display_hightlight_cache = display.cursor_highlighted
-	display.set_hightlight( drop_down == DropDownState.SHOW )
+	display.set_hightlight(drop_down == DropDownState.SHOW or item_state == ItemDisplayState.Click or item_state == ItemDisplayState.Hover)
 	match drop_down:
 		DropDownState.NOT: _display_plain_label( display )
 		DropDownState.SHOW: _display_expanded( display )
@@ -182,10 +183,15 @@ func display_list(display: TextDisplay) -> void:
 	display.set_hightlight( display_hightlight_cache )
 
 func _display_end_line(display: TextDisplay) -> void:
-	display.draw_line_at(start_pos + Vector2i(0,height - 1), list_max_width)	# height reserves one row past the label for this
+	display.draw_line_at(start_pos + Vector2i(0,height - 1), list_max_width)
 
 func _display_plain_label(display: TextDisplay) -> void:
 	display.draw_smart_text_at(item_name, start_pos + DROP_DOWN_OFFSET, Vector2i(label_width, 100))
+	
+	if item_state >= 2 or true: #TODO Add a trailing bar when the label is clicked
+		display.draw_char_at("_line_start", start_pos)
+		display.draw_line_at(start_pos + DROP_DOWN_OFFSET + Vector2i(item_name.length(),0), list_max_width)
+		print("test")
 
 func _display_list_connectors(display: TextDisplay, start_height: int, distance: int) -> void:
 	var start = start_pos + Vector2i(0,start_height)
