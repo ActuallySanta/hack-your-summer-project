@@ -76,11 +76,13 @@ func _ready() -> void:
 	])
 	root = TextListItem.new("C:/Users/Ash Jerock/ana7Tl", WIDTH, [ options, logbook, TextListItem.new("Shut Down", WIDTH, ["Confirm:", "Yes", "No"])])
 	root.show_children()
+	__debug_hook_up_labels()
 	root.display_list( self )
 
 func _process(delta: float) -> void:
 	update_scroll( delta )
 	update_state( delta )
+	update_hover()
 	if not root.dirty: return
 	root.dirty = false
 	root.display_clear( self )
@@ -123,18 +125,65 @@ func mouse_over_display(tile_coords: Vector2i) -> bool:
 	var top_row : int = floori(-position.y / line_height)	# The list line currently drawn on the top row of the screen
 	return tile_coords.y >= top_row and tile_coords.y < top_row + DISPLAY_HEIGHT
 
+## The list line the cursor is on, which is not a screen row: the node carries the scroll and the
+## slide in its own position, so going through to_local() is what keeps the two in step.
+func mouse_tile_coords() -> Vector2i:
+	return local_to_map( to_local( get_global_mouse_position() ) )
+
+## Keeps the hover under the cursor. This is a per frame job rather than a mouse motion one because
+## the list moves as much as the cursor does: scrolling and sliding both change what a still cursor
+## is pointing at.
+func update_hover() -> void:
+	if not touchable:
+		root.on_mouse_exited()
+		root.cancel_press()
+		return
+
+	var tile_coords := mouse_tile_coords()
+	if mouse_over_display( tile_coords ): root.on_mouse_moved( tile_coords )
+	else: root.on_mouse_exited()
+
 func _input(event: InputEvent) -> void:
-	if not touchable or not event is InputEventMouseButton or not event.pressed:
+	if not touchable or not event is InputEventMouseButton:
 		return
-	
-	var local_pos = to_local(get_global_mouse_position())
-	var tile_coords = local_to_map( local_pos )
-	if not mouse_over_display( tile_coords ):
+
+	var tile_coords := mouse_tile_coords()
+	# A release is taken wherever it happens, so a press dragged off the list is called off rather
+	# than left stuck down waiting for a button that already came up.
+	if event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
+		root.on_mouse_released( tile_coords )
 		return
-	
+
+	if not event.pressed or not mouse_over_display( tile_coords ):
+		return
+
 	if event.button_index == MOUSE_BUTTON_WHEEL_UP:
 		scroll_offset += scroll_speed
 	elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 		scroll_offset -= scroll_speed
-	elif event.button_index == MOUSE_BUTTON_LEFT and root.mouse_over_map( tile_coords ):
-		root.on_mouse_click( tile_coords )
+	elif event.button_index == MOUSE_BUTTON_LEFT:
+		root.on_mouse_pressed( tile_coords )
+
+#region Debug
+const DEBUG_DEAD_LABEL := "Shut Down/Confirm:"
+
+## Gives every label something to answer a click with, standing in for the screens that will one
+## day open to the right of the list. Until a label has a listener it is inert by design, so
+## without this none of them would highlight, rule or click at all.
+## DEBUG_DEAD_LABEL is left unconnected on purpose: it is the case that has to stay dead.
+func __debug_hook_up_labels() -> void:
+	__debug_connect_labels( root, root.parse_path( DEBUG_DEAD_LABEL ) )
+
+func __debug_connect_labels(item: TextListItem, skipped: TextListItem) -> void:
+	if item == skipped: return
+	if not item.is_header:
+		item.on_click.connect( __debug_fire_on_click.bind( item ) )
+		return
+	for child in item.sub_lists:
+		__debug_connect_labels( child, skipped )
+
+func __debug_fire_on_click(item: TextListItem) -> void:
+	var active : TextListItem = root.active_item
+	print("[list] clicked '", item.item_name, "' | active label: '", active.item_name if active else "none",
+			"' | ruled: ", item.is_ruled, " | highlighted: ", item.is_highlighted)
+#endregion

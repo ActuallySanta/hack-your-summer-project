@@ -38,19 +38,63 @@ enum ItemState { INACTIVE, HOVER, CLICK, ACTIVE, HIDE, SHOW }
 var super_list : TextListItem
 var sub_lists : Array[ TextListItem ]
 var item_name : String
+## What this item is when the cursor is elsewhere: open or closed for a header, and for a label
+## whether it is the one the player is standing on. The cursor's own states are not kept here - a
+## header has to stay SHOW while it is hovered or the whole list would fold up under the cursor -
+## so the cursor is tracked on the root instead and display_state lays the two over each other.
 var state : ItemState
 var is_last_item : bool
 var dirty : bool = false
+
+## The item under the cursor, the one the button went down on, and the last label to have been
+## clicked. Only the root's copies are ever read; a list has one cursor and one place the player is
+## standing, so the items themselves have nothing to remember.
+var hovered_item : TextListItem
+var pressed_item : TextListItem
+var active_item : TextListItem
+
+## The top of this list, which holds everything the whole list shares
+var root_item : TextListItem:
+	get():
+		return super_list.root_item if super_list else self
 
 ## Whether this item heads a sub-list, and so owns a drop-down arrow rather than a plain label
 var is_header : bool:
 	get():
 		return not sub_lists.is_empty()
 
-## Whether this item draws lit: an open header, or a label the mouse is on or has picked
+## Whether a click on this item would do anything: a header opens or closes itself, and a label
+## needs someone listening on on_click. Everything else is inert text that the cursor ignores.
+var is_interactive : bool:
+	get():
+		return is_header or not on_click.get_connections().is_empty()
+
+## What this item is doing right now, the cursor included. The cursor's states sit on top of the
+## resting one rather than replacing it, so a hovered open header is still an open header and a
+## hovered active label is still the active one underneath.
+var display_state : ItemState:
+	get():
+		var root := root_item
+		if root.pressed_item == self: return ItemState.CLICK
+		if root.hovered_item == self: return ItemState.HOVER
+		return state
+
+## Whether this item draws lit. The highlight answers one question - what is the cursor on - so
+## the active label does not get to keep it: a lit label the player is not pointing at would have
+## them guessing at what a click is about to hit. An open header is the exception, where the
+## highlight is part of being open rather than a reply to the cursor.
 var is_highlighted : bool:
 	get():
-		return state != ItemState.INACTIVE and state != ItemState.HIDE
+		var shown := display_state
+		return shown == ItemState.HOVER or shown == ItemState.CLICK or shown == ItemState.SHOW
+
+## Whether this item draws the rule that runs out to the right edge. That is the other question -
+## where in the list the player is standing - and it belongs to the active label whether or not
+## the cursor happens to be resting on it. A header never takes the mark, only opens and closes.
+var is_ruled : bool:
+	get():
+		if is_header: return false
+		return state == ItemState.ACTIVE or display_state == ItemState.CLICK
 
 ## The width the whole list has to fit in. Only the root's copy is ever read; children walk up to it.
 var base_max_width : int
@@ -149,6 +193,7 @@ func remove_label_at(label: String) -> TextListItem:
 	for i in nodes.size():
 		if nodes[ i ].item_name == label_name:
 			var target = nodes[ i ]
+			root_item._forget( target )
 			target.super_list = null
 			nodes.remove_at( i )
 			if nodes.is_empty(): holder.state = ItemState.INACTIVE	# Nothing left to head, so it is a plain label again
@@ -197,13 +242,14 @@ func display_list(display: TextDisplay) -> void:
 func _display_end_line(display: TextDisplay) -> void:
 	display.draw_line_at(start_pos + Vector2i(0,height - 1), list_max_width)
 
-## Draws a label and the rule that ties it to the right edge of the list.
+## Draws a label, and on the active one the rule that ties it to the right edge of the list.
 ## A label has no arrow of its own, so the rule opens in that empty column and picks up again where
 ## the text runs out, carrying the eye across the gap. On a label that wraps, only the first line is
 ## ruled: the arrow column and the trailing bar sit on the same top row, and the lines below it are
 ## left to the text. Both ends read the display's highlight, so a lit label gets a lit rule.
 func _display_plain_label(display: TextDisplay) -> void:
 	display.draw_smart_text_at(item_name, start_pos + DROP_DOWN_OFFSET, Vector2i(label_width, 100))
+	if not is_ruled: return
 
 	var first_line_width := TextDisplay.measure_smart_text_first_line(item_name, label_width)
 	display.draw_char_at(display.get_line_pieces()[ 0 ], start_pos)
@@ -238,17 +284,77 @@ func _display_collasped(display: TextDisplay) -> void:
 #endregion
 
 #region Mouse Click Handling
+# Every function in here is the root's to answer: the cursor belongs to the list as a whole, and
+# only the root knows which line of which branch a screen row landed on.
 func mouse_over_map(mouse_position: Vector2i) -> bool:
 	return not(mouse_not_over_map(mouse_position))
 func mouse_not_over_map(mouse_position: Vector2i) -> bool:
 	return mouse_position.y < 0 or mouse_position.y >= lines.size() or mouse_position.x < 0 or mouse_position.x >= base_max_width
 
-func on_mouse_click(click_position: Vector2i) -> void:
-	var item_clicked = lines[ click_position.y ]
-	if item_clicked.is_header:
-		item_clicked.toggle_children()
-	item_clicked.on_click.emit()
+## The item the cursor can act on at [param mouse_position], or null for a dead spot.
+## Two things count as dead: off the list entirely, and the columns to the left of the item's own,
+## which are the branch lines its parents drew and belong to no label.
+func item_at(mouse_position: Vector2i) -> TextListItem:
+	if mouse_not_over_map( mouse_position ): return null
+	var item : TextListItem = lines[ mouse_position.y ]
+	if mouse_position.x < item.hoizontal_offset: return null
+	return item if item.is_interactive else null
+
+## Moves the hover to whatever the cursor is over, which may be nothing
+func on_mouse_moved(mouse_position: Vector2i) -> void:
+	_set_hovered_item( item_at( mouse_position ) )
+
+## Drops the hover, for when the cursor leaves the list. The press is left armed so the button can
+## still be brought back and released on the item it went down on.
+func on_mouse_exited() -> void:
+	_set_hovered_item( null )
+
+func on_mouse_pressed(click_position: Vector2i) -> void:
+	var item := item_at( click_position )
+	if item == null: return
+	pressed_item = item
 	dirty = true
+
+## Finishes a click. Press and release have to land on the same item, so sliding off one before
+## letting go calls the click off the way every other button does.
+func on_mouse_released(click_position: Vector2i) -> void:
+	var item := pressed_item
+	cancel_press()
+	if item == null or item != item_at( click_position ): return
+
+	if item.is_header: item.toggle_children()
+	else: _set_active_item( item )	# Only a label brings up a screen, so only a label moves where the player is
+	item.on_click.emit()		# Emitted after the move, so a listener opening its screen finds the list already agreeing with it
+	dirty = true
+
+## Forgets a press without acting on it, for when the list stops taking input mid-click
+func cancel_press() -> void:
+	if pressed_item == null: return
+	pressed_item = null
+	dirty = true
+
+func _set_hovered_item(item: TextListItem) -> void:
+	if hovered_item == item: return
+	hovered_item = item
+	dirty = true
+
+## Moves where the player is standing to [param item]. Unlike the cursor, this one is written into
+## the items themselves, because being the active label is something an item goes on being rather
+## than something the cursor is doing to it - so the label being left has to be put back to rest.
+func _set_active_item(item: TextListItem) -> void:
+	if active_item == item: return
+	# A label that has grown children since is a header now, and its HIDE or SHOW outranks the rest
+	if active_item != null and not active_item.is_header: active_item.state = ItemState.INACTIVE
+	active_item = item
+	if active_item != null: active_item.state = ItemState.ACTIVE
+	dirty = true
+
+## Drops every hold the root has on [param item], so a label taken out of the list cannot stay
+## hovered, held down, or standing as the place the player is
+func _forget(item: TextListItem) -> void:
+	if hovered_item == item: hovered_item = null
+	if pressed_item == item: pressed_item = null
+	if active_item == item: _set_active_item( null )
 
 #endregion
 
