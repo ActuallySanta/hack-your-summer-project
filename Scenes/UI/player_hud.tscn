@@ -65,7 +65,7 @@ layout_mode = 1
 [node name="LevelTileMap" type="TileMapLayer" parent="." unique_id=126558450]
 position = Vector2(64, -32)
 scale = Vector2(3, 3)
-tile_map_data = PackedByteArray("AAAUAAEAAAAAAAAAAAAVAAEAAAAAAAAAAAAWAAEAAAAAAAAAAAAWAAAAAAAAAAAAAAAVAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAATAAIAAAAEAAIAAGATAAEAAAAGAAIAAAATAAAAAAAGAAIAAAAUAAIAAAAEAAAAAAAVAAIAAAAEAAAAAAAWAAIAAAAEAAAAAAA=")
+tile_map_data = PackedByteArray("AAAmAAUAAAAEAAIAAGAmAAIAAAAGAAIAAAAmAAAAAAAGAAIAAAAoAAQAAAAEAAAAAAApAAQAAAAEAAAAAAAqAAQAAAAEAAAAAAArAAQAAAAEAAAAAAAsAAQAAAAEAAAAAAA=")
 tile_set = ExtResource("3_odvir")
 script = ExtResource("4_out4y")
 metadata/_custom_type_script = "uid://dpm1m1a7ewttn"
@@ -88,6 +88,7 @@ area = Vector2i(5, 3)
 [node name="PlayerHealth" parent="." unique_id=1360041974 instance=ExtResource("3_jh2mb")]
 
 [node name="FullMap" parent="." unique_id=1902447311 instance=ExtResource("4_fullmap")]
+visible = false
 custom_minimum_size = Vector2(960, 576)
 layout_mode = 1
 offset_left = 96.0

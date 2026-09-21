@@ -52,7 +52,7 @@ func _update_display() -> void:
 	var num_tiles : int = ceili( float( number_health ) / ICONS_PER_TILE )
 	extension.global_position.x = tile_width * num_tiles
 
-	var pattern : TileMapPattern = tile_set.get_pattern(1)
+	var pattern : TileMapPattern = tile_set.get_pattern(3)
 	for i in num_tiles:
 		set_pattern( Vector2i(i, 0), pattern )
 	# Rub out any tiles the bar has shrunk past, or they stay on screen under nothing.

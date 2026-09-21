@@ -238,12 +238,12 @@ func _process(_delta: float) -> void:
 	# death is meant to cost the player everything since the last one.
 	if allow_save_anywhere and OS.is_debug_build() and Input.is_action_just_pressed(&"debug_save"):
 		SaveManager.save_data_to_file(current_save_name, false)
+	# The list menu has taken the pause key over, and stops the world its own way: it eases
+	# Engine.time_scale down along its slide instead of stopping the tree dead. pause_game() and
+	# the GameHUD pause menu are still here and still work, they are just not bound to anything.
 	if Input.is_action_just_pressed("pause"):
-		if paused:
-			resume_game()
-		else:
-			pause_game()
-		
+		_hud.force_close_map()	# The map would otherwise be left sitting on screen over the menu
+		ListDisplay.toggle_menu()
 
 #region Camera bounds and axis regions
 ## Camera2D's own limits are pushed this far out on an axis we don't want it to

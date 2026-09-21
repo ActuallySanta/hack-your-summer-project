@@ -16,6 +16,10 @@ const WIDTH := 15
 ## How many lines of text fit on screen at once
 const DISPLAY_HEIGHT := 28
 
+## The longest real step the panel will take in one frame. A load hitch is not travel, and without
+## this the menu would jump the width of the screen on the frame the game comes back.
+const MAX_REAL_DELTA := 0.1
+
 enum MenuState { MENU_REST_HIDDEN, MENU_REST_SHOWN, MENU_MOVE_TO_HIDDEN, MENU_MOVE_TO_SHOWN }
 
 @onready var audio_source : AudioStreamPlayer2D = $AudioStreamPlayer2D
@@ -63,13 +67,24 @@ var menu_open_percent : float:
 var inverse_percent : float:
 	get(): return clamp(1 - menu_open_percent, 0.01, 0.9)
 
-var touchable : bool: 
+var touchable : bool:
 	get(): return menu_state == MenuState.MENU_REST_SHOWN
+
+## Whether the menu is the one currently slowing the world down. It takes the clock on the way out
+## and gives it back the moment it is fully away, so a world nobody is holding is left alone.
+var _owns_world_clock : bool = false
+## What PlayerManager.canMove was before the menu borrowed it
+var _player_could_move := true
+## The real clock, read straight rather than through a delta the menu itself is shrinking
+var _real_time_usec : int
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	# The menu is what hands the world's clock back, so it must not be something a stopped world stops.
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	menu_state = MenuState.MENU_REST_HIDDEN
-	menu_goal = MenuState.MENU_REST_SHOWN
+	menu_goal = MenuState.MENU_REST_HIDDEN
+	_real_time_usec = Time.get_ticks_usec()
 	_open_audio_mixer()
 
 	var options = TextListItem.new("Options", WIDTH, [
@@ -85,12 +100,20 @@ func _ready() -> void:
 	])
 	root = TextListItem.new("C:/Users/Ash Jerock/ana7Tl", WIDTH, [ options, logbook, TextListItem.new("Shut Down", WIDTH, ["Confirm:", "Yes", "No"])])
 	root.show_children()
-	__debug_hook_up_labels()
+	_hook_up_labels()
 	root.display_list( self )
 
-func _process(delta: float) -> void:
+## Time is global, and this node is one of the two things that takes it away, so a menu going down
+## with the game still stopped would leave the world frozen with nothing left to thaw it.
+func _exit_tree() -> void:
+	if _owns_world_clock:
+		Engine.time_scale = 1.0
+
+func _process(_delta: float) -> void:
+	var delta := _real_delta()	# Not the delta handed in: see _real_delta()
 	update_scroll( delta )
 	update_state( delta )
+	update_world_time()
 	update_hover()
 	if not root.dirty: return
 	root.dirty = false
@@ -111,6 +134,70 @@ func update_state(delta: float) -> void:
 		menu_state = menu_goal
 		return
 	position.x += d
+
+#region Opening and closing
+## Puts the menu away if it is coming out, and brings it out otherwise. Called part way through a
+## slide this reverses it from where it got to, which is why the goal is what gets set rather than
+## the position: the travel and the world's clock both read off where the panel actually is.
+func toggle_menu() -> void:
+	if menu_goal == MenuState.MENU_REST_SHOWN: close_menu()
+	else: open_menu()
+
+func open_menu() -> void:
+	if menu_goal == MenuState.MENU_REST_SHOWN: return
+	if not _owns_world_clock and not _world_clock_is_free(): return
+
+	menu_goal = MenuState.MENU_REST_SHOWN
+	_owns_world_clock = true
+	_set_player_frozen( true )
+
+func close_menu() -> void:
+	if menu_goal == MenuState.MENU_REST_HIDDEN: return
+	menu_goal = MenuState.MENU_REST_HIDDEN
+
+## Hands the world's clock to the panel's own travel, so the game slows to a stop exactly as the
+## menu arrives and picks its speed back up as the menu leaves - the deceleration is the slide's
+## own easing curve, not a second animation that has to be kept in step with it.
+## Inverted the way [RoomTransitionFade] does it: a menu fully out is a world fully stopped.
+func update_world_time() -> void:
+	if not _owns_world_clock: return
+	Engine.time_scale = clampf(1.0 - menu_open_percent, 0.0, 1.0)
+	if menu_state != MenuState.MENU_REST_HIDDEN: return
+
+	# Home again, and the write above was the one that put time back to 1, so let go of both the
+	# clock and the player rather than sitting on a world nobody is using.
+	_owns_world_clock = false
+	_set_player_frozen( false )
+
+## Whether the world's clock is free to take. Time is global and the room fade drives it too, so
+## the menu keeps out of a world that is already being slowed instead of the two of them writing
+## over each other every frame - which ends with one handing the world back at full speed while
+## the other still has the screen.
+func _world_clock_is_free() -> bool:
+	return is_equal_approx(Engine.time_scale, 1.0)
+
+## Takes the player's input away for as long as the menu is up, the way the full map does it. The
+## world being stopped is not enough on its own: _process still runs at a time scale of zero, so
+## the keys pressed while reading the menu would otherwise all go off the moment time came back.
+func _set_player_frozen(frozen: bool) -> void:
+	if frozen:
+		_player_could_move = PlayerManager.canMove
+		PlayerManager.canMove = false
+	else:
+		PlayerManager.canMove = _player_could_move
+
+	if is_instance_valid(PlayerManager.player):
+		PlayerManager.player.reset_all_inputs()
+
+## Seconds since the last frame off the real clock, which is not what _process is handed. The menu
+## slows the world to a stop as it opens, and a slide counted in a delta it was shrinking itself
+## would crawl and never arrive - the same reason [RoomTransitionFade] times itself this way.
+func _real_delta() -> float:
+	var now := Time.get_ticks_usec()
+	var elapsed := (now - _real_time_usec) / 1000000.0
+	_real_time_usec = now
+	return minf(elapsed, MAX_REAL_DELTA)
+#endregion
 
 func update_scroll(delta: float) -> void:
 	var p_y = position.y
@@ -199,26 +286,19 @@ func play_sfx(sfx: AudioStream) -> void:
 	stream_playback.play_stream( sfx )
 #endregion
 
-#region Debug
-const DEBUG_DEAD_LABEL := "Shut Down/Confirm:"
+#region List actions
+## Gives the labels that do something someone to tell. A label with nothing listening is inert by
+## design - it takes no hover, no click and no rule - so this is also the list of what the menu
+## can currently be asked to do, and every other label is waiting on the screen it will open.
+func _hook_up_labels() -> void:
+	root.parse_path("Shut Down/Yes").on_click.connect( _on_shut_down_confirmed )
+	root.parse_path("Shut Down/No").on_click.connect( _on_shut_down_declined )
 
-## Gives every label something to answer a click with, standing in for the screens that will one
-## day open to the right of the list. Until a label has a listener it is inert by design, so
-## without this none of them would highlight, rule or click at all.
-## DEBUG_DEAD_LABEL is left unconnected on purpose: it is the case that has to stay dead.
-func __debug_hook_up_labels() -> void:
-	__debug_connect_labels( root, root.parse_path( DEBUG_DEAD_LABEL ) )
+func _on_shut_down_confirmed() -> void:
+	get_tree().quit()
 
-func __debug_connect_labels(item: TextListItem, skipped: TextListItem) -> void:
-	if item == skipped: return
-	if not item.is_header:
-		item.on_click.connect( __debug_fire_on_click.bind( item ) )
-		return
-	for child in item.sub_lists:
-		__debug_connect_labels( child, skipped )
-
-func __debug_fire_on_click(item: TextListItem) -> void:
-	var active : TextListItem = root.active_item
-	print("[list] clicked '", item.item_name, "' | active label: '", active.item_name if active else "none",
-			"' | ruled: ", item.is_ruled, " | highlighted: ", item.is_highlighted)
+## Folds the group back up, so the question goes away along with the answer
+func _on_shut_down_declined() -> void:
+	root.parse_path("Shut Down").hide_children()
+	root.dirty = true
 #endregion
