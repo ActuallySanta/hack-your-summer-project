@@ -96,12 +96,18 @@ func _destylize() -> void:
 func set_hightlight(state: bool) -> void:
 	cursor_highlighted = state
 
+## The [start, middle, end] pieces of a horizontal rule in the shade the cursor is currently set to.
+## Anything hand placing a single rule piece has to go through here, because the special chars skip
+## the highlight lookup get_tile_coords_from_char() does for letters.
+func get_line_pieces() -> Array[ String ]:
+	return LINE_PIECES_HIGH if cursor_highlighted else LINE_PIECES
+
 func go_to_next_line() -> void:
 	cursor_pos.x = 0
 	cursor_pos.y += 1
 
 func place_line(size: int) -> void:
-	var order := LINE_PIECES_HIGH if cursor_highlighted else LINE_PIECES
+	var order := get_line_pieces()
 	if size <= 0: return
 	if size == 1:									# Too short for a start and an end, so just the middle piece
 		place_char(order[ 1 ])
@@ -152,13 +158,15 @@ func draw_char_at(char_id: String, position_on_grid: Vector2i) -> void:
 ## The drawing twin of place_line(): straight to the grid, so the text box rules the placing cursor
 ## obeys - the narrower title row, wrapping at max_width, max_height and tile_map_pos_offset - do not
 ## apply. Anything positioning itself absolutely wants this one.
-func draw_line_at(start: Vector2i, size: int) -> void:
-	var order := LINE_PIECES_HIGH if cursor_highlighted else LINE_PIECES
+## Pass [param capped_start] as false when the rule picks up a line that already started further
+## left on the row, so it opens on the middle piece instead of a second left end.
+func draw_line_at(start: Vector2i, size: int, capped_start: bool = true) -> void:
+	var order := get_line_pieces()
 	if size <= 0: return
-	if size == 1:									# Too short for a start and an end, so just the middle piece
-		draw_char_at(order[ 1 ], start)
+	if size == 1:									# Too short for a start and an end, so just one piece
+		draw_char_at(order[ 1 ] if capped_start else order[ 2 ], start)
 		return
-	draw_char_at(order[ 0 ], start)
+	draw_char_at(order[ 0 ] if capped_start else order[ 1 ], start)
 	for i in size - 2:
 		draw_char_at(order[ 1 ], start + Vector2i(i + 1, 0))
 	draw_char_at(order[ 2 ], start + Vector2i(size - 1, 0))
@@ -208,6 +216,19 @@ static func count_smart_text_lines(string: String, width: int) -> int:
 			lines += 1
 		line_x += sub_string.length() + 1
 	return lines
+
+## How many cells wide the first line of [param string] comes out when draw_smart_text_at() writes
+## it into a box [param width] wide. Word wrapping decides where that line stops, so anything that
+## wants to draw alongside the text has to ask here instead of measuring the string itself.
+## Must be kept in step with draw_smart_text_at() below.
+static func measure_smart_text_first_line(string: String, width: int) -> int:
+	if width <= 0: return 0
+
+	var line_x := 0
+	for sub_string in string.split(" "):
+		if line_x + sub_string.length() >= width: break	# This word wraps, so line one ended with the last one
+		line_x += sub_string.length() + 1
+	return maxi(line_x - 1, 0)							# Drop the trailing space the loop left room for
 
 func draw_smart_text_at(string: String, top_left: Vector2i, dimensions: Vector2i) -> bool:
 	var strings = string.split(" ")
