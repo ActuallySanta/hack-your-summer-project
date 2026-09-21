@@ -67,8 +67,12 @@ var menu_open_percent : float:
 var inverse_percent : float:
 	get(): return clamp(1 - menu_open_percent, 0.01, 0.9)
 
+## Whether the list is taking the cursor. Any part of the panel being on screen is enough: what
+## the mouse is over is worked out from where the panel actually is, so a row half way in is still
+## a row the player can see and point at, and making them wait out the slide would read as the
+## menu ignoring them. Only a panel fully away has nothing to click.
 var touchable : bool:
-	get(): return menu_state == MenuState.MENU_REST_SHOWN
+	get(): return menu_state != MenuState.MENU_REST_HIDDEN
 
 ## Whether the menu is the one currently slowing the world down. It takes the clock on the way out
 ## and gives it back the moment it is fully away, so a world nobody is holding is left alone.
