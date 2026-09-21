@@ -1,11 +1,19 @@
 extends TextDisplay
 
 ## Pixels the list travels per notch of the mouse wheel
+@export_group("Scrolling")
 @export var scroll_speed : float = 20.0
 @export var scroll_update_speed : float = 400.0
+@export_group("Rest Positions")
+@export var hidden_pos : float = -410
+@export var shown_pos : float = 0
+@export var panel_move_speed : float = 1800.0
+
 const WIDTH := 15
 ## How many lines of text fit on screen at once
 const DISPLAY_HEIGHT := 28
+
+enum MenuState { MENU_REST_HIDDEN, MENU_REST_SHOWN, MENU_MOVE_TO_HIDDEN, MENU_MOVE_TO_SHOWN }
 
 ## One line of the list in screen pixels, the node's scale included
 var line_height : float:
@@ -27,9 +35,34 @@ var scroll_actual : float:
 		return scroll_offset# - line_height * 2
 
 var root : TextListItem
+var menu_goal : MenuState:
+	set(new_value):
+		menu_goal = (new_value % 2) as MenuState
+var goal_pos : float:
+	get(): return hidden_pos if menu_goal == MenuState.MENU_REST_HIDDEN else shown_pos
+var goal_dir : float:
+	get(): return -1 if menu_goal == MenuState.MENU_REST_HIDDEN else 1
+
+var menu_state : MenuState:
+	set(new_value):
+		menu_state = new_value
+		if menu_state == MenuState.MENU_REST_HIDDEN:
+			position.x = hidden_pos
+		elif menu_state == MenuState.MENU_REST_SHOWN:
+			position.x = shown_pos
+
+var menu_open_percent : float:
+	get(): return 1 - position.x / hidden_pos
+var inverse_percent : float:
+	get(): return clamp(1 - menu_open_percent, 0.01, 0.9)
+
+var touchable : bool: 
+	get(): return menu_state == MenuState.MENU_REST_SHOWN
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	menu_state = MenuState.MENU_REST_HIDDEN
+	menu_goal = MenuState.MENU_REST_SHOWN
 	var options = TextListItem.new("Options", WIDTH, [
 		TextListItem.new("Visuals", WIDTH, []),
 		TextListItem.new("Audio", WIDTH, []),
@@ -46,12 +79,27 @@ func _ready() -> void:
 	root.display_list( self )
 
 func _process(delta: float) -> void:
-	update_scroll(delta)
+	update_scroll( delta )
+	update_state( delta )
 	if not root.dirty: return
 	root.dirty = false
 	root.display_clear( self )
 	root.display_list( self )
 	scroll_offset = scroll_offset	# The list just changed height, so re-clamp in case it shrank out from under us
+
+func update_state(delta: float) -> void:
+	$Seperater.do_update = true if touchable else false
+	if menu_goal == menu_state:
+		return
+		
+	menu_state = MenuState.MENU_MOVE_TO_HIDDEN if menu_state == MenuState.MENU_REST_HIDDEN else MenuState.MENU_MOVE_TO_SHOWN
+	var d = delta * panel_move_speed
+	d *= goal_dir * inverse_percent
+	if abs(d) > abs(position.x - goal_pos):
+		position.x = goal_pos
+		menu_state = menu_goal
+		return
+	position.x += d
 
 func update_scroll(delta: float) -> void:
 	var p_y = position.y
@@ -76,7 +124,7 @@ func mouse_over_display(tile_coords: Vector2i) -> bool:
 	return tile_coords.y >= top_row and tile_coords.y < top_row + DISPLAY_HEIGHT
 
 func _input(event: InputEvent) -> void:
-	if not event is InputEventMouseButton or not event.pressed:
+	if not touchable or not event is InputEventMouseButton or not event.pressed:
 		return
 	
 	var local_pos = to_local(get_global_mouse_position())
