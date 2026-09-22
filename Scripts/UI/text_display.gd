@@ -392,5 +392,5 @@ func __debug_test() -> void:
 
 func _ready() -> void:
 	reset_cursor()
-	__debug_test()
-	print("test")
+	#__debug_test()
+	#print("test")

@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://do0ux81pwn128"]
+
+[ext_resource type="Script" uid="uid://b8qf05uwtbxn0" path="res://Scenes/Components/click_test_box.gd" id="1_hrirv"]
+
+[node name="ClickTestBox" type="Node2D" unique_id=388878576]
+script = ExtResource("1_hrirv")

@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://bk8wbos0orgfn"]
+
+[ext_resource type="Script" uid="uid://v48k7lb14y2j" path="res://Scenes/Components/pause_panel.gd" id="1_28seh"]
+[ext_resource type="Script" uid="uid://iayeryu4dvbs" path="res://Scripts/UI/text_display.gd" id="2_hfunt"]
+[ext_resource type="TileSet" uid="uid://buxceg5xwah17" path="res://Tileset/HUD.tres" id="2_yni75"]
+[ext_resource type="Script" uid="uid://b8qf05uwtbxn0" path="res://Scenes/Components/click_test_box.gd" id="4_0lysg"]
+
+[node name="PausePanel" type="Node2D" unique_id=742136505]
+scale = Vector2(3, 3)
+script = ExtResource("1_28seh")
+
+[node name="TextDisplay" type="TileMapLayer" parent="." unique_id=466329200]
+visible = false
+tile_set = ExtResource("2_yni75")
+script = ExtResource("2_hfunt")
+tile_map_pos_offset = Vector2i(0, 0)
+metadata/_custom_type_script = "uid://iayeryu4dvbs"
+
+[node name="ClickBox" type="Node2D" parent="." unique_id=131071060]
+script = ExtResource("4_0lysg")
+dimensions = Vector2i(119, 173)
+metadata/_custom_type_script = "uid://b8qf05uwtbxn0"
