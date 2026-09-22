@@ -7,7 +7,6 @@
 
 [node name="Game" type="Node" unique_id=651801150]
 script = ExtResource("1_wrm1d")
-use_custom_save = true
 custom_save_data = ExtResource("2_3dryh")
 
 [node name="Player" parent="." unique_id=862395343 instance=ExtResource("2_qxrlw")]

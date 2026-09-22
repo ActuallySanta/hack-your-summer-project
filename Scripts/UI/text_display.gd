@@ -13,6 +13,7 @@ const SPECIAL_OFFSETS : Dictionary[ String, Vector2i ] = {
 	"_dot": Vector2i(16,4),
 	"_circ": Vector2i(16,5),
 	"_box": Vector2i(16,6),
+	
 	"_list_show" : Vector2i(16,7),
 	"_list_hide" : Vector2i(17,7),
 	"_list_entry" : Vector2i(16,8),
@@ -24,7 +25,23 @@ const SPECIAL_OFFSETS : Dictionary[ String, Vector2i ] = {
 	"_line_start" : Vector2i(17,9),
 	"_line_continue" : Vector2i(18,9),
 	"_line_end" : Vector2i(19,9),
+	
+	"_bullet_point" : Vector2i(17,10),
+	
 	"_": INVALID_CHAR,
+}
+
+const SCROLL_OFFSETS : Dictionary[ String, Vector2i ] = {
+	"vert": Vector2i(19,0),
+	"horz": Vector2i(19,1),
+	"vert_start": Vector2i(12,1),
+	"horz_start": Vector2i(14,3),
+	"vert_empty": Vector2i(16,9),
+	"horz_empty": Vector2i(18,9),
+	"left_cap":  Vector2i(12,2),
+	"right_cap":  Vector2i(13,2),
+	"up_cap":  Vector2i(15,0),
+	"down_cap":  Vector2i(15,1),
 }
 
 ## Used for evil chars, or other visual assets that are pushed to the cursor
@@ -76,6 +93,43 @@ func get_tile_coords_from_char(char_id: String, is_highlight: bool) -> Vector2i:
 		x += tile_texture_width
 	
 	return Vector2i(x, y)
+
+func _get_scroll_bar_cursor_tile(button_offset_thirds: int, direction: TextElement.Axis, top_or_left_capped: bool = false, bottom_or_right_capped: bool = false) -> Array[ Vector2i ]:
+	button_offset_thirds = button_offset_thirds % 4
+	var is_vertical : bool = direction == TextElement.Axis.Vertical
+	
+	# We don't need to worry about anything else since empty caps are placed before the cursor
+	if button_offset_thirds == 0:
+		return [ SCROLL_OFFSETS["vert"] if is_vertical else SCROLL_OFFSETS["horz"] ]
+	var arr : Array[ Vector2i ] = []
+	var start : Vector2i = SCROLL_OFFSETS["vert_start"] if is_vertical else SCROLL_OFFSETS["horz_start"]
+	var offset_thirds : Vector2i = Vector2i(1,0) if is_vertical else Vector2i(2,0)
+	var second_part_offset : Vector2i = Vector2i(0,-1) if is_vertical else Vector2i(1,0)
+	# Create the elements
+	arr.append(start + offset_thirds * (button_offset_thirds-1))
+	arr.append(arr[0] + second_part_offset)
+	
+	# We don't need to change anything if there's no caps
+	if not top_or_left_capped and not bottom_or_right_capped:
+		return arr
+	
+	# Caps are lined up with a specific relativity in mind, just add it
+	var capped_offset : Vector2i = Vector2i(4,0) if is_vertical else Vector2i(0,-1)
+	if top_or_left_capped: arr[ 0 ] += capped_offset
+	else: arr[ 1 ] += capped_offset
+	
+	return arr
+
+func _get_scroll_bar_percent_complete(size: int, cursor_pos_quarters: int = 0) -> float:
+	size = max(size, 2) # Size must be a minimum of 2 tall
+	var max_size : float = (size - 2) * 4 + 2
+	cursor_pos_quarters = clamp(cursor_pos_quarters, 0, max_size)
+	return cursor_pos_quarters / max_size
+
+func _get_scroll_bar_quarters_from_percent(size: int, percent: float) -> int:
+	size = max(size, 2) # Size must be a minimum of 2 tall
+	var max_size : float = (size - 2) * 4 + 2
+	return int(max_size * percent)
 
 func _place_char_at_position(char_id: String, is_highlighted: bool, position_on_grid: Vector2i) -> void:
 	set_cell(position_on_grid, 0, get_tile_coords_from_char(char_id, is_highlighted))
@@ -257,6 +311,29 @@ func draw_smart_text_at(string: String, top_left: Vector2i, dimensions: Vector2i
 		# Add space
 		cursor.x += 1
 	return true
+
+func draw_scroll_bar(start_pos: Vector2i, direction: TextElement.Axis, size: int, cursor_pos_quarters: int = 0) -> void:
+	size = max(size, 2) # Size must be a minimum of 2 tall
+	var max_size : int = (size - 2) * 4 + 3
+	cursor_pos_quarters += 1
+	cursor_pos_quarters = clamp(cursor_pos_quarters, 1, max_size) # Get rid of two options since caps only have 3 states, not four
+	# Draw bar
+	var dir : Vector2i = Vector2i(1,0) if direction == TextElement.Axis.Horizontal else Vector2i(0,-1)
+	var pos = start_pos
+	set_cell(start_pos, 0, SCROLL_OFFSETS["left_cap"] if direction == TextElement.Axis.Horizontal else SCROLL_OFFSETS["down_cap"] )
+	for i in size - 2:
+		pos += dir
+		set_cell(pos, 0, SCROLL_OFFSETS["horz_empty"] if direction == TextElement.Axis.Horizontal else SCROLL_OFFSETS["vert_empty"])
+	
+	set_cell(start_pos + dir * (size-1), 0, SCROLL_OFFSETS["right_cap"] if direction == TextElement.Axis.Horizontal else SCROLL_OFFSETS["up_cap"] )
+	var cursor_tiles := _get_scroll_bar_cursor_tile(cursor_pos_quarters, direction, cursor_pos_quarters < 4, cursor_pos_quarters > max_size - 4) # If there is bad end, lower this rightmost value
+	@warning_ignore("integer_division")
+	pos = start_pos + dir * (cursor_pos_quarters / 4)
+	set_cell(pos, 0, cursor_tiles[0])
+	if cursor_tiles.size() == 1:
+		return
+	set_cell(pos + dir, 0, cursor_tiles[1])
+	
 #endregion
 
 # Placing is when you are treating the textDisplay like it is a text box, one char left to right, top to bottom
@@ -316,3 +393,4 @@ func __debug_test() -> void:
 func _ready() -> void:
 	reset_cursor()
 	__debug_test()
+	print("test")
