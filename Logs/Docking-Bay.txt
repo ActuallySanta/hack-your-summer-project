@@ -1,1 +1,5 @@
-Wow Look! A $HIGH_ON second $HIGH_OFF log entry? In this economy :O
+		For security reasons, the Ouroborus' docking bay is the only known way in and out of the station, setup to only have a singular access point to the main $HIGH_ON crew quarters. $HIGH_OFF if a hull breachs, or door fails to seal properly, this setup allows cutting off the entire station from the source of the problem.
+		
+		However, for unkown reasons the docking bay was completely sealed off from the rest of the station despite maintaining a perfect synthetic atmosphere and gravity simulator.
+		
+		This cutoff from the rest of the station has prevented Ouroborus station's repair and security drones from maintaining it's lower subsystems, which is the suspected cause of the local power failure.

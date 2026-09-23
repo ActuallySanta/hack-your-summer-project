@@ -68,6 +68,10 @@ const DEBUG_DEEP_OUT : String = "_dot $TAB Testing $HIGH_ON Highlight $HIGH_OFF 
 @export var tile_index_offset := Vector2i(0,4)
 ## The position to start rendering Tiles at on the tilemap
 @export var tile_map_pos_offset := Vector2i(0, 1)
+## Which Atlas should be used
+@export var atlas_id := 0
+## Should the text print it's debug text by default
+@export var print_debug_text : bool = true
 
 var cursor_pos : Vector2i
 var cursor_highlighted : bool
@@ -131,8 +135,11 @@ func _get_scroll_bar_quarters_from_percent(size: int, percent: float) -> int:
 	var max_size : float = (size - 2) * 4 + 2
 	return int(max_size * percent)
 
-func _place_char_at_position(char_id: String, is_highlighted: bool, position_on_grid: Vector2i) -> void:
-	set_cell(position_on_grid, 0, get_tile_coords_from_char(char_id, is_highlighted))
+func _set_cell(position_on_grid: Vector2i, atlas_chords: Vector2i) -> void:
+	set_cell(position_on_grid, atlas_id, atlas_chords)
+
+func _place_char_at_position(char_id: String, is_highlighted: bool, position_on_grid: Vector2i) -> void:		
+	_set_cell(position_on_grid, get_tile_coords_from_char(char_id, is_highlighted))
 
 func get_cursor_height() -> int:
 	return cursor_pos.y + 1
@@ -144,34 +151,24 @@ func turn_on_highlight() -> void:
 func turn_off_highlight() -> void:
 	cursor_highlighted = false
 
+func auto_text(length: int) -> void:
+	var text : String = ""
+	for i in length:
+		text += LETTER_OFFSETS[ randi_range(0,25) ] if randi_range(0,3) != 0 else " "
+	
+	place_deep( text )
+
 func _destylize() -> void:
 	turn_off_highlight()
 
 func set_hightlight(state: bool) -> void:
 	cursor_highlighted = state
-
-## The [start, middle, end] pieces of a horizontal rule in the shade the cursor is currently set to.
-## Anything hand placing a single rule piece has to go through here, because the special chars skip
-## the highlight lookup get_tile_coords_from_char() does for letters.
-func get_line_pieces() -> Array[ String ]:
-	return LINE_PIECES_HIGH if cursor_highlighted else LINE_PIECES
-
-func go_to_next_line() -> void:
-	cursor_pos.x = 0
-	cursor_pos.y += 1
-
-func place_line(size: int) -> void:
-	var order := get_line_pieces()
-	if size <= 0: return
-	if size == 1:									# Too short for a start and an end, so just the middle piece
-		place_char(order[ 1 ])
-		return
-	place_char(order[ 0 ])
-	for i in size - 2: place_char(order[ 1 ])
-	place_char(order[ 2 ])
-
-func __out_command_error(command: String, expected: String) -> void:
+	
+func _out_command_error(condition: bool, command: String, expected: String) -> bool:
+	if !condition:
+		return false
 	printerr("WARNING (text_display _parse_command): '", command, "' is missing a parameter, ", expected)
+	return true
 
 func _parse_command(sub_string: String) -> void:
 	var split = sub_string.split("_")
@@ -182,20 +179,39 @@ func _parse_command(sub_string: String) -> void:
 		"$":
 			_destylize()
 		"$HIGH":
-			if cmd_prmt.is_empty():
-				__out_command_error(sub_string, "expected $HIGH_ON or $HIGH_OFF")
-				return
+			if _out_command_error(cmd_prmt.is_empty(), sub_string, " expected $HIGH_ON or $HIGH_OFF"): return
 			set_hightlight(cmd_prmt[ 0 ] == "ON")
 		"$NEWLINE":
 			go_to_next_line()
 		"$TAB":
 			place_string( INDENT )
 		"$HORIZONTALLINE":
-			if cmd_prmt.is_empty():
-				__out_command_error(sub_string, "expected a width, like $HORIZONTALLINE_12")
-				return
-			place_line( cmd_prmt[ 0 ].to_int())
+			if _out_command_error(cmd_prmt.is_empty(), sub_string, " expected a width: $HORIZONTALLINE_12"): return
+			place_line( cmd_prmt[ 0 ].to_int() )
+		"$AUTO":
+			if _out_command_error(cmd_prmt.is_empty(), sub_string, " expected a size: $AUTO_24"): return
+			auto_text( cmd_prmt[ 0 ].to_int() )
 #endregion
+
+func get_lines_placed() -> int:
+	return cursor_pos.y + 1
+
+func get_line_pieces() -> Array[ String ]:
+	return LINE_PIECES_HIGH if cursor_highlighted else LINE_PIECES
+
+func go_to_next_line() -> void:
+	cursor_pos.x = 0
+	cursor_pos.y += 1
+
+func place_line(size: int) -> void:
+	var order := get_line_pieces()
+	if size <= 0: return
+	if size == 1:
+		place_char(order[ 1 ])
+		return
+	place_char(order[ 0 ])
+	for i in size - 2: place_char(order[ 1 ])
+	place_char(order[ 2 ])
 
 func cursor_at_title() -> bool:
 	return cursor_pos.y == 0
@@ -312,6 +328,7 @@ func draw_smart_text_at(string: String, top_left: Vector2i, dimensions: Vector2i
 		cursor.x += 1
 	return true
 
+#TODO, functions in text_display should never manually set_cells, and instead should call one of the draw/place char/cell methods
 func draw_scroll_bar(start_pos: Vector2i, direction: TextElement.Axis, size: int, cursor_pos_quarters: int = 0) -> void:
 	size = max(size, 2) # Size must be a minimum of 2 tall
 	var max_size : int = (size - 2) * 4 + 3
@@ -320,19 +337,19 @@ func draw_scroll_bar(start_pos: Vector2i, direction: TextElement.Axis, size: int
 	# Draw bar
 	var dir : Vector2i = Vector2i(1,0) if direction == TextElement.Axis.Horizontal else Vector2i(0,-1)
 	var pos = start_pos
-	set_cell(start_pos, 0, SCROLL_OFFSETS["left_cap"] if direction == TextElement.Axis.Horizontal else SCROLL_OFFSETS["down_cap"] )
+	_set_cell(start_pos, SCROLL_OFFSETS["left_cap"] if direction == TextElement.Axis.Horizontal else SCROLL_OFFSETS["down_cap"] )
 	for i in size - 2:
 		pos += dir
-		set_cell(pos, 0, SCROLL_OFFSETS["horz_empty"] if direction == TextElement.Axis.Horizontal else SCROLL_OFFSETS["vert_empty"])
+		_set_cell(pos, SCROLL_OFFSETS["horz_empty"] if direction == TextElement.Axis.Horizontal else SCROLL_OFFSETS["vert_empty"])
 	
-	set_cell(start_pos + dir * (size-1), 0, SCROLL_OFFSETS["right_cap"] if direction == TextElement.Axis.Horizontal else SCROLL_OFFSETS["up_cap"] )
+	_set_cell(start_pos + dir * (size-1), SCROLL_OFFSETS["right_cap"] if direction == TextElement.Axis.Horizontal else SCROLL_OFFSETS["up_cap"] )
 	var cursor_tiles := _get_scroll_bar_cursor_tile(cursor_pos_quarters, direction, cursor_pos_quarters < 4, cursor_pos_quarters > max_size - 4) # If there is bad end, lower this rightmost value
 	@warning_ignore("integer_division")
 	pos = start_pos + dir * (cursor_pos_quarters / 4)
-	set_cell(pos, 0, cursor_tiles[0])
+	_set_cell(pos, cursor_tiles[0])
 	if cursor_tiles.size() == 1:
 		return
-	set_cell(pos + dir, 0, cursor_tiles[1])
+	_set_cell(pos + dir, cursor_tiles[1])
 	
 #endregion
 
@@ -359,6 +376,12 @@ func place_string(string: String, replace_highlight: bool = false, highlight_wor
 	
 	# Place strings
 	for chr in string:
+		if chr == "\n":
+			_parse_command("$NEWLINE")
+			continue
+		elif chr == "\t":
+			_parse_command("$TAB")
+			continue
 		place_char(chr)
 	
 	if replace_highlight:
@@ -374,6 +397,8 @@ func place_deep(string: String) -> void:
 			place_char(sub_string)
 			continue
 		place_string(sub_string)
+		if cursor_pos.x == 0:
+			continue
 		place_char(" ")
 
 func clear_screen() -> void:
@@ -384,7 +409,7 @@ func clear_screen() -> void:
 func place_deep_fresh(string: String) -> void:
 	reset_cursor()
 	clear_screen()
-	place_deep(string)
+	place_deep( string )
 #endregion
 
 func __debug_test() -> void:
@@ -392,5 +417,5 @@ func __debug_test() -> void:
 
 func _ready() -> void:
 	reset_cursor()
-	#__debug_test()
-	#print("test")
+	if print_debug_text:
+		__debug_test()

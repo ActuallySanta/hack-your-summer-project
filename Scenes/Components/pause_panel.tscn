@@ -10,7 +10,6 @@ scale = Vector2(3, 3)
 script = ExtResource("1_28seh")
 
 [node name="Rules" type="TileMapLayer" parent="." unique_id=848498014]
-visible = false
 tile_map_data = PackedByteArray("AAAbABsAAAAGAAgAAAAcABsAAAAHAAgAAAAdABsAAAAAAAkAAAAeABsAAAABAAkAAAAfABsAAAACAAkAAAAgABsAAAADAAkAAAAhABsAAAAEAAkAAAAiABsAAAAFAAkAAAAjABsAAAAGAAkAAAAkABsAAAAHAAkAAAAlABsAAAAGAAgAAAAmABsAAAAHAAgAAAAnABsAAAAAAAkAAAAoABsAAAABAAkAAAApABsAAAACAAkAAAAqABsAAAADAAkAAAArABsAAAAEAAkAAAAsABsAAAAFAAkAAAAtABsAAAAGAAkAAAAuABsAAAAHAAkAAAARABsAAAAGAAgAAAASABsAAAAHAAgAAAATABsAAAAAAAkAAAAUABsAAAABAAkAAAAVABsAAAACAAkAAAAWABsAAAADAAkAAAAXABsAAAAEAAkAAAAYABsAAAAFAAkAAAAZABsAAAAGAAkAAAAaABsAAAAHAAkAAAAaABoAAAAGAAgAAAAkABoAAAAHAAgAAAAuABoAAAAAAAkAAAAuAAkAAAAGAAgAAAAuABMAAAAHAAgAAAAvAAAAAAAGAAgAAAAvAAEAAAAHAAgAAAAvAAIAAAAAAAkAAAAvAAMAAAABAAkAAAAvAAQAAAACAAkAAAAvAAUAAAADAAkAAAAvAAYAAAAEAAkAAAAvAAcAAAAFAAkAAAAvAAgAAAAGAAkAAAAvAAkAAAAHAAkAAAAvAAoAAAAGAAgAAAAvAAsAAAAHAAgAAAAvAAwAAAAAAAkAAAAvAA0AAAABAAkAAAAvAA4AAAACAAkAAAAvAA8AAAADAAkAAAAvABAAAAAEAAkAAAAvABEAAAAFAAkAAAAvABIAAAAGAAkAAAAvABMAAAAHAAkAAAAvABQAAAAGAAgAAAAvABUAAAAHAAgAAAAvABYAAAAAAAkAAAAvABcAAAABAAkAAAAvABgAAAACAAkAAAAvABkAAAADAAkAAAAvABoAAAAEAAkAAAA=")
 tile_set = ExtResource("2_yni75")
 script = ExtResource("2_hfunt")
@@ -25,11 +24,28 @@ script = ExtResource("2_hfunt")
 tile_map_pos_offset = Vector2i(0, 0)
 metadata/_custom_type_script = "uid://iayeryu4dvbs"
 
-[node name="TextDisplay" type="TileMapLayer" parent="." unique_id=466329200]
+[node name="Constants" type="TileMapLayer" parent="." unique_id=466329200]
 position = Vector2(136, 0)
 tile_set = ExtResource("2_yni75")
 script = ExtResource("2_hfunt")
-tile_map_pos_offset = Vector2i(0, 0)
+max_height = 256
+max_width = 20
+max_width_title = 20
+tile_map_pos_offset = Vector2i(6, 3)
+atlas_id = 2
+print_debug_text = false
+metadata/_custom_type_script = "uid://iayeryu4dvbs"
+
+[node name="Content" type="TileMapLayer" parent="." unique_id=1967357063]
+position = Vector2(136, 0)
+tile_set = ExtResource("2_yni75")
+script = ExtResource("2_hfunt")
+max_height = 256
+max_width = 20
+max_width_title = 20
+tile_map_pos_offset = Vector2i(6, 3)
+atlas_id = 2
+print_debug_text = false
 metadata/_custom_type_script = "uid://iayeryu4dvbs"
 
 [node name="ClickBox" type="Node2D" parent="." unique_id=131071060]
