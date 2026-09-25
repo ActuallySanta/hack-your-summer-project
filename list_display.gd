@@ -139,10 +139,6 @@ func update_state(delta: float) -> void:
 	position.x += d
 
 #region Opening and closing
-func toggle_menu() -> void:
-	if menu_goal == MenuState.MENU_REST_SHOWN: close_menu()
-	else: open_menu()
-
 func open_menu() -> void:
 	if menu_goal == MenuState.MENU_REST_SHOWN: return
 	if not _owns_world_clock and not is_equal_approx(Engine.time_scale, 1.0): return
@@ -155,10 +151,6 @@ func close_menu() -> void:
 	if menu_goal == MenuState.MENU_REST_HIDDEN: return
 	menu_goal = MenuState.MENU_REST_HIDDEN
 
-## Hands the world's clock to the panel's own travel, so the game slows to a stop exactly as the
-## menu arrives and picks its speed back up as the menu leaves - the deceleration is the slide's
-## own easing curve, not a second animation that has to be kept in step with it.
-## Inverted the way [RoomTransitionFade] does it: a menu fully out is a world fully stopped.
 func update_world_time() -> void:
 	if not _owns_world_clock: return
 	Engine.time_scale = clampf(1.0 - menu_open_percent, 0.0, 1.0)
