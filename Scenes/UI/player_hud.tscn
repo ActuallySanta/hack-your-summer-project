@@ -123,3 +123,4 @@ color = Color(0, 0, 0, 1)
 script = ExtResource("10_tquq1")
 
 [node name="PausePanel" parent="." unique_id=742136505 instance=ExtResource("11_op1xi")]
+visible = false

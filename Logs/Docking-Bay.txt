@@ -1,4 +1,4 @@
-		For security reasons, the Ouroborus' docking bay is the only known way in and out of the station, setup to only have a singular access point to the main $HIGH_ON crew quarters. $HIGH_OFF if a hull breachs, or door fails to seal properly, this setup allows cutting off the entire station from the source of the problem.
+		For security reasons, the Ouroborus' docking bay is the only known way in and out of the station, setup to only have a singular access point to the main $HIGH_ON crew quarters. $HIGH_OFF if a hull breachs, or a door fails to seal properly, this setup allows cutting off the entire station from the source of the problem.
 		
 		However, for unkown reasons the docking bay was completely sealed off from the rest of the station despite maintaining a perfect synthetic atmosphere and gravity simulator.
 		

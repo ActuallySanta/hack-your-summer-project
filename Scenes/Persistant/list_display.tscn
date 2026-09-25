@@ -1,8 +1,9 @@
-[gd_scene format=4]
+[gd_scene format=4 uid="uid://77ushgcp8rkp"]
 
 [ext_resource type="TileSet" uid="uid://buxceg5xwah17" path="res://Tileset/HUD.tres" id="2_lkwcn"]
 [ext_resource type="Script" uid="uid://gx523isgg6l5" path="res://list_display.gd" id="3_cano2"]
-[ext_resource type="Script" path="res://Scripts/UI/list_menu.gd" id="4_lmenu"]
+[ext_resource type="PackedScene" uid="uid://bk8wbos0orgfn" path="res://Scenes/Components/pause_panel.tscn" id="4_fkk7d"]
+[ext_resource type="Script" uid="uid://cxhn08n76gqjl" path="res://Scripts/UI/list_menu.gd" id="4_lmenu"]
 
 [sub_resource type="GDScript" id="GDScript_lkwcn"]
 resource_name = "lock_y"
@@ -17,7 +18,7 @@ func _process(_delta: float) -> void:
 
 [sub_resource type="AudioStreamPolyphonic" id="AudioStreamPolyphonic_bpmhk"]
 
-[node name="ListDisplay" type="CanvasLayer"]
+[node name="ListDisplay" type="CanvasLayer" unique_id=2013822374]
 layer = 3
 script = ExtResource("4_lmenu")
 
@@ -37,3 +38,5 @@ script = SubResource("GDScript_lkwcn")
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="Panel" unique_id=1926880475]
 stream = SubResource("AudioStreamPolyphonic_bpmhk")
 max_polyphony = 8
+
+[node name="PausePanel" parent="." unique_id=742136505 instance=ExtResource("4_fkk7d")]

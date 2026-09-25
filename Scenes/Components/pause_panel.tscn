@@ -8,8 +8,10 @@
 [node name="PausePanel" type="Node2D" unique_id=742136505]
 scale = Vector2(3, 3)
 script = ExtResource("1_28seh")
+fade_speed = 1.0
 
 [node name="Rules" type="TileMapLayer" parent="." unique_id=848498014]
+visible = false
 tile_map_data = PackedByteArray("AAAbABsAAAAGAAgAAAAcABsAAAAHAAgAAAAdABsAAAAAAAkAAAAeABsAAAABAAkAAAAfABsAAAACAAkAAAAgABsAAAADAAkAAAAhABsAAAAEAAkAAAAiABsAAAAFAAkAAAAjABsAAAAGAAkAAAAkABsAAAAHAAkAAAAlABsAAAAGAAgAAAAmABsAAAAHAAgAAAAnABsAAAAAAAkAAAAoABsAAAABAAkAAAApABsAAAACAAkAAAAqABsAAAADAAkAAAArABsAAAAEAAkAAAAsABsAAAAFAAkAAAAtABsAAAAGAAkAAAAuABsAAAAHAAkAAAARABsAAAAGAAgAAAASABsAAAAHAAgAAAATABsAAAAAAAkAAAAUABsAAAABAAkAAAAVABsAAAACAAkAAAAWABsAAAADAAkAAAAXABsAAAAEAAkAAAAYABsAAAAFAAkAAAAZABsAAAAGAAkAAAAaABsAAAAHAAkAAAAaABoAAAAGAAgAAAAkABoAAAAHAAgAAAAuABoAAAAAAAkAAAAuAAkAAAAGAAgAAAAuABMAAAAHAAgAAAAvAAAAAAAGAAgAAAAvAAEAAAAHAAgAAAAvAAIAAAAAAAkAAAAvAAMAAAABAAkAAAAvAAQAAAACAAkAAAAvAAUAAAADAAkAAAAvAAYAAAAEAAkAAAAvAAcAAAAFAAkAAAAvAAgAAAAGAAkAAAAvAAkAAAAHAAkAAAAvAAoAAAAGAAgAAAAvAAsAAAAHAAgAAAAvAAwAAAAAAAkAAAAvAA0AAAABAAkAAAAvAA4AAAACAAkAAAAvAA8AAAADAAkAAAAvABAAAAAEAAkAAAAvABEAAAAFAAkAAAAvABIAAAAGAAkAAAAvABMAAAAHAAkAAAAvABQAAAAGAAgAAAAvABUAAAAHAAgAAAAvABYAAAAAAAkAAAAvABcAAAABAAkAAAAvABgAAAACAAkAAAAvABkAAAADAAkAAAAvABoAAAAEAAkAAAA=")
 tile_set = ExtResource("2_yni75")
 script = ExtResource("2_hfunt")
@@ -22,6 +24,7 @@ tile_map_data = PackedByteArray("AAARAAAAAAAGAAIAAAARABoAAAAGAAIAAAARABgAAAAGAAI
 tile_set = ExtResource("2_yni75")
 script = ExtResource("2_hfunt")
 tile_map_pos_offset = Vector2i(0, 0)
+print_debug_text = false
 metadata/_custom_type_script = "uid://iayeryu4dvbs"
 
 [node name="Constants" type="TileMapLayer" parent="." unique_id=466329200]
@@ -51,6 +54,7 @@ metadata/_custom_type_script = "uid://iayeryu4dvbs"
 [node name="ClickBox" type="Node2D" parent="." unique_id=131071060]
 position = Vector2(368, 14)
 script = ExtResource("4_0lysg")
+scroll_speed = 1.0
 show_boundries = false
 dimensions = Vector2(8, 196)
 metadata/_custom_type_script = "uid://b8qf05uwtbxn0"
@@ -58,6 +62,15 @@ metadata/_custom_type_script = "uid://b8qf05uwtbxn0"
 [node name="ScrollInteractable" type="Node2D" parent="." unique_id=236872049]
 position = Vector2(368.00003, 8.333331)
 script = ExtResource("4_0lysg")
+scroll_speed = 1.0
 show_boundries = false
 dimensions = Vector2(8, 208)
+metadata/_custom_type_script = "uid://b8qf05uwtbxn0"
+
+[node name="ScrollWheelInteractable" type="Node2D" parent="." unique_id=992081058]
+position = Vector2(136, 0)
+script = ExtResource("4_0lysg")
+scroll_speed = 1.0
+show_boundries = false
+dimensions = Vector2(256, 224)
 metadata/_custom_type_script = "uid://b8qf05uwtbxn0"

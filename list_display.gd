@@ -82,9 +82,7 @@ var _player_could_move := true
 ## The real clock, read straight rather than through a delta the menu itself is shrinking
 var _real_time_usec : int
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	# The menu is what hands the world's clock back, so it must not be something a stopped world stops.
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	menu_state = MenuState.MENU_REST_HIDDEN
 	menu_goal = MenuState.MENU_REST_HIDDEN
@@ -102,9 +100,10 @@ func _ready() -> void:
 		TextListItem.new("Regions", WIDTH),
 		TextListItem.new("General", WIDTH),
 	])
-	root = TextListItem.new("C:/Users/Ash Jerock/ana7Tl", WIDTH, [ options, logbook, TextListItem.new("Shut Down", WIDTH, ["Confirm:", "Yes", "No"])])
+	root = TextListItem.new("C:/Users/Ash Jerock/ana4Tl", WIDTH, [ options, logbook, TextListItem.new("Shut Down", WIDTH, ["Confirm:", "Yes", "No"])])
 	root.show_children()
-	_hook_up_labels()
+	root.parse_path("Shut Down/Yes").on_click.connect( _on_shut_down_confirmed )
+	root.parse_path("Shut Down/No").on_click.connect( _on_shut_down_declined )
 	root.display_list( self )
 
 ## Time is global, and this node is one of the two things that takes it away, so a menu going down
@@ -140,16 +139,13 @@ func update_state(delta: float) -> void:
 	position.x += d
 
 #region Opening and closing
-## Puts the menu away if it is coming out, and brings it out otherwise. Called part way through a
-## slide this reverses it from where it got to, which is why the goal is what gets set rather than
-## the position: the travel and the world's clock both read off where the panel actually is.
 func toggle_menu() -> void:
 	if menu_goal == MenuState.MENU_REST_SHOWN: close_menu()
 	else: open_menu()
 
 func open_menu() -> void:
 	if menu_goal == MenuState.MENU_REST_SHOWN: return
-	if not _owns_world_clock and not _world_clock_is_free(): return
+	if not _owns_world_clock and not is_equal_approx(Engine.time_scale, 1.0): return
 
 	menu_goal = MenuState.MENU_REST_SHOWN
 	_owns_world_clock = true
@@ -168,30 +164,12 @@ func update_world_time() -> void:
 	Engine.time_scale = clampf(1.0 - menu_open_percent, 0.0, 1.0)
 	if menu_state != MenuState.MENU_REST_HIDDEN: return
 
-	# Home again, and the write above was the one that put time back to 1, so let go of both the
-	# clock and the player rather than sitting on a world nobody is using.
 	_owns_world_clock = false
 	_set_player_frozen( false )
 
-## Whether the world's clock is free to take. Time is global and the room fade drives it too, so
-## the menu keeps out of a world that is already being slowed instead of the two of them writing
-## over each other every frame - which ends with one handing the world back at full speed while
-## the other still has the screen.
-func _world_clock_is_free() -> bool:
-	return is_equal_approx(Engine.time_scale, 1.0)
-
-## Takes the player's input away for as long as the menu is up, the way the full map does it. The
-## world being stopped is not enough on its own: _process still runs at a time scale of zero, so
-## the keys pressed while reading the menu would otherwise all go off the moment time came back.
 func _set_player_frozen(frozen: bool) -> void:
-	if frozen:
-		_player_could_move = PlayerManager.canMove
-		PlayerManager.canMove = false
-	else:
-		PlayerManager.canMove = _player_could_move
-
-	if is_instance_valid(PlayerManager.player):
-		PlayerManager.player.reset_all_inputs()
+	PlayerManager.canMove = !frozen
+	if is_instance_valid(PlayerManager.player): PlayerManager.player.reset_all_inputs()
 
 ## Seconds since the last frame off the real clock, which is not what _process is handed. The menu
 ## slows the world to a stop as it opens, and a slide counted in a delta it was shrinking itself
@@ -205,8 +183,7 @@ func _real_delta() -> float:
 
 func update_scroll(delta: float) -> void:
 	var p_y = position.y
-	if position.y == scroll_actual:
-		return
+	if position.y == scroll_actual: return
 		
 	var d = scroll_update_speed * delta * (-1 if p_y > scroll_actual else 1)
 	if abs(d) > abs(position.y - scroll_actual):
@@ -222,17 +199,11 @@ func update_scroll(delta: float) -> void:
 func mouse_over_display(tile_coords: Vector2i) -> bool:
 	if tile_coords.x < 0 or tile_coords.x >= WIDTH:
 		return false
-	var top_row : int = floori(-position.y / line_height)	# The list line currently drawn on the top row of the screen
+	var top_row : int = floori(-position.y / line_height)
 	return tile_coords.y >= top_row and tile_coords.y < top_row + DISPLAY_HEIGHT
 
-## The list line the cursor is on, which is not a screen row: the node carries the scroll and the
-## slide in its own position, so going through to_local() is what keeps the two in step.
-func mouse_tile_coords() -> Vector2i:
-	return local_to_map( to_local( get_global_mouse_position() ) )
+func mouse_tile_coords() -> Vector2i: return local_to_map( to_local( get_global_mouse_position() ) )
 
-## Keeps the hover under the cursor. This is a per frame job rather than a mouse motion one because
-## the list moves as much as the cursor does: scrolling and sliding both change what a still cursor
-## is pointing at.
 func update_hover() -> void:
 	if not touchable:
 		root.on_mouse_exited()
@@ -244,46 +215,28 @@ func update_hover() -> void:
 	if mouse_over_display( tile_coords ): root.on_mouse_moved( tile_coords )
 	else: root.on_mouse_exited()
 
-	# Only the moment the cursor lands on a new row is worth a sound. This runs every frame, so
-	# playing on "the cursor is over something" would fire sixty times a second into the mixer.
-	if root.hovered_item != null and root.hovered_item != was_hovering:
-		play_sfx( hover_sfx )
+	if root.hovered_item != null and root.hovered_item != was_hovering: play_sfx( hover_sfx )
 
 func _input(event: InputEvent) -> void:
-	if not touchable or not event is InputEventMouseButton:
-		return
+	if not touchable or not event is InputEventMouseButton: return
 
 	var tile_coords := mouse_tile_coords()
-	# A release is taken wherever it happens, so a press dragged off the list is called off rather
-	# than left stuck down waiting for a button that already came up.
 	if event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
-		if root.on_mouse_released( tile_coords ): play_sfx( click_sfx )	# Silence is the right answer for a click that was called off, or one on inert text
+		if root.on_mouse_released( tile_coords ): play_sfx( click_sfx )
 		return
 
-	if not event.pressed or not mouse_over_display( tile_coords ):
-		return
+	if not event.pressed or not mouse_over_display( tile_coords ): return
 
-	if event.button_index == MOUSE_BUTTON_WHEEL_UP:
-		scroll_offset += scroll_speed
-	elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-		scroll_offset -= scroll_speed
-	elif event.button_index == MOUSE_BUTTON_LEFT:
-		root.on_mouse_pressed( tile_coords )
+	if event.button_index == MOUSE_BUTTON_WHEEL_UP: scroll_offset += scroll_speed
+	elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN: scroll_offset -= scroll_speed
+	elif event.button_index == MOUSE_BUTTON_LEFT: root.on_mouse_pressed( tile_coords )
 
 #region Audio
-## Starts the one stream the list's sounds all ride on. An AudioStreamPolyphonic makes no sound of
-## its own - it is an empty mixer with room for several voices - so the player has to be playing it
-## before there is a playback to hand sounds to, and get_stream_playback() answers null until then.
-## The player is then left running for the node's whole life; nothing here ever calls play() again.
 func _open_audio_mixer() -> void:
 	audio_source.play()
 	stream_playback = audio_source.get_stream_playback() as AudioStreamPlaybackPolyphonic
-	if stream_playback == null:
-		printerr("WARNING (list_display _open_audio_mixer): ", audio_source.name, " needs an AudioStreamPolyphonic as its stream, so the list will be silent")
+	if stream_playback == null: printerr("WARNING (list_display _open_audio_mixer): ", audio_source.name, " needs an AudioStreamPolyphonic as its stream, so the list will be silent")
 
-## Feeds [param sfx] into the mixer as a voice of its own, which is the point of the polyphonic
-## stream: a click landing while a hover is still ringing lays over it instead of cutting it off,
-## the way a plain player calling play() twice would.
 func play_sfx(sfx: AudioStream) -> void:
 	if not audio_source.playing: _open_audio_mixer()	# Something stopped the player, so the old playback is deaf now
 	if stream_playback == null: return
@@ -291,17 +244,8 @@ func play_sfx(sfx: AudioStream) -> void:
 #endregion
 
 #region List actions
-## Gives the labels that do something someone to tell. A label with nothing listening is inert by
-## design - it takes no hover, no click and no rule - so this is also the list of what the menu
-## can currently be asked to do, and every other label is waiting on the screen it will open.
-func _hook_up_labels() -> void:
-	root.parse_path("Shut Down/Yes").on_click.connect( _on_shut_down_confirmed )
-	root.parse_path("Shut Down/No").on_click.connect( _on_shut_down_declined )
+func _on_shut_down_confirmed() -> void: get_tree().quit()
 
-func _on_shut_down_confirmed() -> void:
-	get_tree().quit()
-
-## Folds the group back up, so the question goes away along with the answer
 func _on_shut_down_declined() -> void:
 	root.parse_path("Shut Down").hide_children()
 	root.dirty = true
