@@ -113,6 +113,7 @@ func __debug_test() -> void:
 func _exit_tree() -> void:
 	if _owns_world_clock:
 		Engine.time_scale = 1.0
+		PhysicsServer2D.set_active(true)
 
 func _process(_delta: float) -> void:
 	var delta := _real_delta()	# Not the delta handed in: see _real_delta()
@@ -156,6 +157,10 @@ func close_menu() -> void:
 func update_world_time() -> void:
 	if not _owns_world_clock: return
 	Engine.time_scale = clampf(1.0 - menu_open_percent, 0.0, 1.0)
+	# The physics server still steps at a time scale of zero, just with a step of zero, and a
+	# moving AnimatableBody2D works its velocity out as motion / step. That is 0 / 0 = NaN,
+	# which a player riding it (the elevators) picks up as platform velocity and never sheds.
+	PhysicsServer2D.set_active(Engine.time_scale > 0.0)
 	if menu_state != MenuState.MENU_REST_HIDDEN: return
 
 	_owns_world_clock = false

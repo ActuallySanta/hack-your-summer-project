@@ -47,8 +47,7 @@ func _ready() -> void:
 	_real_time_usec = Time.get_ticks_usec()
 
 func _process(_delta: float) -> void:
-	update_display_state( _real_delta() )	# Not the delta handed in: see _real_delta()
-	print(PlayerManager.player.position)
+	update_display_state( _real_delta() )
 
 ## Seconds since the last frame off the real clock. The menu opening drives Engine.time_scale to 0,
 ## which scales the delta every node gets regardless of process_mode, so a fade counted in that
