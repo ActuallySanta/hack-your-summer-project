@@ -4,6 +4,8 @@ const SCROLL_BAR_SIZE := 26
 const TILE_SIZE := 8
 const CONTENT_LINE_COUNT : int = 28
 const TOTAL_WIDTH : int = 32
+## The longest real step the fade will take in one frame, so a load hitch doesn't pop it fully in
+const MAX_REAL_DELTA := 0.1
 
 enum HideState { HIDE_REST, SHOW_REST, HIDING, SHOWING }
 
@@ -20,6 +22,8 @@ var text_line_count : int = 0
 var file_height : int = 3
 
 var _desire_to_hide : HideState = HideState.SHOW_REST
+## The real clock, read straight rather than through a delta the menu is shrinking
+var _real_time_usec : int
 
 var _pos_raw : int = 0 
 var pos_y : int:
@@ -40,9 +44,20 @@ func _ready() -> void:
 	#read_and_place( "res://Logs/Docking-Bay.txt" )
 	scroll_wheel_detector.on_scroll.connect( on_scroll )
 	force_set_display( false )
+	_real_time_usec = Time.get_ticks_usec()
 
-func _process(delta: float) -> void:
-	update_display_state( delta )
+func _process(_delta: float) -> void:
+	update_display_state( _real_delta() )	# Not the delta handed in: see _real_delta()
+	print(PlayerManager.player.position)
+
+## Seconds since the last frame off the real clock. The menu opening drives Engine.time_scale to 0,
+## which scales the delta every node gets regardless of process_mode, so a fade counted in that
+## delta stalls part way - the same reason [ListDisplayName] times its slide this way.
+func _real_delta() -> float:
+	var now := Time.get_ticks_usec()
+	var elapsed := (now - _real_time_usec) / 1000000.0
+	_real_time_usec = now
+	return minf(elapsed, MAX_REAL_DELTA)
 
 func read_and_place(file_name: String) -> void:
 	if not FileAccess.file_exists(file_name):
