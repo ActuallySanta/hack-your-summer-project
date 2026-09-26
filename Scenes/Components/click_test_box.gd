@@ -10,6 +10,7 @@ signal on_scroll
 @export var scroll_speed : float = 100.0
 @export var show_boundries : bool = true
 
+var enabled : bool
 var was_pressed : bool
 var init_click : Vector2
 var _last_mouse_pos : Vector2
@@ -25,7 +26,7 @@ var delta_from_start : Vector2:
 		queue_redraw()
 
 func _process(_delta: float) -> void:
-	if not was_pressed:
+	if not enabled or not was_pressed:
 		return
 	_last_mouse_pos = _curr_mouse_pos
 	_curr_mouse_pos = get_mouse_percent()
@@ -38,9 +39,8 @@ func _is_mouse_in_bounds() -> bool:
 	return Rect2(Vector2.ZERO, dimensions).has_point(get_local_mouse_position())
 
 func _input(event: InputEvent) -> void:
-	if not event is InputEventMouseButton:
-		return
-		
+	if not enabled or not event is InputEventMouseButton: return
+	
 	_left_click_handling( event )
 	_scroll_handling( event )
 

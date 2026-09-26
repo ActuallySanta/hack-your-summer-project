@@ -25,11 +25,15 @@ func _turn_on_noclip() -> void:
 	_parent.collision_layer = 0
 	_parent.collision_mask = 0
 	_parent.gravity_override = 0
+	for component in _parent._components:
+		component.component_enabled = false
 	
 func _turn_off_noclip() -> void:
 	_parent.collision_layer = _collision_mask_and_layer[ 1 ]
 	_parent.collision_mask = _collision_mask_and_layer[ 0 ]
 	_parent.gravity_override = -1.0
+	for component in _parent._components:
+		component.component_enabled = true
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

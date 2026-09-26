@@ -21,6 +21,11 @@ enum MenuState { MENU_REST_HIDDEN, MENU_REST_SHOWN, MENU_MOVE_TO_HIDDEN, MENU_MO
 
 @onready var audio_source : AudioStreamPlayer2D = $AudioStreamPlayer2D
 
+var am_i_enabled : bool:
+	set( new_value ):
+		am_i_enabled = new_value
+		enabled = new_value
+
 var stream_playback : AudioStreamPlaybackPolyphonic
 
 ## One line of the list in screen pixels, the node's scale included
@@ -74,8 +79,6 @@ var touchable : bool:
 ## Whether the menu is the one currently slowing the world down. It takes the clock on the way out
 ## and gives it back the moment it is fully away, so a world nobody is holding is left alone.
 var _owns_world_clock : bool = false
-## What PlayerManager.canMove was before the menu borrowed it
-var _player_could_move := true
 ## The real clock, read straight rather than through a delta the menu itself is shrinking
 var _real_time_usec : int
 
@@ -113,6 +116,7 @@ func _exit_tree() -> void:
 		PhysicsServer2D.set_active(true)
 
 func _process(_delta: float) -> void:
+	if not am_i_enabled: return
 	var delta := RealDelta.get_capped()
 	update_scroll( delta )
 	update_state( delta )

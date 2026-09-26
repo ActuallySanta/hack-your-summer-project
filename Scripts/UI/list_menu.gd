@@ -3,6 +3,12 @@ extends CanvasLayer
 @onready var panel : ListDisplayName = $Panel
 @onready var pause_panel := $PausePanel
 
+var enabled : bool:
+	set( new_value ):
+		enabled = new_value
+		panel.am_i_enabled = enabled
+		pause_panel.enabled = enabled
+
 var panel_open : bool = false
 
 func toggle_menu() -> void:
@@ -11,6 +17,7 @@ func toggle_menu() -> void:
 	else: close_menu()
 
 func open_menu() -> void:
+	enabled = true
 	panel.open_menu()
 	pause_panel.display( true )
 

@@ -22,7 +22,8 @@ var current : float
 var fps_min : float = INF
 var fps_max : float = -INF
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
+	var delta = RealDelta.get_delta()
 	if Input.is_action_just_pressed(\"ToggleFPSCounter\", true):
 		visible = not visible
 		fps_min = INF
@@ -99,6 +100,7 @@ offset_bottom = 624.0
 
 [node name="Label" type="Label" parent="." unique_id=447231271]
 visible = false
+z_index = 999
 layout_mode = 0
 offset_left = 5.0
 offset_top = 647.0

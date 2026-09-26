@@ -9,7 +9,7 @@ extends Control
 var _state : int = 0
 var _goal_height : float = 0
 var _timer : float = 0
-var _last_msg : String = "Gay little gay boy, gay gay gay. Got I hope this game doesn't end up getting datamined... Do you think tkn heard you? No I doubt it, niether of us would be here if that were the case."
+var _last_msg : String = "Gay little gay boy, gay gay gay. God I hope this game doesn't end up getting datamined... Do you think tkn heard you? No I doubt it, niether of us would be here if that were the case."
 
 func _ready() -> void:
 	_state = 0

@@ -17,6 +17,13 @@ enum HideState { HIDE_REST, SHOW_REST, HIDING, SHOWING }
 
 var _scroll_bar_data : TextBar = TextBar.new(Vector2i(29, SCROLL_BAR_SIZE), TextElement.Axis.Vertical, SCROLL_BAR_SIZE)
 
+var enabled : bool:
+	set( new_value ):
+		enabled = new_value
+		click_box.enabled = enabled
+		scroll_interactable.enabled = enabled
+		scroll_wheel_detector.enabled = enabled
+
 var read_output : String = "$TAB $AUTO_1028"
 var text_line_count : int = 0
 var file_height : int = 3

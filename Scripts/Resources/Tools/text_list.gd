@@ -209,7 +209,7 @@ func insert_new_list_item_at(label: String) -> TextListItem:
 	var node = result[ 0 ]
 	var remaining_path : PackedStringArray = result[ 1 ]
 	if remaining_path == PackedStringArray([ "" ]): return node.insert_new_list_item( label_name ) # If we got a valid spot to add on
-	
+
 	# Go down the remaining path
 	for dir in remaining_path:
 		node = node.insert_new_list_item( dir )

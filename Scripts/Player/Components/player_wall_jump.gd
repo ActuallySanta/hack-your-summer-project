@@ -70,6 +70,15 @@ var _hold_timer := 0.0
 ## Seconds since the last launch, for the push-off frame. See
 ## [method launched_recently].
 var _since_launch := 999.0
+## The gravity this component put into [member Player.gravity_override], or negative
+## when it has not claimed it.
+##
+## The claim used to be implicit -- any override at all was taken to be this one's, and
+## dropped the moment the rise was over. So anything else that set an override had it
+## taken away on the next frame: switching gravity off for a no-clip mode looked like
+## the setting did nothing at all, because a frame later the wall jump had handed it
+## back.
+var _claimed_gravity := -1.0
 
 func on_jump_pressed() -> void:
 	_input_buffer = contact_buffer_seconds
@@ -110,6 +119,7 @@ func wall_jump() -> void:
 	# Ours until the rise is over: the floor jump's hold-variable gravity is tuned for
 	# its own launch speed and would make this one enormous.
 	player.gravity_override = gravity
+	_claimed_gravity = gravity
 	_hold_timer = launch_hold_seconds
 	_since_launch = 0.0
 	player.horizontal_lock = _hold_timer
@@ -118,12 +128,20 @@ func wall_jump() -> void:
 	player.jumped.emit()
 
 func post_move_update(_delta: float) -> void:
-	if player.gravity_override < 0.0:
+	if _claimed_gravity < 0.0:
 		return
 	# The rise is what needed protecting. Once it is over -- apex reached, or cut short
 	# by a ceiling or a landing -- gravity goes back to whoever normally owns it.
 	if player.velocity.y >= 0.0 or player.is_grounded() or player.is_on_ceiling():
+		_release_gravity()
+
+func _release_gravity() -> void:
+	# Only what it set. Something else may have taken the override over since, and
+	# putting it back to "no override" would be taking that away rather than giving it
+	# up.
+	if is_equal_approx(player.gravity_override, _claimed_gravity):
 		player.gravity_override = -1.0
+	_claimed_gravity = -1.0
 
 ## The launch speed that brings the arc to rest exactly [member apex_tiles] above
 ## where it started.
@@ -209,4 +227,4 @@ func on_respawn() -> void:
 	_hold_timer = 0.0
 	_since_launch = 999.0
 	player.horizontal_lock = 0.0
-	player.gravity_override = -1.0
+	_release_gravity()
