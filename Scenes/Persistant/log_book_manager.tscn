@@ -1,6 +1,15 @@
-[gd_scene format=4 uid="uid://wah8b4yecbfv"]
+[gd_scene format=3 uid="uid://wah8b4yecbfv"]
 
 [ext_resource type="Script" uid="uid://dnv147yc5sopp" path="res://Scripts/log_book_manager.gd" id="1_f3eyq"]
 
 [node name="LogBookManager" type="Node2D" unique_id=736220827]
 script = ExtResource("1_f3eyq")
+region_map = Dictionary[StringName, String]({
+&"BRS": "res://Logs/BRS.txt",
+&"Crew Quarters": "res://Logs/Crew-Quarters.txt",
+&"Docking Bay": "res://Logs/Docking-Bay.txt",
+&"Internals": "res://Logs/Internals.txt",
+&"Maintainence": "res://Logs/Labs.txt",
+&"Operations": "res://Logs/Operations.txt",
+&"UNSS-Iliad": "res://Logs/UNSS-Iliad.txt"
+})
