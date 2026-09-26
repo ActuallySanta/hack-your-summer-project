@@ -1,4 +1,4 @@
-extends TextDisplay
+class_name ListDisplayName extends TextDisplay
 
 const hover_sfx := preload("res://Sounds/UI/menuHover.wav")
 const click_sfx := preload("res://Sounds/UI/menuSelect.wav")
@@ -90,21 +90,23 @@ func _ready() -> void:
 	_open_audio_mixer()
 
 	var options = TextListItem.new("Options", WIDTH, [
-		TextListItem.new("Visuals", WIDTH, []),
-		TextListItem.new("Audio", WIDTH, []),
-		TextListItem.new("Controls", WIDTH, []),
-		TextListItem.new("Difficulty", WIDTH, []),
+		TextListItem.new("Visuals", WIDTH),
+		TextListItem.new("Audio", WIDTH),
+		TextListItem.new("Controls", WIDTH),
+		TextListItem.new("Difficulty", WIDTH),
 	])
-	var logbook = TextListItem.new("Log Book", WIDTH, [
-		TextListItem.new("Entities", WIDTH, ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]),
-		TextListItem.new("Regions", WIDTH),
-		TextListItem.new("General", WIDTH),
-	])
+	var logbook = TextListItem.new("Log Book", WIDTH)
 	root = TextListItem.new("C:/Users/Ash Jerock/ana4Tl", WIDTH, [ options, logbook, TextListItem.new("Shut Down", WIDTH, ["Confirm:", "Yes", "No"])])
 	root.show_children()
 	root.parse_path("Shut Down/Yes").on_click.connect( _on_shut_down_confirmed )
 	root.parse_path("Shut Down/No").on_click.connect( _on_shut_down_declined )
 	root.display_list( self )
+	
+func __debug_test() -> void:
+	print(" - Test for finding youngest - ")
+	var arr :=  root.find_youngest_node_on_invalid_path(".../Log Book/Regions/Doomsbay/Goon bay")
+	print( "   ", arr[ 0 ].item_name, arr[ 1 ] )
+	root.insert_new_list_item_at(".../Log Book/Regions/Doomsbay/Goon bay")
 
 ## Time is global, and this node is one of the two things that takes it away, so a menu going down
 ## with the game still stopped would leave the world frozen with nothing left to thaw it.

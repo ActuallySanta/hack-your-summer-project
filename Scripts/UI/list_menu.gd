@@ -1,6 +1,6 @@
 extends CanvasLayer
 
-@onready var panel := $Panel
+@onready var panel : ListDisplayName = $Panel
 @onready var pause_panel := $PausePanel
 
 var panel_open : bool = false

@@ -1,5 +1,7 @@
 extends Node2D
 
+const LOG_BOOK_ACCESS := ".../Log Book/"
+
 func _ready() -> void:
 	GlobalSignals.room_transition_complete.connect(_on_player_settled)
 	# Re-enable this if want the player to know the spawn location instantly, I say no since it can info overload :(
@@ -18,3 +20,4 @@ func _collect_region_log(region: StringName) -> void:
 	if not SaveManager.update_logbook(region):
 		return
 	MessageDisplay.add_log_pop_up("Region: %s" % region)
+	ListDisplay.panel.root.insert_new_list_item_at(LOG_BOOK_ACCESS + "Regions/" + region).on_click.connect( func(): ListDisplay.pause_panel.read_and_place( "res://Logs/UNSS-Iliad.txt" ) )

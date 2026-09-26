@@ -33,10 +33,11 @@ var get_pos_percent : float:
 		return _pos_raw / float(file_height)
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	click_box.on_mouse_held.connect( on_mouse_hold )
 	constants.draw_scroll_bar(Vector2i(29, SCROLL_BAR_SIZE), TextElement.Axis.Vertical, SCROLL_BAR_SIZE, 1000)
 	scroll_interactable.on_mouse_pressed.connect( func(): click_box.was_pressed = true )
-	read_and_place( "res://Logs/Docking-Bay.txt" )
+	#read_and_place( "res://Logs/Docking-Bay.txt" )
 	scroll_wheel_detector.on_scroll.connect( on_scroll )
 	force_set_display( false )
 
@@ -51,7 +52,7 @@ func read_and_place(file_name: String) -> void:
 	var file = FileAccess.open(file_name, FileAccess.READ)
 	read_output = file.get_as_text()
 	file.close()
-	content.place_deep( read_output )
+	content.place_deep_fresh( read_output )
 	text_line_count = content.get_lines_placed()
 	@warning_ignore("integer_division")
 	file_height = max(text_line_count + 3 - CONTENT_LINE_COUNT / 2, 0)

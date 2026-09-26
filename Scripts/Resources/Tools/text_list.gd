@@ -204,9 +204,17 @@ func insert_new_list_item_at(label: String) -> TextListItem:
 	var last_path_marker = label.rfind("/")
 	if last_path_marker == -1:
 		return insert_new_list_item(label)
-	var path = label.substr(0, last_path_marker)
 	var label_name = label.substr(last_path_marker + 1)
-	return parse_path( path ).insert_new_list_item( label_name )
+	var result := find_youngest_node_on_invalid_path( label )
+	var node = result[ 0 ]
+	var remaining_path : PackedStringArray = result[ 1 ]
+	if remaining_path == PackedStringArray([ "" ]): return node.insert_new_list_item( label_name ) # If we got a valid spot to add on
+	
+	# Go down the remaining path
+	for dir in remaining_path:
+		node = node.insert_new_list_item( dir )
+		print(dir)
+	return node
 
 func insert_new_list_item(label: String) -> TextListItem:
 	var child := new(label, base_max_width)
@@ -367,6 +375,26 @@ func _forget(item: TextListItem) -> void:
 #endregion
 
 #region Helpers
+
+func find_youngest_node_on_invalid_path(path: String) -> Array: # The array should be formatted : [ Youngest_node_that_exists, Remaining_path_nodes ]
+	if parse_path( path ) != null: return [ path, [ "" ] ] # What if the path actually works
+	
+	var nodes := path.split("/", false)
+	var current_node := self
+	# Otherwise we go down until it stops working, and report that
+	for i in nodes.size():
+		# Get the next node in path
+		var node = nodes[ 0 ]
+		
+		# Go down the path
+		var next = _descend_path_relative(node, current_node)
+		if next == null: return [ current_node, nodes ] # We have found the last valid node
+		nodes.remove_at( 0 )
+		current_node = next
+	
+	printerr("WARNING (text_list.gd: 389): Path is both invalid and valid at the same time")
+	return [ current_node, [ "" ] ] # This should never end up happening but we still need it for error parsing purposes
+
 func parse_path(path: String) -> TextListItem:
 	#Example:
 	# Input: (../../Something/Else/Here) called on "Is here*" node, given:
@@ -381,11 +409,15 @@ func parse_path(path: String) -> TextListItem:
 	# would return "Here*" node
 	var nodes := path.split("/", false)
 	var current_node := self
+	# Parse string
 	for node in nodes:
-		current_node = current_node.super_list if node == ".." else current_node.find_child( node )
-		if current_node == null:
-			return null
+		current_node = _descend_path_relative(node, current_node)
+		if current_node == null: return null
 	return current_node
+
+func _descend_path_relative(directory: String, node: TextListItem) -> TextListItem:
+	if directory == "...": return node.root_item
+	return node.super_list if directory == ".." else node.find_child( directory )
 
 func find_child(label: String) -> TextListItem:
 	for child in sub_lists:
