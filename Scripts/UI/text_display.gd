@@ -329,23 +329,23 @@ func draw_smart_text_at(string: String, top_left: Vector2i, dimensions: Vector2i
 	return true
 
 #TODO, functions in text_display should never manually set_cells, and instead should call one of the draw/place char/cell methods
-func draw_scroll_bar(start_pos: Vector2i, direction: TextElement.Axis, size: int, cursor_pos_quarters: int = 0) -> void:
-	size = max(size, 2) # Size must be a minimum of 2 tall
-	var max_size : int = (size - 2) * 4 + 3
+func draw_scroll_bar(data: TextBar, cursor_pos_quarters: int = 0) -> void:
+	data.size = max(data.size, 2) # Size must be a minimum of 2 tall
+	var max_size : int = (data.size - 2) * 4 + 3
 	cursor_pos_quarters += 1
 	cursor_pos_quarters = clamp(cursor_pos_quarters, 1, max_size) # Get rid of two options since caps only have 3 states, not four
 	# Draw bar
-	var dir : Vector2i = Vector2i(1,0) if direction == TextElement.Axis.Horizontal else Vector2i(0,-1)
-	var pos = start_pos
-	_set_cell(start_pos, SCROLL_OFFSETS["left_cap"] if direction == TextElement.Axis.Horizontal else SCROLL_OFFSETS["down_cap"] )
-	for i in size - 2:
+	var dir : Vector2i = Vector2i(1,0) if data.axis == TextElement.Axis.Horizontal else Vector2i(0,-1)
+	var pos = data.start_pos
+	_set_cell(data.start_pos, SCROLL_OFFSETS["left_cap"] if data.axis == TextElement.Axis.Horizontal else SCROLL_OFFSETS["down_cap"] )
+	for i in data.size - 2:
 		pos += dir
-		_set_cell(pos, SCROLL_OFFSETS["horz_empty"] if direction == TextElement.Axis.Horizontal else SCROLL_OFFSETS["vert_empty"])
+		_set_cell(pos, SCROLL_OFFSETS["horz_empty"] if data.axis == TextElement.Axis.Horizontal else SCROLL_OFFSETS["vert_empty"])
 	
-	_set_cell(start_pos + dir * (size-1), SCROLL_OFFSETS["right_cap"] if direction == TextElement.Axis.Horizontal else SCROLL_OFFSETS["up_cap"] )
-	var cursor_tiles := _get_scroll_bar_cursor_tile(cursor_pos_quarters, direction, cursor_pos_quarters < 4, cursor_pos_quarters > max_size - 4) # If there is bad end, lower this rightmost value
+	_set_cell(data.start_pos + dir * (data.size-1), SCROLL_OFFSETS["right_cap"] if data.axis == TextElement.Axis.Horizontal else SCROLL_OFFSETS["up_cap"] )
+	var cursor_tiles := _get_scroll_bar_cursor_tile(cursor_pos_quarters, data.axis, cursor_pos_quarters < 4, cursor_pos_quarters > max_size - 4) # If there is bad end, lower this rightmost value
 	@warning_ignore("integer_division")
-	pos = start_pos + dir * (cursor_pos_quarters / 4)
+	pos = data.start_pos + dir * (cursor_pos_quarters / 4)
 	_set_cell(pos, cursor_tiles[0])
 	if cursor_tiles.size() == 1:
 		return

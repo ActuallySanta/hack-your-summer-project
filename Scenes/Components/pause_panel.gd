@@ -4,8 +4,6 @@ const SCROLL_BAR_SIZE := 26
 const TILE_SIZE := 8
 const CONTENT_LINE_COUNT : int = 28
 const TOTAL_WIDTH : int = 32
-## The longest real step the fade will take in one frame, so a load hitch doesn't pop it fully in
-const MAX_REAL_DELTA := 0.1
 
 enum HideState { HIDE_REST, SHOW_REST, HIDING, SHOWING }
 
@@ -17,13 +15,13 @@ enum HideState { HIDE_REST, SHOW_REST, HIDING, SHOWING }
 @onready var scroll_interactable := $ScrollInteractable
 @onready var scroll_wheel_detector := $ScrollWheelInteractable
 
+var _scroll_bar_data : TextBar = TextBar.new(Vector2i(29, SCROLL_BAR_SIZE), TextElement.Axis.Vertical, SCROLL_BAR_SIZE)
+
 var read_output : String = "$TAB $AUTO_1028"
 var text_line_count : int = 0
 var file_height : int = 3
 
 var _desire_to_hide : HideState = HideState.SHOW_REST
-## The real clock, read straight rather than through a delta the menu is shrinking
-var _real_time_usec : int
 
 var _pos_raw : int = 0 
 var pos_y : int:
@@ -39,24 +37,13 @@ var get_pos_percent : float:
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	click_box.on_mouse_held.connect( on_mouse_hold )
-	constants.draw_scroll_bar(Vector2i(29, SCROLL_BAR_SIZE), TextElement.Axis.Vertical, SCROLL_BAR_SIZE, 1000)
+	#constants.draw_scroll_bar(_scroll_bar_data, 1000)
 	scroll_interactable.on_mouse_pressed.connect( func(): click_box.was_pressed = true )
-	#read_and_place( "res://Logs/Docking-Bay.txt" )
 	scroll_wheel_detector.on_scroll.connect( on_scroll )
 	force_set_display( false )
-	_real_time_usec = Time.get_ticks_usec()
 
 func _process(_delta: float) -> void:
-	update_display_state( _real_delta() )
-
-## Seconds since the last frame off the real clock. The menu opening drives Engine.time_scale to 0,
-## which scales the delta every node gets regardless of process_mode, so a fade counted in that
-## delta stalls part way - the same reason [ListDisplayName] times its slide this way.
-func _real_delta() -> float:
-	var now := Time.get_ticks_usec()
-	var elapsed := (now - _real_time_usec) / 1000000.0
-	_real_time_usec = now
-	return minf(elapsed, MAX_REAL_DELTA)
+	update_display_state( RealDelta.get_capped() )
 
 func read_and_place(file_name: String) -> void:
 	if not FileAccess.file_exists(file_name):
@@ -68,6 +55,8 @@ func read_and_place(file_name: String) -> void:
 	file.close()
 	content.place_deep_fresh( read_output )
 	text_line_count = content.get_lines_placed()
+	print( text_line_count )
+	_draw_scroll_bar( 0 )
 	@warning_ignore("integer_division")
 	file_height = max(text_line_count + 3 - CONTENT_LINE_COUNT / 2, 0)
 
@@ -75,12 +64,16 @@ func print_screen_percent_line() -> void: print( int( file_height * click_box.ge
 
 func on_scroll(delta: int) -> void:
 	pos_y -= delta
-	constants.draw_scroll_bar(Vector2i(29, SCROLL_BAR_SIZE), TextElement.Axis.Vertical, SCROLL_BAR_SIZE, constants._get_scroll_bar_quarters_from_percent(SCROLL_BAR_SIZE, 1 - get_pos_percent))
+	_draw_scroll_bar( get_pos_percent )
 
 func on_mouse_hold() -> void:
-	constants.draw_scroll_bar(Vector2i(29, SCROLL_BAR_SIZE), TextElement.Axis.Vertical, SCROLL_BAR_SIZE, constants._get_scroll_bar_quarters_from_percent(SCROLL_BAR_SIZE, 1 - click_box.get_mouse_percent().y))
+	_draw_scroll_bar( click_box.get_mouse_percent().y )
 	var offset: int = int( file_height * click_box.get_mouse_percent().y )
 	pos_y = offset
+
+func _draw_scroll_bar(percent: float) -> void:
+	if text_line_count < CONTENT_LINE_COUNT: return
+	constants.draw_scroll_bar(_scroll_bar_data, constants._get_scroll_bar_quarters_from_percent(SCROLL_BAR_SIZE, 1 - percent))
 
 #region animation stuffs
 # shw | dth | ocm

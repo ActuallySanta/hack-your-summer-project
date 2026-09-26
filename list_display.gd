@@ -15,9 +15,6 @@ const click_sfx := preload("res://Sounds/UI/menuSelect.wav")
 const WIDTH := 15
 ## How many lines of text fit on screen at once
 const DISPLAY_HEIGHT := 28
-
-## The longest real step the panel will take in one frame. A load hitch is not travel, and without
-## this the menu would jump the width of the screen on the frame the game comes back.
 const MAX_REAL_DELTA := 0.1
 
 enum MenuState { MENU_REST_HIDDEN, MENU_REST_SHOWN, MENU_MOVE_TO_HIDDEN, MENU_MOVE_TO_SHOWN }
@@ -116,7 +113,7 @@ func _exit_tree() -> void:
 		PhysicsServer2D.set_active(true)
 
 func _process(_delta: float) -> void:
-	var delta := _real_delta()	# Not the delta handed in: see _real_delta()
+	var delta := RealDelta.get_capped()
 	update_scroll( delta )
 	update_state( delta )
 	update_world_time()
@@ -169,15 +166,6 @@ func update_world_time() -> void:
 func _set_player_frozen(frozen: bool) -> void:
 	PlayerManager.canMove = !frozen
 	if is_instance_valid(PlayerManager.player): PlayerManager.player.reset_all_inputs()
-
-## Seconds since the last frame off the real clock, which is not what _process is handed. The menu
-## slows the world to a stop as it opens, and a slide counted in a delta it was shrinking itself
-## would crawl and never arrive - the same reason [RoomTransitionFade] times itself this way.
-func _real_delta() -> float:
-	var now := Time.get_ticks_usec()
-	var elapsed := (now - _real_time_usec) / 1000000.0
-	_real_time_usec = now
-	return minf(elapsed, MAX_REAL_DELTA)
 #endregion
 
 func update_scroll(delta: float) -> void:

@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://d1irxkv8rmbly" path="res://Sprites/SpaceStation_Character_Sheet.png" id="5_7vh4w"]
 [ext_resource type="AudioStream" uid="uid://bpy8ofln286r3" path="res://Sounds/Entities/Player/PlayerWalk.wav" id="8_fuwcu"]
 [ext_resource type="Script" uid="uid://crhoj1q6iw1an" path="res://Scripts/Player/player_collision_manager.gd" id="9_k8qpn"]
+[ext_resource type="Script" uid="uid://cw6wvh74yo7h" path="res://Scripts/Player/Components/no_clip.gd" id="10_c60xn"]
 [ext_resource type="AudioStream" uid="uid://cuesku8232hdq" path="res://Sounds/Entities/Player/Gun Fire.wav" id="12_j8xm3"]
 [ext_resource type="AudioStream" uid="uid://8jtcqp1gbmcq" path="res://Sounds/Entities/Player/PlayerJump.wav" id="13_r5bcf"]
 [ext_resource type="AudioStream" uid="uid://y4se7p08x45o" path="res://Sounds/Entities/Player/PlayerHurt.ogg" id="14_7vh4w"]
@@ -536,6 +537,9 @@ script = ExtResource("22_mantle")
 [node name="PlanarMovement" type="Node2D" parent="." unique_id=1135378168]
 visible = false
 script = ExtResource("23_planar")
+
+[node name="NoClip" type="Node2D" parent="." unique_id=494273294]
+script = ExtResource("10_c60xn")
 
 [node name="FloorJump" type="Node2D" parent="." unique_id=1510188819]
 visible = false
