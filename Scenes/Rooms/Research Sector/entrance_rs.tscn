@@ -33,7 +33,7 @@ tile_set = ExtResource("3_vglh0")
 script = ExtResource("7_akg7m")
 start_brightness = 0.8
 end_brightness = 0.7
-cycle_seconds = 2.0
+occilations_per_second = 0.25
 
 [node name="Background" type="TileMapLayer" parent="VisualAssets" unique_id=1468262481]
 self_modulate = Color(0.78431374, 0.78431374, 0.78431374, 1)

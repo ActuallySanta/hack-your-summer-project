@@ -31,7 +31,7 @@ collision_enabled = false
 script = ExtResource("5_5rqth")
 start_brightness = 0.78
 end_brightness = 0.6
-cycle_seconds = 6.0
+occilations_per_second = 0.08333333333333333
 
 [node name="Foreground2" type="TileMapLayer" parent="." unique_id=454258810 groups=["Geometry", "PathFindingWalls"]]
 scale = Vector2(3, 3)

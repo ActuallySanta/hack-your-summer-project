@@ -40,7 +40,7 @@ collision_enabled = false
 script = ExtResource("5_q14ib")
 start_brightness = 0.78
 end_brightness = 0.6
-cycle_seconds = 6.0
+occilations_per_second = 0.08333333333333333
 
 [node name="Door background" type="TileMapLayer" parent="." unique_id=11462015]
 modulate = Color(0.78431374, 0.78431374, 0.78431374, 1)
@@ -51,7 +51,7 @@ collision_enabled = false
 script = ExtResource("5_q14ib")
 start_brightness = 0.78
 end_brightness = 0.6
-cycle_seconds = 6.0
+occilations_per_second = 0.08333333333333333
 
 [node name="Foreground2" type="TileMapLayer" parent="." unique_id=1275830056 groups=["Geometry", "PathFindingWalls"]]
 scale = Vector2(3, 3)

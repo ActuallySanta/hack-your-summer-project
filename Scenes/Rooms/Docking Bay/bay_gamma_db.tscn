@@ -25,7 +25,7 @@
 script = ExtResource("2_kmmgv")
 start_brightness = 0.6
 end_brightness = 0.45
-cycle_seconds = 6.0
+occilations_per_second = 0.08333333333333333
 
 [node name="ParalaxLayer" type="Node2D" parent="BrightnessLayer" unique_id=71069556]
 script = ExtResource("2_85tdl")

@@ -26,6 +26,7 @@ tile_set = ExtResource("4_cargs")
 script = ExtResource("5_lmuun")
 start_brightness = 0.3
 end_brightness = 0.1
+occilations_per_second = 0.25
 
 [node name="BreakAbles" parent="." unique_id=1463144321 instance=ExtResource("6_gsers")]
 tile_map_data = PackedByteArray("AAAUAAwAAAAAAAIAAAAUAAsAAAAAAAIAAAA=")
@@ -38,6 +39,7 @@ tile_set = ExtResource("4_cargs")
 script = ExtResource("5_lmuun")
 start_brightness = 0.5
 end_brightness = 0.1
+occilations_per_second = 0.25
 
 [node name="UpVerticalRoomTransitionTool" parent="." unique_id=1520149205 instance=ExtResource("6_lxcl8")]
 position = Vector2(288, 72)
@@ -54,3 +56,6 @@ shape = SubResource("RectangleShape2D_bpmhk")
 tile_map_data = PackedByteArray("AAAVAAsAAwABAAIAAAAWAAsAAwAEAAAAAAAWAAwAAwAFAAQAAAAWAA0AAwAFAAUAAAAVAAwAAwACAAAAAAAVAA0AAwACAAIAAAA=")
 tile_set = ExtResource("4_cargs")
 script = ExtResource("5_lmuun")
+start_brightness = 0.5
+end_brightness = 0.1
+occilations_per_second = 0.25

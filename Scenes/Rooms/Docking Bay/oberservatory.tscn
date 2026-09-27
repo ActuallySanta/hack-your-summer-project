@@ -25,7 +25,7 @@ tile_set = ExtResource("2_13m2y")
 script = ExtResource("3_io01w")
 start_brightness = 0.6
 end_brightness = 0.45
-cycle_seconds = 6.0
+occilations_per_second = 0.08333333333333333
 
 [node name="Decoration" type="TileMapLayer" parent="VisualAssets" unique_id=738018630]
 scale = Vector2(3, 3)
@@ -45,7 +45,7 @@ tile_set = ExtResource("4_xaksc")
 script = ExtResource("3_io01w")
 start_brightness = 0.6
 end_brightness = 0.45
-cycle_seconds = 6.0
+occilations_per_second = 0.08333333333333333
 
 [node name="Props" type="TileMapLayer" parent="VisualAssets" unique_id=1843498364]
 modulate = Color(0.7233511, 0.7233511, 0.7233511, 1)
@@ -54,7 +54,7 @@ tile_set = ExtResource("4_xaksc")
 script = ExtResource("3_io01w")
 start_brightness = 0.6
 end_brightness = 0.45
-cycle_seconds = 6.0
+occilations_per_second = 0.08333333333333333
 
 [node name="UpVerticalRoomTransitionTool" parent="." unique_id=1520149205 instance=ExtResource("7_vwqq8")]
 position = Vector2(816, 112)

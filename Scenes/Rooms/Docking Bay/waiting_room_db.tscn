@@ -35,6 +35,7 @@ tile_set = ExtResource("3_tj87j")
 script = ExtResource("5_by526")
 start_brightness = 0.6
 end_brightness = 0.45
+occilations_per_second = 0.08333333333333333
 
 [node name="BackgroundFront" type="TileMapLayer" parent="Node2D" unique_id=1336467954]
 modulate = Color(0.7233511, 0.7233511, 0.7233511, 1)
@@ -44,6 +45,7 @@ tile_set = ExtResource("3_tj87j")
 script = ExtResource("5_by526")
 start_brightness = 0.6
 end_brightness = 0.45
+occilations_per_second = 0.08333333333333333
 
 [node name="ObjectFlyer" parent="." unique_id=447494354 instance=ExtResource("6_dwh12")]
 position = Vector2(0, 672)

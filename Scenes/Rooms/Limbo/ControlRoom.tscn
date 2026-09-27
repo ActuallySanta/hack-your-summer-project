@@ -64,12 +64,15 @@ tile_map_data = PackedByteArray("AAABAAkAAQAAAAAAABAAAAkAAQABAAAAABABAAoAAQAAAAE
 
 [node name="LimboHeatedRod" parent="." unique_id=81421569 instance=ExtResource("8_qp35y")]
 position = Vector2(255, 189)
+occilations_per_second = 0.1
 
 [node name="LimboHeatedRod2" parent="." unique_id=1162618607 instance=ExtResource("8_qp35y")]
 position = Vector2(285, 189)
+occilations_per_second = 0.1
 
 [node name="LimboHeatedRod3" parent="." unique_id=933814320 instance=ExtResource("8_qp35y")]
 position = Vector2(315, 189)
+occilations_per_second = 0.1
 
 [node name="TileMapLayer2" parent="." unique_id=1698720756 instance=ExtResource("3_8mvxd")]
 visible = false
@@ -87,7 +90,6 @@ scale = Vector2(3, 3)
 texture = ExtResource("10_dpjwi")
 hframes = 6
 vframes = 2
-frame = 4
 script = SubResource("GDScript_b0u4x")
 frames_in_sequence = 6
 anim_speed_adjust = 0.1

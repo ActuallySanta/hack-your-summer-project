@@ -36,6 +36,7 @@ tile_set = ExtResource("2_sjctm")
 script = ExtResource("4_q0jt4")
 start_brightness = 0.9
 end_brightness = 0.8
+occilations_per_second = 0.5
 
 [node name="ForegroundFloor" type="TileMapLayer" parent="." unique_id=1938669710 groups=["Geometry", "PathFindingWalls"]]
 scale = Vector2(3, 3)
@@ -44,6 +45,7 @@ tile_set = ExtResource("2_sjctm")
 script = ExtResource("4_q0jt4")
 start_brightness = 0.9
 end_brightness = 0.8
+occilations_per_second = 0.5
 
 [node name="Riser" parent="." unique_id=1020301332 instance=ExtResource("3_sjctm")]
 position = Vector2(292, -39)

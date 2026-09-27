@@ -35,6 +35,7 @@ tile_set = ExtResource("2_bu7cl")
 script = ExtResource("3_1btmx")
 start_brightness = 0.6
 end_brightness = 0.45
+occilations_per_second = 0.08333333333333333
 
 [node name="BackgroundFront" type="TileMapLayer" parent="Node2D" unique_id=1116371195]
 modulate = Color(0.7233511, 0.7233511, 0.7233511, 1)
@@ -44,6 +45,7 @@ tile_set = ExtResource("2_bu7cl")
 script = ExtResource("3_1btmx")
 start_brightness = 0.6
 end_brightness = 0.45
+occilations_per_second = 0.08333333333333333
 
 [node name="ObjectFlyer" parent="Node2D" unique_id=447494354 instance=ExtResource("6_y056p")]
 position = Vector2(0, 1471.333)
@@ -68,6 +70,7 @@ tile_set = ExtResource("4_lw307")
 script = ExtResource("3_1btmx")
 start_brightness = 0.6
 end_brightness = 0.45
+occilations_per_second = 0.08333333333333333
 
 [node name="DoorTileMapLayer" parent="." unique_id=197313074 instance=ExtResource("9_owopv")]
 tile_map_data = PackedByteArray("AAAsAAoAAQAAAAgAAAAtAAoAAQABAAgAAAAuAAoAAQACAAgAAAAvAAoAAQABAAgAAAAuABYAAQAAAAAAAAAuABcAAQAAAAEAAAAuABgAAQAAAAIAAAAvABYAAQABAAAAAAAvABcAAQABAAEAAAAvABgAAQABAAIAAAA=")

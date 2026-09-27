@@ -34,7 +34,7 @@ tile_set = ExtResource("7_k2hd1")
 script = ExtResource("5_nsswl")
 start_brightness = 0.6
 end_brightness = 0.4
-cycle_seconds = 6.0
+occilations_per_second = 0.08333333333333333
 
 [node name="Doors" type="TileMapLayer" parent="." unique_id=2138322309]
 z_index = 10
@@ -85,7 +85,7 @@ tile_set = ExtResource("7_k2hd1")
 script = ExtResource("5_nsswl")
 start_brightness = 0.8
 end_brightness = 0.7
-cycle_seconds = 6.0
+occilations_per_second = 0.08333333333333333
 
 [node name="Props" type="TileMapLayer" parent="." unique_id=581363750]
 scale = Vector2(3, 3)

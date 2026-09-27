@@ -73,7 +73,7 @@ collision_enabled = false
 navigation_enabled = false
 script = ExtResource("8_ylffj")
 end_brightness = 0.8
-cycle_seconds = 2.0
+occilations_per_second = 0.25
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area2DHider" unique_id=1286578067]
 polygon = PackedVector2Array(400, 176, 400, 144, 384, 144, 384, 176)

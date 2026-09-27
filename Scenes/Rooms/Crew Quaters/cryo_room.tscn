@@ -29,7 +29,7 @@ tile_set = ExtResource("4_qbq0e")
 script = ExtResource("5_kl5k2")
 start_brightness = 0.78
 end_brightness = 0.5
-cycle_seconds = 6.0
+occilations_per_second = 0.08333333333333333
 
 [node name="Foreground2" type="TileMapLayer" parent="." unique_id=1298041012 groups=["Geometry", "PathFindingWalls"]]
 scale = Vector2(3, 3)
@@ -37,7 +37,7 @@ tile_map_data = PackedByteArray("AAADAAsAAwAHAAQAAAAEAAsAAwAGAAQAAAAFAAsAAwAHAAQ
 tile_set = ExtResource("4_qbq0e")
 script = ExtResource("5_kl5k2")
 end_brightness = 0.6
-cycle_seconds = 6.0
+occilations_per_second = 0.08333333333333333
 
 [node name="Path" type="Node2D" parent="." unique_id=291817587]
 script = ExtResource("6_qbq0e")

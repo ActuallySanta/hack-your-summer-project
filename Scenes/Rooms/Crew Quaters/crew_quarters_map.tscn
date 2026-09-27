@@ -32,7 +32,7 @@ collision_enabled = false
 script = ExtResource("4_0a1ah")
 start_brightness = 0.7
 end_brightness = 0.5
-cycle_seconds = 6.0
+occilations_per_second = 0.08333333333333333
 
 [node name="Foreground2" type="TileMapLayer" parent="." unique_id=861693764 groups=["Geometry", "PathFindingWalls"]]
 z_index = 2
@@ -42,7 +42,7 @@ tile_set = ExtResource("5_msx2w")
 script = ExtResource("4_0a1ah")
 start_brightness = 0.9
 end_brightness = 0.8
-cycle_seconds = 6.0
+occilations_per_second = 0.08333333333333333
 
 [node name="MapStation" parent="." unique_id=1432104097 instance=ExtResource("4_c5ari")]
 z_index = 2

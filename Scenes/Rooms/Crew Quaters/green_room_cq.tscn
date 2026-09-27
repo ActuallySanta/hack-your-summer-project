@@ -33,4 +33,4 @@ tile_set = ExtResource("4_no4a3")
 script = ExtResource("6_uq35h")
 start_brightness = 0.8
 end_brightness = 0.6
-cycle_seconds = 4.0
+occilations_per_second = 0.125

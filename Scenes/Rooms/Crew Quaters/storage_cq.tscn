@@ -26,7 +26,7 @@ collision_enabled = false
 script = ExtResource("4_j4ghg")
 start_brightness = 0.78
 end_brightness = 0.4
-cycle_seconds = 6.0
+occilations_per_second = 0.08333333333333333
 
 [node name="AccessButton" parent="." unique_id=775097331 instance=ExtResource("4_syw0b")]
 position = Vector2(1896, 336)
