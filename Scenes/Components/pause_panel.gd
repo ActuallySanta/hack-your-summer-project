@@ -72,6 +72,7 @@ func read_and_place(file_name: String) -> void:
 	@warning_ignore("integer_division")
 	var new_file_height : int = max(text_line_count + 3 - CONTENT_LINE_COUNT / 2, 0)
 	if new_file_height == file_height: return
+	pos_y = 0
 	_draw_scroll_bar( 0 )
 	file_height = new_file_height
 
@@ -85,7 +86,9 @@ func on_mouse_hold() -> void:
 	pos_y = offset
 
 func _draw_scroll_bar(percent: float) -> void:
-	if text_line_count < CONTENT_LINE_COUNT: return
+	if text_line_count < CONTENT_LINE_COUNT: 
+		constants.erase_scroll_bar( _scroll_bar_data )
+		return
 	constants.draw_scroll_bar(_scroll_bar_data, constants._get_scroll_bar_quarters_from_percent(SCROLL_BAR_SIZE, 1 - percent))
 
 #region animation stuffs

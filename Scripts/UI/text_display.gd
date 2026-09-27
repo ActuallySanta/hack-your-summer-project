@@ -328,7 +328,6 @@ func draw_smart_text_at(string: String, top_left: Vector2i, dimensions: Vector2i
 		cursor.x += 1
 	return true
 
-#TODO, functions in text_display should never manually set_cells, and instead should call one of the draw/place char/cell methods
 func draw_scroll_bar(data: TextBar, cursor_pos_quarters: int = 0) -> void:
 	data.size = max(data.size, 2) # Size must be a minimum of 2 tall
 	var max_size : int = (data.size - 2) * 4 + 3
@@ -350,8 +349,17 @@ func draw_scroll_bar(data: TextBar, cursor_pos_quarters: int = 0) -> void:
 	if cursor_tiles.size() == 1:
 		return
 	_set_cell(pos + dir, cursor_tiles[1])
-	
+
 #endregion
+
+#region Erase output
+func erase_scroll_bar(data: TextBar) -> void:
+	data.size = max(data.size, 2) # Size must be a minimum of 2 tall
+	var dir : Vector2i = Vector2i(1,0) if data.axis == TextElement.Axis.Horizontal else Vector2i(0,-1)
+	var pos = data.start_pos
+	for i in data.size: 
+		_set_cell(pos, Vector2i(-1,-1))
+		pos += dir
 
 # Placing is when you are treating the textDisplay like it is a text box, one char left to right, top to bottom
 #region Placing output
