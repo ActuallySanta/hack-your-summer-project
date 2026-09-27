@@ -18,6 +18,7 @@ grow_vertical = 2
 script = ExtResource("1_o14dv")
 
 [node name="Background" type="Panel" parent="." unique_id=1563919755]
+modulate = Color(0, 0, 0, 1)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -46,6 +47,7 @@ offset_bottom = 70.0
 grow_vertical = 2
 
 [node name="Title Text" type="Label" parent="Main Menu/VBoxContainer" unique_id=1441537417]
+modulate = Color(0, 0.7764706, 1, 1)
 layout_mode = 2
 text = "SPACE STATION: OUROBOROS 
 DEMO VERSION"
@@ -58,11 +60,11 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="Main Menu Button" type="LinkButton" parent="Main Menu/VBoxContainer/CenterContainer" unique_id=518139205]
+modulate = Color(0, 0.7764706, 1, 1)
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 16
 text = "FEEDBACK FORM"
-underline = 1
 uri = "https://docs.google.com/forms/d/e/1FAIpQLScmOtYmFp_Vxhhe9ylyNEi1FR3lww1bRCD2YETw95PYG1Na9g/viewform?usp=publish-editor"
 
 [node name="Menu Click SFX" type="AudioStreamPlayer" parent="Main Menu/VBoxContainer/CenterContainer/Main Menu Button" unique_id=1725111875]
@@ -81,16 +83,19 @@ grow_horizontal = 0
 grow_vertical = 2
 
 [node name="Main Menu Button" parent="Main Menu/Button Container" unique_id=1030041492 instance=ExtResource("3_mrfpk")]
+modulate = Color(0, 1, 1, 1)
 layout_mode = 2
 size_flags_vertical = 3
 text = "START GAME"
 
 [node name="Main Menu Button2" parent="Main Menu/Button Container" unique_id=2098235088 instance=ExtResource("3_mrfpk")]
+modulate = Color(0, 1, 1, 1)
 layout_mode = 2
 size_flags_vertical = 3
 text = "LOAD GAME"
 
 [node name="Main Menu Button3" parent="Main Menu/Button Container" unique_id=218845620 instance=ExtResource("3_mrfpk")]
+modulate = Color(0, 1, 1, 1)
 layout_mode = 2
 size_flags_vertical = 3
 text = "CREDITS"
@@ -101,6 +106,7 @@ nodeToSwitchTo = NodePath("../../../../Credits Menu")
 menuNode = NodePath("../../..")
 
 [node name="Main Menu Button4" parent="Main Menu/Button Container" unique_id=1364985603 instance=ExtResource("3_mrfpk")]
+modulate = Color(0, 1, 1, 1)
 layout_mode = 2
 size_flags_vertical = 3
 text = "QUIT GAME"
