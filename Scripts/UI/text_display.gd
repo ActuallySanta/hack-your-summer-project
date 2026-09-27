@@ -265,7 +265,7 @@ func draw_text_at(string: String, top_left: Vector2i, dimensions: Vector2i, star
 			cursor_pos.x = top_left.x
 			cursor_pos.y += 1
 			if cursor_pos.y - top_left.y >= dimensions.y:
-				print("To many lines tall!")
+				printerr("To many lines tall!")
 				return false # We ran out of space while printing
 		draw_char_at(character, cursor_pos)
 		cursor_pos.x += 1
@@ -306,7 +306,7 @@ func draw_smart_text_at(string: String, top_left: Vector2i, dimensions: Vector2i
 	var end_cursor : Vector2i
 	for sub_string in strings:
 		if sub_string.length() >= dimensions.x:
-			print("Used too big a word!")
+			printerr("Used too big a word!")
 			return false
 		
 		end_cursor = cursor + Vector2i(sub_string.length(),0)
@@ -316,7 +316,7 @@ func draw_smart_text_at(string: String, top_left: Vector2i, dimensions: Vector2i
 			cursor.x = top_left.x
 			cursor.y += 1
 			if cursor.y - top_left.y >= dimensions.y:
-				print("To many lines tall! ", cursor.y - top_left.y, " is more than ", dimensions.y)
+				printerr("To many lines tall! ", cursor.y - top_left.y, " is more than ", dimensions.y)
 				return false # We ran out of space while printing
 		
 		# Draw word

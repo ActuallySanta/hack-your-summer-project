@@ -213,7 +213,6 @@ func insert_new_list_item_at(label: String) -> TextListItem:
 	# Go down the remaining path
 	for dir in remaining_path:
 		node = node.insert_new_list_item( dir )
-		print(dir)
 	return node
 
 func insert_new_list_item(label: String) -> TextListItem:

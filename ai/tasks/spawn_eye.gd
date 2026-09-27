@@ -17,7 +17,6 @@ func _tick(delta: float) -> Status:
 	
 	match currAttackType:
 		AttackType.basicAttack:
-			print("SPAWNED BULLET")
 			var instance : BossBullet = eyeProjectile.instantiate()
 			instance.global_position = user.attack_point.global_position
 			agent.add_child(instance)
@@ -54,5 +53,4 @@ func _tick(delta: float) -> Status:
 				instances[i].linear_velocity = instances[i].global_position.direction_to(user.eyeSpawnArea.get_center())*projectileSpeed
 			return Status.SUCCESS
 		_:
-			print("No Attack Type Selected")
 			return Status.FAILURE

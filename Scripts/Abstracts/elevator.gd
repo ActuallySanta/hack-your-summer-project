@@ -96,14 +96,7 @@ func __debug_checking() -> void:
 		printerr("Elevator: No 'Body/PlayerInteractable' PlayerInteractable as child")
 
 func __debug_inputs() -> void:
-	var dirty : bool = false
 	if Input.is_action_pressed("Up"):
 		_target_floor += 1
-		dirty = true
 	elif Input.is_action_pressed("Down"):
 		_target_floor -= 1
-		dirty = true
-	
-	if dirty:
-		print("Height: ", int(_current_platform_height) % 48)
-		print("Tiles: ", int(-_current_platform_height / 48))

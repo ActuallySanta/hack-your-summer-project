@@ -25,6 +25,9 @@ var _transitioning := false
 ## What [code]PlayerManager.canMove[/code] was before the transition took it.
 var _could_move := true
 
+## What [code]health.ignore_effects[/code] was before the transition took it.
+var _ignored_effects := false
+
 func _initialize() -> void:
 	player = game.player
 	assert(player)
@@ -90,5 +93,11 @@ func _suspend_player(suspended: bool) -> void:
 		# can_act() only stops new input being read; whatever was held at the crossing
 		# would otherwise still be held all the way through the fade.
 		p.reset_all_inputs()
+	# Borrowed and handed back for the same reason as canMove above: a cheat mode or
+	# anything else that has switched damage off is entitled to still have it off on
+	# the other side of the crossing. Handing back a flat false took it away instead,
+	# and no-clip crosses a room boundary every few seconds.
 	if is_instance_valid(p.health):
-		p.health.ignore_effects = suspended
+		if suspended:
+			_ignored_effects = p.health.ignore_effects
+		p.health.ignore_effects = true if suspended else _ignored_effects

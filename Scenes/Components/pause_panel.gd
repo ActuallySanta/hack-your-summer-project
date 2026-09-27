@@ -69,12 +69,11 @@ func read_and_place(file_name: String) -> void:
 	file.close()
 	content.place_deep_fresh( read_output )
 	text_line_count = content.get_lines_placed()
-	print( text_line_count )
-	_draw_scroll_bar( 0 )
 	@warning_ignore("integer_division")
-	file_height = max(text_line_count + 3 - CONTENT_LINE_COUNT / 2, 0)
-
-func print_screen_percent_line() -> void: print( int( file_height * click_box.get_mouse_percent().y ) )
+	var new_file_height : int = max(text_line_count + 3 - CONTENT_LINE_COUNT / 2, 0)
+	if new_file_height == file_height: return
+	_draw_scroll_bar( 0 )
+	file_height = new_file_height
 
 func on_scroll(delta: int) -> void:
 	pos_y -= delta
