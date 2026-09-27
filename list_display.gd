@@ -3,6 +3,9 @@ class_name ListDisplayName extends TextDisplay
 const hover_sfx := preload("res://Sounds/UI/menuHover.wav")
 const click_sfx := preload("res://Sounds/UI/menuSelect.wav")
 
+## The panel has finished sliding away and handed the world clock back
+signal on_fully_hidden
+
 ## Pixels the list travels per notch of the mouse wheel
 @export_group("Scrolling")
 @export var scroll_speed : float = 20.0
@@ -24,7 +27,12 @@ enum MenuState { MENU_REST_HIDDEN, MENU_REST_SHOWN, MENU_MOVE_TO_HIDDEN, MENU_MO
 var am_i_enabled : bool:
 	set( new_value ):
 		am_i_enabled = new_value
-		enabled = new_value
+		enabled = new_value	# TileMapLayer's own switch: stops the list's tiles rendering while it is away
+		set_process( new_value )
+		set_process_input( new_value )
+		# update_state() hands the Seperater its do_update a frame behind, so the frame the panel
+		# lands hidden leaves it at true. Switch its process off directly instead.
+		$Seperater.set_process( new_value )
 
 var stream_playback : AudioStreamPlaybackPolyphonic
 
@@ -82,6 +90,11 @@ var _owns_world_clock : bool = false
 ## The real clock, read straight rather than through a delta the menu itself is shrinking
 var _real_time_usec : int
 
+## Whether the panel is away with the world clock given back, so nothing it does per frame matters.
+## A panel whose open was refused never left, so it counts as hidden too.
+var fully_hidden : bool:
+	get(): return menu_state == MenuState.MENU_REST_HIDDEN and not _owns_world_clock
+
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	menu_state = MenuState.MENU_REST_HIDDEN
@@ -116,7 +129,6 @@ func _exit_tree() -> void:
 		PhysicsServer2D.set_active(true)
 
 func _process(_delta: float) -> void:
-	if not am_i_enabled: return
 	var delta := RealDelta.get_capped()
 	update_scroll( delta )
 	update_state( delta )
@@ -166,6 +178,7 @@ func update_world_time() -> void:
 
 	_owns_world_clock = false
 	_set_player_frozen( false )
+	on_fully_hidden.emit()
 
 func _set_player_frozen(frozen: bool) -> void:
 	PlayerManager.canMove = !frozen

@@ -11,6 +11,15 @@ var enabled : bool:
 
 var panel_open : bool = false
 
+func _ready() -> void:
+	panel.on_fully_hidden.connect( _disable_if_fully_hidden )
+	pause_panel.on_fully_hidden.connect( _disable_if_fully_hidden )
+	enabled = false
+
+# The slide and the fade finish at different times, so whichever lands second turns the menu off
+func _disable_if_fully_hidden() -> void:
+	if panel.fully_hidden and pause_panel.fully_hidden: enabled = false
+
 func toggle_menu() -> void:
 	panel_open = not panel_open
 	if panel_open: open_menu()

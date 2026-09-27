@@ -10,7 +10,11 @@ signal on_scroll
 @export var scroll_speed : float = 100.0
 @export var show_boundries : bool = true
 
-var enabled : bool
+var enabled : bool:
+	set( new_value ):
+		enabled = new_value
+		# A release that lands while disabled is never seen, which would leave the box held
+		if not enabled: was_pressed = false
 var was_pressed : bool
 var init_click : Vector2
 var _last_mouse_pos : Vector2

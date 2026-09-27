@@ -25,6 +25,9 @@ func _turn_on_noclip() -> void:
 	_parent.collision_layer = 0
 	_parent.collision_mask = 0
 	_parent.gravity_override = 0
+	_parent.move_input = 0
+	_parent.velocity = Vector2.ZERO
+	_parent.health.ignore_effects = true
 	for component in _parent._components:
 		component.component_enabled = false
 	
@@ -32,6 +35,7 @@ func _turn_off_noclip() -> void:
 	_parent.collision_layer = _collision_mask_and_layer[ 1 ]
 	_parent.collision_mask = _collision_mask_and_layer[ 0 ]
 	_parent.gravity_override = -1.0
+	_parent.health.ignore_effects = false
 	for component in _parent._components:
 		component.component_enabled = true
 

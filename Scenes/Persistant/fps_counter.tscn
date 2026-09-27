@@ -1,0 +1,21 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://Scripts/UI/fps_counter.gd" id="1_fpsc"]
+
+[node name="FpsCounter" type="CanvasLayer"]
+process_mode = 3
+layer = 128
+
+[node name="Label" type="Label" parent="."]
+visible = false
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = -25.0
+offset_right = 142.0
+offset_bottom = -2.0
+grow_vertical = 0
+mouse_filter = 2
+text = "FPS:"
+script = ExtResource("1_fpsc")

@@ -7,6 +7,9 @@ const TOTAL_WIDTH : int = 32
 
 enum HideState { HIDE_REST, SHOW_REST, HIDING, SHOWING }
 
+## The panel has finished fading out
+signal on_fully_hidden
+
 @export var fade_speed : float
 
 @onready var constants := $Constants
@@ -20,6 +23,7 @@ var _scroll_bar_data : TextBar = TextBar.new(Vector2i(29, SCROLL_BAR_SIZE), Text
 var enabled : bool:
 	set( new_value ):
 		enabled = new_value
+		set_process( enabled )	# The fade runs in _process, so enable before display( true )
 		click_box.enabled = enabled
 		scroll_interactable.enabled = enabled
 		scroll_wheel_detector.enabled = enabled
@@ -29,6 +33,9 @@ var text_line_count : int = 0
 var file_height : int = 3
 
 var _desire_to_hide : HideState = HideState.SHOW_REST
+
+var fully_hidden : bool:
+	get(): return _desire_to_hide == HideState.HIDE_REST
 
 var _pos_raw : int = 0 
 var pos_y : int:
@@ -113,5 +120,6 @@ func force_set_display(should_show: bool) -> void:
 	else:
 		modulate.a = 0
 		_desire_to_hide = HideState.HIDE_REST
+		on_fully_hidden.emit()
 
 #endregion
