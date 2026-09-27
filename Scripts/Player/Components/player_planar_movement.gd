@@ -19,8 +19,15 @@ extends PlayerComponent
 ## and travelling faster than walking pace in the direction they are holding. Lower
 ## carries a wall jump's push further; 1 cuts straight to walking speed.
 @export_range(0.01, 1.0, 0.01) var air_momentum_decay := 0.06
-## Steering the player still has while being knocked back.
-@export var knockback_control := 150.0
+
+@export_group("Knockback")
+## How far a hit pushes the player back, in tiles.
+@export var knockback_tiles := 1.0
+## How high the hop at the start of a knockback goes, in tiles.
+@export var knockback_apex_tiles := 0.5
+## How long the knockback lasts. The player has no control until it ends. Matches the
+## length of the knockback animation, so the two finish together.
+@export_range(0.05, 1.0, 0.01) var knockback_seconds := 0.5
 
 @export_group("Slopes")
 ## Steepest floor the player can walk up. The tilesets' slopes are 45 degrees, so
@@ -54,6 +61,9 @@ extends PlayerComponent
 ## True when the player is pushing into something that will not move. Read by the
 ## animator through [method is_walking].
 var _stalled := false
+## -1 or 1: which way the current knockback pushes.
+var _knockback_direction := 1.0
+var _knockback_elapsed := 0.0
 
 func _bind() -> void:
 	player.floor_max_angle = deg_to_rad(max_slope_degrees)
@@ -98,11 +108,43 @@ func _walk() -> void:
 
 	player.velocity.x = target
 
+## Starts a knockback. Only the sign of [param force] is used: it says which way to push.
+## How far, how high and how long come from this component, so every hit reads the same
+## however the hitbox that landed it was set up.
+##
+## It used to be the hitbox's strength divided by its duration, applied as a speed. The
+## default hitbox (150 over 0.01s) came out at 15000px/s, and the knockback handed that
+## speed back when it ended, so on the ground it took seconds to bleed off, and holding
+## away from the hit in the air kept most of it. Holding towards the hit snapped straight
+## back to walking speed, which is why the distance depended on what was held.
+func start_knockback(force: float) -> void:
+	if is_zero_approx(force):
+		_knockback_direction = -1.0 if player.facing_right else 1.0
+	else:
+		_knockback_direction = signf(force)
+	_knockback_elapsed = 0.0
+	player.knockback_timer = knockback_seconds
+	# A press made just before the hit would otherwise fire on the first frame of the
+	# knockback, since the jump runs before this and the arc would overwrite it anyway.
+	player.reset_all_inputs()
+
+# The arc is set by position, not by forces: each frame moves the body to where the
+# curve says it should be next, and move_and_slide still gets the final say on walls.
+# That keeps the distance the same at any frame rate and whatever gravity is set to, and
+# the arc ends with almost no speed left over for the next state to carry on with.
 func _knockback(delta: float) -> void:
-	player.velocity.x = player.knockback_force
-	if not is_zero_approx(player.move_input):
-		player.velocity.x += player.move_input * knockback_control
-	player.knockback_timer -= delta
+	var from := _knockback_offset(_knockback_elapsed / knockback_seconds)
+	_knockback_elapsed = minf(_knockback_elapsed + delta, knockback_seconds)
+	var to := _knockback_offset(_knockback_elapsed / knockback_seconds)
+	player.velocity = (to - from) / delta
+	player.knockback_timer = knockback_seconds - _knockback_elapsed
+
+# Pushed out fast and slowing to a stop, over a hop that lands back at the starting height.
+func _knockback_offset(progress: float) -> Vector2:
+	var distance := knockback_tiles * player.tile_size
+	var height := knockback_apex_tiles * player.tile_size
+	var eased := 1.0 - (1.0 - progress) * (1.0 - progress)
+	return Vector2(_knockback_direction * distance * eased, -4.0 * height * progress * (1.0 - progress))
 
 func post_move_update(_delta: float) -> void:
 	# get_real_velocity() is what the body managed after collisions, so pushing into a
@@ -116,3 +158,4 @@ func is_walking() -> bool:
 
 func on_respawn() -> void:
 	_stalled = false
+	_knockback_elapsed = 0.0

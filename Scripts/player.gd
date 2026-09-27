@@ -94,7 +94,6 @@ var move_state: MoveState = MoveState.Standing
 var previous_move_state: MoveState = MoveState.Standing
 var visual_offset := 0.0
 var knockback_timer := 0.0
-var knockback_force := 0.0
 var gravity_override := -1.0
 var horizontal_lock := 0.0
 ## Seconds of floor snapping still to be given up after a crumble gave way underfoot.
@@ -207,9 +206,11 @@ func _on_jump_pressed() -> void:
 	if wall_jump:
 		wall_jump.on_jump_pressed()
 
-## Whether the player is allowed to act on input at all.
+## Whether the player is allowed to act on input at all. Not during a knockback: its
+## arc is fixed, and a jump or thrust mid-way would be overwritten by it anyway.
 func can_act() -> bool:
-	return PlayerManager.canMove and not _dying and not (health and health.is_dead())
+	return PlayerManager.canMove and not _dying and not (health and health.is_dead()) \
+		and knockback_timer <= 0.0
 #endregion
 
 #region Move state
@@ -385,9 +386,9 @@ func share_shoot_cooldown(seconds: float) -> void:
 	if wrench:
 		wrench.block_for(seconds)
 
-func _on_knocked_back(force: float, duration: float) -> void:
-	knockback_force = force
-	knockback_timer = duration
+func _on_knocked_back(force: float, _duration: float) -> void:
+	if planar_movement:
+		planar_movement.start_knockback(force)
 	if animator:
 		animator.request_action(&"knockback")
 #endregion
@@ -411,7 +412,6 @@ func respawn() -> void:
 	gravity_override = -1.0
 	horizontal_lock = 0.0
 	knockback_timer = 0.0
-	knockback_force = 0.0
 	reset_all_inputs()
 	enter_state(MoveState.Standing)
 
