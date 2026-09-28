@@ -4,6 +4,7 @@
 [ext_resource type="Resource" uid="uid://dci76v6q5aje8" path="res://Resources/CustomSaves/limbo_spawn.tres" id="2_3dryh"]
 [ext_resource type="PackedScene" uid="uid://dohmyoeiilp0v" path="res://Scenes/Players/player.tscn" id="2_qxrlw"]
 [ext_resource type="PackedScene" uid="uid://c4thct0jgtock" path="res://Scenes/game_hud.tscn" id="3_wrm1d"]
+[ext_resource type="Environment" uid="uid://da4yyl0ndg2kg" path="res://00_Globals/bloom_environment.tres" id="4_wowpa"]
 
 [node name="Game" type="Node" unique_id=651801150]
 script = ExtResource("1_wrm1d")
@@ -13,6 +14,7 @@ custom_save_data = ExtResource("2_3dryh")
 position = Vector2(2493, 399)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1073950029]
+environment = ExtResource("4_wowpa")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1429657112 groups=["Cameras"]]
 
