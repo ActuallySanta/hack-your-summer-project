@@ -80,8 +80,8 @@ func _swap_room(target_room: String) -> void:
 ## half of the effect that makes the stop read as time stopping rather than as the game
 ## dropping a frame.
 func _suspend_player(suspended: bool) -> void:
-	# Borrowed and handed back rather than set to true, because the full map borrows the
-	# same flag (see PlayerHUD) and is entitled to still be holding it afterwards.
+	# Borrowed and handed back rather than set to true, because anything else that has
+	# taken the same flag away is entitled to still be holding it afterwards.
 	if suspended:
 		_could_move = PlayerManager.canMove
 	PlayerManager.canMove = false if suspended else _could_move

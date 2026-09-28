@@ -5,7 +5,7 @@
 ## once per frame with the frame delta, and the panel stays in the OPENING/CLOSING
 ## state until that callable returns [code]true[/code].
 ##
-## Used by [FullMap] and [HudMinimap] so both follow the same contract.
+## Used by [PauseMap] and [HudMinimap] so both follow the same contract.
 class_name MapPanelAnimator
 extends RefCounted
 
@@ -83,6 +83,18 @@ func snap_closed() -> void:
 		push_warning("MapPanelAnimator: the close animation did not finish when snapped. It may not be duration-based.")
 	state = State.CLOSED
 	closed.emit()
+
+## Opens with no animation, in one call. The mirror of [method snap_closed], for when
+## the rest of an opening animation would play where nobody can see it.
+func snap_open() -> void:
+	if state == State.OPEN:
+		return
+	open()
+	_open_step.call(3600.0)
+	if not _open_step.call(3600.0):
+		push_warning("MapPanelAnimator: the open animation did not finish when snapped. It may not be duration-based.")
+	state = State.OPEN
+	opened.emit()
 
 ## Drives the current animation. Call once per frame from the panel's [code]_process[/code].
 func step(delta: float) -> void:

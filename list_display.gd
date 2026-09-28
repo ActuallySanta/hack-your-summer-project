@@ -108,8 +108,9 @@ func _ready() -> void:
 		TextListItem.new("Controls", WIDTH),
 		TextListItem.new("Difficulty", WIDTH),
 	])
+	var map = TextListItem.new("Map", WIDTH)
 	var logbook = TextListItem.new("Log Book", WIDTH)
-	root = TextListItem.new("C:/Users/Ash Jerock/ana4Tl", WIDTH, [ options, logbook, TextListItem.new("Shut Down", WIDTH, ["Confirm:", "Yes", "No"])])
+	root = TextListItem.new("C:/Users/Ash Jerock/ana4Tl", WIDTH, [ map, options, logbook, TextListItem.new("Shut Down", WIDTH, ["Confirm:", "Yes", "No"])])
 	root.show_children()
 	root.parse_path("Shut Down/Yes").on_click.connect( _on_shut_down_confirmed )
 	root.parse_path("Shut Down/No").on_click.connect( _on_shut_down_declined )

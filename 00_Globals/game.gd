@@ -182,8 +182,6 @@ func _reset_world_state() -> void:
 	MusicManager.restore_automatic_assignment()
 
 func pause_game() -> void:
-	# Before the tree stops, or the map freezes on screen over the menu.
-	_hud.force_close_map()
 	get_tree().paused = true
 	_hud.show_menu(GameHUD.MenuType.Pause)
 	paused = true
@@ -242,7 +240,6 @@ func _process(_delta: float) -> void:
 	# Engine.time_scale down along its slide instead of stopping the tree dead. pause_game() and
 	# the GameHUD pause menu are still here and still work, they are just not bound to anything.
 	if Input.is_action_just_pressed("pause"):
-		_hud.force_close_map()	# The map would otherwise be left sitting on screen over the menu
 		ListDisplay.toggle_menu()
 
 #region Camera bounds and axis regions

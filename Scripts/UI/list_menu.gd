@@ -14,6 +14,7 @@ var panel_open : bool = false
 func _ready() -> void:
 	panel.on_fully_hidden.connect( _disable_if_fully_hidden )
 	pause_panel.on_fully_hidden.connect( _disable_if_fully_hidden )
+	panel.root.parse_path(".../Map").on_click.connect( pause_panel.show_map )
 	enabled = false
 
 # The slide and the fade finish at different times, so whichever lands second turns the menu off

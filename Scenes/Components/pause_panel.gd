@@ -6,6 +6,8 @@ const CONTENT_LINE_COUNT : int = 28
 const TOTAL_WIDTH : int = 32
 
 enum HideState { HIDE_REST, SHOW_REST, HIDING, SHOWING }
+## What the panel is showing: a text file from the list, or the map
+enum Tab { TEXT, MAP }
 
 ## The panel has finished fading out
 signal on_fully_hidden
@@ -17,6 +19,8 @@ signal on_fully_hidden
 @onready var click_box := $ClickBox
 @onready var scroll_interactable := $ScrollInteractable
 @onready var scroll_wheel_detector := $ScrollWheelInteractable
+@onready var map_tab := $MapTab
+@onready var map : PauseMap = $MapTab/Map
 
 var _scroll_bar_data : TextBar = TextBar.new(Vector2i(29, SCROLL_BAR_SIZE), TextElement.Axis.Vertical, SCROLL_BAR_SIZE)
 
@@ -24,15 +28,14 @@ var enabled : bool:
 	set( new_value ):
 		enabled = new_value
 		set_process( enabled )	# The fade runs in _process, so enable before display( true )
-		click_box.enabled = enabled
-		scroll_interactable.enabled = enabled
-		scroll_wheel_detector.enabled = enabled
+		_apply_input()
 
 var read_output : String = "$TAB $AUTO_1028"
 var text_line_count : int = 0
 var file_height : int = 3
 
 var _desire_to_hide : HideState = HideState.SHOW_REST
+var _tab : Tab = Tab.TEXT
 
 var fully_hidden : bool:
 	get(): return _desire_to_hide == HideState.HIDE_REST
@@ -54,6 +57,7 @@ func _ready() -> void:
 	#constants.draw_scroll_bar(_scroll_bar_data, 1000)
 	scroll_interactable.on_mouse_pressed.connect( func(): click_box.was_pressed = true )
 	scroll_wheel_detector.on_scroll.connect( on_scroll )
+	_apply_tab()
 	force_set_display( false )
 
 func _process(_delta: float) -> void:
@@ -64,6 +68,7 @@ func read_and_place(file_name: String) -> void:
 		printerr("Warning (pause_panel, 27): File does not exist")
 		return
 	
+	_show_text()
 	var file = FileAccess.open(file_name, FileAccess.READ)
 	read_output = file.get_as_text()
 	file.close()
@@ -91,6 +96,37 @@ func _draw_scroll_bar(percent: float) -> void:
 		return
 	constants.draw_scroll_bar(_scroll_bar_data, constants._get_scroll_bar_quarters_from_percent(SCROLL_BAR_SIZE, 1 - percent))
 
+#region Tabs
+## Switches to the map, which plays its turn-on. Already on the map this does nothing, so
+## clicking the tab again, or closing and reopening the menu, never replays it.
+func show_map() -> void:
+	if _tab == Tab.MAP: return
+	_tab = Tab.MAP
+	_apply_tab()
+	map.open()
+
+func _show_text() -> void:
+	if _tab == Tab.TEXT: return
+	_tab = Tab.TEXT
+	map.snap_closed()
+	_apply_tab()
+
+func _apply_tab() -> void:
+	var on_map := _tab == Tab.MAP
+	map_tab.visible = on_map
+	content.visible = not on_map
+	constants.visible = not on_map
+	_apply_input()
+
+# The text's click and scroll boxes sit over the map, so only the tab showing takes input
+func _apply_input() -> void:
+	var reading := enabled and _tab == Tab.TEXT
+	click_box.enabled = reading
+	scroll_interactable.enabled = reading
+	scroll_wheel_detector.enabled = reading
+	map.active = enabled and _tab == Tab.MAP
+#endregion
+
 #region animation stuffs
 # shw | dth | ocm
 #  0  |  0  |  0
@@ -104,6 +140,8 @@ func _draw_scroll_bar(percent: float) -> void:
 # When equal -> no change
 # else: outcome (ocm) = 2 + show
 func display(should_show: bool) -> void:
+	# Coming back from fully away, the player has moved on since the map last looked
+	if should_show and fully_hidden and _tab == Tab.MAP: map.refresh()
 	if int(should_show) == _desire_to_hide: pass
 	else: _desire_to_hide = (2 + int(should_show)) as HideState
 
@@ -122,6 +160,8 @@ func force_set_display(should_show: bool) -> void:
 	else:
 		modulate.a = 0
 		_desire_to_hide = HideState.HIDE_REST
+		# Reopening shows the map as it was left, so a turn-on the fade cut short finishes unseen
+		map.finish_animation()
 		on_fully_hidden.emit()
 
 #endregion

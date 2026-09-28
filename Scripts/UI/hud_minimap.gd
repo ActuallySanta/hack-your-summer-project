@@ -1,8 +1,8 @@
 @tool
-## The HUD minimap, with the same open/close animation contract as [FullMap].
+## The HUD minimap, with the same open/close animation contract as [PauseMap].
 ##
 ## Everything about what the minimap draws is inherited from MetSys' Minimap.gd; this
-## only adds the ability to animate it out of the way while the full map is open.
+## only adds the ability to animate it in and out of the way.
 ##
 ## [b]Animation contract.[/b] While closing, [method _animate_close] is called once per
 ## frame with the frame delta and the minimap counts as closed on the first frame it

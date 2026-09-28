@@ -6,11 +6,9 @@
 [ext_resource type="PackedScene" uid="uid://dch8dyylb7526" path="res://addons/MetroidvaniaSystem/Template/Nodes/Minimap.tscn" id="2_y31ga"]
 [ext_resource type="PackedScene" uid="uid://c214glttpaw83" path="res://Scenes/UI/player_health.tscn" id="3_jh2mb"]
 [ext_resource type="TileSet" uid="uid://buxceg5xwah17" path="res://Tileset/HUD.tres" id="3_odvir"]
-[ext_resource type="PackedScene" path="res://Scenes/UI/full_map.tscn" id="4_fullmap"]
 [ext_resource type="Script" uid="uid://dpm1m1a7ewttn" path="res://Scripts/LevelTileMap.gd" id="4_out4y"]
 [ext_resource type="PackedScene" uid="uid://c72ewsb5wge47" path="res://Scenes/UI/text_display.tscn" id="9_out4y"]
 [ext_resource type="Script" uid="uid://cglok4irgmrj7" path="res://Scripts/Animation/transition_fade.gd" id="10_tquq1"]
-[ext_resource type="PackedScene" uid="uid://bk8wbos0orgfn" path="res://Scenes/Components/pause_panel.tscn" id="11_op1xi"]
 
 [node name="Player HUD" type="Control" unique_id=890844106]
 layout_mode = 3
@@ -50,15 +48,6 @@ area = Vector2i(5, 3)
 
 [node name="PlayerHealth" parent="." unique_id=1360041974 instance=ExtResource("3_jh2mb")]
 
-[node name="FullMap" parent="." unique_id=1902447311 instance=ExtResource("4_fullmap")]
-visible = false
-custom_minimum_size = Vector2(960, 576)
-layout_mode = 1
-offset_left = 96.0
-offset_top = 48.0
-offset_right = 1056.0
-offset_bottom = 624.0
-
 [node name="TextDisplay" parent="." unique_id=1424382426 instance=ExtResource("9_out4y")]
 layout_mode = 1
 offset_top = 672.0
@@ -73,6 +62,3 @@ offset_right = 1152.0
 offset_bottom = 672.0
 color = Color(0, 0, 0, 1)
 script = ExtResource("10_tquq1")
-
-[node name="PausePanel" parent="." unique_id=742136505 instance=ExtResource("11_op1xi")]
-visible = false
