@@ -51,4 +51,5 @@ func _process(delta: float) -> void:
 	
 	var move_input_x := Input.get_axis("Left", "Right")
 	var move_input_y := Input.get_axis("Up", "Down")
-	_parent.global_position += Vector2(move_input_x, move_input_y) * move_speed * delta
+	var double := 5 if Input.is_action_pressed("Jump") else 1
+	_parent.global_position += Vector2(move_input_x, move_input_y) * move_speed * delta * double

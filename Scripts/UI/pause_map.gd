@@ -36,6 +36,10 @@ enum SizeMode {
 signal opened
 ## Emitted when the map is put away.
 signal closed
+## Emitted when the panning input the map is following changes: [param held] is the
+## direction of the movement keys it is obeying, [param dragging] whether the mouse is
+## dragging it. For showing that input, as each [MapArrow] does.
+signal pan_input_changed(held: Vector2i, dragging: bool)
 
 # A zero scale leaves no inverse transform, and the GUI's mouse picking inverts every
 # Control's transform each frame, visible or not.
@@ -143,11 +147,21 @@ var _view_cells: Vector2i
 var _cell_size: Vector2
 ## Where the view is looking, in cells off the centre of the player's cell.
 var _pan: Vector2
-var _key_input: Vector2i
+var _key_input: Vector2i:
+	set(value):
+		if value == _key_input:
+			return
+		_key_input = value
+		pan_input_changed.emit(_key_input, _dragging)
 var _key_ignored: Vector2i
 ## Fractional cells built up towards the next key step, per axis.
 var _key_accum: Vector2
-var _dragging := false
+var _dragging := false:
+	set(value):
+		if value == _dragging:
+			return
+		_dragging = value
+		pan_input_changed.emit(_key_input, _dragging)
 var _drag_last: Vector2
 var _turn_on_elapsed: float
 

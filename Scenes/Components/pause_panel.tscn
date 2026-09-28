@@ -5,6 +5,40 @@
 [ext_resource type="TileSet" uid="uid://buxceg5xwah17" path="res://Tileset/HUD.tres" id="2_yni75"]
 [ext_resource type="Script" uid="uid://b8qf05uwtbxn0" path="res://Scenes/Components/click_test_box.gd" id="4_0lysg"]
 [ext_resource type="Script" uid="uid://d2tqaabm000qd" path="res://Scripts/UI/pause_map.gd" id="5_pmap"]
+[ext_resource type="Texture2D" uid="uid://b201wdn5apbf4" path="res://Sprites/Game UI/Player HUD/UI1.png" id="6_ui1"]
+[ext_resource type="Script" uid="uid://16yk02bp8blu" path="res://Scripts/UI/map_arrow.gd" id="7_arrow"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_arrow_north"]
+atlas = ExtResource("6_ui1")
+region = Rect2(128, 96, 15, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_arrow_north_pressed"]
+atlas = ExtResource("6_ui1")
+region = Rect2(128, 112, 15, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_arrow_south"]
+atlas = ExtResource("6_ui1")
+region = Rect2(128, 104, 15, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_arrow_south_pressed"]
+atlas = ExtResource("6_ui1")
+region = Rect2(128, 120, 15, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_arrow_west"]
+atlas = ExtResource("6_ui1")
+region = Rect2(144, 96, 8, 15)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_arrow_west_pressed"]
+atlas = ExtResource("6_ui1")
+region = Rect2(144, 112, 8, 15)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_arrow_east"]
+atlas = ExtResource("6_ui1")
+region = Rect2(152, 96, 8, 15)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_arrow_east_pressed"]
+atlas = ExtResource("6_ui1")
+region = Rect2(152, 112, 8, 15)
 
 [node name="PausePanel" type="Node2D" unique_id=742136505]
 scale = Vector2(3, 3)
@@ -97,6 +131,45 @@ cell_scale = 1.0
 [node name="Drawer" type="Node2D" parent="MapTab/Map" unique_id=250978116]
 position = Vector2(-1.1666667, 0)
 scale = Vector2(0.33333334, 0.33333334)
+
+[node name="ArrowNorth" type="Sprite2D" parent="MapTab/Map" unique_id=5144524]
+z_index = 6
+position = Vector2(114, 4)
+texture = SubResource("AtlasTexture_arrow_north")
+centered = false
+script = ExtResource("7_arrow")
+idle_texture = SubResource("AtlasTexture_arrow_north")
+pressed_texture = SubResource("AtlasTexture_arrow_north_pressed")
+
+[node name="ArrowSouth" type="Sprite2D" parent="MapTab/Map" unique_id=105591678]
+z_index = 6
+position = Vector2(114, 148)
+texture = SubResource("AtlasTexture_arrow_south")
+centered = false
+script = ExtResource("7_arrow")
+edge = 1
+idle_texture = SubResource("AtlasTexture_arrow_south")
+pressed_texture = SubResource("AtlasTexture_arrow_south_pressed")
+
+[node name="ArrowWest" type="Sprite2D" parent="MapTab/Map" unique_id=1319394071]
+z_index = 6
+position = Vector2(4, 72)
+texture = SubResource("AtlasTexture_arrow_west")
+centered = false
+script = ExtResource("7_arrow")
+edge = 2
+idle_texture = SubResource("AtlasTexture_arrow_west")
+pressed_texture = SubResource("AtlasTexture_arrow_west_pressed")
+
+[node name="ArrowEast" type="Sprite2D" parent="MapTab/Map" unique_id=1616082753]
+z_index = 6
+position = Vector2(231, 72)
+texture = SubResource("AtlasTexture_arrow_east")
+centered = false
+script = ExtResource("7_arrow")
+edge = 3
+idle_texture = SubResource("AtlasTexture_arrow_east")
+pressed_texture = SubResource("AtlasTexture_arrow_east_pressed")
 
 [node name="Key" type="Control" parent="MapTab" unique_id=1971239738]
 layout_mode = 3
