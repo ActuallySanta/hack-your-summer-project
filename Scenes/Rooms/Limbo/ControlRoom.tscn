@@ -34,10 +34,11 @@ size = Vector2(102, 96)
 
 [node name="ControlRoom" type="Node2D" unique_id=1349079859]
 
-[node name="RoomInstance" parent="." unique_id=654008620 instance=ExtResource("1_jubvm")]
-
 [node name="SpaceBackground" parent="." unique_id=1411061257 instance=ExtResource("2_dfvwi")]
+z_index = -64
 position = Vector2(576, 336)
+
+[node name="RoomInstance" parent="." unique_id=654008620 instance=ExtResource("1_jubvm")]
 
 [node name="Background" type="Sprite2D" parent="." unique_id=1035454331]
 position = Vector2(576, 336)
@@ -90,6 +91,7 @@ scale = Vector2(3, 3)
 texture = ExtResource("10_dpjwi")
 hframes = 6
 vframes = 2
+frame = 5
 script = SubResource("GDScript_b0u4x")
 frames_in_sequence = 6
 anim_speed_adjust = 0.1

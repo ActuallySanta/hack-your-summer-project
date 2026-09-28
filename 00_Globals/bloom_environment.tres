@@ -1,0 +1,10 @@
+[gd_resource type="Environment" format=3 uid="uid://da4yyl0ndg2kg"]
+
+[resource]
+background_mode = 3
+tonemap_exposure = 0.71
+glow_enabled = true
+glow_intensity = 1.64
+glow_hdr_threshold = 0.02
+glow_hdr_scale = 1.52
+glow_hdr_luminance_cap = 0.89

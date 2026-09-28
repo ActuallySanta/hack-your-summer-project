@@ -12,6 +12,8 @@ custom_save_data = ExtResource("2_3dryh")
 [node name="Player" parent="." unique_id=862395343 instance=ExtResource("2_qxrlw")]
 position = Vector2(2493, 399)
 
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1073950029]
+
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1429657112 groups=["Cameras"]]
 
 [node name="HUD" parent="." unique_id=98304293 instance=ExtResource("3_wrm1d")]

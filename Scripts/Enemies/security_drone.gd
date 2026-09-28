@@ -16,7 +16,7 @@ var state := 0
 var is_dead := false
 
 func _ready() -> void:
-	$RoboHealth.on_death_event( _die )
+	$RoboHealth.on_death_event.connect( _die )
 
 func _process(delta: float) -> void:
 	if is_dead:
