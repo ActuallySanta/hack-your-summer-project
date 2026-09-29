@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://bf00djjaurdhr" path="res://Textures/PropsAndBackgrounds/Darkness.png" id="1_a6myr"]
 [ext_resource type="Script" uid="uid://dpm1m1a7ewttn" path="res://Scripts/LevelTileMap.gd" id="2_dcmm8"]
-[ext_resource type="Script" path="res://Scripts/Level Elements/darkness.gd" id="3_dknss"]
+[ext_resource type="Script" uid="uid://bv34gcwfofg10" path="res://Scripts/Level Elements/darkness.gd" id="3_dknss"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_we1ai"]
 texture = ExtResource("1_a6myr")
@@ -347,6 +347,7 @@ texture = ExtResource("1_a6myr")
 sources/0 = SubResource("TileSetAtlasSource_we1ai")
 
 [node name="Darkness" type="Sprite2D" unique_id=1231306066]
+modulate = Color(1, 1, 1, 0.8)
 z_index = 999
 scale = Vector2(3, 3)
 texture = ExtResource("1_a6myr")

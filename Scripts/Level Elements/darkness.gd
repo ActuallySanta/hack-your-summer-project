@@ -233,7 +233,7 @@ func _fade_in() -> void:
 	modulate.a = 0.0
 	visible = true
 	_fade = create_tween().set_parallel().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	_fade.tween_property(self, "modulate:a", 1.0, entry_seconds)
+	_fade.tween_property(self, "modulate:a", 0.8, entry_seconds)
 	_fade.tween_property(self, "scale", _base_scale, entry_seconds)
 	_fade.finished.connect(_clear_fade)
 #endregion

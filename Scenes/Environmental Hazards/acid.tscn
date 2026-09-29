@@ -16,7 +16,8 @@ script = ExtResource("2_osni7")
 collision_layer = 0
 collision_mask = 2
 script = ExtResource("3_bds7y")
-knockback_duration = 0.1
+knockback_strength = 0.0
+knockback_duration = 0.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=692635070]
 shape = SubResource("RectangleShape2D_fe33h")
