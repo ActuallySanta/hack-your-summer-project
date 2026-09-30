@@ -103,11 +103,11 @@ func _ready() -> void:
 	_open_audio_mixer()
 
 	var options = TextListItem.new("Options", WIDTH, [
-		TextListItem.new("Visuals", WIDTH),
-		TextListItem.new("Audio", WIDTH),
-		TextListItem.new("Controls", WIDTH),
-		TextListItem.new("Difficulty", WIDTH),
-	])
+		["Visuals", ["General","Special Effects"]],
+		"Audio",
+		"Controls",
+		"Difficulty",
+		])
 	var map = TextListItem.new("Map", WIDTH)
 	var logbook = TextListItem.new("Log Book", WIDTH)
 	root = TextListItem.new("C:/Users/Ash Jerock/ana4Tl", WIDTH, [ map, options, logbook, TextListItem.new("Shut Down", WIDTH, ["Confirm:", "Yes", "No"])])

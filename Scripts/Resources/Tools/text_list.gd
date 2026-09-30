@@ -169,6 +169,21 @@ func _init(label: String, max_width: int, child_lists: Array = []) -> void:
 			make_parent_of( child )
 		elif child is String:
 			insert_new_list_item_at( child )
+		elif child is Array:
+			var name = child[0]
+			var width = max_width
+			var kids = []
+			if child.size() > 1:
+				if child[ 1 ] is int: width = child[ 1 ]
+				elif child[ 1 ] is Array: kids = child[ 1 ]
+			if child.size() > 2:
+				if child[ 2 ] is int: 
+					assert(not child[ 1 ] is int, "Cannot re-assign width")
+					width = child[ 2 ]
+				elif child[ 2 ] is Array: 
+					assert(not child[ 1 ] is Array, "Cannot re-assign children")
+					kids = child[ 2 ]
+			make_parent_of( TextListItem.new(name, width,kids) )
 
 func make_parent_of(child: TextListItem) -> void:
 	if child == null: return
