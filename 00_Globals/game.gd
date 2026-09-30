@@ -164,6 +164,11 @@ func _enter_world(write_starting_save: bool) -> void:
 	_player.global_position = SaveManager.get_spawn_position()
 	_player_positioned = true
 	_player.respawn()
+	# Nothing the camera holds goes away with the room reload, so without this a respawn
+	# plays out whatever it was doing where the player died: the region they died in
+	# hands its axes back, a boundary that no longer applies eases away, and the camera
+	# slides across to the spawn as the load screen clears.
+	_place_camera_on_spawn()
 	# Everything that restores itself from the save does so on this signal, including
 	# [SaveManager] putting the map back the way the save describes.
 	GlobalSignals.player_spawned.emit()
@@ -607,6 +612,17 @@ func _resolve_camera_arrival() -> void:
 			best = region
 	if best != null:
 		snap_to_camera_axis_region(best)
+
+## Cuts the camera straight onto the player with nothing in flight. Runs before
+## [signal GlobalSignals.player_spawned], which is when a region the player spawned
+## inside takes the camera over from here.
+func _place_camera_on_spawn() -> void:
+	reset_camera_axis_state()
+	var bounds := _camera_bounds()
+	if not _bounds_roomless:
+		_settle_camera_bounds(bounds)
+	_apply_camera_limits(bounds, 0)
+	_place_camera(_clamp_view_to_rect(_player.position, _half_view(), bounds), bounds, 0)
 
 ## Half the camera's view, in world pixels.
 func _half_view() -> Vector2:

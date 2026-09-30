@@ -216,14 +216,16 @@ func remove_label_at(label: String) -> TextListItem:
 	return null
 
 func insert_new_list_item_at(label: String) -> TextListItem:
+	# Get the new item name
 	var last_path_marker = label.rfind("/")
-	if last_path_marker == -1: return insert_new_list_item(label)
-	var label_name = label.substr(last_path_marker + 1)
+	if last_path_marker == -1: return insert_new_list_item( label ) # If it's just a label 
 	var result := find_youngest_node_on_invalid_path( label )
 	var node = result[ 0 ]
+	print(node.item_name)
 	var remaining_path : PackedStringArray = result[ 1 ]
-	if remaining_path == "": return parse_path( path )
-	if remaining_path == PackedStringArray([ "" ]): return node.insert_new_list_item( label_name ) # If we got a valid spot to add on
+	print(remaining_path)
+	if remaining_path == PackedStringArray([ "" ]): 
+		return node#.insert_new_list_item( label_name ) # If we got a valid spot to add on
 
 	# Go down the remaining path
 	for dir in remaining_path:
@@ -391,7 +393,8 @@ func _forget(item: TextListItem) -> void:
 #region Helpers
 
 func find_youngest_node_on_invalid_path(path: String) -> Array: # The array should be formatted : [ Youngest_node_that_exists, Remaining_path_nodes ]
-	if parse_path( path ) != null: return [ path, [ "" ] ] # What if the path actually works
+	var parse_attempt := parse_path( path )
+	if parse_attempt != null: return [ parse_attempt, [ "" ] ] # What if the path actually works
 	
 	var nodes := path.split("/", false)
 	var current_node := self
