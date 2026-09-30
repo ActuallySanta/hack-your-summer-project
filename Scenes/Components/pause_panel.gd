@@ -34,11 +34,18 @@ var read_output : String = "$TAB $AUTO_1028"
 var text_line_count : int = 0
 var file_height : int = 3
 
-var _desire_to_hide : HideState = HideState.SHOW_REST
+var _desire_to_hide : HideState = HideState.SHOW_REST:
+	set( new_value ):
+		_desire_to_hide = new_value
+		_apply_input()
 var _tab : Tab = Tab.TEXT
 
 var fully_hidden : bool:
 	get(): return _desire_to_hide == HideState.HIDE_REST
+
+## Whether the panel is up or on its way up, rather than fading away or gone
+var _showing : bool:
+	get(): return _desire_to_hide == HideState.SHOW_REST or _desire_to_hide == HideState.SHOWING
 
 var _pos_raw : int = 0 
 var pos_y : int:
@@ -125,6 +132,9 @@ func _apply_input() -> void:
 	scroll_interactable.enabled = reading
 	scroll_wheel_detector.enabled = reading
 	map.active = enabled and _tab == Tab.MAP
+	# Resuming puts the player straight back on the movement keys while the map is still fading
+	# out, so it stops panning the moment the panel starts to go rather than once it has gone
+	map.takes_input = _showing
 #endregion
 
 #region animation stuffs

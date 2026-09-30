@@ -44,7 +44,13 @@ var item_name : String
 ## so the cursor is tracked on the root instead and display_state lays the two over each other.
 var state : ItemState
 var is_last_item : bool
-var dirty : bool = false
+## Whether the list has changed since it was last drawn. The display only ever asks the root, so
+## every item marks the root's flag: an entry added deep in a branch would otherwise sit unseen
+## until something done to the root itself, like the cursor moving, redrew the list.
+var dirty : bool:
+	get(): return root_item._dirty
+	set(new_value): root_item._dirty = new_value
+var _dirty : bool = false
 
 ## The item under the cursor, the one the button went down on, and the last label to have been
 ## clicked. Only the root's copies are ever read; a list has one cursor and one place the player is
@@ -212,6 +218,8 @@ func remove_label_at(label: String) -> TextListItem:
 			target.super_list = null
 			nodes.remove_at( i )
 			if nodes.is_empty(): holder.state = ItemState.INACTIVE	# Nothing left to head, so it is a plain label again
+			else: nodes.back().is_last_item = true	# The branch closes off on whatever is at the bottom now
+			dirty = true
 			return target
 	return null
 
@@ -221,9 +229,7 @@ func insert_new_list_item_at(label: String) -> TextListItem:
 	if last_path_marker == -1: return insert_new_list_item( label ) # If it's just a label 
 	var result := find_youngest_node_on_invalid_path( label )
 	var node = result[ 0 ]
-	print(node.item_name)
 	var remaining_path : PackedStringArray = result[ 1 ]
-	print(remaining_path)
 	if remaining_path == PackedStringArray([ "" ]): 
 		return node#.insert_new_list_item( label_name ) # If we got a valid spot to add on
 

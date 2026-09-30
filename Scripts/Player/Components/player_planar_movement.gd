@@ -133,6 +133,11 @@ func start_knockback(force: float) -> void:
 # That keeps the distance the same at any frame rate and whatever gravity is set to, and
 # the arc ends with almost no speed left over for the next state to carry on with.
 func _knockback(delta: float) -> void:
+	# A stopped clock (the pause menu, a room fade) still steps physics, with a delta of zero,
+	# and the velocity below is distance over time: 0 / 0 would put the player at NaN for good.
+	# Nothing moves at a delta of zero anyway, so the arc just waits for time to come back.
+	if delta <= 0.0:
+		return
 	var from := _knockback_offset(_knockback_elapsed / knockback_seconds)
 	_knockback_elapsed = minf(_knockback_elapsed + delta, knockback_seconds)
 	var to := _knockback_offset(_knockback_elapsed / knockback_seconds)

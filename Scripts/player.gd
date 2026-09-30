@@ -189,14 +189,15 @@ func _read_inputs() -> void:
 	move_input = Input.get_axis("Left", "Right")
 	crouch_input = Input.is_action_pressed("Crouch")
 	jump_held = Input.is_action_pressed("Jump")
-	shoot_held = Input.is_action_pressed("Shoot")
-	attack_held = Input.is_action_pressed("Attack")
+	var can_attack := PlayerManager.canAttack
+	shoot_held = can_attack and Input.is_action_pressed("Shoot")
+	attack_held = can_attack and Input.is_action_pressed("Attack")
 
 	if Input.is_action_just_pressed("Jump"):
 		_on_jump_pressed()
-	if Input.is_action_just_pressed("Attack") and wrench:
+	if can_attack and Input.is_action_just_pressed("Attack") and wrench:
 		wrench.on_attack_pressed()
-	if Input.is_action_just_pressed("Shoot") and shooting:
+	if can_attack and Input.is_action_just_pressed("Shoot") and shooting:
 		shooting.on_shoot_pressed()
 
 ## A press goes to the mantle first: at a ledge it is a vault, and only otherwise a

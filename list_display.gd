@@ -87,6 +87,9 @@ var touchable : bool:
 ## Whether the menu is the one currently slowing the world down. It takes the clock on the way out
 ## and gives it back the moment it is fully away, so a world nobody is holding is left alone.
 var _owns_world_clock : bool = false
+## Whether the menu is holding the player's controls, and what canMove was before it took them
+var _holding_player_controls : bool = false
+var _player_could_move : bool = true
 ## The real clock, read straight rather than through a delta the menu itself is shrinking
 var _real_time_usec : int
 
@@ -128,6 +131,7 @@ func _exit_tree() -> void:
 	if _owns_world_clock:
 		Engine.time_scale = 1.0
 		PhysicsServer2D.set_active(true)
+	_hold_player_controls( false )
 
 func _process(_delta: float) -> void:
 	var delta := RealDelta.get_capped()
@@ -156,13 +160,16 @@ func update_state(delta: float) -> void:
 	position.x += d
 
 #region Opening and closing
-func open_menu() -> void:
-	if menu_goal == MenuState.MENU_REST_SHOWN: return
-	if not _owns_world_clock and not is_equal_approx(Engine.time_scale, 1.0): return
+## Sets the panel coming in, and answers whether it is coming. It will not take the world clock off
+## a room transition that is still easing it, so it stays put until the fade has handed time back.
+func open_menu() -> bool:
+	if menu_goal == MenuState.MENU_REST_SHOWN: return true
+	if not _owns_world_clock and not is_equal_approx(Engine.time_scale, 1.0): return false
 
 	menu_goal = MenuState.MENU_REST_SHOWN
 	_owns_world_clock = true
-	_set_player_frozen( true )
+	_hold_player_attacks( true )
+	return true
 
 func close_menu() -> void:
 	if menu_goal == MenuState.MENU_REST_HIDDEN: return
@@ -175,15 +182,30 @@ func update_world_time() -> void:
 	# moving AnimatableBody2D works its velocity out as motion / step. That is 0 / 0 = NaN,
 	# which a player riding it (the elevators) picks up as platform velocity and never sheds.
 	PhysicsServer2D.set_active(Engine.time_scale > 0.0)
+	_hold_player_controls( Engine.time_scale == 0.0 )
 	if menu_state != MenuState.MENU_REST_HIDDEN: return
 
 	_owns_world_clock = false
-	_set_player_frozen( false )
+	_hold_player_attacks( false )
 	on_fully_hidden.emit()
 
-func _set_player_frozen(frozen: bool) -> void:
-	PlayerManager.canMove = !frozen
-	if is_instance_valid(PlayerManager.player): PlayerManager.player.reset_all_inputs()
+# Held only while the world is fully stopped. At a time scale of zero the player's physics still
+# runs, so input read then turns them on the spot and queues jumps that go off on resume, with
+# nothing moving to show for it. Either side of that the world is merely slowed and the controls
+# are live, so a direction pressed as the menu slides away carries the player off with it. Nothing
+# held is cleared: the pose they were stopped in is the pose they resume in.
+func _hold_player_controls(held: bool) -> void:
+	if held == _holding_player_controls: return
+	_holding_player_controls = held
+	# Borrowed and handed back rather than set to true, as the room transition does, since
+	# anything else holding the flag is entitled to still be holding it afterwards
+	if held: _player_could_move = PlayerManager.canMove
+	PlayerManager.canMove = false if held else _player_could_move
+
+# Attacks share the mouse buttons with the list, so every click on a row would otherwise queue a
+# swing or a shot. They stay held back until the list stops taking clicks, when it is fully away.
+func _hold_player_attacks(held: bool) -> void:
+	PlayerManager.canAttack = not held
 #endregion
 
 func update_scroll(delta: float) -> void:

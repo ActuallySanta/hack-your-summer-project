@@ -9,7 +9,8 @@
 ##
 ## The view starts centred on the player's cell whenever it is brought up, and pans with
 ## the movement keys (a whole cell per step) or by dragging with the mouse, as far as the
-## four pan limits allow. [PausePanel] decides when it is [member active].
+## four pan limits allow. [PausePanel] decides when it is [member active], and when it
+## [member takes_input].
 ##
 ## [b]Animation contract.[/b] While opening, [method _animate_open] is called once per
 ## frame with the real frame delta (the pause menu slows [code]Engine.time_scale[/code]
@@ -120,19 +121,22 @@ const MAX_TURN_ON_STEP := 1.0 / 30.0
 @export var pan_action_left := &"Left"
 @export var pan_action_right := &"Right"
 
-## Whether the map is up and taking input. Set by [PausePanel] while its Map tab is the
-## one showing and the panel is open; while false the map neither pans nor follows the
-## player.
+## Whether the map is up. Set by [PausePanel] while its Map tab is the one showing and the
+## panel is open; while false the map neither pans nor follows the player.
 var active := false:
 	set(value):
-		# Keys already down when the map comes up were meant for the player (a pause
-		# pressed mid-run), so each axis waits for its key to be let go first.
-		if value and not active:
-			_key_ignored = _held_direction()
 		active = value
-		if not active:
-			_dragging = false
-			_key_input = Vector2i.ZERO
+		_update_listening()
+		_update_processing()
+
+## Whether the map pans for the movement keys and the mouse while it is [member active].
+## [PausePanel] takes this away the moment the menu starts to close, well before its fade
+## lets go of [member active]: the player is back on the movement keys by then, and those
+## presses are for the world, not for a map on its way out.
+var takes_input := true:
+	set(value):
+		takes_input = value
+		_update_listening()
 		_update_processing()
 
 @onready var _drawer: Node2D = $Drawer
@@ -164,6 +168,8 @@ var _dragging := false:
 		pan_input_changed.emit(_key_input, _dragging)
 var _drag_last: Vector2
 var _turn_on_elapsed: float
+## Whether the map is panning for the player: [member active] and [member takes_input].
+var _listening := false
 
 func _ready() -> void:
 	_animator = MapPanelAnimator.new(_animate_open, _animate_close)
@@ -194,7 +200,7 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	var delta := RealDelta.get_capped()
-	if active and _animator.is_open():
+	if _listening and _animator.is_open():
 		_handle_key_pan(delta)
 	_animator.step(delta)
 	_update_processing()
@@ -202,7 +208,20 @@ func _process(_delta: float) -> void:
 func _update_processing() -> void:
 	if not _animator:
 		return
-	set_process(not Engine.is_editor_hint() and (_animator.is_animating() or (active and _animator.is_open())))
+	set_process(not Engine.is_editor_hint() and (_animator.is_animating() or (_listening and _animator.is_open())))
+
+func _update_listening() -> void:
+	var listening := active and takes_input
+	if listening == _listening:
+		return
+	_listening = listening
+	if _listening:
+		# Keys already down when the map starts listening were meant for the player (a
+		# pause pressed mid-run), so each axis waits for its key to be let go first.
+		_key_ignored = _held_direction()
+	else:
+		_dragging = false
+		_key_input = Vector2i.ZERO
 
 #region Open / close
 ## Brings the map up with its turn-on animation, centred on the player. Safe to call
@@ -346,7 +365,7 @@ func _step(cells: Vector2i) -> void:
 	pan_by(target - _pan)
 
 func _input(event: InputEvent) -> void:
-	if not active or not _animator.is_open():
+	if not _listening or not _animator.is_open():
 		return
 
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
