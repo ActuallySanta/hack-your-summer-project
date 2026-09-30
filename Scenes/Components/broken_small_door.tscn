@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://c323supseu85k"]
+
+[ext_resource type="Texture2D" uid="uid://ybaxfhkg6wjn" path="res://Textures/PropsAndBackgrounds/SmallassDoorBroken.png" id="1_86pxv"]
+[ext_resource type="Script" uid="uid://dbsiojnrufio7" path="res://Scripts/Animation/broken_small_door.gd" id="2_htxjb"]
+[ext_resource type="Script" uid="uid://42wdk8m1e0ck" path="res://Scripts/Enemies/enemy_components/repair_node.gd" id="2_tcvio"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bpmhk"]
+size = Vector2(14, 48)
+
+[node name="BrokenSmallDoor" type="Sprite2D" unique_id=126858313]
+scale = Vector2(3, 3)
+texture = ExtResource("1_86pxv")
+hframes = 9
+vframes = 2
+script = ExtResource("2_htxjb")
+
+[node name="RepairNode" type="Node2D" parent="." unique_id=1254687936]
+script = ExtResource("2_tcvio")
+metadata/_custom_type_script = "uid://42wdk8m1e0ck"
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=513816465]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1078251326]
+shape = SubResource("RectangleShape2D_bpmhk")
