@@ -346,6 +346,18 @@ texture = ExtResource("1_a6myr")
 [sub_resource type="TileSet" id="TileSet_bpmhk"]
 sources/0 = SubResource("TileSetAtlasSource_we1ai")
 
+[sub_resource type="Gradient" id="Gradient_we1ai"]
+offsets = PackedFloat32Array(0.23664123, 0.43129772, 0.71374047)
+colors = PackedColorArray(0, 0, 0, 0, 0, 0, 0, 0.73333335, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_bpmhk"]
+gradient = SubResource("Gradient_we1ai")
+width = 256
+height = 256
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.7, 0)
+
 [node name="Darkness" type="Sprite2D" unique_id=1231306066]
 modulate = Color(1, 1, 1, 0.8)
 z_index = 999
@@ -358,3 +370,10 @@ tile_map_data = PackedByteArray("AAAMAPn/AAAAAAAAAAAMAPr/AAAAAAAAAAAMAPv/AAAAAAA
 tile_set = SubResource("TileSet_bpmhk")
 script = ExtResource("2_dcmm8")
 metadata/_custom_type_script = "uid://dpm1m1a7ewttn"
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=453077810]
+offset_left = -576.0
+offset_top = -336.0
+offset_right = 576.0
+offset_bottom = 336.0
+texture = SubResource("GradientTexture2D_bpmhk")

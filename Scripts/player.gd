@@ -108,6 +108,9 @@ var _visual_offset_bases: PackedVector2Array
 var _dying := false
 #endregion
 
+func get_health_component() -> HealthComponent:
+	return health
+
 func _ready() -> void:
 	PlayerManager.player = self
 	facing_right = true

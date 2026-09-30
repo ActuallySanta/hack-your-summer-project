@@ -217,12 +217,12 @@ func remove_label_at(label: String) -> TextListItem:
 
 func insert_new_list_item_at(label: String) -> TextListItem:
 	var last_path_marker = label.rfind("/")
-	if last_path_marker == -1:
-		return insert_new_list_item(label)
+	if last_path_marker == -1: return insert_new_list_item(label)
 	var label_name = label.substr(last_path_marker + 1)
 	var result := find_youngest_node_on_invalid_path( label )
 	var node = result[ 0 ]
 	var remaining_path : PackedStringArray = result[ 1 ]
+	if remaining_path == "": return parse_path( path )
 	if remaining_path == PackedStringArray([ "" ]): return node.insert_new_list_item( label_name ) # If we got a valid spot to add on
 
 	# Go down the remaining path

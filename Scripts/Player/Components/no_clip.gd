@@ -47,6 +47,17 @@ func _process(delta: float) -> void:
 	if not _cheats_enabled: return
 	
 	if Input.is_action_just_pressed("Climb"): _no_clip_on = not _no_clip_on
+	do_no_clip( delta )
+	do_suicide()
+
+func do_suicide() -> void:
+	if not Input.is_action_pressed("Alt Toggle"): return
+	if Input.is_action_just_pressed("Attack"): 
+		print("Offing self")
+		PlayerManager.player.get_health_component().kill_self()
+		return
+
+func do_no_clip(delta: float) -> void:
 	if not _no_clip_on: return
 	
 	var move_input_x := Input.get_axis("Left", "Right")
