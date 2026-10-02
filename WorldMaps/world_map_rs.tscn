@@ -5,6 +5,23 @@
 [ext_resource type="PackedScene" uid="uid://euism3m73ce2" path="res://Scenes/Rooms/Research Sector/operations_rs.tscn" id="3_6f58x"]
 [ext_resource type="PackedScene" uid="uid://b0nn5vano5iv0" path="res://Scenes/Rooms/Research Sector/labs_rs.tscn" id="4_htech"]
 [ext_resource type="PackedScene" uid="uid://4sacacgt25hd" path="res://Scenes/Rooms/Research Sector/save_room_rs.tscn" id="5_hcoau"]
+[ext_resource type="PackedScene" uid="uid://8ds33djeopah" path="res://Scenes/Rooms/Research Sector/central_labs_rs.tscn" id="6_htech"]
+[ext_resource type="PackedScene" uid="uid://bb8xlsme68ftr" path="res://Scenes/Rooms/Research Sector/freezer_rs.tscn" id="7_hcoau"]
+[ext_resource type="PackedScene" uid="uid://bgany6fylnj3v" path="res://Scenes/Rooms/Research Sector/map_room_rs.tscn" id="8_nr8r4"]
+[ext_resource type="PackedScene" uid="uid://d0tyj4lf6awa5" path="res://Scenes/Rooms/Research Sector/server_room_rs.tscn" id="9_isay6"]
+[ext_resource type="PackedScene" uid="uid://jadbebfoo21n" path="res://Scenes/Rooms/Research Sector/simulation_chamber_rs.tscn" id="10_mvitl"]
+[ext_resource type="PackedScene" uid="uid://eahwsqokgm30" path="res://Scenes/Rooms/Research Sector/specimen_anaysis_rs.tscn" id="11_ca0se"]
+[ext_resource type="PackedScene" uid="uid://jh78bllpyxs0" path="res://Scenes/Rooms/Research Sector/storage_rs.tscn" id="12_mvitl"]
+[ext_resource type="PackedScene" uid="uid://doclrg3o86k0k" path="res://Scenes/Rooms/Research Sector/ventilation_rs.tscn" id="13_ca0se"]
+[ext_resource type="PackedScene" uid="uid://bybxgvwja21ra" path="res://Scenes/Rooms/Research Sector/workshop_rs.tscn" id="14_4umyx"]
+[ext_resource type="PackedScene" uid="uid://diskgekrygh6a" path="res://Scenes/Rooms/Research Sector/classified_access_rs.tscn" id="15_uc65d"]
+[ext_resource type="PackedScene" uid="uid://dr74tos5tkq7q" path="res://Scenes/Rooms/Research Sector/classified_upper_labs_rs.tscn" id="16_pdb5e"]
+[ext_resource type="PackedScene" uid="uid://d35ginxw1jlx" path="res://Scenes/Rooms/Research Sector/save_access_rs.tscn" id="17_l5a5r"]
+[ext_resource type="PackedScene" uid="uid://bdvx2i3lqp5at" path="res://Scenes/Rooms/Research Sector/chemical_storage_rs.tscn" id="18_65tc7"]
+[ext_resource type="PackedScene" uid="uid://b8arow3lon7ga" path="res://Scenes/Rooms/Research Sector/security_rs.tscn" id="19_yqb1m"]
+[ext_resource type="PackedScene" uid="uid://dn6qcth1e4bmb" path="res://Scenes/Rooms/Research Sector/restricted_labs_rs.tscn" id="20_3tiqr"]
+[ext_resource type="PackedScene" uid="uid://o0pjt26fmevi" path="res://Scenes/Rooms/Research Sector/meta_physics_rnd_rs.tscn" id="21_5f3kw"]
+[ext_resource type="PackedScene" uid="uid://dp2f4xg6u84tw" path="res://Scenes/Rooms/Research Sector/jetpack_exercise_course_rs.tscn" id="22_rtk38"]
 
 [node name="WorldMapRS" type="Node2D" unique_id=1107164827]
 
@@ -21,4 +38,55 @@ position = Vector2(2473, -25)
 position = Vector2(1321, 1319)
 
 [node name="SaveRoomRS" parent="." unique_id=2007880890 instance=ExtResource("5_hcoau")]
+position = Vector2(-4439, 6695)
+
+[node name="CentralLabsRS" parent="." unique_id=688913453 instance=ExtResource("6_htech")]
+position = Vector2(-983, 4007)
+
+[node name="Map_Room_RS" parent="." unique_id=207361747 instance=ExtResource("8_nr8r4")]
 position = Vector2(4777, 1319)
+
+[node name="ServerRoomRS" parent="." unique_id=907550304 instance=ExtResource("9_isay6")]
+position = Vector2(-983, 2663)
+
+[node name="SimulationChamberRS" parent="." unique_id=1297110902 instance=ExtResource("10_mvitl")]
+position = Vector2(169, 5351)
+
+[node name="SpecimenAnaysisRS" parent="." unique_id=1347159652 instance=ExtResource("11_ca0se")]
+position = Vector2(2473, -1369)
+
+[node name="FreezerRS" parent="." unique_id=817174294 instance=ExtResource("7_hcoau")]
+position = Vector2(169, 4007)
+
+[node name="StorageRS" parent="." unique_id=1597865909 instance=ExtResource("12_mvitl")]
+position = Vector2(1321, -2041)
+
+[node name="VentilationRS" parent="." unique_id=1902888486 instance=ExtResource("13_ca0se")]
+position = Vector2(-983, 2663)
+
+[node name="WorkshopRS" parent="." unique_id=29252409 instance=ExtResource("14_4umyx")]
+position = Vector2(-2135, 2663)
+
+[node name="ClassifiedAccessRS" parent="." unique_id=2017177184 instance=ExtResource("15_uc65d")]
+position = Vector2(-5591, 5351)
+
+[node name="ClassifiedUpperLabsRS" parent="." unique_id=1418846680 instance=ExtResource("16_pdb5e")]
+position = Vector2(-10199, 5351)
+
+[node name="SaveAccessRS" parent="." unique_id=1889996121 instance=ExtResource("17_l5a5r")]
+position = Vector2(-6743, 6695)
+
+[node name="ChemicalStorageRS" parent="." unique_id=1941329283 instance=ExtResource("18_65tc7")]
+position = Vector2(-9047, 6023)
+
+[node name="SecurityRS" parent="." unique_id=760022746 instance=ExtResource("19_yqb1m")]
+position = Vector2(-11351, 6023)
+
+[node name="RestrictedLabsRS" parent="." unique_id=315621559 instance=ExtResource("20_3tiqr")]
+position = Vector2(-13655, 5351)
+
+[node name="MetaPhysicsRndRS" parent="." unique_id=1455953565 instance=ExtResource("21_5f3kw")]
+position = Vector2(-11351, 6695)
+
+[node name="JetpackExerciseCourseRS" parent="." unique_id=374256645 instance=ExtResource("22_rtk38")]
+position = Vector2(-3287, 4007)

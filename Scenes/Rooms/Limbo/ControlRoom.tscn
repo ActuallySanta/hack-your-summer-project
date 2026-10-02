@@ -91,7 +91,6 @@ scale = Vector2(3, 3)
 texture = ExtResource("10_dpjwi")
 hframes = 6
 vframes = 2
-frame = 5
 script = SubResource("GDScript_b0u4x")
 frames_in_sequence = 6
 anim_speed_adjust = 0.1
