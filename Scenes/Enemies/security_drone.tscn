@@ -237,6 +237,7 @@ collision_layer = 4
 collision_mask = 8
 gravity_scale = 0.0
 script = ExtResource("1_bgcgs")
+do_bullets_danger = true
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1084366026]
 position = Vector2(1.5, 1.5)

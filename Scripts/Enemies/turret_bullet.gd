@@ -13,7 +13,7 @@ func set_mode() -> void:
 
 func _make_dangerous() -> void:
 	do_wall_collisions = false
-	move_speed = 1000
+	move_speed = 300
 	$Sprite2D.texture = DANGER
 
 func post_init_operations() -> void:

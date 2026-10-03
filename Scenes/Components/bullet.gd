@@ -1,6 +1,10 @@
 class_name Bullet extends CharacterBody2D
 
-@export var move_speed : float = 100
+@export var move_speed : float = 100:
+	set(val):
+		move_speed = val
+		velocity = dir * move_speed
+		
 @export var do_wall_collisions : bool = true
 @export var sprite_texture_map : Dictionary[ StringName, int ] = {
 	"U" : 1,
@@ -24,6 +28,7 @@ var direction_to_vector : Dictionary[ StringName, Vector2 ] = {
 	"UL": Vector2(-1, -1).normalized(),
 }
 var initDir : StringName
+var dir : Vector2
 var spawnPos : Vector2
 var start_offset : float
 
@@ -40,7 +45,7 @@ func initial_operations(spawn_pos: Vector2, spawn_direction: StringName, spawn_o
 	initDir = spawn_direction
 	spawnPos = spawn_pos
 	start_offset = spawn_offset
-	var dir : = direction_to_vector[ initDir ]
+	dir = direction_to_vector[ initDir ]
 	position = spawnPos + dir * start_offset
 	velocity = dir * move_speed
 	if $Sprite2D is ManualAnim:
