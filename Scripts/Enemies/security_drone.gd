@@ -79,6 +79,7 @@ func _process(delta: float) -> void:
 			animator.play("Rotate_make_straight")
 
 func _shoot(at_angle: bool) -> void:
+	if not $Visibility.is_on_screen() and Difficulty.current_difficulty < Difficulty.DifficultyID.Standard: return
 	var dirs : Array = [ "UR","DR","DL","UL" ] if at_angle else [ "U","R","D","L" ]
 	for dir in dirs:
 		var bullet = BULLET_SCENE.instantiate() as TurretBullet

@@ -33,8 +33,8 @@ script/source = "extends GPUParticles2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	if not SaveManager.is_station_powered():
-		speed_scale = 0.0
+	if not Settings.db_drone_bg: queue_free()
+	if not SaveManager.is_station_powered(): speed_scale = 0.0
 "
 
 [node name="ObjectFlyer" type="GPUParticles2D" unique_id=447494354]

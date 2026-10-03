@@ -12,7 +12,6 @@
 [ext_resource type="PackedScene" uid="uid://c23c0urqh5mm5" path="res://Scenes/Components/ScaledTileMap.tscn" id="8_sod7b"]
 [ext_resource type="PackedScene" uid="uid://bfdxh46jtantj" path="res://Scenes/Enemies/fallen_cyborg.tscn" id="9_ydc0m"]
 [ext_resource type="PackedScene" uid="uid://cy2osx3ogepds" path="res://Scenes/Rooms/Tutorial Area/locked_door.tscn" id="10_l2g7j"]
-[ext_resource type="PackedScene" uid="uid://dst5y4sttk4ir" path="res://Scenes/Enemies/security_drone.tscn" id="12_pm1qf"]
 [ext_resource type="PackedScene" uid="uid://b0fyg7kdjcyou" path="res://Scenes/Enemies/repair_drone.tscn" id="13_gp64u"]
 [ext_resource type="PackedScene" uid="uid://usl0ryav6sdi" path="res://Scenes/Components/door_blocker.tscn" id="14_5p3vb"]
 [ext_resource type="PackedScene" uid="uid://b7lnb5mc2cxhl" path="res://Scenes/Components/station_powered_node.tscn" id="14_tnlk3"]
@@ -85,9 +84,6 @@ position = Vector2(192, 1392)
 [node name="Fallen_Cyborg3" parent="." unique_id=1135235308 instance=ExtResource("9_ydc0m")]
 position = Vector2(527, 622)
 start_flipped = true
-
-[node name="SecurityDrone" parent="." unique_id=1086733501 instance=ExtResource("12_pm1qf")]
-position = Vector2(855, 554)
 
 [node name="LockedDoor" parent="." unique_id=1290327451 instance=ExtResource("10_l2g7j")]
 position = Vector2(168, 360)

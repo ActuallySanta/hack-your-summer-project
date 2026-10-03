@@ -36,7 +36,8 @@ autostart = true
 
 [node name="Hitbox" parent="." unique_id=125498642 instance=ExtResource("1_c2p3q")]
 collision_layer = 8
-collision_mask = 2
+collision_mask = 3
+monitorable = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=806612866]
 shape = SubResource("CircleShape2D_b5bhe")

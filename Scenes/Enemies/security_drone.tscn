@@ -239,6 +239,9 @@ gravity_scale = 0.0
 script = ExtResource("1_bgcgs")
 do_bullets_danger = true
 
+[node name="Visibility" type="VisibleOnScreenNotifier2D" parent="." unique_id=493969828]
+rect = Rect2(-22, -22, 45, 45)
+
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1084366026]
 position = Vector2(1.5, 1.5)
 scale = Vector2(3, 3)
@@ -247,6 +250,7 @@ hframes = 6
 vframes = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=586316795]
+visible = false
 shape = SubResource("CircleShape2D_bpmhk")
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=214273928]
@@ -261,6 +265,7 @@ stream = ExtResource("5_bl4by")
 max_distance = 4096.0
 
 [node name="RoboHealth" type="Node2D" parent="." unique_id=1501417485]
+visible = false
 script = ExtResource("6_pn02w")
 max_health = 4
 start_health = 4

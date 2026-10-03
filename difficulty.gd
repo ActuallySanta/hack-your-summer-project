@@ -14,7 +14,7 @@ var _diff_settings : Dictionary[ DifficultyID, DifficultyType ] = {
 	DifficultyID.BullShit : DifficultyType.new(false, true, 4, 1/3.0, 0.75, 0.8),
 }
 
-var current_difficulty : DifficultyID
+var current_difficulty : DifficultyID = DifficultyID.Easy
 
 func get_setting() -> DifficultyType: 
 	return _diff_settings[ current_difficulty ]

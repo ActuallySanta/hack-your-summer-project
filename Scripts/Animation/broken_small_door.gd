@@ -21,7 +21,7 @@ func check_save() -> bool:
 	if SaveManager.is_item_collected(self): 
 		repair_node.queue_free()
 		body.queue_free()
-		frame = 100
+		frame = 17
 		return true
 	return false
 
