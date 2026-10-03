@@ -35,6 +35,7 @@ ListDisplay="*res://Scenes/Persistant/list_display.tscn"
 MSGroups="*uid://b2kr6jak1b8l5"
 RealDelta="*uid://bef0kiqofbt7t"
 FpsCounter="*res://Scenes/Persistant/fps_counter.tscn"
+Difficulty="*uid://cvrhp2gnfw7w"
 
 [display]
 

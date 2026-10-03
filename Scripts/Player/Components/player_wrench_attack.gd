@@ -80,7 +80,7 @@ func wrench_mode() -> StringName:
 
 #region Damage
 func damage() -> int:
-	return base_damage + _damage_bonus
+	return (base_damage + _damage_bonus) * Difficulty.get_setting().player_damage_factor
 
 func set_damage_bonus(bonus: int) -> void:
 	_damage_bonus = maxi(bonus, 0)

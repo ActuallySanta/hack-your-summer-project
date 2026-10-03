@@ -5,6 +5,7 @@ const BULLET_SCENE := preload("res://Scenes/Enemies/turret_bullet.tscn")
 @export var bullet_spawn_distance := 40.0
 @export var do_chaos : bool = false
 @export var action_wait_time : float = 1.0
+@export var do_bullets_danger : bool
 
 @onready var sprite := $Sprite2D
 @onready var audio_player := $AudioStreamPlayer2D
@@ -80,8 +81,10 @@ func _process(delta: float) -> void:
 func _shoot(at_angle: bool) -> void:
 	var dirs : Array = [ "UR","DR","DL","UL" ] if at_angle else [ "U","R","D","L" ]
 	for dir in dirs:
-		var bullet = BULLET_SCENE.instantiate() as Bullet
+		var bullet = BULLET_SCENE.instantiate() as TurretBullet
 		bullet.initial_operations(position, dir, bullet_spawn_distance)
+		bullet.is_dangerous = do_bullets_danger
+		bullet.set_mode()
 		get_parent().add_child(bullet)
 
 func _die() -> void:

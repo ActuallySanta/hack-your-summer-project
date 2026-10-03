@@ -261,8 +261,8 @@ max_distance = 4096.0
 
 [node name="RoboHealth" type="Node2D" parent="." unique_id=1501417485]
 script = ExtResource("6_pn02w")
-max_health = 1
-start_health = 1
+max_health = 4
+start_health = 4
 metadata/_custom_type_script = "uid://p46g50v8y7y4"
 
 [node name="Hurtbox" type="Area2D" parent="RoboHealth" unique_id=1408942975]

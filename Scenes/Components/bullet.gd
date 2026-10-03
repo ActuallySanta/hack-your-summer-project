@@ -33,7 +33,7 @@ func _ready() -> void:
 func _on_bullet_lifetime_timeout() -> void:
 	queue_free()
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	move_and_slide()
 
 func initial_operations(spawn_pos: Vector2, spawn_direction: StringName, spawn_offset: float = 0) -> void:
@@ -53,11 +53,13 @@ func initial_operations(spawn_pos: Vector2, spawn_direction: StringName, spawn_o
 func post_init_operations() -> void:
 	pass
 
+func set_mode() -> void:
+	pass
 
 func on_entity_hit(_hitbox: Hitbox, _target: Hurtbox) -> void:
 	queue_free()
 
-func on_wall_hit(target: Node2D) -> void:
+func on_wall_hit(_target: Node2D) -> void:
 	queue_free()
 
 func _on_hitbox_on_hit(_hitbox: Hitbox, _target: Hurtbox) -> void:

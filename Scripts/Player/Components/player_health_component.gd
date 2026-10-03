@@ -124,7 +124,7 @@ func _on_hit(_hurt_box: Hurtbox, hit_info: HitInfo, _source: Hitbox) -> void:
 	if _invuln_timer > 0.0 or _dead or ignore_effects:
 		return
 
-	take_damage(hit_info.damage)
+	take_damage(hit_info.damage * Difficulty.get_setting().damage_factor)
 	_announce()
 	on_hit_event.emit()
 
