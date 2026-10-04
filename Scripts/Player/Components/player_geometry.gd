@@ -15,6 +15,15 @@ class_name PlayerGeometry
 ## The room's solid tile layer. Rooms put exactly one layer in this group.
 const GEOMETRY_GROUP := &"Geometry"
 
+## Layers of breakable blocks. As far as the player is concerned a block is part of the
+## foreground -- one you can climb is a ledge, one in the way is in the way -- whichever
+## layer it happens to be drawn on.
+const BREAKABLE_GROUP := &"BreakAbles"
+
+## Any other tile layer a room wants the vault to treat as solid. Put the layer in this
+## group in the editor; nothing else needs wiring.
+const MANTLE_GROUP := &"MantleGeometry"
+
 ## How far inside a cell's top edge [method has_solid_top] samples for solid.
 const TOP_PROBE_DEPTH := 3.0
 
@@ -36,13 +45,37 @@ static func map_coords(layer: TileMapLayer, global_point: Vector2) -> Vector2i:
 		return Vector2i.MIN
 	return layer.local_to_map(layer.to_local(global_point))
 
-## True when [param coords] holds no tile at all on [param layer].
+## Every tile layer the vault treats as solid: the room's foreground, its breakable
+## blocks, and anything in [constant MANTLE_GROUP].
 ##
-## This is a cheap "is anything drawn here" test and nothing more. It says nothing
-## about whether what is there has a collider, which is why anything that cares about
-## being able to stand on a tile asks [method has_solid_top] instead.
-static func is_cell_empty(layer: TileMapLayer, coords: Vector2i) -> bool:
-	return layer == null or layer.get_cell_source_id(coords) == -1
+## [param visible_only] leaves out hidden layers, for asking what can be climbed onto:
+## rooms toggle layers for animation, and a layer nobody can see is not somewhere to
+## vault to. What is [i]in the way[/i] is a different question, because hiding a
+## [TileMapLayer] does not switch its collision off -- that is
+## [member TileMapLayer.collision_enabled] -- so a hidden layer can still be something
+## the player would come up inside.
+static func solid_layers(tree: SceneTree, visible_only := true) -> Array[TileMapLayer]:
+	var found: Array[TileMapLayer] = []
+	for group in [GEOMETRY_GROUP, BREAKABLE_GROUP, MANTLE_GROUP]:
+		for node in tree.get_nodes_in_group(group):
+			var layer := node as TileMapLayer
+			if layer == null or found.has(layer):
+				continue
+			if visible_only and not layer.is_visible_in_tree():
+				continue
+			found.append(layer)
+	return found
+
+## True when any of [param layers] has a tile drawn at [param global_point].
+##
+## A cheap "is anything drawn here" test and nothing more: it says nothing about whether
+## what is there has a collider. Asked by world position rather than by cell, because
+## layers from two rooms can be loaded at once and only share a grid within a room.
+static func has_tile_at(layers: Array[TileMapLayer], global_point: Vector2) -> bool:
+	for layer in layers:
+		if layer.get_cell_source_id(map_coords(layer, global_point)) != -1:
+			return true
+	return false
 
 ## The rectangle [param coords] covers, in global space.
 static func cell_rect(layer: TileMapLayer, coords: Vector2i) -> Rect2:
@@ -168,18 +201,21 @@ static func tile_blocks(layer: TileMapLayer, coords: Vector2i) -> bool:
 				return true
 	return false
 
-## True when the cell at [param coords] is solid right across its top face.
+## True when the cell at [param coords] of [param grid] is solid right across its top
+## face, and one of [param layers] has a tile there.
 ##
 ## The plain "is there a tile here" test is not enough to mantle on: a decorative
 ## tile has no collider at all, and a half-height or sloped tile only covers part of
 ## its cell, so a vault onto it lands the player inside the geometry or in mid-air.
 ## Sampling across the whole top edge is what makes a partial tile fail the test --
 ## which is the rare case where a mantle onto nothing used to be possible.
-static func has_solid_top(world: World2D, layer: TileMapLayer, coords: Vector2i, mask: int, exclude: Array[RID] = []) -> bool:
-	if layer == null or is_cell_empty(layer, coords):
+static func has_solid_top(world: World2D, grid: TileMapLayer, layers: Array[TileMapLayer], coords: Vector2i, mask: int, exclude: Array[RID] = []) -> bool:
+	if grid == null:
+		return false
+	var rect := cell_rect(grid, coords)
+	if not has_tile_at(layers, rect.get_center()):
 		return false
 
-	var rect := cell_rect(layer, coords)
 	var probe_y := rect.position.y + TOP_PROBE_DEPTH
 	for fraction in TOP_PROBE_SPREAD:
 		var probe := Vector2(rect.position.x + rect.size.x * fraction, probe_y)
@@ -187,15 +223,17 @@ static func has_solid_top(world: World2D, layer: TileMapLayer, coords: Vector2i,
 			return false
 	return true
 
-## True when nothing in the column of [param cells] is solid, so there is room to
-## come up into it.
-static func are_cells_clear(world: World2D, layer: TileMapLayer, cells: Array[Vector2i], mask: int, exclude: Array[RID] = []) -> bool:
+## True when nothing in [param cells] of [param grid] is solid, so there is room to
+## come up into it. Only cells where one of [param layers] has a tile are checked.
+static func are_cells_clear(world: World2D, grid: TileMapLayer, layers: Array[TileMapLayer], cells: Array[Vector2i], mask: int, exclude: Array[RID] = []) -> bool:
+	if grid == null:
+		return true
 	for coords in cells:
-		if is_cell_empty(layer, coords):
+		var rect := cell_rect(grid, coords)
+		if not has_tile_at(layers, rect.get_center()):
 			continue
 		# A tile that is drawn but has no collider (decoration in front of a gap) is
 		# not in the way, so the collider is what is asked about rather than the cell.
-		var rect := cell_rect(layer, coords)
 		for fraction in TOP_PROBE_SPREAD:
 			var probe := Vector2(rect.position.x + rect.size.x * fraction, rect.get_center().y)
 			if is_point_solid(world, probe, mask, exclude):

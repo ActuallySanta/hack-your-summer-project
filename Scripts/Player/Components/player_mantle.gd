@@ -91,39 +91,44 @@ func try_mantle() -> bool:
 		return false
 
 	var direction := 1 if player.move_input > 0.0 else -1
-	var foreground := PlayerGeometry.foreground(get_tree())
-	if foreground == null:
+	# The room's foreground sets the grid every cell below is measured in; which layers
+	# count as solid is a separate question, answered by PlayerGeometry.solid_layers.
+	var grid := PlayerGeometry.foreground(get_tree())
+	if grid == null:
 		return false
 
-	var here := PlayerGeometry.map_coords(foreground, player.global_position)
+	var here := PlayerGeometry.map_coords(grid, player.global_position)
 	var ledge := Vector2i(here.x + direction, here.y)
 	var world := player.get_world_2d()
 	var exclude: Array[RID] = [player.get_rid()]
 
 	# A ledge is a cell with a floor on top of it and room above it. Both halves
 	# matter: the first is what makes a half-tile fail, the second is what stops a
-	# vault into a ceiling.
-	if not PlayerGeometry.has_solid_top(world, foreground, ledge, geometry_layers, exclude):
+	# vault into a ceiling. They ask different layers: a hidden layer is not somewhere
+	# to climb to, but with its collision still on it is something to come up inside.
+	var climbable := PlayerGeometry.solid_layers(get_tree())
+	if not PlayerGeometry.has_solid_top(world, grid, climbable, ledge, geometry_layers, exclude):
 		return false
 	var headroom: Array[Vector2i] = []
 	for step in mantle_height_tiles:
 		headroom.append(Vector2i(ledge.x, ledge.y - 1 - step))
-	if not PlayerGeometry.are_cells_clear(world, foreground, headroom, geometry_layers, exclude):
+	var in_the_way := PlayerGeometry.solid_layers(get_tree(), false)
+	if not PlayerGeometry.are_cells_clear(world, grid, in_the_way, headroom, geometry_layers, exclude):
 		return false
-	if not _within_reach(foreground, ledge, direction):
+	if not _within_reach(grid, ledge, direction):
 		return false
 
-	_ledge_rect = PlayerGeometry.cell_rect(foreground, ledge)
+	_ledge_rect = PlayerGeometry.cell_rect(grid, ledge)
 	_begin(direction)
 	return true
 
 ## True when the active collider's leading edge is within [member reach_distance] of
 ## the near face of [param ledge].
-func _within_reach(foreground: TileMapLayer, ledge: Vector2i, direction: int) -> bool:
+func _within_reach(grid: TileMapLayer, ledge: Vector2i, direction: int) -> bool:
 	var bounds := player.collision_manager.get_bounds()
 	var lead_edge := maxf(bounds[0].x, bounds[1].x) if direction > 0 else minf(bounds[0].x, bounds[1].x)
 
-	var rect := PlayerGeometry.cell_rect(foreground, ledge)
+	var rect := PlayerGeometry.cell_rect(grid, ledge)
 	var wall_face := rect.position.x if direction > 0 else rect.end.x
 	return absf(wall_face - lead_edge) <= reach_distance
 

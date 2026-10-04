@@ -1,0 +1,66 @@
+[gd_scene format=3 uid="uid://cfsiruojdbm7l"]
+
+[ext_resource type="Script" uid="uid://cphcuqed0ttgm" path="res://WorldMaps/world_map_viewer.gd" id="1_7bwvm"]
+[ext_resource type="PackedScene" uid="uid://juk7v7st0vtc" path="res://Scenes/Rooms/Ship Internals/central_crossroads_in.tscn" id="2_a8rfi"]
+[ext_resource type="PackedScene" uid="uid://cbgm7ylkv6t25" path="res://Scenes/Rooms/Ship Internals/central_railway_in.tscn" id="3_iakm2"]
+[ext_resource type="PackedScene" uid="uid://bqvr1cu40r0ik" path="res://Scenes/Rooms/Ship Internals/damaged_shaft_in.tscn" id="4_rpjuv"]
+[ext_resource type="PackedScene" uid="uid://bal825x75f0c2" path="res://Scenes/Rooms/Ship Internals/escape_pods_in.tscn" id="5_5idqf"]
+[ext_resource type="PackedScene" uid="uid://b4pxqqsfcws13" path="res://Scenes/Rooms/Ship Internals/lower_crossroads_in.tscn" id="6_lx7oe"]
+[ext_resource type="PackedScene" uid="uid://hlodgdep2e0y" path="res://Scenes/Rooms/Ship Internals/management_access_in.tscn" id="7_iakm2"]
+[ext_resource type="PackedScene" uid="uid://cilvnxm5uj0qg" path="res://Scenes/Rooms/Ship Internals/management_in.tscn" id="8_rpjuv"]
+[ext_resource type="PackedScene" uid="uid://bm4408lucdyr7" path="res://Scenes/Rooms/Ship Internals/map_room_in.tscn" id="9_5idqf"]
+[ext_resource type="PackedScene" uid="uid://c0avqhx1iephd" path="res://Scenes/Rooms/Ship Internals/sealed_station_in.tscn" id="10_gak0k"]
+[ext_resource type="PackedScene" uid="uid://404ch0e4don4" path="res://Scenes/Rooms/Ship Internals/station_auto_pilot_in.tscn" id="11_xwq2p"]
+[ext_resource type="PackedScene" uid="uid://dqtjuvasqeciq" path="res://Scenes/Rooms/Ship Internals/station_four_access_in.tscn" id="12_xfb82"]
+[ext_resource type="PackedScene" uid="uid://bimwwrkcldgbh" path="res://Scenes/Rooms/Ship Internals/station_one_access_in.tscn" id="13_grnfn"]
+[ext_resource type="PackedScene" uid="uid://du8dik8lloh73" path="res://Scenes/Rooms/Ship Internals/station_three_access_in.tscn" id="14_oqn3w"]
+[ext_resource type="PackedScene" uid="uid://dd5timksnvlyr" path="res://Scenes/Rooms/Ship Internals/station_two_access_in.tscn" id="15_baxp8"]
+[ext_resource type="PackedScene" uid="uid://b8mvn75vy3mp" path="res://Scenes/Rooms/Ship Internals/upper_railway_in.tscn" id="16_g5o5o"]
+
+[node name="WorldMapIN" type="Node2D" unique_id=1098571671]
+script = ExtResource("1_7bwvm")
+
+[node name="CentralCrossroadsIN" parent="." unique_id=869988904 instance=ExtResource("2_a8rfi")]
+position = Vector2(443, 420)
+
+[node name="CentralRailwayIN" parent="." unique_id=21938614 instance=ExtResource("3_iakm2")]
+position = Vector2(-9925, 1764)
+
+[node name="DamagedShaftIN" parent="." unique_id=1181211796 instance=ExtResource("4_rpjuv")]
+position = Vector2(6203, -252)
+
+[node name="EscapePodsIN" parent="." unique_id=1620395284 instance=ExtResource("5_5idqf")]
+position = Vector2(-5317, 2436)
+
+[node name="LowerCrossroadsIN" parent="." unique_id=1020986990 instance=ExtResource("6_lx7oe")]
+position = Vector2(-6469, 2436)
+
+[node name="ManagementAccessIN" parent="." unique_id=140526872 instance=ExtResource("7_iakm2")]
+position = Vector2(-8773, 2436)
+
+[node name="ManagementIN" parent="." unique_id=344141043 instance=ExtResource("8_rpjuv")]
+position = Vector2(-9925, 2436)
+
+[node name="MapRoomIN" parent="." unique_id=1042690402 instance=ExtResource("9_5idqf")]
+position = Vector2(-6469, 3108)
+
+[node name="SealedStationIN" parent="." unique_id=1373884580 instance=ExtResource("10_gak0k")]
+position = Vector2(3899, -924)
+
+[node name="StationAutoPilotIN" parent="." unique_id=2138512767 instance=ExtResource("11_xwq2p")]
+position = Vector2(-1861, 2436)
+
+[node name="StationFourAccessIN" parent="." unique_id=1774174579 instance=ExtResource("12_xfb82")]
+position = Vector2(443, -252)
+
+[node name="StationOneAccessIN" parent="." unique_id=1839720618 instance=ExtResource("13_grnfn")]
+position = Vector2(-709, 2436)
+
+[node name="StationThreeAccessIN" parent="." unique_id=1734375316 instance=ExtResource("14_oqn3w")]
+position = Vector2(1595, 420)
+
+[node name="StationTwoAccessIN" parent="." unique_id=1480720596 instance=ExtResource("15_baxp8")]
+position = Vector2(-12229, 1092)
+
+[node name="UpperRailwayIN" parent="." unique_id=718600909 instance=ExtResource("16_g5o5o")]
+position = Vector2(-7621, 1092)

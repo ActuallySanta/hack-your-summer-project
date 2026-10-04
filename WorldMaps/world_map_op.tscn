@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://bscv5tnv2oj2u"]
+
+[ext_resource type="Script" uid="uid://cphcuqed0ttgm" path="res://WorldMaps/world_map_viewer.gd" id="1_p6j04"]
+[ext_resource type="PackedScene" uid="uid://dsut5plcousr6" path="res://Scenes/Rooms/Operations/bridge_op.tscn" id="2_v6f5u"]
+[ext_resource type="PackedScene" uid="uid://dqpc78gfthvrf" path="res://Scenes/Rooms/Operations/closet_op.tscn" id="3_lojqv"]
+[ext_resource type="PackedScene" uid="uid://bingkx32tvfmj" path="res://Scenes/Rooms/Operations/elevator_op.tscn" id="4_q7pt5"]
+[ext_resource type="PackedScene" uid="uid://bw0jogepmprfb" path="res://Scenes/Rooms/Operations/lower_save_room_op.tscn" id="5_vcxdr"]
+[ext_resource type="PackedScene" uid="uid://cnigbo5hlakrw" path="res://Scenes/Rooms/Operations/lower_viewport_op.tscn" id="6_1h6mh"]
+[ext_resource type="PackedScene" uid="uid://b0tva860dnt16" path="res://Scenes/Rooms/Operations/map_room_op.tscn" id="7_evaye"]
+[ext_resource type="PackedScene" uid="uid://b7ndrv8pah5ya" path="res://Scenes/Rooms/Operations/save_room_op.tscn" id="8_lol6f"]
+[ext_resource type="PackedScene" uid="uid://caipllpei4d4p" path="res://Scenes/Rooms/Operations/stairway_op.tscn" id="9_ooxbp"]
+[ext_resource type="PackedScene" uid="uid://dg0lfaxe3lg87" path="res://Scenes/Rooms/Operations/terminal_and_boiler_op.tscn" id="10_4kh5d"]
+[ext_resource type="PackedScene" uid="uid://duv5x7yl6qbna" path="res://Scenes/Rooms/Operations/view_port_op.tscn" id="11_a8y55"]
+[ext_resource type="PackedScene" uid="uid://bq8fi4tds3gvg" path="res://Scenes/Rooms/Operations/waterways_op.tscn" id="12_ftpdh"]
+
+[node name="WorldMapOP" type="Node2D" unique_id=757348490]
+script = ExtResource("1_p6j04")
+
+[node name="BridgeOP" parent="." unique_id=1828590504 instance=ExtResource("2_v6f5u")]
+position = Vector2(446, 56)
+
+[node name="ClosetOP" parent="." unique_id=1963476267 instance=ExtResource("3_lojqv")]
+position = Vector2(-1858, 2744)
+
+[node name="ElevatorOP" parent="." unique_id=440762663 instance=ExtResource("4_q7pt5")]
+position = Vector2(446, 1400)
+
+[node name="LowerSaveRoomOP" parent="." unique_id=1156897410 instance=ExtResource("5_vcxdr")]
+position = Vector2(-1858, 6104)
+
+[node name="LowerViewportOP" parent="." unique_id=184063985 instance=ExtResource("6_1h6mh")]
+position = Vector2(-4162, 6104)
+
+[node name="MapRoomOP" parent="." unique_id=881493189 instance=ExtResource("7_evaye")]
+position = Vector2(-1858, 4088)
+
+[node name="SaveRoomOP" parent="." unique_id=1635408014 instance=ExtResource("8_lol6f")]
+position = Vector2(-1858, 3416)
+
+[node name="StairwayOP" parent="." unique_id=852383709 instance=ExtResource("9_ooxbp")]
+position = Vector2(-706, 2744)
+
+[node name="TerminalAndBoilerOP" parent="." unique_id=136532446 instance=ExtResource("10_4kh5d")]
+position = Vector2(446, 1400)
+
+[node name="ViewPortOP" parent="." unique_id=1066610462 instance=ExtResource("11_a8y55")]
+position = Vector2(446, -616)
+
+[node name="WaterwaysOP" parent="." unique_id=615933480 instance=ExtResource("12_ftpdh")]
+position = Vector2(-4162, 4760)

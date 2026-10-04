@@ -413,39 +413,39 @@ $ln;Demo Level;NewMap
 [22,4,0]
 0,0,1,0|00ff91,,,,|4|Scenes/Rooms/Research Sector/map_room_rs.tscn
 [3,7,0]
--1,0,0,0|f200ff,,,,|0|
+-1,0,0,0|f200ff,,,,|0|Scenes/Rooms/Ship Internals/station_two_access_in.tscn
 [4,7,0]
--1,0,-1,0|f200ff,,,,||
+-1,0,-1,0|f200ff,,,,||Scenes/Rooms/Ship Internals/station_two_access_in.tscn
 [16,11,0]
 1,0,-1,0|00ae63,,,,||Scenes/Rooms/Research Sector/classified_access_rs.tscn
 [18,4,0]
-0,-1,-1,0|9d00a6,,,,||
+0,-1,-1,0|9d00a6,,,,||Scenes/Rooms/Ship Internals/sealed_station_in.tscn
 [18,7,0]
 -1,1,-1,0|00ff91,,,,||Scenes/Rooms/Research Sector/server_room_rs.tscn
 [17,4,0]
--1,-1,0,0|9d00a6,,,,||
+-1,-1,0,0|9d00a6,,,,||Scenes/Rooms/Ship Internals/sealed_station_in.tscn
 [9,7,0]
--1,0,-1,0|9d00a6,,,,||
+-1,0,-1,0|9d00a6,,,,||Scenes/Rooms/Ship Internals/upper_railway_in.tscn
 [10,7,0]
--1,0,-1,0|9d00a6,,,,||
+-1,0,-1,0|9d00a6,,,,||Scenes/Rooms/Ship Internals/upper_railway_in.tscn
 [5,7,0]
--1,0,-1,4|f200ff,,,,||
+-1,0,-1,4|f200ff,,,,||Scenes/Rooms/Ship Internals/station_two_access_in.tscn
 [6,7,0]
-2,0,-1,4|f200ff,,,,||
+2,0,-1,4|f200ff,,,,||Scenes/Rooms/Ship Internals/station_two_access_in.tscn
 [8,7,0]
--1,0,-1,0|9d00a6,,,,||
+-1,0,-1,0|9d00a6,,,,||Scenes/Rooms/Ship Internals/upper_railway_in.tscn
 [11,7,0]
--1,0,-1,0|9d00a6,,,,||
+-1,0,-1,0|9d00a6,,,,||Scenes/Rooms/Ship Internals/upper_railway_in.tscn
 [12,7,0]
--1,0,-1,0|9d00a6,,,,||
+-1,0,-1,0|9d00a6,,,,||Scenes/Rooms/Ship Internals/upper_railway_in.tscn
 [19,6,0]
 -1,-1,1,0|00ff91,,,,||Scenes/Rooms/Research Sector/server_room_rs.tscn
 [20,6,0]
 0,-1,-1,0|00ff91,,,,||Scenes/Rooms/Research Sector/server_room_rs.tscn
 [13,7,0]
-2,0,-1,0|9d00a6,,,,||
+2,0,-1,0|9d00a6,,,,||Scenes/Rooms/Ship Internals/upper_railway_in.tscn
 [13,9,0]
--1,0,0,2|f200ff,,,,||
+-1,0,0,2|f200ff,,,,||Scenes/Rooms/Ship Internals/station_one_access_in.tscn
 [8,11,0]
 -1,0,1,0|00ae63,,,,||Scenes/Rooms/Research Sector/security_rs.tscn
 [10,11,0]
@@ -457,53 +457,53 @@ $ln;Demo Level;NewMap
 [17,7,0]
 -1,0,0,0|00ff91,,,,||Scenes/Rooms/Research Sector/server_room_rs.tscn
 [15,7,0]
-0,0,2,-1|f200ff,,,,||
+0,0,2,-1|f200ff,,,,||Scenes/Rooms/Ship Internals/station_three_access_in.tscn
 [14,9,0]
-0,-1,-1,0|f200ff,,,,||
+0,-1,-1,0|f200ff,,,,||Scenes/Rooms/Ship Internals/station_one_access_in.tscn
 [14,10,0]
-0,0,4,-1|f200ff,,,,||
+0,0,4,-1|f200ff,,,,||Scenes/Rooms/Ship Internals/station_one_access_in.tscn
 [15,11,0]
 -1,0,-1,0|00ae63,,,,||Scenes/Rooms/Research Sector/classified_access_rs.tscn
 [14,5,0]
--1,2,0,4|f200ff,,,,||
+-1,2,0,4|f200ff,,,,||Scenes/Rooms/Ship Internals/station_four_access_in.tscn
 [15,5,0]
--1,0,-1,4|f200ff,,,,||
+-1,0,-1,4|f200ff,,,,||Scenes/Rooms/Ship Internals/station_four_access_in.tscn
 [19,7,0]
 -1,0,-1,-1|00ff91,,,,||Scenes/Rooms/Research Sector/server_room_rs.tscn
 [20,7,0]
 0,0,-1,-1|00ff91,,,,||Scenes/Rooms/Research Sector/server_room_rs.tscn
 [24,3,0]
--1,-1,0,1|77775d,,,,||
+-1,-1,0,1|77775d,,,,||Scenes/Rooms/Operations/terminal_and_boiler_op.tscn
 [25,3,0]
-0,-1,-1,0|77775d,,,,||
+0,-1,-1,0|77775d,,,,||Scenes/Rooms/Operations/terminal_and_boiler_op.tscn
 [24,4,0]
--1,-1,0,-1|77775d,,,,||
+-1,-1,0,-1|77775d,,,,||Scenes/Rooms/Operations/terminal_and_boiler_op.tscn
 [25,4,0]
-0,-1,-1,-1|77775d,,,,||
+0,-1,-1,-1|77775d,,,,||Scenes/Rooms/Operations/terminal_and_boiler_op.tscn
 [25,5,0]
-0,-1,-1,-1|77775d,,,,||
+0,-1,-1,-1|77775d,,,,||Scenes/Rooms/Operations/terminal_and_boiler_op.tscn
 [24,6,0]
--1,0,-1,0|77775d,,,,||
+-1,0,-1,0|77775d,,,,||Scenes/Rooms/Operations/terminal_and_boiler_op.tscn
 [25,6,0]
-0,0,-1,-1|77775d,,,,||
+0,0,-1,-1|77775d,,,,||Scenes/Rooms/Operations/terminal_and_boiler_op.tscn
 [20,8,0]
--1,-1,-1,0|77775d,,,,||
+-1,-1,-1,0|77775d,,,,||Scenes/Rooms/Operations/waterways_op.tscn
 [21,8,0]
--1,-1,-1,0|77775d,,,,||
+-1,-1,-1,0|77775d,,,,||Scenes/Rooms/Operations/waterways_op.tscn
 [22,8,0]
-1,-1,-1,0|77775d,,,,||
+1,-1,-1,0|77775d,,,,||Scenes/Rooms/Operations/waterways_op.tscn
 [19,9,0]
--1,1,0,-1|77775d,,,,||
+-1,1,0,-1|77775d,,,,||Scenes/Rooms/Operations/waterways_op.tscn
 [20,9,0]
--1,0,-1,-1|77775d,,,,||
+-1,0,-1,-1|77775d,,,,||Scenes/Rooms/Operations/waterways_op.tscn
 [21,9,0]
--1,0,-1,-1|77775d,,,,||
+-1,0,-1,-1|77775d,,,,||Scenes/Rooms/Operations/waterways_op.tscn
 [22,9,0]
-0,0,-1,-1|77775d,,,,||
+0,0,-1,-1|77775d,,,,||Scenes/Rooms/Operations/waterways_op.tscn
 [17,5,0]
-0,0,1,-1|9d00a6,,,,||
+0,0,1,-1|9d00a6,,,,||Scenes/Rooms/Ship Internals/sealed_station_in.tscn
 [19,5,0]
-4,0,2,0|f200ff,,,,||
+4,0,2,0|f200ff,,,,||Scenes/Rooms/Ship Internals/damaged_shaft_in.tscn
 [39,16,0]
 -1,0,0,1|||
 [40,16,0]
@@ -629,11 +629,11 @@ $ln;Demo Level;NewMap
 [3,-2,0]
 1,0,-1,0|000000,,,,||Scenes/Rooms/Limbo/storage_and_operations.tscn
 [23,8,0]
--1,-1,1,-1|77775d,,,,||
+-1,-1,1,-1|77775d,,,,||Scenes/Rooms/Operations/terminal_and_boiler_op.tscn
 [23,9,0]
-0,0,0,-1|77775d,,,,||
+0,0,0,-1|77775d,,,,||Scenes/Rooms/Operations/terminal_and_boiler_op.tscn
 [24,8,0]
-0,0,-1,-1|77775d,,,,||
+0,0,-1,-1|77775d,,,,||Scenes/Rooms/Operations/terminal_and_boiler_op.tscn
 [15,8,0]
 1,-1,0,0|00ae63,,,,||Scenes/Rooms/Research Sector/jetpack_exercise_course_rs.tscn
 [15,9,0]
@@ -963,49 +963,49 @@ $ln;Demo Level;NewMap
 [20,3,0]
 -1,0,1,-1|00ff91,,,,|0|Scenes/Rooms/Research Sector/operations_rs.tscn
 [23,0,0]
-0,1,1,0|aeae94,,,,||
+0,1,1,0|aeae94,,,,||Scenes/Rooms/Operations/view_port_op.tscn
 [23,3,0]
-0,-1,0,1|aeae94,,,,||
+0,-1,0,1|aeae94,,,,|0|Scenes/Rooms/Operations/elevator_op.tscn
 [23,4,0]
-0,-1,0,-1|aeae94,,,,||
+0,-1,0,-1|aeae94,,,,||Scenes/Rooms/Operations/elevator_op.tscn
 [23,5,0]
-0,0,1,-1|aeae94,,,,||
+0,0,1,-1|aeae94,,,,||Scenes/Rooms/Operations/elevator_op.tscn
 [22,5,0]
-1,-1,1,0|aeae94,,,,||
+1,-1,1,0|aeae94,,,,||Scenes/Rooms/Operations/stairway_op.tscn
 [21,5,0]
-1,0,4,0|aeae94,,,,||
+1,0,4,0|aeae94,,,,||Scenes/Rooms/Operations/closet_op.tscn
 [21,6,0]
-1,0,0,0|aeae94,,,,|3|
+1,0,0,0|aeae94,,,,|3|Scenes/Rooms/Operations/save_room_op.tscn
 [21,7,0]
-1,0,0,0|aeae94,,,,|4|
+1,0,0,0|aeae94,,,,|4|Scenes/Rooms/Operations/map_room_op.tscn
 [22,6,0]
-0,-1,1,-1|aeae94,,,,||
+0,-1,1,-1|aeae94,,,,||Scenes/Rooms/Operations/stairway_op.tscn
 [22,7,0]
-0,0,1,-1|aeae94,,,,||
+0,0,1,-1|aeae94,,,,||Scenes/Rooms/Operations/stairway_op.tscn
 [23,1,0]
--1,-1,0,1|aeae94,,,,||
+-1,-1,0,1|aeae94,,,,||Scenes/Rooms/Operations/bridge_op.tscn
 [24,1,0]
-0,-1,-1,0|aeae94,,,,||
+0,-1,-1,0|aeae94,,,,||Scenes/Rooms/Operations/bridge_op.tscn
 [23,2,0]
--1,1,0,-1|aeae94,,,,||
+-1,1,0,-1|aeae94,,,,||Scenes/Rooms/Operations/bridge_op.tscn
 [24,2,0]
-0,1,-1,-1|aeae94,,,,||
+0,1,-1,-1|aeae94,,,,||Scenes/Rooms/Operations/bridge_op.tscn
 [23,6,0]
--1,-1,0,0|77775d,,,,||
+-1,-1,0,0|77775d,,,,||Scenes/Rooms/Operations/terminal_and_boiler_op.tscn
 [23,7,0]
--1,-1,0,-1|77775d,,,,||
+-1,-1,0,-1|77775d,,,,||Scenes/Rooms/Operations/terminal_and_boiler_op.tscn
 [24,7,0]
-0,-1,-1,0|77775d,,,,||
+0,-1,-1,0|77775d,,,,||Scenes/Rooms/Operations/terminal_and_boiler_op.tscn
 [24,5,0]
--1,0,0,-1|77775d,,,,||
+-1,0,0,-1|77775d,,,,||Scenes/Rooms/Operations/terminal_and_boiler_op.tscn
 [19,8,0]
--1,-1,0,0|77775d,,,,|5|
+-1,-1,0,0|77775d,,,,|5|Scenes/Rooms/Operations/waterways_op.tscn
 [19,10,0]
--1,0,0,1|77775d,,,,||
+-1,0,0,1|77775d,,,,||Scenes/Rooms/Operations/lower_viewport_op.tscn
 [20,10,0]
-1,0,-1,0|77775d,,,,|2|
+1,0,-1,0|77775d,,,,|2|Scenes/Rooms/Operations/lower_viewport_op.tscn
 [21,10,0]
-0,0,1,0|aeae94,,,,|3|
+0,0,1,0|aeae94,,,,|3|Scenes/Rooms/Operations/lower_save_room_op.tscn
 [12,12,0]
 -1,0,0,1|00ae63,,,,||Scenes/Rooms/Research Sector/save_access_rs.tscn
 [13,12,0]
@@ -1015,21 +1015,21 @@ $ln;Demo Level;NewMap
 [10,12,0]
 -1,0,0,-1|00ae63,,,,|0|Scenes/Rooms/Research Sector/chemical_storage_rs.tscn
 [14,6,0]
-0,-1,0,2|9d00a6,,,,||
+0,-1,0,2|9d00a6,,,,||Scenes/Rooms/Ship Internals/central_crossroads_in.tscn
 [14,7,0]
-2,2,2,-1|9d00a6,,,,||
+2,2,2,-1|9d00a6,,,,||Scenes/Rooms/Ship Internals/central_crossroads_in.tscn
 [15,6,0]
-4,-1,0,0|f200ff,,,,||
+4,-1,0,0|f200ff,,,,||Scenes/Rooms/Ship Internals/station_three_access_in.tscn
 [18,5,0]
-2,0,0,-1|9d00a6,,,,||
+2,0,0,-1|9d00a6,,,,||Scenes/Rooms/Ship Internals/sealed_station_in.tscn
 [16,5,0]
-1,0,-1,0|f200ff,,,,||
+1,0,-1,0|f200ff,,,,||Scenes/Rooms/Ship Internals/station_four_access_in.tscn
 [6,9,0]
--1,0,1,0|f200ff,,,,||
+-1,0,1,0|f200ff,,,,||Scenes/Rooms/Ship Internals/management_access_in.tscn
 [7,9,0]
-1,0,-1,0|f200ff,,,,||
+1,0,-1,0|f200ff,,,,||Scenes/Rooms/Ship Internals/management_access_in.tscn
 [7,7,0]
--1,0,2,0|9d00a6,,,,||
+-1,0,2,0|9d00a6,,,,||Scenes/Rooms/Ship Internals/upper_railway_in.tscn
 [14,11,0]
 -1,0,-1,0|00ae63,,,,||Scenes/Rooms/Research Sector/classified_access_rs.tscn
 [13,10,0]
@@ -1045,7 +1045,7 @@ $ln;Demo Level;NewMap
 [11,10,0]
 -1,0,-1,0|00ae63,,,,||Scenes/Rooms/Research Sector/classified_upper_labs_rs.tscn
 [8,10,0]
-0,0,4,1|f200ff,,,,|4|
+0,0,4,1|f200ff,,,,|4|Scenes/Rooms/Ship Internals/map_room_in.tscn
 [6,10,0]
 -1,-1,0,0|00ae63,,,,||Scenes/Rooms/Research Sector/restricted_labs_rs.tscn
 [7,10,0]
@@ -1071,37 +1071,37 @@ $ln;Demo Level;NewMap
 [9,13,0]
 0,0,-1,-1|00ae63,,,,|0|Scenes/Rooms/Research Sector/meta_physics_rnd_rs.tscn
 [8,9,0]
-1,1,1,2|f200ff,,,,||
+1,1,1,2|f200ff,,,,||Scenes/Rooms/Ship Internals/lower_crossroads_in.tscn
 [5,8,0]
--1,0,0,0|9d00a6,,,,|0|
+-1,0,0,0|9d00a6,,,,|0|Scenes/Rooms/Ship Internals/central_railway_in.tscn
 [6,8,0]
--1,0,-1,0|9d00a6,,,,||
+-1,0,-1,0|9d00a6,,,,||Scenes/Rooms/Ship Internals/central_railway_in.tscn
 [7,8,0]
--1,0,-1,0|9d00a6,,,,||
+-1,0,-1,0|9d00a6,,,,||Scenes/Rooms/Ship Internals/central_railway_in.tscn
 [8,8,0]
--1,2,-1,0|9d00a6,,,,||
+-1,2,-1,0|9d00a6,,,,||Scenes/Rooms/Ship Internals/central_railway_in.tscn
 [9,8,0]
--1,0,-1,0|9d00a6,,,,||
+-1,0,-1,0|9d00a6,,,,||Scenes/Rooms/Ship Internals/central_railway_in.tscn
 [10,8,0]
--1,0,-1,0|9d00a6,,,,||
+-1,0,-1,0|9d00a6,,,,||Scenes/Rooms/Ship Internals/central_railway_in.tscn
 [11,8,0]
--1,0,-1,0|9d00a6,,,,||
+-1,0,-1,0|9d00a6,,,,||Scenes/Rooms/Ship Internals/central_railway_in.tscn
 [12,8,0]
--1,0,-1,0|9d00a6,,,,||
+-1,0,-1,0|9d00a6,,,,||Scenes/Rooms/Ship Internals/central_railway_in.tscn
 [13,8,0]
--1,2,-1,0|9d00a6,,,,||
+-1,2,-1,0|9d00a6,,,,||Scenes/Rooms/Ship Internals/central_railway_in.tscn
 [14,8,0]
-0,0,-1,2|9d00a6,,,,||
+0,0,-1,2|9d00a6,,,,||Scenes/Rooms/Ship Internals/central_railway_in.tscn
 [5,9,0]
-1,0,0,0|f200ff,,,,|0|
+1,0,0,0|f200ff,,,,|0|Scenes/Rooms/Ship Internals/management_in.tscn
 [9,9,0]
--1,0,1,0|f200ff,,,,||
+-1,0,1,0|f200ff,,,,||Scenes/Rooms/Ship Internals/escape_pods_in.tscn
 [10,9,0]
--1,0,-1,0|f200ff,,,,||
+-1,0,-1,0|f200ff,,,,||Scenes/Rooms/Ship Internals/escape_pods_in.tscn
 [11,9,0]
-1,0,-1,0|f200ff,,,,||
+1,0,-1,0|f200ff,,,,||Scenes/Rooms/Ship Internals/escape_pods_in.tscn
 [12,9,0]
-0,0,1,0|f200ff,,,,|0|
+0,0,1,0|f200ff,,,,|0|Scenes/Rooms/Ship Internals/station_auto_pilot_in.tscn
 [44,-16,0]
 -1,0,0,0|ffedc8,,,,||
 [45,-16,0]

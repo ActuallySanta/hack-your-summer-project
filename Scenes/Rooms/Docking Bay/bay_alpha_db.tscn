@@ -17,7 +17,6 @@
 
 [node name="RoomInstance" parent="." unique_id=1214753879 instance=ExtResource("1_jve2h")]
 z_index = 10
-position = Vector2(1, 0)
 
 [node name="Node2D" type="Node2D" parent="." unique_id=1722669659]
 position = Vector2(0, -191)

@@ -60,10 +60,6 @@ enum MoveState {
 ## off. Long enough to clear the tile that gave way; see [method _update_floor_snap].
 @export var crumbleSnapPause := 0.25
 
-## Group every BreakAbles layer joins, so the player can find the ones in the room it
-## is standing in without the room having to wire them up.
-const BREAKABLE_GROUP := &"BreakAbles"
-
 #region Node references
 @onready var collision_manager: CollisionManager = $CollisionManager
 @onready var jump_sfx: AudioStreamPlayer2D = $SFX/JumpSFX
@@ -490,7 +486,7 @@ func _handle_crumbling_floor() -> void:
 	if not is_grounded():
 		return
 
-	var layers := get_tree().get_nodes_in_group(BREAKABLE_GROUP)
+	var layers := get_tree().get_nodes_in_group(PlayerGeometry.BREAKABLE_GROUP)
 	if layers.is_empty():
 		return
 
