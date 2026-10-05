@@ -523,4 +523,7 @@ func click_components(interact_position: Vector2) -> String:
 		draw_bullet_list( bullet_list )
 		return component_name
 	return ""
+
+func clear_components() -> void: 
+	components = {}
 #endregion
