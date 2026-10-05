@@ -36,9 +36,13 @@ func _ready() -> void:
 	else:
 		hurtbox.hit.connect(_on_hit)
 	_curr_health = start_health
-	# Seeded rather than checked, so a body that starts below the line does not fire
-	# an "entry" it never crossed into.
 	_was_low = _curr_health < low_health_boundry
+	mod_for_difficulty()
+
+# Handle Difficulty mod for enemies; since player attacks with int we weaken them by making the enemies stronger
+# Note: This needs to be undone / ignored in player_health_component
+func mod_for_difficulty() -> void:
+	max_health = int(max_health / Difficulty.get_setting().player_damage_factor)
 
 func current_health() -> float:
 	return _curr_health;

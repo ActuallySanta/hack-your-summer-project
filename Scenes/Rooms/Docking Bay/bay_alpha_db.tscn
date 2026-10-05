@@ -12,6 +12,9 @@
 [ext_resource type="PackedScene" uid="uid://6jbhsdtefk1p" path="res://Scenes/Components/door_tile_map_layer.tscn" id="9_owopv"]
 [ext_resource type="PackedScene" uid="uid://c23c0urqh5mm5" path="res://Scenes/Components/ScaledTileMap.tscn" id="10_55hf3"]
 [ext_resource type="PackedScene" uid="uid://0ked6ikwavah" path="res://Scenes/Components/limbo_exit_door.tscn" id="11_pkc5g"]
+[ext_resource type="PackedScene" uid="uid://dst5y4sttk4ir" path="res://Scenes/Enemies/security_drone.tscn" id="13_0haqv"]
+[ext_resource type="PackedScene" uid="uid://b7lnb5mc2cxhl" path="res://Scenes/Components/station_powered_node.tscn" id="13_r0hqb"]
+[ext_resource type="Script" uid="uid://6f15nb6r34b0" path="res://Scripts/EnvironmentalHazards/path.gd" id="14_an5ex"]
 
 [node name="BayAlphaDB" type="Node2D" unique_id=1161255728]
 
@@ -88,3 +91,17 @@ tile_set = ExtResource("2_bu7cl")
 [node name="LimboExitDoor" parent="." unique_id=618844697 instance=ExtResource("11_pkc5g")]
 position = Vector2(0, 144)
 scale = Vector2(3, 3)
+
+[node name="StationPoweredNode" parent="." unique_id=1319736591 instance=ExtResource("13_r0hqb")]
+
+[node name="Path" type="Node2D" parent="StationPoweredNode" unique_id=899141086]
+script = ExtResource("14_an5ex")
+loop_mode = "Closed Loop"
+wait_time_seconds = 1.5
+node_speed = 300.0
+points = Array[Vector2]([Vector2(1271, 202), Vector2(1628, 943), Vector2(1959, 701)])
+metadata/_custom_type_script = "uid://6f15nb6r34b0"
+
+[node name="SecurityDrone" parent="StationPoweredNode/Path" unique_id=1086733501 instance=ExtResource("13_0haqv")]
+position = Vector2(1970, 879)
+do_bullets_danger = false

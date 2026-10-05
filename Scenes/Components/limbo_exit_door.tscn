@@ -42,7 +42,7 @@ collision_mask = 14
 position = Vector2(24, 24)
 shape = SubResource("RectangleShape2D_bpmhk")
 
-[node name="ClosedImage" type="TileMapLayer" parent="." unique_id=750702452]
+[node name="ClosedImage" type="TileMapLayer" parent="." unique_id=750702452 groups=["MantleGeometry"]]
 visible = false
 tile_map_data = PackedByteArray("AAAAAAAABAAHAAQAAAAAAAEABAAHAAUAAAAAAAIABAAHAAYAAAABAAAABAAIAAQAAAABAAEABAAIAAUAAAABAAIABAAIAAYAAAACAAAABAAJAAQAAAACAAEABAAJAAUAAAACAAIABAAJAAYAAAA=")
 tile_set = ExtResource("1_4eqyx")

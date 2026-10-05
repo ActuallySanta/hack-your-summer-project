@@ -86,6 +86,10 @@ func _apply_hurtbox_pose(crouched: bool, jumping: bool) -> void:
 func _player() -> Player:
 	return get_parent() as Player
 
+# This just erases the moding for difficulty.
+func mod_for_difficulty() -> void:
+	pass
+
 #region Save-derived maximum
 ## Re-reads the extenders collected and puts the player on full health.
 ##

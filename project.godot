@@ -59,6 +59,7 @@ save_checkpoint=""
 Cameras="The cameras in the game"
 Geometry=""
 Repairable=""
+MantleGeometry=""
 
 [input]
 

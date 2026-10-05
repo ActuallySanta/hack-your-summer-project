@@ -106,7 +106,12 @@ func physics_update(delta: float) -> void:
 
 	if _jump_buffer <= 0.0:
 		return
-	if can_jump():
+	# No launching from anywhere the player could not stand up -- the same test that
+	# keeps them crouched, so a crawl space is something to crawl out of rather than
+	# jump in. Asked here rather than in can_jump(), which the state machine reads to
+	# decide coyote time. The press still counts down in the buffer meanwhile, so one
+	# made just before crawling out of the gap jumps the moment there is room.
+	if can_jump() and player.has_headroom():
 		jump()
 	else:
 		_jump_buffer -= delta

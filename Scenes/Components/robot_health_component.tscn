@@ -4,5 +4,3 @@
 
 [node name="RobotHealthComponent" type="Node2D" unique_id=2027675310]
 script = ExtResource("1_5etna")
-max_health = null
-start_health = null
