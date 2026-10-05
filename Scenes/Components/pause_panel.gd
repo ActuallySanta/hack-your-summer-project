@@ -68,7 +68,7 @@ func _ready() -> void:
 	full_click_box.on_mouse_pressed.connect( on_mouse_pressed )
 	_apply_tab()
 	force_set_display( false )
-	constants.place_deep("This is a test for the bullet point command: $BULLET_TESTBULLET_Label:_0_1_-1_Top choice_Middle choice_bottom choice$")
+	constants.place_deep("This is a test for the bullet point command: $BULLET_TESTBULLET_Label:_0_1_-1_Top choice_Middle choice_bottom choice$ Congrats it worked!")
 
 func _process(_delta: float) -> void:
 	update_display_state( RealDelta.get_capped() )
