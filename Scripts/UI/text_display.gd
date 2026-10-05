@@ -75,6 +75,7 @@ const DEBUG_DEEP_OUT : String = "_dot $TAB Testing $HIGH_ON Highlight $HIGH_OFF 
 
 var cursor_pos : Vector2i
 var cursor_highlighted : bool
+var components : Dictionary[ String, TextElement ] = {}
 
 ## Sets the cursor to a default state at the top left of the tilemap
 func reset_cursor() -> void:
@@ -158,6 +159,15 @@ func auto_text(length: int) -> void:
 	
 	place_deep( text )
 
+## Wrapper that places a temperary bullet point
+func _place_template_bullet_point(componenet_name: String, label: String, cursor_offset: Vector2i, default: int , items: Array[ String ]) -> void:
+	# Start on a new line
+	go_to_next_line()
+	# Add the new componenet internally
+	components[ componenet_name ] = TextBulletSelections.new(label, cursor_pos + cursor_offset, items, default)
+	draw_bullet_list( components[ componenet_name ] )
+	for i in components[ componenet_name ].get_element_dimensions().y: go_to_next_line()
+
 func _destylize() -> void:
 	turn_off_highlight()
 
@@ -191,6 +201,9 @@ func _parse_command(sub_string: String) -> void:
 		"$AUTO":
 			if _out_command_error(cmd_prmt.is_empty(), sub_string, " expected a size: $AUTO_24"): return
 			auto_text( cmd_prmt[ 0 ].to_int() )
+		"$BULLET":
+			#TODO safe guard this one, it's long and complicated
+			_place_template_bullet_point(cmd_prmt[ 0 ], cmd_prmt[ 1 ], Vector2i(cmd_prmt[ 2 ].to_int(), cmd_prmt[ 3 ].to_int()), cmd_prmt[ 4 ].to_int(), cmd_prmt.slice(4))
 #endregion
 
 func get_lines_placed() -> int:
