@@ -1,3 +1,4 @@
+## Pause panel should handle the logic, and the display should just draw things
 class_name PausePanel extends Node2D
 
 const SCROLL_BAR_SIZE := 26
@@ -21,6 +22,7 @@ signal on_fully_hidden
 @onready var scroll_wheel_detector := $ScrollWheelInteractable
 @onready var map_tab := $MapTab
 @onready var map : PauseMap = $MapTab/Map
+@onready var full_click_box := $FullAreaClickBox
 
 var _scroll_bar_data : TextBar = TextBar.new(Vector2i(29, SCROLL_BAR_SIZE), TextElement.Axis.Vertical, SCROLL_BAR_SIZE)
 
@@ -58,14 +60,17 @@ var get_pos_percent : float:
 	get():
 		return _pos_raw / float(file_height)
 
+var test_bullet : TextBulletSelections = TextBulletSelections.new("Test", Vector2i(0,0),["test 1", "test 2", "Crazy"])
+
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	click_box.on_mouse_held.connect( on_mouse_hold )
-	#constants.draw_scroll_bar(_scroll_bar_data, 1000)
 	scroll_interactable.on_mouse_pressed.connect( func(): click_box.was_pressed = true )
 	scroll_wheel_detector.on_scroll.connect( on_scroll )
+	full_click_box.on_mouse_pressed.connect( on_mouse_pressed )
 	_apply_tab()
 	force_set_display( false )
+	constants.draw_bullet_list(test_bullet)
 
 func _process(_delta: float) -> void:
 	update_display_state( RealDelta.get_capped() )
@@ -87,6 +92,10 @@ func read_and_place(file_name: String) -> void:
 	pos_y = 0
 	_draw_scroll_bar( 0 )
 	file_height = new_file_height
+
+func on_mouse_pressed() -> void:
+	var result = constants.test_against_bullet_list( test_bullet, get_global_mouse_position() )
+	print(result)
 
 func on_scroll(delta: int) -> void:
 	pos_y -= delta

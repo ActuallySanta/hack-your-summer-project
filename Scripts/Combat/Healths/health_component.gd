@@ -30,22 +30,34 @@ var _curr_health : int:
 		if _curr_health <= 0:
 			_on_death()
 
+## The player_damage_factor [method mod_for_difficulty] divided health by; stays 1.0 where it is overridden.
+var _difficulty_factor := 1.0
+
 func _ready() -> void:
 	if hurtbox == null:
 		printerr("No Hurtbox for this health to detect damage")
 	else:
 		hurtbox.hit.connect(_on_hit)
+	# Has to come first: current health is copied from start_health right below, so scaling
+	# afterwards only moved the ceiling and left the health actually being hit unchanged.
+	mod_for_difficulty()
 	_curr_health = start_health
 	_was_low = _curr_health < low_health_boundry
-	mod_for_difficulty()
 
 # Handle Difficulty mod for enemies; since player attacks with int we weaken them by making the enemies stronger
 # Note: This needs to be undone / ignored in player_health_component
 func mod_for_difficulty() -> void:
-	max_health = int(max_health / Difficulty.get_setting().player_damage_factor)
+	_difficulty_factor = Difficulty.get_setting().player_damage_factor
+	var scaled_max := int(max_health/_difficulty_factor)
+	low_health_boundry = ceili(low_health_boundry * scaled_max / float(max_health))
+	start_health = int(start_health/_difficulty_factor)
+	max_health = scaled_max
 
 func current_health() -> float:
 	return _curr_health;
+
+func unscaled_health() -> float:
+	return _curr_health * _difficulty_factor
 
 func take_damage(amount: int) -> void:
 	_curr_health -= amount

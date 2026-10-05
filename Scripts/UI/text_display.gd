@@ -350,6 +350,25 @@ func draw_scroll_bar(data: TextBar, cursor_pos_quarters: int = 0) -> void:
 		return
 	_set_cell(pos + dir, cursor_tiles[1])
 
+#TODO implement Wrap
+func draw_bullet_list(bullet_list_data: TextBulletSelections, wrap: bool = false) -> void:
+	if wrap == true: printerr("text_display.gd (draw_bullet_list): Wrap has not been implemented for bulleted lists!")
+	var dir : Vector2i = Vector2i(0,1)
+	# Draw label
+	draw_smart_text_at(bullet_list_data.label, bullet_list_data.start_pos, Vector2i(INT32_MAX, 1))
+	var local_cursor : Vector2i = bullet_list_data.start_pos + dir + Vector2i.RIGHT
+	var start_highlight_state = cursor_highlighted
+	for i in bullet_list_data.items.size():
+		var item = bullet_list_data.items[ i ]
+		# Highlight selected option
+		if bullet_list_data.current.back() == i: turn_on_highlight()
+		else: turn_off_highlight()
+		draw_char_at("_bullet_point", local_cursor + Vector2i.LEFT)
+		draw_smart_text_at(item, local_cursor, Vector2i(INT32_MAX, 1))
+		local_cursor += dir
+	
+	# Clean up after drawing
+	cursor_highlighted = start_highlight_state
 #endregion
 
 #region Erase output
@@ -361,11 +380,17 @@ func erase_scroll_bar(data: TextBar) -> void:
 		_set_cell(pos, Vector2i(-1,-1))
 		pos += dir
 
+#TODO
+func erase_bullet_list(bullet_list_data: TextBulletSelections) -> void:
+	pass
+
+#endregion
+
 # Placing is when you are treating the textDisplay like it is a text box, one char left to right, top to bottom
 #region Placing output
 func place_char(char_id: String) -> void:
 	if cursor_pos.y == max_height:
-		printerr("WARNING (text_display: 103): Max hight reached")
+		printerr("WARNING (text_display@place_char): Max hight reached")
 		return
 	
 	_place_char_at_position(char_id, cursor_highlighted, cursor_pos + tile_map_pos_offset)
@@ -427,3 +452,17 @@ func _ready() -> void:
 	reset_cursor()
 	if print_debug_text:
 		__debug_test()
+
+#region Helpers for either components or overall script
+func get_local_mouse_click(global_mouse_position: Vector2) -> Vector2i:
+	return local_to_map(to_local(global_mouse_position))
+
+func test_against_bullet_list(bullet_list_data: TextBulletSelections, interact_position: Vector2) -> String:
+	var int_pos := get_local_mouse_click( interact_position )
+	if int_pos.x < bullet_list_data.start_pos.x or int_pos.y < bullet_list_data.start_pos.y: return "NONE"
+	var relative_to_start := int_pos - bullet_list_data.start_pos
+	if relative_to_start.y >= bullet_list_data.get_element_dimensions().y: return "NONE"
+	if relative_to_start.x >= bullet_list_data.get_element_dimensions().x: return "NONE"
+	
+	return bullet_list_data.make_selection(relative_to_start.y)
+#endregion

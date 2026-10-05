@@ -288,13 +288,15 @@ func yelp_in_agony() -> void:
 	vocalizer.stream = yelp
 	vocalizer.play()
 	visuals.flash()
-	if health_component.current_health() > 23:
+	# These are out of the 30 set in the scene, and difficulty rescales the real number
+	var health : float = health_component.unscaled_health()
+	if health > 23:
 		pass
-	elif health_component.current_health() > 18:
+	elif health > 18:
 		sprite_sheet_swapper.set_sprite_level(1)
-	elif health_component.current_health() > 13:
+	elif health > 13:
 		sprite_sheet_swapper.set_sprite_level(2)
-	elif health_component.current_health() > 7:
+	elif health > 7:
 		sprite_sheet_swapper.set_sprite_level(3)
 	if do_intro_cutscene:
 		start_intro_cutscene()

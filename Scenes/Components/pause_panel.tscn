@@ -114,6 +114,13 @@ show_boundries = false
 dimensions = Vector2(256, 224)
 metadata/_custom_type_script = "uid://b8qf05uwtbxn0"
 
+[node name="FullAreaClickBox" type="Node2D" parent="." unique_id=1887814666]
+position = Vector2(135.99991, 0)
+script = ExtResource("4_0lysg")
+show_boundries = false
+dimensions = Vector2(250, 250)
+metadata/_custom_type_script = "uid://b8qf05uwtbxn0"
+
 [node name="MapTab" type="Node2D" parent="." unique_id=794487974]
 
 [node name="Map" type="Control" parent="MapTab" unique_id=1513920192]
