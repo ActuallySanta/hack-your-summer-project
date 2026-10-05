@@ -96,6 +96,7 @@ func read_and_place(file_name: String) -> void:
 func on_mouse_pressed() -> void:
 	var result = constants.test_against_bullet_list( test_bullet, get_global_mouse_position() )
 	print(result)
+	if result != "NONE": constants.draw_bullet_list( test_bullet )
 
 func on_scroll(delta: int) -> void:
 	pos_y -= delta
@@ -140,6 +141,7 @@ func _apply_input() -> void:
 	click_box.enabled = reading
 	scroll_interactable.enabled = reading
 	scroll_wheel_detector.enabled = reading
+	full_click_box.enabled = reading
 	map.active = enabled and _tab == Tab.MAP
 	# Resuming puts the player straight back on the movement keys while the map is still fading
 	# out, so it stops panning the moment the panel starts to go rather than once it has gone

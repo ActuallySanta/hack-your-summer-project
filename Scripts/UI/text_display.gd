@@ -361,7 +361,7 @@ func draw_bullet_list(bullet_list_data: TextBulletSelections, wrap: bool = false
 	for i in bullet_list_data.items.size():
 		var item = bullet_list_data.items[ i ]
 		# Highlight selected option
-		if bullet_list_data.current.back() == i: turn_on_highlight()
+		if not bullet_list_data.current.is_empty() and bullet_list_data.current.back() == i: turn_on_highlight()
 		else: turn_off_highlight()
 		draw_char_at("_bullet_point", local_cursor + Vector2i.LEFT)
 		draw_smart_text_at(item, local_cursor, Vector2i(INT32_MAX, 1))
@@ -459,8 +459,10 @@ func get_local_mouse_click(global_mouse_position: Vector2) -> Vector2i:
 
 func test_against_bullet_list(bullet_list_data: TextBulletSelections, interact_position: Vector2) -> String:
 	var int_pos := get_local_mouse_click( interact_position )
-	if int_pos.x < bullet_list_data.start_pos.x or int_pos.y < bullet_list_data.start_pos.y: return "NONE"
-	var relative_to_start := int_pos - bullet_list_data.start_pos
+	# draw_bullet_list() puts the label on start_pos, so the items start on the row below it
+	var items_start := bullet_list_data.start_pos + Vector2i.DOWN
+	if int_pos.x < items_start.x or int_pos.y < items_start.y: return "NONE"
+	var relative_to_start := int_pos - items_start
 	if relative_to_start.y >= bullet_list_data.get_element_dimensions().y: return "NONE"
 	if relative_to_start.x >= bullet_list_data.get_element_dimensions().x: return "NONE"
 	
