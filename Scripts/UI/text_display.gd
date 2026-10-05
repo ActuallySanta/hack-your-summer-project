@@ -159,14 +159,24 @@ func auto_text(length: int) -> void:
 	
 	place_deep( text )
 
-## Wrapper that places a temperary bullet point
-func _place_template_bullet_point(componenet_name: String, label: String, cursor_offset: Vector2i, default: int , items: Array[ String ]) -> void:
-	# Start on a new line
-	go_to_next_line()
-	# Add the new componenet internally
-	components[ componenet_name ] = TextBulletSelections.new(label, cursor_pos + cursor_offset, items, default)
-	draw_bullet_list( components[ componenet_name ] )
-	for i in components[ componenet_name ].get_element_dimensions().y: go_to_next_line()
+## Places a bullet list in the flow of the text: on a line of its own, nudged by [param cursor_offset], with
+## whatever follows carrying on below it. Clicks find it in components under [param component_name].
+func _place_template_bullet_point(component_name: String, label: String, cursor_offset: Vector2i, default: int, raw_items: PackedStringArray) -> void:
+	# Spaces around the _ separators are there to make the command readable, not part of the items
+	var items : Array[ String ] = []
+	for item in raw_items: items.append( item.strip_edges() )
+	if default < -1 or default >= items.size():
+		printerr("WARNING (text_display _place_template_bullet_point): '", component_name, "' has no item ", default, " to default to, so nothing starts selected")
+		default = -1
+
+	# Start on a new line, unless the text already left off at the start of one
+	if cursor_pos.x != 0: go_to_next_line()
+	# The cursor counts from tile_map_pos_offset, but the list draws straight onto the grid
+	var bullet_list := TextBulletSelections.new(label.strip_edges(), cursor_pos + tile_map_pos_offset + cursor_offset, items, default)
+	components[ component_name ] = bullet_list
+	draw_bullet_list( bullet_list )
+	# Carry on under the list: past its offset, then its label and one row per item
+	for i in cursor_offset.y + 1 + items.size(): go_to_next_line()
 
 func _destylize() -> void:
 	turn_off_highlight()
@@ -202,8 +212,8 @@ func _parse_command(sub_string: String) -> void:
 			if _out_command_error(cmd_prmt.is_empty(), sub_string, " expected a size: $AUTO_24"): return
 			auto_text( cmd_prmt[ 0 ].to_int() )
 		"$BULLET":
-			#TODO safe guard this one, it's long and complicated
-			_place_template_bullet_point(cmd_prmt[ 0 ], cmd_prmt[ 1 ], Vector2i(cmd_prmt[ 2 ].to_int(), cmd_prmt[ 3 ].to_int()), cmd_prmt[ 4 ].to_int(), cmd_prmt.slice(4))
+			if _out_command_error(cmd_prmt.size() < 6, sub_string, " expected a name, label, x and y offset, default (-1 for none) and its items: $BULLET_NAME_Label_0_0_-1_First item_Second item$"): return
+			_place_template_bullet_point(cmd_prmt[ 0 ], cmd_prmt[ 1 ], Vector2i(cmd_prmt[ 2 ].to_int(), cmd_prmt[ 3 ].to_int()), cmd_prmt[ 4 ].to_int(), cmd_prmt.slice(5))
 #endregion
 
 func get_lines_placed() -> int:
@@ -235,7 +245,7 @@ func is_string_too_wide(string: String) -> bool:
 # Drawing is when you put stuff directly to the screen like images, manual texts, or list items
 #region Drawing output
 func draw_char_at(char_id: String, position_on_grid: Vector2i) -> void:
-	set_cell(position_on_grid, 0, get_tile_coords_from_char(char_id, cursor_highlighted))
+	_set_cell(position_on_grid, get_tile_coords_from_char(char_id, cursor_highlighted))
 	
 ## Draws a horizontal rule [param size] cells wide with its left end at [param start].
 ## The drawing twin of place_line(): straight to the grid, so the text box rules the placing cursor
@@ -434,7 +444,7 @@ func place_string(string: String, replace_highlight: bool = false, highlight_wor
 		set_hightlight(old_highlight)
 
 func place_deep(string: String) -> void:
-	var strings = string.split(" ")
+	var strings = _split_words( string )
 	for sub_string in strings:
 		if sub_string.begins_with("$"):
 			_parse_command( sub_string )
@@ -447,7 +457,30 @@ func place_deep(string: String) -> void:
 			continue
 		place_char(" ")
 
+## Splits text into words on its spaces. A command can run on past spaces, so its parameters can hold
+## them, when a later word closes it with a '$': "$BULLET_..._Top choice_Last choice$" comes back as one
+## word, minus that '$'. Without one before the next command opens, a command ends at its first space as always.
+func _split_words(string: String) -> PackedStringArray:
+	var raw := string.split(" ")
+	var words := PackedStringArray()
+	var i := 0
+	while i < raw.size():
+		var end := i
+		if raw[ i ].begins_with("$") and not raw[ i ].ends_with("$"):
+			for j in range(i + 1, raw.size()):
+				if raw[ j ].begins_with("$"): break
+				if raw[ j ].ends_with("$"):
+					end = j
+					break
+		var word := " ".join(raw.slice(i, end + 1))
+		# A lone '$' is the destylize command, not a closing '$'
+		if word.begins_with("$") and word != "$": word = word.trim_suffix("$")
+		words.append( word )
+		i = end + 1
+	return words
+
 func clear_screen() -> void:
+	components.clear()
 	for y in max_height:
 		for x in max_width:
 			erase_cell(Vector2i(x,y) + tile_map_pos_offset)
@@ -480,4 +513,14 @@ func test_against_bullet_list(bullet_list_data: TextBulletSelections, interact_p
 	if relative_to_start.x >= bullet_list_data.get_element_dimensions().x: return "NONE"
 	
 	return bullet_list_data.make_selection(relative_to_start.y)
+
+## Gives a click to the component placed under it, which takes the selection and redraws to show it.
+## Returns that component's name, or "" when the click missed every component.
+func click_components(interact_position: Vector2) -> String:
+	for component_name in components:
+		var bullet_list := components[ component_name ] as TextBulletSelections
+		if bullet_list == null or test_against_bullet_list(bullet_list, interact_position) == "NONE": continue
+		draw_bullet_list( bullet_list )
+		return component_name
+	return ""
 #endregion

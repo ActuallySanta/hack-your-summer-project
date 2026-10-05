@@ -60,8 +60,6 @@ var get_pos_percent : float:
 	get():
 		return _pos_raw / float(file_height)
 
-var test_bullet : TextBulletSelections = TextBulletSelections.new("Test", Vector2i(0,0),["test 1", "test 2", "Crazy"])
-
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	click_box.on_mouse_held.connect( on_mouse_hold )
@@ -70,7 +68,7 @@ func _ready() -> void:
 	full_click_box.on_mouse_pressed.connect( on_mouse_pressed )
 	_apply_tab()
 	force_set_display( false )
-	constants.draw_bullet_list(test_bullet)
+	constants.place_deep("This is a test for the bullet point command: $BULLET_TESTBULLET_Label:_0_1_-1_Top choice_Middle choice_bottom choice$")
 
 func _process(_delta: float) -> void:
 	update_display_state( RealDelta.get_capped() )
@@ -94,9 +92,10 @@ func read_and_place(file_name: String) -> void:
 	file_height = new_file_height
 
 func on_mouse_pressed() -> void:
-	var result = constants.test_against_bullet_list( test_bullet, get_global_mouse_position() )
-	print(result)
-	if result != "NONE": constants.draw_bullet_list( test_bullet )
+	var clicked : String = constants.click_components( get_global_mouse_position() )
+	if clicked.is_empty(): return
+	var bullet_list : TextBulletSelections = constants.components[ clicked ]
+	print(clicked, ": ", bullet_list.items[ bullet_list.current.back() ])
 
 func on_scroll(delta: int) -> void:
 	pos_y -= delta
