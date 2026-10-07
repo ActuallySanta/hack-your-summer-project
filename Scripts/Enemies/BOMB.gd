@@ -10,11 +10,9 @@ var _timer = -1
 var boomed = false
 var going_for_delete = false
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	manin_flash.modulate.a = 0
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if boomed:
 		return
@@ -40,6 +38,7 @@ func _physics_process(_delta: float) -> void:
 		queue_free()
 	
 func _BOOM_BOOM_BOOM() -> void:
+	if _timer >= 0: return
 	_timer = 0
 
 func _KABOOM() -> void:
@@ -52,6 +51,8 @@ func _KABOOM() -> void:
 	$RigidBody2D.queue_free()
 	boomed = true
 
-
 func _on_player_collider_body_entered(body: Node2D) -> void:
+	_BOOM_BOOM_BOOM()
+
+func _on_hurtbox_hit(_hurtbox: Hurtbox, _hit_info: HitInfo, _source: Hitbox) -> void:
 	_BOOM_BOOM_BOOM()
