@@ -6,6 +6,8 @@ const TILE_SIZE := 8
 const CONTENT_LINE_COUNT : int = 28
 const TOTAL_WIDTH : int = 32
 
+const DIFFICULTY_LABEL : String = "This is a test for the bullet point command: $BULLET_TESTBULLET_Label:_0_1_-1_Top choice_Middle choice_bottom choice$ Congrats it worked!"
+
 enum HideState { HIDE_REST, SHOW_REST, HIDING, SHOWING }
 ## What the panel is showing: a text file from the list, or the map
 enum Tab { TEXT, MAP }
@@ -68,21 +70,30 @@ func _ready() -> void:
 	full_click_box.on_mouse_pressed.connect( on_mouse_pressed )
 	_apply_tab()
 	force_set_display( false )
-	constants.place_deep("This is a test for the bullet point command: $BULLET_TESTBULLET_Label:_0_1_-1_Top choice_Middle choice_bottom choice$ Congrats it worked!")
 
 func _process(_delta: float) -> void:
 	update_display_state( RealDelta.get_capped() )
 
 func read_and_place(file_name: String) -> void:
 	if not FileAccess.file_exists(file_name):
-		printerr("Warning (pause_panel, 27): File does not exist")
+		printerr("Warning (pause_panel, read_and_place): File does not exist")
 		return
 	
 	_show_text()
 	var file = FileAccess.open(file_name, FileAccess.READ)
 	read_output = file.get_as_text()
 	file.close()
-	content.place_deep_fresh( read_output )
+	apply_settings_content( read_output )
+
+func on_mouse_pressed() -> void:
+	var clicked : String = content.click_components( get_global_mouse_position() )
+	if clicked.is_empty(): return
+	var bullet_list : TextBulletSelections = constants.components[ clicked ]
+	print(clicked, ": ", bullet_list.items[ bullet_list.current.back() ])
+
+func apply_settings_content(thing_to_place: String) -> void:
+	content.clear_components()
+	content.place_deep_fresh( thing_to_place )
 	text_line_count = content.get_lines_placed()
 	@warning_ignore("integer_division")
 	var new_file_height : int = max(text_line_count + 3 - CONTENT_LINE_COUNT / 2, 0)
@@ -90,12 +101,6 @@ func read_and_place(file_name: String) -> void:
 	pos_y = 0
 	_draw_scroll_bar( 0 )
 	file_height = new_file_height
-
-func on_mouse_pressed() -> void:
-	var clicked : String = constants.click_components( get_global_mouse_position() )
-	if clicked.is_empty(): return
-	var bullet_list : TextBulletSelections = constants.components[ clicked ]
-	print(clicked, ": ", bullet_list.items[ bullet_list.current.back() ])
 
 func on_scroll(delta: int) -> void:
 	pos_y -= delta

@@ -120,9 +120,7 @@ func _ready() -> void:
 	root.display_list( self )
 	
 func __debug_test() -> void:
-	print(" - Test for finding youngest - ")
 	var arr :=  root.find_youngest_node_on_invalid_path(".../Log Book/Regions/Doomsbay/Goon bay")
-	print( "   ", arr[ 0 ].item_name, arr[ 1 ] )
 	root.insert_new_list_item_at(".../Log Book/Regions/Doomsbay/Goon bay")
 
 ## Time is global, and this node is one of the two things that takes it away, so a menu going down
