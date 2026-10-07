@@ -183,6 +183,7 @@ Cheats={
 2d_physics/layer_5="pickups"
 2d_physics/layer_6="BreakableBlocks"
 2d_physics/layer_9="Enemy Only Geometry"
+2d_physics/layer_10="Mines"
 
 [physics]
 
@@ -197,3 +198,4 @@ renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
 viewport/hdr_2d=true
 2d/snap/snap_2d_transforms_to_pixel=true
+2d/snap/snap_2d_vertices_to_pixel=true

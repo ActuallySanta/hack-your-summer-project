@@ -41,5 +41,13 @@ func iterate(delta: float, num_points: int, speed: float) -> bool:
 func move_node_end() -> void:
 	node.position = current_point.start + current_point.delta
 
-func move_node() -> void:
-	node.position = current_point.start + current_point.delta_normal * travelled_distance
+func move_node(easing: String) -> void:
+	match easing:
+		"Linear":
+			node.position = current_point.start + current_point.delta_normal * travelled_distance
+		"Ease-in":
+			pass
+		"Ease-out":
+			pass
+		"Ease-in-out":
+			pass

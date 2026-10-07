@@ -1,0 +1,138 @@
+[gd_scene format=3 uid="uid://ubb50nvnsfg8"]
+
+[ext_resource type="Script" uid="uid://bdgk11k35o1b4" path="res://Scripts/Enemies/BOMB.gd" id="1_thrjk"]
+[ext_resource type="Texture2D" uid="uid://crpcsnsk24ei3" path="res://Sprites/Characters/Enemy SpriteSheets/Miner/Mines.png" id="1_xsf2c"]
+[ext_resource type="Script" uid="uid://ctc17oyja7fup" path="res://Scripts/Combat/hitbox.gd" id="3_tvqek"]
+
+[sub_resource type="GDScript" id="GDScript_xsf2c"]
+resource_name = "LockRotationMines"
+script/source = "extends RigidBody2D
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	rotation = 0
+"
+
+[sub_resource type="Gradient" id="Gradient_thrjk"]
+offsets = PackedFloat32Array(0, 0.30020705, 0.72670805, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.494824, 1, 1, 1, 0.08930257, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_bpmhk"]
+gradient = SubResource("Gradient_thrjk")
+fill = 1
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_thrjk"]
+atlas = ExtResource("1_xsf2c")
+region = Rect2(0, 0, 7, 3)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tvqek"]
+atlas = ExtResource("1_xsf2c")
+region = Rect2(7, 0, 7, 3)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n14v1"]
+atlas = ExtResource("1_xsf2c")
+region = Rect2(14, 0, 7, 3)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0awbx"]
+atlas = ExtResource("1_xsf2c")
+region = Rect2(21, 0, 7, 3)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_bpmhk"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_thrjk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tvqek")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n14v1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0awbx")
+}],
+"loop": 0,
+"name": &"idle",
+"speed": 10.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_wrphf"]
+radius = 4.5
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_85ri6"]
+radius = 45.099888
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_bpmhk"]
+radius = 45.17743
+
+[node name="Mines" type="Node2D" unique_id=672678482]
+script = ExtResource("1_thrjk")
+
+[node name="RigidBody2D" type="RigidBody2D" parent="." unique_id=1461331259]
+collision_layer = 516
+collision_mask = 513
+can_sleep = false
+angular_damp = 5.715
+script = SubResource("GDScript_xsf2c")
+
+[node name="Flash" type="Node2D" parent="RigidBody2D" unique_id=32652606]
+
+[node name="TextureRect" type="TextureRect" parent="RigidBody2D/Flash" unique_id=1305258062]
+offset_right = 64.0
+offset_bottom = 64.0
+texture = SubResource("GradientTexture2D_bpmhk")
+
+[node name="TextureRect2" type="TextureRect" parent="RigidBody2D/Flash" unique_id=1559323882]
+offset_left = -64.0
+offset_bottom = 64.0
+texture = SubResource("GradientTexture2D_bpmhk")
+flip_h = true
+
+[node name="TextureRect3" type="TextureRect" parent="RigidBody2D/Flash" unique_id=117638250]
+offset_top = -64.0
+offset_right = 64.0
+texture = SubResource("GradientTexture2D_bpmhk")
+flip_v = true
+
+[node name="TextureRect4" type="TextureRect" parent="RigidBody2D/Flash" unique_id=2037299463]
+offset_left = -64.0
+offset_top = -64.0
+texture = SubResource("GradientTexture2D_bpmhk")
+flip_h = true
+flip_v = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="RigidBody2D" unique_id=1021085952]
+position = Vector2(0, -2)
+scale = Vector2(3, 3)
+sprite_frames = SubResource("SpriteFrames_bpmhk")
+animation = &"idle"
+frame = 3
+frame_progress = 1.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D" unique_id=1295162647]
+shape = SubResource("CircleShape2D_wrphf")
+
+[node name="PlayerCollider" type="Area2D" parent="." unique_id=653954399]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerCollider" unique_id=1073492912]
+visible = false
+shape = SubResource("CircleShape2D_85ri6")
+
+[node name="Hitbox" type="Area2D" parent="." unique_id=1275812061]
+collision_layer = 2
+collision_mask = 2
+monitoring = false
+monitorable = false
+script = ExtResource("3_tvqek")
+damage = 2
+knockback_duration = 0.02
+metadata/_custom_type_script = "uid://ctc17oyja7fup"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=1146621617]
+visible = false
+shape = SubResource("CircleShape2D_bpmhk")
+
+[connection signal="body_entered" from="PlayerCollider" to="." method="_on_player_collider_body_entered"]

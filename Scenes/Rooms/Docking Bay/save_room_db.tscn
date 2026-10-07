@@ -10,7 +10,6 @@
 [ext_resource type="PackedScene" uid="uid://b2ibnxde1hrva" path="res://Scenes/Enemies/ranged_enemy.tscn" id="7_f4wp1"]
 [ext_resource type="PackedScene" uid="uid://6jbhsdtefk1p" path="res://Scenes/Components/door_tile_map_layer.tscn" id="9_xr133"]
 [ext_resource type="PackedScene" uid="uid://bnpsyl86ggbjm" path="res://Scenes/Pickups/health_extender.tscn" id="10_eelfb"]
-[ext_resource type="PackedScene" uid="uid://bywk7doxfo4dy" path="res://Scenes/Enemies/miner.tscn" id="11_sew1r"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bpmhk"]
 size = Vector2(706, 202)
@@ -91,6 +90,3 @@ tile_map_data = PackedByteArray("AAAWAAUAAQACAAAAAAAWAAYAAQACAAEAAAAWAAcAAQACAAI
 
 [node name="Marker2D" type="Marker2D" parent="." unique_id=286963146 groups=["save_checkpoint"]]
 position = Vector2(647, 325)
-
-[node name="Miner" parent="." unique_id=1446641281 instance=ExtResource("11_sew1r")]
-position = Vector2(800, 220)

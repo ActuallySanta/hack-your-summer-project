@@ -2,7 +2,7 @@
 class_name Path extends Node2D
 @export_category("Behavior")
 @export_enum("Jump", "Closed Loop", "Ping Pong") var loop_mode : String
-#@export_enum("Linear", "Ease-in", "Ease-out", "Ease-in-out") var easing : String
+@export_enum("Linear", "Ease-in", "Ease-out", "Ease-in-out") var easing : String = "Linear"
 @export var wait_at_point : bool = true
 @export var wait_time_seconds : float = 1.0
 @export var node_speed : float = 10.0
@@ -102,7 +102,7 @@ func update_path_follower(follower: PathFollowerData, delta: float) -> void:
 		if wait_time_seconds > 0:
 			follower.wait_time = wait_time_seconds
 			follower.travelled_distance = 0
-	follower.move_node()
+	follower.move_node(easing)
 
 func _draw() -> void:
 	if not Engine.is_editor_hint():
