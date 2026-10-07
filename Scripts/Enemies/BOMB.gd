@@ -29,8 +29,10 @@ func _process(delta: float) -> void:
 func _physics_process(_delta: float) -> void:
 	if $RigidBody2D != null:
 		$PlayerCollider.position = $RigidBody2D.position
+		$Hurtbox.position = $RigidBody2D.position
 	elif $PlayerCollider != null:
 		$PlayerCollider.queue_free()
+		$Hurtbox.queue_free()
 	
 	if boomed and not going_for_delete:
 		going_for_delete = true

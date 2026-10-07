@@ -114,14 +114,14 @@ frame_progress = 1.0
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D" unique_id=1295162647]
 shape = SubResource("CircleShape2D_wrphf")
 
-[node name="Hurtbox" type="Area2D" parent="RigidBody2D" unique_id=695425565]
+[node name="Hurtbox" type="Area2D" parent="." unique_id=695425565]
 collision_layer = 512
 collision_mask = 0
 monitoring = false
 script = ExtResource("4_hrtbx")
 metadata/_custom_type_script = "uid://dhgcprjrtfobr"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D/Hurtbox" unique_id=2035525363]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=2035525363]
 shape = SubResource("CircleShape2D_wrphf")
 
 [node name="PlayerCollider" type="Area2D" parent="." unique_id=653954399]
@@ -129,7 +129,6 @@ collision_layer = 0
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerCollider" unique_id=1073492912]
-visible = false
 shape = SubResource("CircleShape2D_85ri6")
 
 [node name="Hitbox" type="Area2D" parent="." unique_id=1275812061]
@@ -143,8 +142,7 @@ knockback_duration = 0.02
 metadata/_custom_type_script = "uid://ctc17oyja7fup"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=1146621617]
-visible = false
 shape = SubResource("CircleShape2D_bpmhk")
 
-[connection signal="hit" from="RigidBody2D/Hurtbox" to="." method="_on_hurtbox_hit"]
+[connection signal="hit" from="Hurtbox" to="." method="_on_hurtbox_hit"]
 [connection signal="body_entered" from="PlayerCollider" to="." method="_on_player_collider_body_entered"]
