@@ -1,0 +1,125 @@
+[gd_scene format=3 uid="uid://bywk7doxfo4dy"]
+
+[ext_resource type="Script" uid="uid://ck04mie7vcgfp" path="res://Scripts/Animation/miner_visual_manager.gd" id="1_3sgtg"]
+[ext_resource type="Script" uid="uid://cscem8xiwfk3c" path="res://Scripts/Enemies/miner.gd" id="1_ngnoe"]
+[ext_resource type="Texture2D" uid="uid://cv72dg5owh8kp" path="res://Sprites/Characters/Enemy SpriteSheets/Miner/Miner.png" id="1_v6q4p"]
+[ext_resource type="Texture2D" uid="uid://dstaq3pgb8wok" path="res://Sprites/Characters/Enemy SpriteSheets/Miner/MinerPanel.png" id="2_0wi3u"]
+[ext_resource type="Texture2D" uid="uid://dxei5b815ew5q" path="res://Sprites/Characters/Enemy SpriteSheets/Miner/MinerEye.png" id="2_3khq3"]
+[ext_resource type="PackedScene" uid="uid://c744kphkhs1tv" path="res://Scenes/Components/flasher.tscn" id="3_ngnoe"]
+[ext_resource type="Script" uid="uid://p46g50v8y7y4" path="res://Scripts/Combat/Healths/robot_health_component.gd" id="6_6tgu0"]
+[ext_resource type="Script" uid="uid://dhgcprjrtfobr" path="res://Scripts/Combat/hurtbox.gd" id="7_n3qvy"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3sgtg"]
+atlas = ExtResource("2_0wi3u")
+region = Rect2(0, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_27iws"]
+atlas = ExtResource("2_0wi3u")
+region = Rect2(32, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6tgu0"]
+atlas = ExtResource("2_0wi3u")
+region = Rect2(64, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n3qvy"]
+atlas = ExtResource("2_0wi3u")
+region = Rect2(96, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ngnoe"]
+atlas = ExtResource("2_0wi3u")
+region = Rect2(0, 16, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q0q0e"]
+atlas = ExtResource("2_0wi3u")
+region = Rect2(32, 16, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yprqx"]
+atlas = ExtResource("2_0wi3u")
+region = Rect2(64, 16, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wwohx"]
+atlas = ExtResource("2_0wi3u")
+region = Rect2(96, 16, 32, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_bpmhk"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3sgtg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_27iws")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6tgu0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n3qvy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ngnoe")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q0q0e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yprqx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wwohx")
+}],
+"loop": 0,
+"name": &"PanelFall",
+"speed": 10.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_bpmhk"]
+radius = 380.00525
+
+[node name="Miner" type="Node2D" unique_id=1446641281]
+script = ExtResource("1_ngnoe")
+
+[node name="VisualManager" type="Node2D" parent="." unique_id=1086391350]
+scale = Vector2(3, 3)
+script = ExtResource("1_3sgtg")
+
+[node name="Flasher" parent="VisualManager" unique_id=734208757 instance=ExtResource("3_ngnoe")]
+
+[node name="Body" type="Sprite2D" parent="VisualManager/Flasher" unique_id=1891766020]
+texture = ExtResource("1_v6q4p")
+hframes = 2
+
+[node name="Eye" type="Sprite2D" parent="VisualManager/Flasher" unique_id=1685129907]
+texture = ExtResource("2_3khq3")
+offset = Vector2(1, 5)
+
+[node name="Panel" type="AnimatedSprite2D" parent="VisualManager" unique_id=1171232208]
+position = Vector2(0, -8)
+sprite_frames = SubResource("SpriteFrames_bpmhk")
+animation = &"PanelFall"
+
+[node name="RoboHealth" type="Node2D" parent="." unique_id=1317024677]
+script = ExtResource("6_6tgu0")
+destroy_on_death = true
+max_health = 6
+start_health = 6
+low_health_boundry = 3
+metadata/_custom_type_script = "uid://p46g50v8y7y4"
+
+[node name="Hurtbox" type="Area2D" parent="RoboHealth" unique_id=785039461]
+collision_layer = 4
+collision_mask = 10
+script = ExtResource("7_n3qvy")
+metadata/_custom_type_script = "uid://dhgcprjrtfobr"
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="RoboHealth/Hurtbox" unique_id=1796413245]
+visible = false
+polygon = PackedVector2Array(9, 39, 48, 39, 48, -48, -48, -48, -48, 12)
+
+[node name="PlayerCollider" type="Area2D" parent="." unique_id=1388644934]
+collision_layer = 4
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerCollider" unique_id=627539788]
+visible = false
+shape = SubResource("CircleShape2D_bpmhk")
