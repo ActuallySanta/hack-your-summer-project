@@ -5,6 +5,9 @@ const EXPLOSION := preload("res://Scenes/Enemies/enemy_death_boom.tscn")
 @export var explosion_brightness : float = 10.0
 
 @onready var manin_flash : Node2D = $RigidBody2D/Flash
+@onready var rb : RigidBody2D = $RigidBody2D
+@onready var player_controller : Area2D = $PlayerCollider
+@onready var hitbox : Hitbox = $Hitbox
 
 var _timer = -1
 var boomed = false
@@ -27,12 +30,10 @@ func _process(delta: float) -> void:
 	manin_flash.modulate.a = _timer * _timer / explosion_time
 
 func _physics_process(_delta: float) -> void:
-	if $RigidBody2D != null:
-		$PlayerCollider.position = $RigidBody2D.position
-		$Hurtbox.position = $RigidBody2D.position
-	elif $PlayerCollider != null:
-		$PlayerCollider.queue_free()
-		$Hurtbox.queue_free()
+	if rb != null:
+		player_controller.position = rb.position
+	elif player_controller != null:
+		player_controller.queue_free()
 	
 	if boomed and not going_for_delete:
 		going_for_delete = true
@@ -44,17 +45,18 @@ func _BOOM_BOOM_BOOM() -> void:
 	_timer = 0
 
 func _KABOOM() -> void:
-	$Hitbox.monitorable  = true
-	$Hitbox.monitoring  = true
+	hitbox.monitorable  = true
+	hitbox.monitoring  = true
 	var effects : Node2D = EXPLOSION.instantiate()
-	effects.global_position = $RigidBody2D.global_position
-	$Hitbox.global_position = effects.global_position
+	effects.global_position = rb.global_position
+	hitbox.global_position = effects.global_position
 	get_tree().root.add_child(effects)
-	$RigidBody2D.queue_free()
+	rb.queue_free()
 	boomed = true
 
 func _on_player_collider_body_entered(body: Node2D) -> void:
 	_BOOM_BOOM_BOOM()
 
-func _on_hurtbox_hit(_hurtbox: Hurtbox, _hit_info: HitInfo, _source: Hitbox) -> void:
-	_BOOM_BOOM_BOOM()
+func _on_mines_explorer_area_entered(area: Area2D) -> void:
+	if area is Hitbox:
+		_BOOM_BOOM_BOOM()

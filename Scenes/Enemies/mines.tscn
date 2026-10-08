@@ -3,7 +3,6 @@
 [ext_resource type="Script" uid="uid://bdgk11k35o1b4" path="res://Scripts/Enemies/BOMB.gd" id="1_thrjk"]
 [ext_resource type="Texture2D" uid="uid://crpcsnsk24ei3" path="res://Sprites/Characters/Enemy SpriteSheets/Miner/Mines.png" id="1_xsf2c"]
 [ext_resource type="Script" uid="uid://ctc17oyja7fup" path="res://Scripts/Combat/hitbox.gd" id="3_tvqek"]
-[ext_resource type="Script" uid="uid://dhgcprjrtfobr" path="res://Scripts/Combat/hurtbox.gd" id="4_hrtbx"]
 
 [sub_resource type="GDScript" id="GDScript_xsf2c"]
 resource_name = "LockRotationMines"
@@ -114,16 +113,6 @@ frame_progress = 1.0
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D" unique_id=1295162647]
 shape = SubResource("CircleShape2D_wrphf")
 
-[node name="Hurtbox" type="Area2D" parent="." unique_id=695425565]
-collision_layer = 512
-collision_mask = 0
-monitoring = false
-script = ExtResource("4_hrtbx")
-metadata/_custom_type_script = "uid://dhgcprjrtfobr"
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=2035525363]
-shape = SubResource("CircleShape2D_wrphf")
-
 [node name="PlayerCollider" type="Area2D" parent="." unique_id=653954399]
 collision_layer = 0
 collision_mask = 2
@@ -132,7 +121,7 @@ collision_mask = 2
 shape = SubResource("CircleShape2D_85ri6")
 
 [node name="Hitbox" type="Area2D" parent="." unique_id=1275812061]
-collision_layer = 2
+collision_layer = 512
 collision_mask = 514
 monitoring = false
 monitorable = false
@@ -144,5 +133,12 @@ metadata/_custom_type_script = "uid://ctc17oyja7fup"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=1146621617]
 shape = SubResource("CircleShape2D_bpmhk")
 
-[connection signal="hit" from="Hurtbox" to="." method="_on_hurtbox_hit"]
+[node name="MinesExplorer" type="Area2D" parent="." unique_id=1282392390]
+collision_layer = 0
+collision_mask = 512
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MinesExplorer" unique_id=586852610]
+shape = SubResource("CircleShape2D_bpmhk")
+
 [connection signal="body_entered" from="PlayerCollider" to="." method="_on_player_collider_body_entered"]
+[connection signal="area_entered" from="MinesExplorer" to="." method="_on_mines_explorer_area_entered"]
