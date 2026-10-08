@@ -17,6 +17,7 @@
 [ext_resource type="PackedScene" uid="uid://b7lnb5mc2cxhl" path="res://Scenes/Components/station_powered_node.tscn" id="14_tnlk3"]
 [ext_resource type="Script" uid="uid://ppq0y0iwxyc2" path="res://Scripts/Level Elements/debug_spawn_point.gd" id="16_qf1ib"]
 [ext_resource type="PackedScene" uid="uid://bywk7doxfo4dy" path="res://Scenes/Enemies/miner.tscn" id="17_pm1qf"]
+[ext_resource type="PackedScene" uid="uid://ubb50nvnsfg8" path="res://Scenes/Enemies/mines.tscn" id="18_wrphf"]
 
 [node name="ServiceCrossroads" type="Node2D" unique_id=1037229723]
 
@@ -128,3 +129,12 @@ metadata/_custom_type_script = "uid://ppq0y0iwxyc2"
 
 [node name="Miner" parent="." unique_id=1446641281 instance=ExtResource("17_pm1qf")]
 position = Vector2(614, 930)
+
+[node name="Mines" parent="." unique_id=672678482 instance=ExtResource("18_wrphf")]
+position = Vector2(612, 991)
+
+[node name="Mines2" parent="." unique_id=2002847297 instance=ExtResource("18_wrphf")]
+position = Vector2(534, 947)
+
+[node name="Mines3" parent="." unique_id=1364580779 instance=ExtResource("18_wrphf")]
+position = Vector2(537, 921)

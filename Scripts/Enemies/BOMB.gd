@@ -4,7 +4,8 @@ const EXPLOSION := preload("res://Scenes/Enemies/enemy_death_boom.tscn")
 @export var explosion_time : float = 0.1
 @export var explosion_brightness : float = 10.0
 
-@onready var manin_flash : Node2D = $RigidBody2D/Flash
+@onready var manin_flash : Node2D = $RigidBody2D/Visuals/Flash
+@onready var visuals : Node2D = $RigidBody2D/Visuals
 @onready var rb : RigidBody2D = $RigidBody2D
 @onready var player_controller : Area2D = $PlayerCollider
 @onready var hitbox : Hitbox = $Hitbox
@@ -19,6 +20,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if boomed:
 		return
+	visuals.global_rotation = 0
 	if _timer < 0: return
 	if _timer >= explosion_time:
 		_KABOOM()

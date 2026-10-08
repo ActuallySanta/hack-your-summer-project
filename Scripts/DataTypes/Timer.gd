@@ -1,4 +1,4 @@
-class_name SmartTimer extends Node
+class_name SmartTimer extends RefCounted
 
 var _callable : Callable
 var _time_seconds : float

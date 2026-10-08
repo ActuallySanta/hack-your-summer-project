@@ -4,15 +4,6 @@
 [ext_resource type="Texture2D" uid="uid://crpcsnsk24ei3" path="res://Sprites/Characters/Enemy SpriteSheets/Miner/Mines.png" id="1_xsf2c"]
 [ext_resource type="Script" uid="uid://ctc17oyja7fup" path="res://Scripts/Combat/hitbox.gd" id="3_tvqek"]
 
-[sub_resource type="GDScript" id="GDScript_xsf2c"]
-resource_name = "LockRotationMines"
-script/source = "extends RigidBody2D
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	rotation = 0
-"
-
 [sub_resource type="Gradient" id="Gradient_thrjk"]
 offsets = PackedFloat32Array(0, 0.30020705, 0.72670805, 1)
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.494824, 1, 1, 1, 0.08930257, 1, 1, 1, 0)
@@ -93,35 +84,36 @@ collision_layer = 516
 collision_mask = 513
 can_sleep = false
 angular_damp = 5.715
-script = SubResource("GDScript_xsf2c")
 
-[node name="Flash" type="Node2D" parent="RigidBody2D" unique_id=32652606]
+[node name="Visuals" type="Node2D" parent="RigidBody2D" unique_id=1873405529]
 
-[node name="TextureRect" type="TextureRect" parent="RigidBody2D/Flash" unique_id=1305258062]
+[node name="Flash" type="Node2D" parent="RigidBody2D/Visuals" unique_id=32652606]
+
+[node name="TextureRect" type="TextureRect" parent="RigidBody2D/Visuals/Flash" unique_id=1305258062]
 offset_right = 64.0
 offset_bottom = 64.0
 texture = SubResource("GradientTexture2D_bpmhk")
 
-[node name="TextureRect2" type="TextureRect" parent="RigidBody2D/Flash" unique_id=1559323882]
+[node name="TextureRect2" type="TextureRect" parent="RigidBody2D/Visuals/Flash" unique_id=1559323882]
 offset_left = -64.0
 offset_bottom = 64.0
 texture = SubResource("GradientTexture2D_bpmhk")
 flip_h = true
 
-[node name="TextureRect3" type="TextureRect" parent="RigidBody2D/Flash" unique_id=117638250]
+[node name="TextureRect3" type="TextureRect" parent="RigidBody2D/Visuals/Flash" unique_id=117638250]
 offset_top = -64.0
 offset_right = 64.0
 texture = SubResource("GradientTexture2D_bpmhk")
 flip_v = true
 
-[node name="TextureRect4" type="TextureRect" parent="RigidBody2D/Flash" unique_id=2037299463]
+[node name="TextureRect4" type="TextureRect" parent="RigidBody2D/Visuals/Flash" unique_id=2037299463]
 offset_left = -64.0
 offset_top = -64.0
 texture = SubResource("GradientTexture2D_bpmhk")
 flip_h = true
 flip_v = true
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="RigidBody2D" unique_id=1021085952]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="RigidBody2D/Visuals" unique_id=1021085952]
 position = Vector2(0, -2)
 scale = Vector2(3, 3)
 sprite_frames = SubResource("SpriteFrames_bpmhk")
