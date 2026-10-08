@@ -8,6 +8,7 @@ const EXPLOSION := preload("res://Scenes/Enemies/enemy_death_boom.tscn")
 @onready var visuals : Node2D = $RigidBody2D/Visuals
 @onready var rb : RigidBody2D = $RigidBody2D
 @onready var player_controller : Area2D = $PlayerCollider
+@onready var mines_explorer : Area2D = $MinesExplorer
 @onready var hitbox : Hitbox = $Hitbox
 
 var _timer = -1
@@ -34,6 +35,7 @@ func _process(delta: float) -> void:
 func _physics_process(_delta: float) -> void:
 	if rb != null:
 		player_controller.position = rb.position
+		mines_explorer.position = rb.position
 	elif player_controller != null:
 		player_controller.queue_free()
 	
