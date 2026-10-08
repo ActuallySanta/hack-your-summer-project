@@ -131,7 +131,10 @@ metadata/_custom_type_script = "uid://ppq0y0iwxyc2"
 position = Vector2(614, 930)
 
 [node name="Mines" parent="." unique_id=672678482 instance=ExtResource("18_wrphf")]
-position = Vector2(548, 899)
+position = Vector2(552, 954)
 
 [node name="Mines2" parent="." unique_id=1019549044 instance=ExtResource("18_wrphf")]
-position = Vector2(598, 980)
+position = Vector2(554, 940)
+
+[node name="Mines3" parent="." unique_id=716217969 instance=ExtResource("18_wrphf")]
+position = Vector2(593, 1001)
