@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bo6qgt11s8q53" path="res://00_Globals/game.gd" id="1_wrm1d"]
 [ext_resource type="PackedScene" uid="uid://dohmyoeiilp0v" path="res://Scenes/Players/player.tscn" id="2_qxrlw"]
-[ext_resource type="Resource" uid="uid://dd30177okkcfg" path="res://Resources/CustomSaves/service_crossroads.tres" id="2_wowpa"]
+[ext_resource type="Resource" uid="uid://xrdkcn077v5i" path="res://Resources/CustomSaves/crew_quarters.tres" id="2_wowpa"]
 [ext_resource type="PackedScene" uid="uid://c4thct0jgtock" path="res://Scenes/game_hud.tscn" id="3_wrm1d"]
 [ext_resource type="Environment" uid="uid://da4yyl0ndg2kg" path="res://00_Globals/bloom_environment.tres" id="4_wowpa"]
 

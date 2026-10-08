@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="CustomSaveData" format=3 uid="uid://xrdkcn077v5i"]
+
+[ext_resource type="Script" uid="uid://cc3yvafs1yvnj" path="res://Scripts/DataTypes/custom_save_data.gd" id="1_mpmtu"]
+
+[resource]
+script = ExtResource("1_mpmtu")
+start_room = "uid://qv7ay1j4dm6r"
+fuse = 2
+gun = 1
+wrench = 1
+metadata/_custom_type_script = "uid://cc3yvafs1yvnj"

@@ -70,7 +70,7 @@ func bling() -> void:
 radius = 4.5
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_85ri6"]
-radius = 45.099888
+radius = 13.152946
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_bpmhk"]
 radius = 45.17743
@@ -126,7 +126,7 @@ shape = SubResource("CircleShape2D_wrphf")
 
 [node name="PlayerCollider" type="Area2D" parent="." unique_id=653954399]
 collision_layer = 0
-collision_mask = 2
+collision_mask = 6
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerCollider" unique_id=1073492912]
 shape = SubResource("CircleShape2D_85ri6")
@@ -151,5 +151,6 @@ collision_mask = 512
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MinesExplorer" unique_id=586852610]
 shape = SubResource("CircleShape2D_bpmhk")
 
+[connection signal="area_entered" from="PlayerCollider" to="." method="_on_player_collider_area_entered"]
 [connection signal="body_entered" from="PlayerCollider" to="." method="_on_player_collider_body_entered"]
 [connection signal="area_entered" from="MinesExplorer" to="." method="_on_mines_explorer_area_entered"]

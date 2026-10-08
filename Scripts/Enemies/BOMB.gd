@@ -59,7 +59,12 @@ func _KABOOM() -> void:
 	boomed = true
 
 func _on_player_collider_body_entered(body: Node2D) -> void:
-	_BOOM_BOOM_BOOM()
+	if body is Player:
+		_BOOM_BOOM_BOOM()
+
+func _on_player_collider_area_entered(area: Area2D) -> void:
+	if area is Hurtbox and area.owner is not Miner:
+		_BOOM_BOOM_BOOM()
 
 func _on_mines_explorer_area_entered(area: Area2D) -> void:
 	if area is Hitbox:

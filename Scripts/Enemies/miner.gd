@@ -1,4 +1,4 @@
-extends Node2D
+class_name Miner extends Node2D
 
 @export var ignore_player_collider : bool = false
 @export var spawn_time_in_seconds : float = 1.0

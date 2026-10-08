@@ -79,6 +79,7 @@ animations = [{
 radius = 380.00525
 
 [node name="Miner" type="Node2D" unique_id=1446641281]
+z_index = 1
 script = ExtResource("1_ngnoe")
 
 [node name="VisualManager" type="Node2D" parent="." unique_id=1086391350]
@@ -127,6 +128,7 @@ visible = false
 shape = SubResource("CircleShape2D_bpmhk")
 
 [node name="Spawner" type="Node2D" parent="." unique_id=1190269220]
+position = Vector2(27, -11)
 script = ExtResource("9_q0q0e")
 scene_to_spawn = ExtResource("10_yprqx")
 max_spawns = 64
