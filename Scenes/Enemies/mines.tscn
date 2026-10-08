@@ -57,6 +57,25 @@ animations = [{
 "speed": 10.0
 }]
 
+[sub_resource type="GDScript" id="GDScript_yprqx"]
+resource_name = "MinesAnimator"
+script/source = "extends AnimatedSprite2D
+
+@export var flash_time_delta_seconds : float = 1.0
+
+var _timer : SmartTimer
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	_timer = SmartTimer.new(flash_time_delta_seconds, bling)
+
+
+func _process(delta: float) -> void: _timer.increment( delta)
+
+func bling() -> void:
+	play(\"idle\")
+"
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_wrphf"]
 radius = 4.5
 
@@ -109,6 +128,7 @@ sprite_frames = SubResource("SpriteFrames_bpmhk")
 animation = &"idle"
 frame = 3
 frame_progress = 1.0
+script = SubResource("GDScript_yprqx")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D" unique_id=1295162647]
 shape = SubResource("CircleShape2D_wrphf")

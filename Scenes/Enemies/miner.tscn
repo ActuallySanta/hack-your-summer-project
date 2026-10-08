@@ -8,6 +8,8 @@
 [ext_resource type="PackedScene" uid="uid://c744kphkhs1tv" path="res://Scenes/Components/flasher.tscn" id="3_ngnoe"]
 [ext_resource type="Script" uid="uid://p46g50v8y7y4" path="res://Scripts/Combat/Healths/robot_health_component.gd" id="6_6tgu0"]
 [ext_resource type="Script" uid="uid://dhgcprjrtfobr" path="res://Scripts/Combat/hurtbox.gd" id="7_n3qvy"]
+[ext_resource type="Script" uid="uid://b51qvd5s4veat" path="res://Scripts/Level Elements/spawner.gd" id="9_q0q0e"]
+[ext_resource type="PackedScene" uid="uid://ubb50nvnsfg8" path="res://Scenes/Enemies/mines.tscn" id="10_yprqx"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3sgtg"]
 atlas = ExtResource("2_0wi3u")
@@ -123,3 +125,9 @@ collision_mask = 2
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerCollider" unique_id=627539788]
 visible = false
 shape = SubResource("CircleShape2D_bpmhk")
+
+[node name="Spawner" type="Node2D" parent="." unique_id=1190269220]
+script = ExtResource("9_q0q0e")
+scene_to_spawn = ExtResource("10_yprqx")
+max_spawns = 64
+metadata/_custom_type_script = "uid://b51qvd5s4veat"
