@@ -1,1 +1,8 @@
-THIS IS A TEST FOR ELECTRICAL FAILURE
+$HIGH_ON$ Scanning main fusebox for source of failure: $HIGH_OFF$ $NEWLINE$
+
+	Critical failure in the station's power system trigger a fully functional emergency generator capable of powering the station for several decades on low power mode. 
+	A low level scanning of the area indicates the stations lights are still warm; estimated time since blackout: 1.5 hours. 
+
+$HIGH_ON$ Cause found: $HIGH_OFF$
+
+	The core of this fusebox has been removed; displaying the last message on it's history: [Threat nuetralized: forcing lockdown]

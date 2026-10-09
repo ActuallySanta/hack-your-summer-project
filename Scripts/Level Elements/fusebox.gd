@@ -9,6 +9,12 @@ func _ready() -> void:
 		switch_to_powered_sprite()
 		player_interactable.queue_free()
 		return
+	
+	# If we don't have the fuse but do have the log entry
+	if (not SaveManager.is_item_id_collected(SaveManager.ITEM_FUSE)) and SaveManager.check_logbook( "power" ):
+		player_interactable.queue_free()
+		return
+	
 	player_interactable.on_player_confirm_interaction.connect( try_insert_fuse )
 
 func switch_to_powered_sprite() -> void:

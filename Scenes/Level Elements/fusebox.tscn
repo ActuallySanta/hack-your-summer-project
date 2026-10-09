@@ -28,11 +28,13 @@ shape = SubResource("RectangleShape2D_wnqpu")
 [node name="StationNotPoweredNode" parent="." unique_id=1496444005 instance=ExtResource("3_l1c3t")]
 
 [node name="PlayerInteractable" parent="." unique_id=754245965 instance=ExtResource("4_l1c3t")]
+z_index = 1
 position = Vector2(0, 48)
 scale = Vector2(1.25, 1)
 interact_once = true
 velocity_cutoff_point = 0.01
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerInteractable" unique_id=1249681014]
+visible = false
 position = Vector2(0, -19.5)
 shape = SubResource("RectangleShape2D_l1c3t")

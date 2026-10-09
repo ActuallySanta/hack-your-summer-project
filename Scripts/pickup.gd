@@ -31,9 +31,6 @@ func _ready() -> void:
 		return
 
 	SaveManager.register_item(self, _on_load_if_collected, map_icon)
-	# Asked out loud, rather than read off the call above. Registering records the
-	# pickup; whether it had already been taken is a separate question, and the
-	# answer arrives here rather than hidden in a return value.
 	if SaveManager.is_item_collected(self):
 		return
 
