@@ -8,7 +8,8 @@ var nodes_I_spawned : Array[ Node2D ] = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	tree_exited.connect( clear_spawned_objects )
+	if keep_as_child:
+		tree_exited.connect( clear_spawned_objects )
 
 func _process(_delta: float) -> void:
 	nodes_I_spawned = nodes_I_spawned.filter( func(node): return is_instance_valid(node) )
@@ -22,7 +23,7 @@ func spawn_object(num_to_spawn: int, spawn_offset: Vector2 = Vector2.ZERO) -> Ar
 		spawned_objects_this_call.push_back( instance )
 		
 		# Add to the correct node
-		var parent : Node = self if keep_as_child else get_tree().current_scene
+		var parent : Node = self if keep_as_child else MetSys.current_room
 		parent.add_child.call_deferred( instance )
 		num_to_spawn -= 1
 	return spawned_objects_this_call

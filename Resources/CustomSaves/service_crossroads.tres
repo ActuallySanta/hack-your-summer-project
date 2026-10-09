@@ -6,7 +6,7 @@
 script = ExtResource("1_customsave")
 start_room = "uid://dtkowilv386lj"
 start_position = Vector2(1000, 1500)
-fuse = 2
+fuse = 1
 gun = 1
 wrench = 1
 has_jetpack = true

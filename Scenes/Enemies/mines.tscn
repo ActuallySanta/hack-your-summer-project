@@ -76,12 +76,14 @@ radius = 13.152946
 radius = 45.17743
 
 [node name="Mines" type="Node2D" unique_id=672678482]
+z_index = 1
 script = ExtResource("1_thrjk")
 
 [node name="RigidBody2D" type="RigidBody2D" parent="." unique_id=1461331259]
 collision_layer = 516
 collision_mask = 513
 can_sleep = false
+continuous_cd = 1
 angular_damp = 5.715
 
 [node name="Visuals" type="Node2D" parent="RigidBody2D" unique_id=1873405529]

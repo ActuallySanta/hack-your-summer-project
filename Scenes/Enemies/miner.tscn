@@ -128,8 +128,9 @@ visible = false
 shape = SubResource("CircleShape2D_bpmhk")
 
 [node name="Spawner" type="Node2D" parent="." unique_id=1190269220]
-position = Vector2(27, -11)
+position = Vector2(27, 39)
 script = ExtResource("9_q0q0e")
 scene_to_spawn = ExtResource("10_yprqx")
 max_spawns = 64
+keep_as_child = null
 metadata/_custom_type_script = "uid://b51qvd5s4veat"

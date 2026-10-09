@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://crphk251th5ro"]
+
+[sub_resource type="GDScript" id="GDScript_50yn3"]
+script/source = "extends Node2D
+
+@export var monitor_for_update : bool = false
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	if SaveManager.is_station_powered():
+		queue_free()
+
+func _process(delta: float) -> void:
+	if SaveManager.is_station_powered():
+		queue_free()
+"
+
+[node name="StationNotPoweredNode" type="Node2D" unique_id=1496444005]
+script = SubResource("GDScript_50yn3")

@@ -4,9 +4,11 @@ signal on_player_confirm_interaction
 signal on_player_start_interaction
 signal on_player_fail_interaction 
 
-
+## Can the player interact with this trigger more than once per time in the room
 @export var interact_once : bool
+## The minimum speed the player has to be to successfully interact
 @export var velocity_cutoff_point : float = 0
+## The time it takes for the player to trigger this event
 @export var time_to_succeed : float = 1.0
 
 @onready var node_to_scale := $ImageScaler

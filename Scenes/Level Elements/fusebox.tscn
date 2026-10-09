@@ -1,10 +1,15 @@
 [gd_scene format=3 uid="uid://b3d6cwvyjev0s"]
 
 [ext_resource type="Script" uid="uid://c4wa4an3btgh3" path="res://Scripts/Level Elements/fusebox.gd" id="1_glsis"]
+[ext_resource type="PackedScene" uid="uid://crphk251th5ro" path="res://Scenes/Components/station_not_powered_node.tscn" id="3_l1c3t"]
 [ext_resource type="Texture2D" uid="uid://bayp1jw0tr0r2" path="res://Sprites/Fusebox.png" id="3_wnqpu"]
+[ext_resource type="PackedScene" uid="uid://dbrol0aebyxca" path="res://Scenes/Components/player_interactable.tscn" id="4_l1c3t"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wnqpu"]
 size = Vector2(60, 72)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_l1c3t"]
+size = Vector2(48, 39)
 
 [node name="Fusebox" type="Area2D" unique_id=364980564]
 collision_mask = 2
@@ -19,3 +24,15 @@ hframes = 2
 visible = false
 position = Vector2(0, 12)
 shape = SubResource("RectangleShape2D_wnqpu")
+
+[node name="StationNotPoweredNode" parent="." unique_id=1496444005 instance=ExtResource("3_l1c3t")]
+
+[node name="PlayerInteractable" parent="." unique_id=754245965 instance=ExtResource("4_l1c3t")]
+position = Vector2(0, 48)
+scale = Vector2(1.25, 1)
+interact_once = true
+velocity_cutoff_point = 0.01
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerInteractable" unique_id=1249681014]
+position = Vector2(0, -19.5)
+shape = SubResource("RectangleShape2D_l1c3t")
