@@ -1,1 +1,1 @@
-$TAB Data laboritories paste here.
+$TAB$ Data laboritories paste here.

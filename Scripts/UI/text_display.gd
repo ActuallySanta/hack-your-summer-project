@@ -54,7 +54,7 @@ const LINE_PIECES : Array[ String ] = [ "_line_start", "_line_continue", "_line_
 const LINE_PIECES_HIGH : Array[ String ] = [ "_line_start_high", "_line_continue_high", "_line_end_high" ]
 
 ## Debug String used for testing
-const DEBUG_DEEP_OUT : String = "_dot $TAB Testing $HIGH_ON Highlight $HIGH_OFF $NEWLINE ABCDEFGHIJKLMNOPQRSTUVWXYZ?!.,:;/\"()[]1234567890-+%*#@`' "
+const DEBUG_DEEP_OUT : String = "_dot $TAB$ Testing $HIGH_ON$ Highlight $HIGH_OFF$ $NEWLINE$ ABCDEFGHIJKLMNOPQRSTUVWXYZ?!.,:;/\"()[]1234567890-+%*#@`' "
 
 ## The maximum rows of text that can be displayed
 @export var max_height := 8
@@ -187,33 +187,36 @@ func set_hightlight(state: bool) -> void:
 func _out_command_error(condition: bool, command: String, expected: String) -> bool:
 	if !condition:
 		return false
-	printerr("WARNING (text_display _parse_command): '", command, "' is missing a parameter, ", expected)
+	printerr("WARNING (text_display _parse_command): '$", command, "$' is missing a parameter, ", expected)
 	return true
 
-func _parse_command(sub_string: String) -> void:
-	var split = sub_string.split("_")
+## Runs one command, given as what sits between its pair of '$': "HIGH_ON" for "$HIGH_ON$"
+func _parse_command(command: String) -> void:
+	var split = command.split("_")
 	var cmd_name = split[ 0 ]
 	split.remove_at( 0 )
 	var cmd_prmt = split
 	match cmd_name:
-		"$":
+		"":
 			_destylize()
-		"$HIGH":
-			if _out_command_error(cmd_prmt.is_empty(), sub_string, " expected $HIGH_ON or $HIGH_OFF"): return
+		"HIGH":
+			if _out_command_error(cmd_prmt.is_empty(), command, " expected $HIGH_ON$ or $HIGH_OFF$"): return
 			set_hightlight(cmd_prmt[ 0 ] == "ON")
-		"$NEWLINE":
+		"NEWLINE":
 			go_to_next_line()
-		"$TAB":
+		"TAB":
 			place_string( INDENT )
-		"$HORIZONTALLINE":
-			if _out_command_error(cmd_prmt.is_empty(), sub_string, " expected a width: $HORIZONTALLINE_12"): return
+		"HORIZONTALLINE":
+			if _out_command_error(cmd_prmt.is_empty(), command, " expected a width: $HORIZONTALLINE_12$"): return
 			place_line( cmd_prmt[ 0 ].to_int() )
-		"$AUTO":
-			if _out_command_error(cmd_prmt.is_empty(), sub_string, " expected a size: $AUTO_24"): return
+		"AUTO":
+			if _out_command_error(cmd_prmt.is_empty(), command, " expected a size: $AUTO_24$"): return
 			auto_text( cmd_prmt[ 0 ].to_int() )
-		"$BULLET":
-			if _out_command_error(cmd_prmt.size() < 6, sub_string, " expected a name, label, x and y offset, default (-1 for none) and its items: $BULLET_NAME_Label_0_0_-1_First item_Second item$"): return
+		"BULLET":
+			if _out_command_error(cmd_prmt.size() < 6, command, " expected a name, label, x and y offset, default (-1 for none) and its items: $BULLET_NAME_Label_0_0_-1_First item_Second item$"): return
 			_place_template_bullet_point(cmd_prmt[ 0 ], cmd_prmt[ 1 ], Vector2i(cmd_prmt[ 2 ].to_int(), cmd_prmt[ 3 ].to_int()), cmd_prmt[ 4 ].to_int(), cmd_prmt.slice(5))
+		_:
+			printerr("WARNING (text_display _parse_command): '$", command, "$' is not a command")
 #endregion
 
 func get_lines_placed() -> int:
@@ -433,51 +436,42 @@ func place_string(string: String, replace_highlight: bool = false, highlight_wor
 	# Place strings
 	for chr in string:
 		if chr == "\n":
-			_parse_command("$NEWLINE")
+			_parse_command("NEWLINE")
 			continue
 		elif chr == "\t":
-			_parse_command("$TAB")
+			_parse_command("TAB")
 			continue
 		place_char(chr)
 	
 	if replace_highlight:
 		set_hightlight(old_highlight)
 
+## Places [param string] as text, running the commands written into it. Each '$' switches between text and
+## a command, so every command sits between a pair: "$HIGH_ON$ Warning $HIGH_OFF$". The empty command "$$"
+## clears any styling, and parameters can hold spaces: "$BULLET_NAME_Pick one:_0_0_-1_First choice_Last choice$".
 func place_deep(string: String) -> void:
-	var strings = _split_words( string )
-	for sub_string in strings:
-		if sub_string.begins_with("$"):
-			_parse_command( sub_string )
-			continue
-		elif sub_string.begins_with("_"):
+	var pieces := string.split("$")
+	# The pieces go text, command, text..., so an even count means the last command never closed
+	if pieces.size() % 2 == 0:
+		printerr("WARNING (text_display place_deep): a command is never closed with a '$', so everything from '$", pieces[ pieces.size() - 1 ].left(40), "' on was left out")
+		pieces.remove_at( pieces.size() - 1 )
+	for i in pieces.size():
+		if i % 2 == 1: _parse_command( pieces[ i ] )
+		else: _place_words( pieces[ i ], i > 0, i < pieces.size() - 1 )
+
+# A space touching a command only separates it from the next word, so it does not become a gap of its own
+func _place_words(text: String, after_command: bool, before_command: bool) -> void:
+	var words := text.split(" ")
+	if before_command and words[ words.size() - 1 ].is_empty(): words.remove_at( words.size() - 1 )
+	if after_command and not words.is_empty() and words[ 0 ].is_empty(): words.remove_at( 0 )
+	for sub_string in words:
+		if sub_string.begins_with("_"):
 			place_char(sub_string)
 			continue
 		place_string(sub_string)
 		if cursor_pos.x == 0:
 			continue
 		place_char(" ")
-
-## Splits text into words on its spaces. A command can run on past spaces, so its parameters can hold
-## them, when a later word closes it with a '$': "$BULLET_..._Top choice_Last choice$" comes back as one
-## word, minus that '$'. Without one before the next command opens, a command ends at its first space as always.
-func _split_words(string: String) -> PackedStringArray:
-	var raw := string.split(" ")
-	var words := PackedStringArray()
-	var i := 0
-	while i < raw.size():
-		var end := i
-		if raw[ i ].begins_with("$") and not raw[ i ].ends_with("$"):
-			for j in range(i + 1, raw.size()):
-				if raw[ j ].begins_with("$"): break
-				if raw[ j ].ends_with("$"):
-					end = j
-					break
-		var word := " ".join(raw.slice(i, end + 1))
-		# A lone '$' is the destylize command, not a closing '$'
-		if word.begins_with("$") and word != "$": word = word.trim_suffix("$")
-		words.append( word )
-		i = end + 1
-	return words
 
 func clear_screen() -> void:
 	components.clear()

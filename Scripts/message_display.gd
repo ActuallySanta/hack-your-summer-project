@@ -21,10 +21,10 @@ func pop_next() -> String:
 
 #region Common Text appendings
 func add_log_pop_up(log_name: String) -> void:
-	append_message("_dot  $HIGH_ON Logging Data... $ $NEWLINE, " + log_name)
+	append_message("_dot  $HIGH_ON$ Logging Data... $$ " + log_name)
 
 func add_using_map(area_name: String) -> void:
-	append_message("_circ  Downloading $HIGH_ON " + area_name + " $ Map Data...")
+	append_message("_circ  Downloading $HIGH_ON$ " + area_name + " $$ Map Data...")
 
 func add_saving_data() -> void:
 	append_message("_box  Saving Game...")

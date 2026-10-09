@@ -34,7 +34,7 @@ var enabled : bool:
 		set_process( enabled )	# The fade runs in _process, so enable before display( true )
 		_apply_input()
 
-var read_output : String = "$TAB $AUTO_1028"
+var read_output : String = "$TAB$ $AUTO_1028$"
 var text_line_count : int = 0
 var file_height : int = 3
 
@@ -89,7 +89,7 @@ func read_and_place(file_name: String) -> void:
 func on_mouse_pressed() -> void:
 	var clicked : String = content.click_components( get_global_mouse_position() )
 	if clicked.is_empty(): return
-	var bullet_list : TextBulletSelections = constants.components[ clicked ]
+	var bullet_list : TextBulletSelections = content.components[ clicked ]
 	print(clicked, ": ", bullet_list.items[ bullet_list.current.back() ])
 
 func apply_settings_content(thing_to_place: String) -> void:

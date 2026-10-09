@@ -1,1 +1,1 @@
-$TAB Biological Research Sector
+$TAB$ Biological Research Sector
