@@ -13,3 +13,6 @@ region_map = Dictionary[StringName, String]({
 &"Operations": "res://Logs/Operations.txt",
 &"UNSS-Iliad": "res://Logs/UNSS-Iliad.txt"
 })
+event_map = Dictionary[StringName, String]({
+&"power": "res://Logs/Electrical-Failue.txt"
+})

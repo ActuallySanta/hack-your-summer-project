@@ -1,6 +1,7 @@
 extends Node2D
 
 @export var region_map : Dictionary[ StringName, String ]
+@export var event_map : Dictionary[ StringName, String ]
 
 const LOG_BOOK_ACCESS := ".../Log Book/"
 const REGIONS_ACCESS := LOG_BOOK_ACCESS + "Regions"
@@ -20,10 +21,8 @@ func _on_player_settled() -> void:
 	_collect_region_log( current_region )
 
 func _collect_region_log(region: StringName) -> void:
-	#You won't understand your sitation quite so easily.
 	if region == "Limbo": region = "UNSS-Iliad"
-	if not SaveManager.update_logbook(region):
-		return
+	if not SaveManager.update_logbook(region): return
 	MessageDisplay.add_log_pop_up("Region: %s" % region)
 	_add_region_entry( region )
 
@@ -31,10 +30,12 @@ func _collect_lifeforms_log(creature_name: StringName) -> void:
 	pass
 
 func _add_region_entry(region: StringName) -> void:
-	_add_entry(REGIONS_ACCESS, region, func(): ListDisplay.pause_panel.read_and_place( region_map[ region ] ) )
+	_add_entry(REGIONS_ACCESS, region, func(): ListDisplay.pause_panel.read_and_place( region_map[ region ] ))
 
-func collect_event_log(log_name: StringName, callback: Callable) -> void:
-	_add_entry(EVENTS_ACCESS, log_name, callback)
+func collect_event_log(log_name: StringName, event_display: String) -> void:
+	if not SaveManager.update_logbook( log_name ): return
+	MessageDisplay.add_log_pop_up( event_display )
+	_add_entry(EVENTS_ACCESS, log_name, func(): ListDisplay.pause_panel.read_and_place( event_map[ log_name ] ))
 
 func _add_entry(access: StringName, region: StringName, callable: Callable) -> void:
 	ListDisplay.panel.root.insert_new_list_item_at(access + "/" + region).on_click.connect( callable )

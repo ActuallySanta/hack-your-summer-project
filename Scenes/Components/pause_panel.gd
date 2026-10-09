@@ -74,6 +74,7 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	update_display_state( RealDelta.get_capped() )
 
+## Takes a file and places it in the textDisplay
 func read_and_place(file_name: String) -> void:
 	if not FileAccess.file_exists(file_name):
 		printerr("Warning (pause_panel, read_and_place): File does not exist")
