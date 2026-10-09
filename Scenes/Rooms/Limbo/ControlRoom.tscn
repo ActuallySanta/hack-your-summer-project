@@ -12,17 +12,24 @@
 [ext_resource type="Texture2D" uid="uid://b7e8ovpjs0g5f" path="res://Sprites/Console.png" id="10_dpjwi"]
 [ext_resource type="Texture2D" uid="uid://ck1rwovt7jdmp" path="res://Sprites/RuinedConsole.png" id="10_e3dmx"]
 [ext_resource type="Script" uid="uid://dhgcprjrtfobr" path="res://Scripts/Combat/hurtbox.gd" id="13_e3dmx"]
+[ext_resource type="PackedScene" uid="uid://dbrol0aebyxca" path="res://Scenes/Components/player_interactable.tscn" id="13_g7g3k"]
 
 [sub_resource type="GDScript" id="GDScript_b0u4x"]
 resource_name = "console_controller"
 script/source = "@tool
 extends ManualAnim
 
+@onready var interactable : PlayerInteractable = $PlayerInteractable
+
 func _ready() -> void:
+	if SaveManager.check_logbook( \"console\" ):
+		interactable.queue_free()
+	
 	$RoboHealth.on_death_event.connect( _on_death )
 	is_anim_paused = start_paused
 	anim_frame = 0
 	timer = 0.0
+	interactable.on_player_confirm_interaction.connect( func(): LogBookManager.collect_event_log(\"console\", \"Airlock Override\") )
 
 func _on_death() -> void:
 	SaveManager.open_airlock()
@@ -38,6 +45,9 @@ func _on_hit(_hurtBox: Hurtbox, _hit_info: HitInfo, _source: Hitbox) -> void:
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_85ri6"]
 size = Vector2(102, 96)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bpmhk"]
+size = Vector2(48.027443, 36.026)
 
 [node name="ControlRoom" type="Node2D" unique_id=1349079859]
 
@@ -98,7 +108,7 @@ scale = Vector2(3, 3)
 texture = ExtResource("10_dpjwi")
 hframes = 6
 vframes = 2
-frame = 5
+frame = 1
 script = SubResource("GDScript_b0u4x")
 frames_in_sequence = 6
 anim_speed_adjust = 0.1
@@ -120,3 +130,14 @@ metadata/_custom_type_script = "uid://dhgcprjrtfobr"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Console/RoboHealth/Hurtbox" unique_id=1998227726]
 position = Vector2(288, 528)
 shape = SubResource("RectangleShape2D_85ri6")
+
+[node name="PlayerInteractable" parent="Console" unique_id=754245965 instance=ExtResource("13_g7g3k")]
+position = Vector2(-0.33333826, 15.666668)
+scale = Vector2(0.583, 0.333)
+interact_once = true
+velocity_cutoff_point = 0.01
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Console/PlayerInteractable" unique_id=1407548317]
+position = Vector2(0, -18.02301)
+scale = Vector2(0.9999998, 0.99999964)
+shape = SubResource("RectangleShape2D_bpmhk")

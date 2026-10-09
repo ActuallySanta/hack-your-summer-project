@@ -14,5 +14,6 @@ region_map = Dictionary[StringName, String]({
 &"UNSS-Iliad": "res://Logs/UNSS-Iliad.txt"
 })
 event_map = Dictionary[StringName, String]({
+&"console": "res://Logs/Console-Override.txt",
 &"power": "res://Logs/Electrical-Failue.txt"
 })
