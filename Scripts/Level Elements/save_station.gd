@@ -40,8 +40,7 @@ func switch_active() -> void:
 	green.enabled = !green.enabled
 
 func _on_body_entered(body: Node2D) -> void:
-	if on_cooldown:
-		return
+	if on_cooldown: return
 	var player := body as Player
 	if not player: return
 	if not Difficulty.get_setting().can_save: return
