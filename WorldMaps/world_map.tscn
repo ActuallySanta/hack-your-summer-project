@@ -19,6 +19,7 @@ position = Vector2(-12367, 94)
 position = Vector2(-7224, -194)
 
 [node name="WorldMapCQ" parent="." unique_id=1768770900 instance=ExtResource("3_boi75")]
+visible = false
 position = Vector2(-4454, 2054)
 
 [node name="WorldMapBRS" parent="." unique_id=740908366 instance=ExtResource("1_jv6wm")]

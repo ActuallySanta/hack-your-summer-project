@@ -1,19 +1,3 @@
-## The player's health, hit reaction, invulnerability and death.
-##
-## Inherits [HealthComponent] like the drone's does, so hits arrive through the same
-## [Hurtbox] wiring every other body in the game uses.
-##
-## [b]Why maximum health is not a counter.[/b] It used to be: picking up an extender
-## added one to a variable on the player. Nothing saved it, and nothing tied it to
-## whether the pickup had actually been recorded as collected, so the two could
-## disagree in three different ways -- the upgrade was lost on quitting, it survived a
-## death that reverted the pickup, and a pickup that respawned because the run had not
-## been saved could be taken again for another point, over and over.
-##
-## The count is now derived, not accumulated: the save holds the [i]set of extenders
-## collected[/i], and maximum health is the base plus the size of that set. Collecting
-## the same extender twice adds nothing because the set already has it, and reloading
-## puts health and pickups back to the same moment because they are the same fact.
 class_name PlayerHealthComponent
 extends HealthComponent
 
@@ -62,6 +46,7 @@ func _ready() -> void:
 	start_health = base_max_health
 	super()
 	GlobalSignals.health_extended_by_one.connect(_on_extender_collected)
+	GlobalSignals.max_player_health.connect( max_out )
 
 	_hurt_shape = hurtbox.get_node_or_null(^"CollisionShape2D") as CollisionShape2D
 	if _hurt_shape and _hurt_shape.shape:

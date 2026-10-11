@@ -13,7 +13,7 @@ const WHEEL_STOP_SPEED := 1.0
 @export_group("Attack")
 @export var chances_for_attack : Dictionary[ StringName, float ] = {
 	"CHARGE": 0.49,
-	"CHARGE_LASER": 0.01,
+	"CHARGE_LASER": 100000.01,
 	"MINIGUN": 0.50,
 }
 @export var max_speed_when_charging : float
@@ -73,17 +73,13 @@ var _last_wheel_pos : Vector2
 var destination_tunnel : StringName:
 	set(value):
 		destination_tunnel = value
-		if value == "LEFT":
-			navigator.node_to_go_to = left_tunnel_pos
-		elif value == "RIGHT":
-			navigator.node_to_go_to = right_tunnel_pos
+		if value == "LEFT": navigator.node_to_go_to = left_tunnel_pos
+		elif value == "RIGHT": navigator.node_to_go_to = right_tunnel_pos
 var is_in_background : bool:
 	set(value):
 		is_in_background = value
-		if is_instance_valid(hurtbox):
-			hurtbox.ignore_hits = value
-		if is_instance_valid(hitbox):
-			hitbox.ignore_hits = value
+		if is_instance_valid(hurtbox): hurtbox.ignore_hits = value
+		if is_instance_valid(hitbox): hitbox.ignore_hits = value
 
 enum state {
 	INTRO,
@@ -100,46 +96,32 @@ var behavior : state = state.INTRO
 #region Update Behaviors
 func _process(delta: float) -> void:
 	_update_wheel_spin(delta)
-	if is_dead:
-		return
+	if is_dead: return
 	match behavior:
-		state.INTRO:
-			return
-		state.DIE:
-			return
-		state.NAV_TUNNEL:
-			_on_nav_tunnel()
-		state.ENTER_TUNNEL:
-			_on_enter_tunnel()
-		state.CHOOSE_ATTACK:
-			_on_choose_attack( )
-		state.PERFORM_ATTACK_CHARGE:
-			_on_attack_charge(false)
-		state.PERFORM_ATTACK_CHARGE_GUN:
-			_on_attack_charge(true)
-		state.PERFORM_ATTACK_MINIGUN:
-			_on_attack_mini_gun()
+		state.INTRO: return
+		state.DIE: return
+		state.NAV_TUNNEL: _on_nav_tunnel()
+		state.ENTER_TUNNEL: _on_enter_tunnel()
+		state.CHOOSE_ATTACK: _on_choose_attack( )
+		state.PERFORM_ATTACK_CHARGE: _on_attack_charge(false)
+		state.PERFORM_ATTACK_CHARGE_GUN: _on_attack_charge(true)
+		state.PERFORM_ATTACK_MINIGUN: _on_attack_mini_gun()
 
-## Nothing ever re-paused the wheels once an animation unpaused them, so they
-## kept turning while the drone sat still. Tie them to how far it actually
-## moved instead -- that holds no matter what does the moving.
 func _update_wheel_spin(delta: float) -> void:
-	if not is_instance_valid(wheels):
-		return
+	if not is_instance_valid(wheels): return
 	
 	var speed := global_position.distance_to(_last_wheel_pos) / maxf(delta, 0.0001)
 	_last_wheel_pos = global_position
 	wheels.make_paused(pause_sprite_animations or speed < WHEEL_STOP_SPEED)
 
 func _on_nav_tunnel() -> void:
-	if (destination_tunnel == "LEFT" and left_tunnel_global_pos >= global_position.x) or (destination_tunnel == "RIGHT" and right_tunnel_global_pos <= global_position.x):
-		navigator.node_to_go_to = null
-		behavior = state.ENTER_TUNNEL
-		return
+	if not ((destination_tunnel == "LEFT" and left_tunnel_global_pos >= global_position.x) or 
+	(destination_tunnel == "RIGHT" and right_tunnel_global_pos <= global_position.x)): return
+	navigator.node_to_go_to = null
+	behavior = state.ENTER_TUNNEL
 
 func _on_enter_tunnel() -> void:
-	if animator.is_playing():
-		return
+	if animator.is_playing(): return
 	
 	do_random_big_laser_shot = false
 	big_gun.turn_on_barrel()
@@ -148,8 +130,7 @@ func _on_enter_tunnel() -> void:
 	behavior = state.CHOOSE_ATTACK
 
 func _on_choose_attack() -> void:
-	if animator.is_playing():
-		return
+	if animator.is_playing(): return
 	
 	navigator.ignore_target = true
 	set_navigator_speeds()
@@ -157,29 +138,20 @@ func _on_choose_attack() -> void:
 	var atk_type : StringName = PieRand.Roll(chances_for_attack)
 	
 	navigator.x = left_tunnel_global_pos if choose_side == "LEFT" else right_tunnel_global_pos
+	bullets_to_fire = num_bullets_mingun_shoot
 	if choose_side == "LEFT":
-		if atk_type == "MINIGUN":
-			bullets_to_fire = num_bullets_mingun_shoot
-			face_left()
-		else:
-			face_right()
+		if atk_type == "MINIGUN": face_left()
+		else: face_right()
 	elif choose_side == "RIGHT":
-		if atk_type == "MINIGUN":
-			bullets_to_fire = num_bullets_mingun_shoot
-			face_right()
-		else:
-			face_left()
+		if atk_type == "MINIGUN": face_right()
+		else: face_left()
 	
 	behavior = (state.PERFORM_ATTACK_CHARGE if atk_type == "CHARGE" else 
 				state.PERFORM_ATTACK_CHARGE_GUN if atk_type == "CHARGE_LASER" else 
 				state.PERFORM_ATTACK_MINIGUN
 			)
 	
-	if atk_type != "MINIGUN":
-		if choose_side == "LEFT":
-			destination_tunnel = "RIGHT"
-		else:
-			destination_tunnel = "LEFT"
+	if atk_type != "MINIGUN": destination_tunnel = "RIGHT" if choose_side == "LEFT" else "LEFT"
 	
 	animator.play("fade_in")
 
@@ -194,7 +166,7 @@ func _on_attack_charge(use_big_gun: bool) -> void:
 	
 	bumper.flash()
 	behavior = state.NAV_TUNNEL
-	await get_tree().create_timer(randf_range(min_laser_time, max_laser_time)).timeout
+	await get_tree().create_timer( randf_range( min_laser_time, max_laser_time ) ).timeout
 	big_gun.turn_off_gun()
 
 func _on_attack_mini_gun() -> void:
@@ -202,18 +174,11 @@ func _on_attack_mini_gun() -> void:
 	is_in_background = false
 	
 	if bullets_to_fire <= 0:
-		# The Shoot animation spawns its bullet partway through, so leaving the
-		# moment the last shot starts would fire it from halfway down the room.
-		if mini_gun.is_shooting():
-			return
+		if mini_gun.is_shooting(): return
 		enter_tunnel("closest")
 		return
-	
-	# shoot() refuses while the previous shot is still playing. Counting the
-	# refusals as shots burned all five rounds in five frames and sent the drone
-	# straight back to a tunnel after a single bullet.
-	if mini_gun.shoot():
-		bullets_to_fire -= 1
+
+	if mini_gun.shoot(): bullets_to_fire -= 1
 #endregion
 
 func set_navigator_speeds(mode: StringName = "DEFAULT") -> void:
@@ -224,25 +189,28 @@ func set_navigator_speeds(mode: StringName = "DEFAULT") -> void:
 		navigator.max_speed = max_speed_when_charging
 		navigator.steering_max_force = navigator_force_maximum_when_charging
 
-#TODO implement more cleanly
 func face_right() -> void:
 	scale.x = -3
 	mini_gun.is_flipped = true
 
-#TODO implement more cleanly
 func face_left() -> void:
 	scale.x = 3
 	mini_gun.is_flipped = false
+
+func _handle_difficulty_changes() -> void:
+	max_speed_when_charging = DifficultyManager.scale_with_mode(max_speed_when_charging, 20)
+	navigator_force_maximum_when_charging = DifficultyManager.scale_with_mode(navigator_force_maximum_when_charging, 1.1)
+	max_laser_time = DifficultyManager.pick_from_difficulty([ 2.50, 3.15, 3.30 ])
+	min_laser_time = DifficultyManager.pick_from_difficulty([ 1.00, 2.00, 3.00 ])
 
 func _ready() -> void:
 	if SaveManager.is_item_id_collected(SaveManager.ITEM_GUN):
 		queue_free()
 		return
 	
+	_handle_difficulty_changes()
 	is_dead = false
 	_last_wheel_pos = global_position
-	# Keep bullets out of the drone's FaderNode so they do not fade and teleport
-	# along with it when it ducks into a tunnel.
 	mini_gun.bullet_parent = get_parent()
 	prefightNodes.attach_collider(intro_collider)
 	
@@ -265,10 +233,10 @@ func _ready() -> void:
 
 func _swap_charge_chances() -> void:
 	chances_for_attack = {
-	"CHARGE_LASER": 0.69,
-	"MINIGUN": 0.30,
-	"CHARGE": 0.01,
-}
+		"CHARGE_LASER": 0.69,
+		"MINIGUN": 0.30,
+		"CHARGE": 0.01,
+	}
 
 func on_death() -> void:
 	big_gun.turn_on_barrel()
@@ -288,52 +256,31 @@ func yelp_in_agony() -> void:
 	vocalizer.stream = yelp
 	vocalizer.play()
 	visuals.flash()
-	# These are out of the 30 set in the scene, and difficulty rescales the real number
 	var health : float = health_component.unscaled_health()
 	if health > 23:
 		pass
-	elif health > 18:
-		sprite_sheet_swapper.set_sprite_level(1)
-	elif health > 13:
-		sprite_sheet_swapper.set_sprite_level(2)
-	elif health > 7:
-		sprite_sheet_swapper.set_sprite_level(3)
-	if do_intro_cutscene:
-		start_intro_cutscene()
+	elif health > 18: sprite_sheet_swapper.set_sprite_level(1)
+	elif health > 13: sprite_sheet_swapper.set_sprite_level(2)
+	elif health > 7: sprite_sheet_swapper.set_sprite_level(3)
+	if do_intro_cutscene: start_intro_cutscene()
 
 func enter_tunnel(querry_mode: StringName) -> void:
 	animator.play("accelerate")
 	behavior = state.NAV_TUNNEL
-	# The minigun attack parks the navigator to hold position while it fires;
-	# without this the drone would sit still forever instead of driving off.
 	navigator.ignore_target = false
 	
-	if querry_mode == "left":
-		destination_tunnel = "LEFT"
-	elif querry_mode == "right":
-		destination_tunnel = "RIGHT"
-	elif querry_mode == "closest":
-		# These have to be compared as distances. Raw deltas made the left tunnel
-		# win every time, since its delta is negative whenever the drone is to the
-		# right of it -- so a minigun volley on the left re-entered the tunnel it
-		# was already sitting in, over and over.
-		if absf(left_tunnel_global_pos - global_position.x) < absf(right_tunnel_global_pos - global_position.x):
-			destination_tunnel = "LEFT"
-		else:
-			destination_tunnel = "RIGHT"
+	if querry_mode == "left": destination_tunnel = "LEFT"
+	elif querry_mode == "right": destination_tunnel = "RIGHT"
+	elif querry_mode == "closest": destination_tunnel = "LEFT" if absf(left_tunnel_global_pos - global_position.x) < absf(right_tunnel_global_pos - global_position.x) else "RIGHT"
 
 func exit_a_tunnel() -> void:
 	is_in_background = false
 
+#region intro sequence
 func start_intro_cutscene() -> void:
-	if not do_intro_cutscene:
-		return
-	
+	if not do_intro_cutscene: return
 	health_component.ignore_effects = true
 	enter_tunnel("closest")
-	
-	
-	# Temp timer to get around lack of intro cutscene
 	await get_tree().create_timer(1.0).timeout
 	leave_intro_cutscene()
 
@@ -345,12 +292,11 @@ func leave_intro_cutscene() -> void:
 	MessageDisplay.add_log_pop_up("Containment Drone")
 	await prefightNodes.audioStream.finished
 	MusicManager.set_background_track_from_name("BOSS", "Containment Drone")
+#endregion
 
 func remove_visuals() -> void:
-	if is_instance_valid($FaderNode):
-		$FaderNode.queue_free()
-	elif is_instance_valid(visuals):
-		visuals.queue_free()
+	if is_instance_valid($FaderNode): $FaderNode.queue_free()
+	elif is_instance_valid(visuals): visuals.queue_free()
 
 func flash_and_spawn_gun() -> void:
 	CameraEffects.flash(Color(1,1,1,0.5), 0.1, 0.075, 0.075, CameraEffects.Ease.EASE_OUT, CameraEffects.Ease.EASE_IN)
@@ -363,6 +309,7 @@ func flash_and_spawn_gun() -> void:
 	var deathsfx : AudioStreamPlayer2D = $DeathExplosion
 	deathsfx.play()
 	exploder.end_explosions()
+	GlobalSignals.max_player_health.emit()
 	await exploder.when_no_explosions_left
 	if deathsfx.playing == true:
 		await deathsfx.finished
