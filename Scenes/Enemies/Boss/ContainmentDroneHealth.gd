@@ -16,4 +16,4 @@ func _on_hit(_hurtBox: Hurtbox, hit_info: HitInfo, _source: Hitbox) -> void:
 		return
 	on_hit_event.emit()
 	if hit_info.damage > 0:
-		take_damage(hit_info.damage)
+		take_damage(hit_info.damage if DifficultyManager.is_lower_than( Difficulty.BULLSHIT ) else hit_info.damage * 3)

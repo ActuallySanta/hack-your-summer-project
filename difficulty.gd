@@ -2,6 +2,11 @@ class_name DifficultyManager extends Node
 
 signal on_difficulty_changed
 
+const EASY : DifficultyID = DifficultyID.Easy
+const STANDARD : DifficultyID = DifficultyID.Standard
+const HARD : DifficultyID = DifficultyID.Hard
+const BULLSHIT : DifficultyID = DifficultyID.BullShit
+
 static func is_higher_than(difficulty_level: DifficultyID) -> bool: return Difficulty.current_difficulty > difficulty_level
 static func is_lower_than(difficulty_level: DifficultyID) -> bool: return Difficulty.current_difficulty < difficulty_level
 static func is_at_least(difficulty_level: DifficultyID) -> bool: return Difficulty.current_difficulty >= difficulty_level
