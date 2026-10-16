@@ -1,1 +1,5 @@
-	The $HIGH_ON$ UNSS Iliad $HIGH_OFF$  is a C-class ambulance vessel, current docked with $HIGH_ON$ Ouroborus Station $HIGH_OFF$ 
+	The $HIGH_ON$ UNSS Iliad $HIGH_OFF$  is a C-class ambulance vessel, current docked with $HIGH_ON$ Ouroborus Station $HIGH_OFF$ in response to its distress beacon.
+	
+	However shortly after gaining visual of the Ouroborus, the disress beacon went quiet; hailing the vessel resulted in a standard "Green Status" message from the station's drone based management system.
+	
+	There is noticable damage to large portions of the station visible as far as 2au.

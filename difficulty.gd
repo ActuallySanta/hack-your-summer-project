@@ -1,5 +1,7 @@
 class_name DifficultyManager extends Node
 
+signal on_difficulty_changed
+
 enum DifficultyID {
 	Easy,
 	Standard,
@@ -18,3 +20,17 @@ var current_difficulty : DifficultyID = DifficultyID.Standard
 
 func get_setting() -> DifficultyType: 
 	return _diff_settings[ current_difficulty ]
+
+func is_at_least(difficulty_level: DifficultyID) -> bool: return current_difficulty >= difficulty_level
+func is_higher_than(difficulty_level: DifficultyID) -> bool: return current_difficulty > difficulty_level
+func is_at_most(difficulty_level: DifficultyID) -> bool: return current_difficulty <= difficulty_level
+func is_lower_than(difficulty_level: DifficultyID) -> bool: return current_difficulty < difficulty_level
+
+func _input(event: InputEvent) -> void:
+	if not Cheats.cheats: return
+	if not event is InputEventKey: return
+	if not event.is_pressed(): return
+	var selection : int = event.keycode - 49
+	if selection < 0 or selection >= DifficultyID.size(): return
+	current_difficulty = selection as DifficultyID
+	on_difficulty_changed.emit()

@@ -8,6 +8,7 @@ func _ready() -> void:
 	if SaveManager.is_station_powered():
 		switch_to_powered_sprite()
 		player_interactable.queue_free()
+		$PlayerInteractable2.queue_free()
 		return
 	
 	# If we don't have the fuse but do have the log entry

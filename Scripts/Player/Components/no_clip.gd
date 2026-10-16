@@ -1,9 +1,15 @@
-extends Node2D
+class_name Cheats extends Node2D
 
 @export var move_speed := 1000.0
 
-var _cheats_enabled : bool
-var _parent : Player
+static var cheats : bool = false
+
+var _cheats_enabled : bool:
+	set(new_value):
+		_cheats_enabled = new_value
+		cheats = new_value
+
+var _parent : Player 
 var _collision_mask_and_layer : PackedInt32Array
 
 var _no_clip_on : bool:

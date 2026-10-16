@@ -27,6 +27,8 @@ extends Sprite2D
 ## than anywhere a global could name by path.
 const GROUP := &"darkness"
 
+
+
 ## Rooms the darkness never appears in, as room scenes. The player's own ship is not
 ## part of the station, so it keeps its lights whatever the station is doing.
 ##
@@ -79,41 +81,24 @@ var _held := false
 func _ready() -> void:
 	add_to_group(GROUP)
 	_base_scale = scale
-	# At engine start there is no save and no room — the main menu is still up — so
-	# start clear and let the first spawn settle us.
 	_apply_state(false)
 
 	MetSys.room_changed.connect(_on_room_changed)
 	GlobalSignals.player_spawned.connect(_on_player_spawned)
 	GlobalSignals.RestoreStationPower.connect(_on_station_power_restored)
+	Difficulty.on_difficulty_changed.connect( handle_difficulty )
 
-## A spawn is a placement rather than a move: the player is teleported in behind a
-## load screen or a respawn, so the darkness is simply already right when the screen
-## comes back, with no fade to catch the eye.
+func handle_difficulty() -> void:
+	
+
 func _on_player_spawned() -> void:
-	if _held:
-		return
-	# A spawn puts the player in a room that is already loaded, so unlike a room
-	# change, the room MetSys reports is the one they are standing in.
+	if _held: return
 	_set_dark(_should_be_dark(MetSys.get_current_room_name()), false)
 
-## [param new_room] is the room being entered, and is the only place it exists yet.
-##
-## MetSys emits this from visit_cell() the moment the player crosses the cell
-## boundary, before the new room's scene is loaded and before current_room is swapped
-## for it. Asking MetSys which room we are in here names the room being *left*, which
-## runs the whole test one room behind the player: stepping out of the ship clears the
-## darkness and stepping back into the ship raises it.
 func _on_room_changed(new_room: String) -> void:
-	if _held:
-		return
+	if _held: return
 	_set_dark(_should_be_dark(new_room), true)
 
-## Clears the darkness when the fuse goes in.
-##
-## This deliberately does not re-read [method SaveManager.is_station_powered]. We are
-## one of several listeners on this signal and the order it reaches us in is not ours
-## to depend on. The signal itself is the fact.
 func _on_station_power_restored() -> void:
 	if _held:
 		return
@@ -135,8 +120,7 @@ func hold(dark: bool, animate := true) -> void:
 ## Hands the darkness back to the station's power and the current room, moving it to
 ## whichever they call for.
 func release(animate := true) -> void:
-	if not _held:
-		return
+	if not _held: return
 	_held = false
 	_set_dark(_should_be_dark(MetSys.get_current_room_name()), animate)
 
@@ -150,52 +134,32 @@ func _should_be_dark(room: String) -> bool:
 	return not SaveManager.is_station_powered() and _is_in_station(room)
 
 func _is_in_station(room: String) -> bool:
-	if room.is_empty():
-		# No room: the menu, or asked before one is loaded. Nothing to be dark in.
-		return false
-	# MetSys names a room either by a path relative to its map root or by a ":uid"
-	# form; get_uid_room() gives back the relative path either way, and @export_file
-	# hands us a res:// one. Accept every spelling.
+	if room.is_empty(): return false
 	var relative := MetSys.map_data.get_uid_room(room)
 	var full_path := MetSys.get_full_room_path(relative)
 	var uid := _room_uid(full_path)
 	for excluded in non_station_rooms:
-		if excluded == full_path or excluded == relative:
-			return false
-		# By UID as well, because an exported path is plain text: moving the ship
-		# scene on disk would leave the path here stale while the UID still points at
-		# it, and the ship would quietly start going dark.
-		if not uid.is_empty() and uid == _room_uid(excluded):
-			return false
+		if excluded == full_path or excluded == relative: return false
+		if not uid.is_empty() and uid == _room_uid(excluded): return false
 	return true
 
-## The UID text of the scene at [param path], or "" when it has none.
-##
-## ResourceUID reports every path it cannot resolve as the same invalid id, so that is
-## returned as "" and never compared: two rooms it both fails to resolve are not the
-## same room, but the sentinel would say they were.
 static func _room_uid(path: String) -> String:
 	var id := ResourceLoader.get_resource_uid(path)
-	if id == ResourceUID.INVALID_ID:
-		return ""
+	if id == ResourceUID.INVALID_ID: return ""
 	return ResourceUID.id_to_text(id)
 
 ## Moves the darkness to [param dark], fading if [param animate] and the relevant
 ## fade is enabled, snapping otherwise.
 func _set_dark(dark: bool, animate: bool) -> void:
-	if dark == _dark:
-		return
+	if dark == _dark: return
 	_dark = dark
 	_stop_fade()
 
 	if not animate:
-		_apply_state(dark)
+		_apply_state( dark )
 	elif dark:
-		# ENTRY FADE-IN: see the note at the top of this file.
-		if animate_entry:
-			_fade_in()
-		else:
-			_apply_state(true)
+		if animate_entry: _fade_in()
+		else: _apply_state( true )
 	else:
 		_fade_out()
 
@@ -211,8 +175,6 @@ func _fade_out() -> void:
 	_fade = create_tween().set_parallel().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	_fade.tween_property(self, "modulate:a", 0.0, power_on_seconds)
 	_fade.tween_property(self, "scale", _base_scale * power_on_expansion, power_on_seconds)
-	# Hidden rather than left at zero alpha, and back at its authored scale ready for
-	# the next time it is needed.
 	_fade.chain().tween_callback(_apply_state.bind(false))
 	_fade.finished.connect(_clear_fade)
 
@@ -222,8 +184,7 @@ func _clear_fade() -> void:
 	_fade = null
 
 func _stop_fade() -> void:
-	if is_instance_valid(_fade):
-		_fade.kill()
+	if is_instance_valid(_fade): _fade.kill()
 	_fade = null
 
 #region Entry fade-in

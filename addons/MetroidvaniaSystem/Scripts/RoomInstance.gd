@@ -21,7 +21,7 @@ func _enter_tree() -> void:
 	if not Engine.is_editor_hint():
 		MetSys.current_room = self
 	else:
-		if not owner:
+		if not owner: 
 			return
 		
 		if owner.get_meta(&"fake_map", false):
@@ -31,8 +31,7 @@ func _enter_tree() -> void:
 		if initialized:
 			_update_neighbor_previews.call_deferred()
 	
-	if initialized:
-		return
+	if initialized: return
 	initialized = true
 	
 	if Engine.is_editor_hint():

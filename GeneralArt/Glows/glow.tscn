@@ -1,0 +1,79 @@
+[gd_scene format=3 uid="uid://dairp1m0cp4k6"]
+
+[sub_resource type="Gradient" id="Gradient_7va2b"]
+offsets = PackedFloat32Array(0, 0.6761006)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_jm57v"]
+gradient = SubResource("Gradient_7va2b")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+
+[sub_resource type="GDScript" id="GDScript_ur7l7"]
+resource_name = "Glow"
+script/source = "@tool
+extends TextureProgressBar
+
+@export var color : Color:
+	set( new_value ):
+		self_modulate = new_value
+		color = new_value
+		
+@export_range(0,100,0.1,\"or_greater\") var life_time : float = 0
+@export_range(0,360,0.1,\"prefer_slider\") var angle : float = 0:
+	set( new_value ):
+		angle = new_value
+		_set_rotation_degrees(angle, arclen)
+@export_range(0,180,0.5,\"prefer_slider\") var arclen : float = 0:
+	set( new_value ):
+		arclen = new_value
+		value = new_value / 180
+		_set_rotation_degrees(angle, arclen)
+
+var _time : float = 0.0
+
+func _ready() -> void: 
+	self_modulate = color
+	if life_time == 0: process_mode = PROCESS_MODE_DISABLED
+	
+func _process(delta: float) -> void:
+	if Engine.is_editor_hint(): return
+	
+	_time += delta
+	if _time >= life_time:
+		visible= false
+		queue_free()
+		return
+		
+	var percent_visible := 1 - _time / life_time
+	self_modulate.a = percent_visible
+
+func _set_rotation_degrees(forward_angle: float, arclength: float) -> void:
+	forward_angle -= arclength
+	rotation_degrees = forward_angle
+"
+
+[node name="GlowArc" type="TextureProgressBar" unique_id=1848313483]
+process_mode = 4
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 32.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = -3.1415927
+pivot_offset = Vector2(32, 32)
+offset_transform_rotation = -1.5707964
+max_value = 1.0
+step = 0.0
+value = 1.0
+fill_mode = 4
+texture_progress = SubResource("GradientTexture2D_jm57v")
+script = SubResource("GDScript_ur7l7")
+color = Color(1, 1, 1, 1)
+arclen = 180.0
