@@ -20,7 +20,6 @@ var _no_clip_on : bool:
 		else: _turn_off_noclip()
 		_no_clip_on = new_value
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	_parent = get_parent()
 	_collision_mask_and_layer = PackedInt32Array([ _parent.collision_mask, _parent.collision_layer ])

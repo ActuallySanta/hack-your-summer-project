@@ -6,90 +6,70 @@
 # "Entry fade-in" export group and the region outright and replace the one call site
 # marked "ENTRY FADE-IN" in _set_dark() with _apply_state(true).
 
-## The unlit station.
-##
-## A screen-sized vignette parented to the player, so it travels with them for free,
-## drawn over everything and faded in and out rather than spawned and freed.
-##
-## It is shown whenever both of these hold, and hidden the moment either stops:
-## [br]- the station has no power yet, and
-## [br]- the player is in a station room rather than one listed in
-## [member non_station_rooms] (their own ship).
-##
-## That pair is re-read whenever either half can change — a room change, a spawn, or
-## power coming back — so there is no state of its own to keep in sync or to save.
-## Loading a save straight into a powered station, or into the player's ship, lands
-## on the right answer without anything having to replay.
 class_name Darkness
 extends Sprite2D
 
-## How [CameraEffects] finds us, since the darkness lives under the player rather
-## than anywhere a global could name by path.
 const GROUP := &"darkness"
 
+const BASE_GRADIENT := preload("res://GeneralArt/Darkness/easy_gradient.tres")
+const HARD_GRADIENT := preload("res://GeneralArt/Darkness/hard_gradient.tres")
+const BULLSHIT_GRADIENT := preload("res://GeneralArt/Darkness/bullshit_gradient.tres")
 
+static var globle_darkness : Darkness
 
-## Rooms the darkness never appears in, as room scenes. The player's own ship is not
-## part of the station, so it keeps its lights whatever the station is doing.
-##
-## Everything not listed here counts as station interior, which is deliberate: the
-## station is most of the game, and a room accidentally left off a list of station
-## rooms would silently stay lit, while a room accidentally left off this one merely
-## goes dark like its neighbours.
+@export var alpha_for_difficulty : Array[ float ] = [ 150/255.0, 190/255.0, 190/255.0, 210/255.0 ]
+
+var _dark_alpha : float:
+	get(): return DifficultyManager.pick_from_difficulty(alpha_for_difficulty)
+
 @export_file("*.tscn") var non_station_rooms : Array[String] = [
 	"res://Scenes/Rooms/Ship Internals/ship_internals.tscn",
 ]
 
 @export_group("Power-on fade")
-
-## How long the darkness takes to clear once the station powers back on.
 @export_range(0.05, 5.0, 0.05, "or_greater") var power_on_seconds := 1.4
-
-## How far the vignette opens out as it clears, as a multiple of its authored scale.
-## The hole widening is what reads as light flooding in; without it the screen just
-## gets less dark.
 @export_range(1.0, 4.0, 0.05, "or_greater") var power_on_expansion := 1.8
 
 @export_group("Entry fade-in")
-
-## Whether entering the station fades the darkness in. Off, it simply appears.
-## See the note at the top of this file.
 @export var animate_entry := true
-
-## How long the darkness takes to close in after the player steps into the station.
 @export_range(0.05, 5.0, 0.05, "or_greater") var entry_seconds := 1.0
-
-## How far out the vignette starts before closing in, as a multiple of its authored
-## scale. The power-on fade played backwards.
 @export_range(1.0, 4.0, 0.05, "or_greater") var entry_expansion := 1.8
 
-## The scale the scene was authored at. Both fades are measured from it, so neither
-## can drift the vignette off its true size by ending on a value it computed.
 var _base_scale : Vector2
-
-## What we are currently showing or heading towards, so a repeated read of the same
-## state doesn't restart a fade that is already playing it.
 var _dark := false
-
-## Null whenever nothing is in flight, so "is a fade playing" is a single read.
 var _fade : Tween
-
-## True while something has taken the darkness off the station's power and the
-## current room and is driving it by hand. See the "Manual hold" region.
 var _held := false
+var _was_toggled := false
+
+@onready var gradient := $TextureRect
+
+func _input(event: InputEvent) -> void:
+	if not Cheats.cheats: return
+	if not event is InputEventKey: return
+	if not event.keycode == KEY_SLASH: return
+	if event.is_released():
+		_was_toggled = false
+		return
+	if _was_toggled: return
+	_was_toggled = true
+	_apply_state( !_dark )
 
 func _ready() -> void:
-	add_to_group(GROUP)
+	globle_darkness = self
+	add_to_group( GROUP )
 	_base_scale = scale
-	_apply_state(false)
-
+	_apply_state( false )
+	handle_difficulty()
+	
 	MetSys.room_changed.connect(_on_room_changed)
 	GlobalSignals.player_spawned.connect(_on_player_spawned)
 	GlobalSignals.RestoreStationPower.connect(_on_station_power_restored)
 	Difficulty.on_difficulty_changed.connect( handle_difficulty )
 
 func handle_difficulty() -> void:
-	
+	var tex : GradientTexture2D = gradient.texture
+	tex.gradient = DifficultyManager.pick_from_difficulty([BASE_GRADIENT, BASE_GRADIENT, HARD_GRADIENT, BULLSHIT_GRADIENT])
+	update_opacity( _dark_alpha )
 
 func _on_player_spawned() -> void:
 	if _held: return
@@ -100,8 +80,7 @@ func _on_room_changed(new_room: String) -> void:
 	_set_dark(_should_be_dark(new_room), true)
 
 func _on_station_power_restored() -> void:
-	if _held:
-		return
+	if _held: return
 	_set_dark(false, true)
 
 #region Manual hold
@@ -165,9 +144,14 @@ func _set_dark(dark: bool, animate: bool) -> void:
 
 ## Puts the darkness fully on or fully off, with nothing in flight.
 func _apply_state(dark: bool) -> void:
+	_dark = dark
 	scale = _base_scale
-	modulate.a = 1.0 if dark else 0.0
+	modulate.a = _dark_alpha if dark else 0.0
 	visible = dark
+
+func update_opacity(alpha: float) -> void:
+	if not _dark: return
+	modulate.a = alpha
 
 ## Opens the vignette out as it clears, then puts it away.
 func _fade_out() -> void:
@@ -178,8 +162,6 @@ func _fade_out() -> void:
 	_fade.chain().tween_callback(_apply_state.bind(false))
 	_fade.finished.connect(_clear_fade)
 
-## Dropped once a fade plays out, so a killed and a completed fade leave the same
-## state behind.
 func _clear_fade() -> void:
 	_fade = null
 
@@ -194,7 +176,7 @@ func _fade_in() -> void:
 	modulate.a = 0.0
 	visible = true
 	_fade = create_tween().set_parallel().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	_fade.tween_property(self, "modulate:a", 0.8, entry_seconds)
+	_fade.tween_property(self, "modulate:a", _dark_alpha, entry_seconds)
 	_fade.tween_property(self, "scale", _base_scale, entry_seconds)
 	_fade.finished.connect(_clear_fade)
 #endregion
