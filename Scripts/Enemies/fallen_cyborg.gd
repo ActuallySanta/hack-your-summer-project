@@ -39,49 +39,44 @@ func finish_repairs() -> void:
 	var replacement : Enemy = repaired_scene.instantiate()
 	replacement.global_position = global_position + (repaired_position if not isFlipped else Vector2(-repaired_position.x, repaired_position.y))
 	replacement.isFlipped = isFlipped
-	parent.add_child(replacement)
+	parent.add_child( replacement )
 	queue_free()
 
 func play_banger(stream: AudioStreamWAV) -> void:
 	banger_sfx.stream = stream
 	banger_sfx.play()
 
-func _ready() -> void:
-	repair_node.on_repair_start.connect(begin_repairs)
-	repair_node.on_repair_end.connect(finish_repairs)
+func preparations() -> void:
+	repair_node.on_repair_start.connect( begin_repairs )
+	repair_node.on_repair_end.connect( finish_repairs )
 	repair_node.on_repair_failure.connect( health_component.kill_self )
-	#health_component.on_death_event.connect(queue_free)
-	bt_player.blackboard.set_var("canAttack",true)
-	hurtbox.hit.connect(takeDamage)
 	if start_flipped:
 		bullet_spawn_offset.x *= -1
 		isFlipped = true
-	switch_state("idle")
+	switch_state( "idle" )
 
 func _physics_process(delta: float) -> void:
-	timer = max(0, timer - delta)
-	if bt_player.blackboard.get_var("state") == "hurt":
-		return
+	timer = max( 0, timer - delta )
+	if bt_player.blackboard.get_var( "state" ) == "hurt": return
 
-	if shapeCast_hit_playerRef(target_range_check):
-		timer = fire_check_timer
+	if shapeCast_hit_playerRef(target_range_check): timer = fire_check_timer
 	
-	if timer > 0:
-		switch_state("attack" if is_weapon_raised else "bear arms")
-	elif animator.assigned_animation == "attack":
-		switch_state("go rest")
-	elif animator.assigned_animation == "bear_arms":
-		switch_state("idle")
+	if timer > 0: switch_state( "attack" if is_weapon_raised else "bear arms" )
+	elif animator.assigned_animation == "attack": switch_state( "go rest" )
+	elif animator.assigned_animation == "bear_arms": switch_state( "idle" )
+
+func handle_difficulty() -> void:
+	attackCooldown = DifficultyManager.pick_from_difficulty([ 0.5, 0.4, 0.1, 0 ])
 
 func spawnBullet():
 	velocity = Vector2.ZERO
-	bt_player.blackboard.set_var("canAttack",false)
+	bt_player.blackboard.set_var( "canAttack",false )
 	var instance : Bullet = bulletScene.instantiate()
 	instance.initial_operations(global_position + bullet_spawn_offset, "L" if start_flipped else "R", 0)
-	instance.scale = Vector2(3,3)
-	mainScene.add_child.call_deferred(instance)
-	await get_tree().create_timer(attackCooldown).timeout
-	bt_player.blackboard.set_var("canAttack",true)
+	instance.scale = Vector2( 3, 3 )
+	mainScene.add_child.call_deferred( instance )
+	await get_tree().create_timer( attackCooldown ).timeout
+	bt_player.blackboard.set_var( "canAttack",true )
 
 func set_weapon_raised(val: bool) -> void:
 	is_weapon_raised = val
@@ -91,7 +86,7 @@ func play_sfx_at_hurt(stream: AudioStreamWAV) -> void:
 	ouch_sfx.play()
 
 func _on_hit(_hit_info: HitInfo, source: Hitbox) -> void:
-	if source.has_method("get_damage_type"):
+	if source.has_method( "get_damage_type" ):
 		var dmg_type : StringName = source.get_damage_type()
 		if dmg_type == "stun_bullet":
 			play_sfx_at_hurt(STUN_SFX)

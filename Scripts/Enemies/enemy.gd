@@ -33,13 +33,17 @@ func get_dir() -> StringName: return "L" if isFlipped else "R"
 
 var prep_retaliation : bool:
 	set(value):
-		if retaliation_method == "none":
-			return
+		if retaliation_method == "none": return
 		prep_retaliation = value
 
 func _ready() -> void:
+	handle_difficulty()
 	bt_player.blackboard.set_var("canAttack",true)
 	hurtbox.hit.connect(takeDamage)
+	preparations()
+
+func preparations() -> void:
+	pass
 
 func move(targetPos : Vector2):
 	var dir : Vector2 = Vector2(targetPos.x - global_position.x,0).normalized()
@@ -61,23 +65,21 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 func handle_retaliation() -> void:
-	if retaliation_method == "none":
-		printerr("Enemy.gd: \"How did we get here?\"")
-	elif retaliation_method == "face threat":
-		_face_player()
-	else:
-		custom_retaliation()
+	if retaliation_method == "none": printerr("Enemy.gd: \"How did we get here?\"")
+	elif retaliation_method == "face threat": _face_player()
+	else: custom_retaliation()
 
 func _face_player() -> void:
-	# check if player to the left
 	isFlipped = playerReference.global_position.x < global_position.x
+
+func handle_difficulty() -> void:
+	pass
 
 func custom_retaliation() -> void:
 	pass
 
 func read_state() -> String:
-	if not can_see_player():
-		return "patrolling"
+	if not can_see_player(): return "patrolling"
 	target_range_check.force_shapecast_update()
 	return "attacking" if shapeCast_hit_playerRef(target_range_check) else "chasing"
 
@@ -104,7 +106,7 @@ func takeDamage(_hurtBox: Hurtbox, _hit_info: HitInfo, source: Hitbox):
 	if source.has_method("get_damage_type"):
 		var dmg_type : StringName = source.get_damage_type()
 		if dmg_type == "stun_bullet":
-			switch_state("hurt")
+			switch_state( "hurt" )
 			return
 	flasher.flash()
 
@@ -112,13 +114,11 @@ func can_see_player() -> bool:
 	return player_obstruction_check.is_colliding() and player_obstruction_check.get_collider() == playerReference
 
 func shapeCast_hit_playerRef(variable: ShapeCast2D) -> bool:
-	if variable.collision_result.size() < 1:
-		return false
+	if variable.collision_result.size() < 1: return false
 	
 	var playerRID = playerReference.get_rid()
-	for collision in variable.collision_result:
-		if collision[ "rid" ] == playerRID:
-			return true
+	for collision in variable.collision_result: 
+		if collision[ "rid" ] == playerRID: return true
 		
 	return false
 

@@ -1,4 +1,4 @@
-[gd_resource type="BehaviorTree" format=3 uid="uid://bw8myafit8doo"]
+[gd_resource type="BehaviorTree" format=3 uid="uid://cajvvw5y6sphn"]
 
 [ext_resource type="Script" uid="uid://q3siycoeq6oo" path="res://ai/tasks/get_hurt.gd" id="1_x2qe4"]
 [ext_resource type="PackedScene" uid="uid://1edv7orydrhs" path="res://Scenes/Enemies/Boss/boss_projectile.tscn" id="2_wxsuy"]

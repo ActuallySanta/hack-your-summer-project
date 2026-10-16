@@ -17,9 +17,6 @@ signal on_low_health_exit
 
 var ignore_effects : bool = false
 
-## Whether health was under [member low_health_boundry] last time it changed, so the
-## two low-health signals fire on the crossing rather than on every hit that happens
-## to land while already low.
 var _was_low : bool = false
 
 var _curr_health : int:
@@ -56,7 +53,7 @@ func mod_for_difficulty() -> void:
 func current_health() -> float:
 	return _curr_health;
 
-func unscaled_health() -> float:
+func unscaled_health() -> float: 
 	return _curr_health * _difficulty_factor
 
 func take_damage(amount: int) -> void:

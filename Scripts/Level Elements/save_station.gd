@@ -15,11 +15,8 @@ func _ready() -> void:
 	body_entered.connect(_on_body_entered)
 	set_idle()
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	if (is_on):
-		switch_active()
-	
+func _process(_delta: float) -> void:
+	if (is_on): switch_active()
 	
 func activate() -> void:
 	idle.enabled = false
@@ -43,12 +40,12 @@ func switch_active() -> void:
 	green.enabled = !green.enabled
 
 func _on_body_entered(body: Node2D) -> void:
-	if on_cooldown:
-		return
+	if on_cooldown: return
 	var player := body as Player
 	if not player: return
 	if not Difficulty.get_setting().can_save: return
 	SaveManager.save_data_to_file(GameManager.current_save_name)
 	player.save_station_used.emit()
 	MessageDisplay.add_saving_data()
+	GlobalSignals.max_player_health.emit()
 	activate()

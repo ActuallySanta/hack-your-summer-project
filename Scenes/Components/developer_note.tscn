@@ -6,18 +6,15 @@ script/source = "@tool
 extends TextEdit
 
 func _ready() -> void:
-	if Engine.is_editor_hint():
-		return
+	if Engine.is_editor_hint(): return
 
 	var parentID = MetSys.current_room.get_parent().name if not MetSys.current_room == null else get_parent().name
-	if parentID == \"root\":
-		return
+	if parentID == \"root\": return
 	printerr(\"There is a developer note still in \", parentID)
 	queue_free()
 
 func _process(delta: float) -> void:
-	if not Engine.is_editor_hint():
-		return
+	if not Engine.is_editor_hint(): return
 	size.y = 0
 "
 

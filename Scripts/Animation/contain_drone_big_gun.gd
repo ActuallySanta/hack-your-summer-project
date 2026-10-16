@@ -52,8 +52,6 @@ func iterate() -> void:
 			anim_state = anim.OPEN_SHOOTER
 		anim.OPEN_SHOOTER:
 			turn_on_shooter()
-			# INF parks the timer so FIRING never times out on its own; whoever
-			# started the gun decides when it stops.
 			timer += shoot_timer if shoot_timer > 0.0 else INF
 			anim_state = anim.FIRING
 		anim.FIRING:
@@ -66,26 +64,17 @@ func iterate() -> void:
 			turn_on_barrel()
 
 func _process(delta: float) -> void:
-	if anim_state == anim.IDLE:
-		return
-	
+	if anim_state == anim.IDLE: return
 	timer -= delta
-	# Every branch of iterate() either pushes the timer forward or drops to
-	# IDLE, so the IDLE check is what guarantees this loop terminates. Without
-	# it, CLOSE_BARREL (timer = 0, state = IDLE) re-enters iterate() with a
-	# state that matches nothing and spins forever.
 	while timer <= 0 and anim_state != anim.IDLE:
 		iterate()
 
 func turn_on_gun() -> void:
-	# Always start from a known timer. A value left over from an interrupted
-	# cycle used to delay the beam by up to shoot_timer seconds.
 	timer = 0.0
 	anim_state = anim.OPEN_FLARE
 
 func turn_off_gun() -> void:
-	if anim_state == anim.IDLE:
-		return
+	if anim_state == anim.IDLE: return
 	timer = 0.0
 	anim_state = anim.CLOSE_FLARE
 
