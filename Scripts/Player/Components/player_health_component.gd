@@ -6,10 +6,6 @@ signal knocked_back(force: float, duration: float)
 ## Emitted whenever current or maximum health changes, before the global signal.
 signal health_updated(current: int, maximum: int)
 
-@export_group("Health")
-## Maximum health with no extenders collected.
-@export var base_max_health := 3
-
 @export_group("Invulnerability")
 ## How long the player cannot be hit again after a hit lands.
 @export var invulnerable_seconds := 1.0
@@ -35,13 +31,12 @@ signal health_updated(current: int, maximum: int)
 var _invuln_timer := 0.0
 var _blink_timer := 0.0
 var _dead := false
-## The hurtbox's shape node, and a copy of its shape so resizing it cannot reach the
-## scene's own resource (which every instance of the player scene would share).
 var _hurt_shape: CollisionShape2D
 
+var base_max_health:
+	get(): return DifficultyManager.get_curr_setting().start_health
+
 func _ready() -> void:
-	# Base _ready() connects the hurtbox and seeds health from start_health; the real
-	# maximum is only knowable once the save is loaded, which refresh_from_save does.
 	max_health = base_max_health
 	start_health = base_max_health
 	super()
@@ -49,12 +44,17 @@ func _ready() -> void:
 	GlobalSignals.max_player_health.connect( max_out )
 
 	_hurt_shape = hurtbox.get_node_or_null(^"CollisionShape2D") as CollisionShape2D
-	if _hurt_shape and _hurt_shape.shape:
-		_hurt_shape.shape = _hurt_shape.shape.duplicate()
+	if _hurt_shape and _hurt_shape.shape: _hurt_shape.shape = _hurt_shape.shape.duplicate()
 	var player := _player()
-	if player:
-		player.move_state_changed.connect(_on_move_state_changed)
+	if player: player.move_state_changed.connect(_on_move_state_changed)
 	_apply_hurtbox_pose(false, false)
+	Difficulty.on_difficulty_changed.connect( _on_difficulty_changed )
+
+func _on_difficulty_changed() -> void:
+	max_health = base_max_health
+	if _curr_health > max_health: max_out()
+	print("Updated")
+	_announce()
 
 func _on_move_state_changed(_from: Player.MoveState, to: Player.MoveState) -> void:
 	_apply_hurtbox_pose(to == Player.MoveState.Crouching, to == Player.MoveState.Jumping)
@@ -110,25 +110,20 @@ func maximum_health() -> int:
 
 #region Hits
 func _on_hit(_hurt_box: Hurtbox, hit_info: HitInfo, _source: Hitbox) -> void:
-	if _invuln_timer > 0.0 or _dead or ignore_effects:
-		return
+	if _invuln_timer > 0.0 or _dead or ignore_effects: return
 
 	take_damage(hit_info.damage * Difficulty.get_setting().damage_factor)
 	_announce()
 	on_hit_event.emit()
 
 	var player := _player()
-	if player:
-		player.hurt_sfx.play()
-	if hit_info.knockback_duration > 0.0:
+	if player: player.hurt_sfx.play()
+	if hit_info.knockback_duration > 0.0: 
 		knocked_back.emit(hit_info.knockback_strength / hit_info.knockback_duration, hit_info.knockback_duration)
 
-	if _dead:
-		return
+	if _dead: return
 	_invuln_timer = invulnerable_seconds
 	_blink_timer = blink_interval
-	# Taken out of the physics space rather than merely ignored, so overlapping
-	# hitboxes do not queue up hits to land the moment the frames run out.
 	hurtbox.process_mode = Node.PROCESS_MODE_DISABLED
 
 func _on_death() -> void:
@@ -139,15 +134,10 @@ func _on_death() -> void:
 	hurtbox.process_mode = Node.PROCESS_MODE_DISABLED
 	on_death_event.emit()
 	var player := _player()
-	if player:
-		# The blink ends here, and it has to be put back by hand. Clearing the timer
-		# is what stops [method _process], which is the only other place that shows the
-		# body again -- so without this the body is left on whichever half of the blink
-		# it happened to be on, and dying on a hidden one plays the whole death
-		# animation on a sprite nobody can see. A coin toss, every death.
-		if is_instance_valid(player.animator):
-			player.animator.set_body_hidden_for_blink(false)
-		player.on_death()
+	if not player: return
+	if is_instance_valid( player.animator ):
+		player.animator.set_body_hidden_for_blink( false )
+	player.on_death()
 
 func is_dead() -> bool:
 	return _dead
