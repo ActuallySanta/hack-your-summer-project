@@ -56,6 +56,8 @@ func preparations() -> void:
 	switch_state( "idle" )
 
 func _physics_process(delta: float) -> void:
+	if not DifficultyManager.is_higher_than(DifficultyManager.EASY):
+		set_physics_process( false )
 	timer = max( 0, timer - delta )
 	if bt_player.blackboard.get_var( "state" ) == "hurt": return
 

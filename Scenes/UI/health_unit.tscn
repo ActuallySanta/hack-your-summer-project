@@ -7,4 +7,5 @@
 position = Vector2(5.999998, 5)
 texture = ExtResource("1_5ohd3")
 hframes = 3
+frame = 1
 script = ExtResource("2_r60ub")

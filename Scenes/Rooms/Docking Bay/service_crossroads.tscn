@@ -12,10 +12,13 @@
 [ext_resource type="PackedScene" uid="uid://c23c0urqh5mm5" path="res://Scenes/Components/ScaledTileMap.tscn" id="8_sod7b"]
 [ext_resource type="PackedScene" uid="uid://bfdxh46jtantj" path="res://Scenes/Enemies/fallen_cyborg.tscn" id="9_ydc0m"]
 [ext_resource type="PackedScene" uid="uid://cy2osx3ogepds" path="res://Scenes/Rooms/Tutorial Area/locked_door.tscn" id="10_l2g7j"]
+[ext_resource type="PackedScene" uid="uid://dairp1m0cp4k6" path="res://GeneralArt/Glows/glow.tscn" id="11_sod7b"]
 [ext_resource type="PackedScene" uid="uid://b0fyg7kdjcyou" path="res://Scenes/Enemies/repair_drone.tscn" id="13_gp64u"]
 [ext_resource type="PackedScene" uid="uid://usl0ryav6sdi" path="res://Scenes/Components/door_blocker.tscn" id="14_5p3vb"]
 [ext_resource type="PackedScene" uid="uid://b7lnb5mc2cxhl" path="res://Scenes/Components/station_powered_node.tscn" id="14_tnlk3"]
 [ext_resource type="Script" uid="uid://ppq0y0iwxyc2" path="res://Scripts/Level Elements/debug_spawn_point.gd" id="16_qf1ib"]
+[ext_resource type="Script" uid="uid://bhji22p8wcn21" path="res://Scenes/Components/difficulty_hider_node.gd" id="17_wrphf"]
+[ext_resource type="PackedScene" uid="uid://dklylswmcw1pk" path="res://Scenes/Environmental Hazards/teeth_persistant.tscn" id="18_sod7b"]
 
 [node name="ServiceCrossroads" type="Node2D" unique_id=1037229723]
 
@@ -78,6 +81,24 @@ tile_set = ExtResource("5_qf1ib")
 tile_map_data = PackedByteArray("AAAKABoAAgAAAAAAAAAMABoAAgACAAAAAAAKABsAAgAAAAIAAAAMABsAAgACAAIAAAALABoAAgABAAAAAAALABsAAgABAAIAAAAQABwAAgAAAAAAAAAQAB0AAgAAAAIAAAARABwAAgABAAAAAAARAB0AAgABAAIAAAASABwAAgACAAAAAAASAB0AAgACAAIAAAADAAkAAgAAAAAAAAADAAoAAgAAAAIAAAAEAAkAAgABAAAAAAAEAAoAAgABAAIAAAAFAAkAAgABAAAAAAAFAAoAAgABAAIAAAAGAAkAAgACAAAAAAAGAAoAAgACAAIAAAANAAoAAgACAAAAAAAMAAoAAgAAAAAAAAAMAA4AAgAAAAIAAAAPAA4AAgACAAIAAAAOAA4AAgABAAIAAAANAA4AAgABAAIAAAAMAA0AAgAAAAEAAAAMAAwAAgAAAAEAAAAMAAsAAgAAAAEAAAANAAwAAgACAAEAAAANAAsAAgACAAEAAAAOAA0AAgABAAAAAAANAA0AAgABAAYAAAAPAA0AAgACAAAAAAAMABYAAgACAAIAAAAMABUAAgACAAAAAAALABUAAgAAAAAAAAALABYAAgAAAAIAAAAJAB8AAgAAAAAAAAAJACEAAgAAAAIAAAANAB8AAgACAAAAAAANACEAAgACAAIAAAAMACEAAgABAAIAAAALACEAAgABAAIAAAAKACEAAgABAAIAAAAJACAAAgAAAAEAAAANACAAAgACAAEAAAAMAB8AAgABAAAAAAALAB8AAgABAAAAAAAKAB8AAgABAAAAAAAFABgAAQABABYAAAAGABgAAQACABYAAAAHABgAAQADABYAAAAPABcAAQABABYAAAAQABcAAQACABYAAAARABcAAQACABYAAAASABcAAQADABYAAAAPABIAAQABABYAAAAQABIAAQACABYAAAARABIAAQACABYAAAASABIAAQACABYAAAATABIAAQACABYAAAAUABIAAQADABYAAAADACAAAQAAABYAAAAUACAAAQAAABYAAAA=")
 tile_set = ExtResource("5_qf1ib")
 
+[node name="GlowArc" parent="VisualAssets" unique_id=1848313483 instance=ExtResource("11_sod7b")]
+self_modulate = Color(1, 1, 0, 1)
+z_index = 21
+offset_left = -8.0
+offset_top = 856.0
+offset_right = 56.0
+offset_bottom = 920.0
+color = Color(1, 1, 0, 1)
+
+[node name="GlowArc2" parent="VisualAssets" unique_id=1230591176 instance=ExtResource("11_sod7b")]
+self_modulate = Color(1, 1, 0, 1)
+z_index = 21
+offset_left = -8.0
+offset_top = 1048.0
+offset_right = 56.0
+offset_bottom = 1112.0
+color = Color(1, 1, 0, 1)
+
 [node name="Fallen_Cyborg2" parent="." unique_id=708168055 instance=ExtResource("9_ydc0m")]
 position = Vector2(192, 1392)
 
@@ -124,3 +145,12 @@ position = Vector2(569, 1692)
 position = Vector2(107, 988)
 script = ExtResource("16_qf1ib")
 metadata/_custom_type_script = "uid://ppq0y0iwxyc2"
+
+[node name="DifficultySelector" type="Node2D" parent="." unique_id=1947722228]
+modulate = Color(1, 1, 1, 0.5019608)
+script = ExtResource("17_wrphf")
+difficulty = Array[int]([3])
+metadata/_custom_type_script = "uid://bhji22p8wcn21"
+
+[node name="TeethPersistant" parent="DifficultySelector" unique_id=424263396 instance=ExtResource("18_sod7b")]
+tile_map_data = PackedByteArray("AAAMAAkAAwAAAAAAAQANAAkAAwAAAAAAAQAHAAkAAwAAAAAAAVAIAAwAAwAAAAAAAQAJAAwAAwAAAAAAAQAKAAwAAwAAAAAAAQALAAwAAwAAAAAAAQAOAAwAAwAAAAAAAQAPAAwAAwAAAAAAAQAPABMAAwAAAAAAASAKABYAAwAAAAAAAWAPABYAAwAAAAAAAQAQABYAAwAAAAAAAQARABYAAwAAAAAAAQASABYAAwAAAAAAAQAHABcAAwAAAAAAAQAGABcAAwAAAAAAAQAFABcAAwAAAAAAAQAKABwAAwAAAAAAASALABwAAwAAAAAAASAMABwAAwAAAAAAASAKABkAAwAAAAAAAQALABkAAwAAAAAAAQAMABkAAwAAAAAAAQADAB8AAwAAAAAAASAEAB8AAwAAAAAAASA=")

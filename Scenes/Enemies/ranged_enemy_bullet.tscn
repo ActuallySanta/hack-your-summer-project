@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://bxgh8un8uenwd" path="res://Sprites/Bullets/Android_Bullet.png" id="2_1f3k8"]
 [ext_resource type="Script" uid="uid://mrhr0yu4i7jh" path="res://Scripts/Animation/ManualAnim.gd" id="3_06oib"]
 [ext_resource type="PackedScene" uid="uid://liprjmtialrh" path="res://Scenes/Components/Hitbox.tscn" id="4_06oib"]
+[ext_resource type="PackedScene" uid="uid://dairp1m0cp4k6" path="res://GeneralArt/Glows/glow.tscn" id="5_m1xtd"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_bpmhk"]
 radius = 2.0
@@ -51,6 +52,12 @@ shape = SubResource("CircleShape2D_bpmhk")
 [node name="Collider" type="CollisionShape2D" parent="." unique_id=774113725]
 shape = SubResource("CircleShape2D_85ri6")
 disabled = true
+
+[node name="GlowArc" parent="." unique_id=1848313483 instance=ExtResource("5_m1xtd")]
+visible = false
+self_modulate = Color(1, 0.7411765, 0.56078434, 0.25490198)
+scale = Vector2(0.385, 0.385)
+color = Color(1, 0.7411765, 0.56078434, 0.25490198)
 
 [connection signal="timeout" from="Bullet Lifetime" to="." method="_on_bullet_lifetime_timeout"]
 [connection signal="environment_hit" from="Hitbox" to="." method="_on_hitbox_environment_hit"]

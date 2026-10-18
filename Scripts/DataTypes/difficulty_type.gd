@@ -51,9 +51,15 @@ var start_health : int:
 		if _has_been_set: return
 		start_health = val
 
+var health_rune_reward_scale : float:
+	set(val):
+		if _has_been_set: return
+		health_rune_reward_scale = val
+
 func _init(can_save_value: bool, aggressive_mode_value: bool, 
 damage_factor_value: float, player_damage_factor_value: float, 
-enemy_stun_time_value: float, player_invincibility_factor_value: float, start_health_value: int) -> void:
+enemy_stun_time_value: float, player_invincibility_factor_value: float, 
+start_health_value: int, health_rune_reward_scale_value: float) -> void:
 	can_save = can_save_value
 	aggressive_mode = aggressive_mode_value
 	damage_factor = damage_factor_value 
@@ -61,4 +67,5 @@ enemy_stun_time_value: float, player_invincibility_factor_value: float, start_he
 	enemy_stun_factor = enemy_stun_time_value
 	player_invincibility_factor = player_invincibility_factor_value
 	start_health = start_health_value
+	health_rune_reward_scale = health_rune_reward_scale_value
 	_has_been_set = true

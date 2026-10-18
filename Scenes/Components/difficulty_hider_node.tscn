@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://b2h3bfeuti45c"]
+
+[ext_resource type="Script" uid="uid://bhji22p8wcn21" path="res://Scenes/Components/difficulty_hider_node.gd" id="1_uc8y6"]
+
+[node name="DifficultyHiderNode" type="Node2D" unique_id=1091013714]
+script = ExtResource("1_uc8y6")

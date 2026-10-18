@@ -99,22 +99,21 @@ func on_attack_pressed() -> void:
 	_buffer_timer = buffer_time
 
 func physics_update(delta: float) -> void:
-	if _cooldown_timer > 0.0:
-		_cooldown_timer -= delta
-	if _buffer_timer <= 0.0:
-		return
-	if _cooldown_timer <= 0.0:
-		attack()
-	else:
-		_buffer_timer -= delta
+	if _cooldown_timer > 0.0: _cooldown_timer -= delta
+	if _buffer_timer <= 0.0: return
+	if _cooldown_timer <= 0.0: attack()
+	else: _buffer_timer -= delta
 
 func attack() -> void:
-	if swing_scene == null or not _has_wrench:
-		return
+	if swing_scene == null or not _has_wrench: return
 
 	var crouched := player.move_state == Player.MoveState.Crouching
 	var swing := swing_scene.instantiate() as PlayerMeleeSwing
+	# The difference between a normal damage buff and the allen wrench is the allen wrench gives a flat 2x damage boost
 	swing.pending_damage = damage()
+	if _mode == WRENCH_MODES[ 1 ]:
+		swing.pending_damage *= 2
+		print("double damge")
 
 	var offset := crouch_swing_offset if crouched else Vector2(swing_offset, 0.0)
 	if not player.facing_right:

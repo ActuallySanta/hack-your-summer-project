@@ -28,10 +28,10 @@ enum DifficultyID {
 }
 
 var _diff_settings : Dictionary[ DifficultyID, DifficultyType ] = {
-	DifficultyID.Easy : DifficultyType.new(true, false, 1.0, 2.0, 3.0, 1.5, 6),
-	DifficultyID.Standard : DifficultyType.new(true, false, 1.0, 1.0, 1.5, 1.0, 5),
-	DifficultyID.Hard : DifficultyType.new(true, true, 3.0/2, 1/3.0, 1.0, 0.9, 4),
-	DifficultyID.BullShit : DifficultyType.new(false, true, 2, 0.6, 0.75, 0.8, 3),
+	DifficultyID.Easy : DifficultyType.new(true, false, 1.0, 2.0, 3.0, 1.5, 6, 1.0),
+	DifficultyID.Standard : DifficultyType.new(true, false, 1.0, 1.0, 1.5, 1.0, 5, 1.0),
+	DifficultyID.Hard : DifficultyType.new(true, true, 3.0/2, 1/3.0, 1.0, 0.9, 4, 1.0),
+	DifficultyID.BullShit : DifficultyType.new(false, true, 2, 0.6, 0.75, 0.8, 3, 0.5),
 }
 
 var current_difficulty : DifficultyID = DifficultyID.Standard

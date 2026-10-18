@@ -51,10 +51,28 @@ func _ready() -> void:
 	Difficulty.on_difficulty_changed.connect( _on_difficulty_changed )
 
 func _on_difficulty_changed() -> void:
-	max_health = base_max_health
+	print("Base: ", base_max_health, " Saved: ", SaveManager.get_health_upgrade_count(), " Current_max: ", max_health, " Current_va: ", _curr_health)
+	max_health = base_max_health + SaveManager.get_health_upgrade_count()
+	
 	if _curr_health > max_health: max_out()
-	print("Updated")
+	print("Updated: ", max_health, " :Max || Curr: ", _curr_health)
 	_announce()
+
+func _input(event: InputEvent) -> void:
+	if not Cheats.cheats: return
+	if not event is InputEventKey: return
+	if not event.pressed or event.is_echo(): return
+	if event.keycode == KEY_BRACKETRIGHT:
+		max_health += 1
+		if Input.is_action_pressed("Alt Toggle"):
+			max_out()
+		_announce()
+	elif event.keycode == KEY_BRACKETLEFT:
+		_curr_health -= 1
+		if Input.is_action_pressed("Alt Toggle"):
+			max_health -= 1
+			max_out()
+		_announce()
 
 func _on_move_state_changed(_from: Player.MoveState, to: Player.MoveState) -> void:
 	_apply_hurtbox_pose(to == Player.MoveState.Crouching, to == Player.MoveState.Jumping)
