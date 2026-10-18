@@ -12,7 +12,6 @@
 [ext_resource type="PackedScene" uid="uid://c23c0urqh5mm5" path="res://Scenes/Components/ScaledTileMap.tscn" id="8_sod7b"]
 [ext_resource type="PackedScene" uid="uid://bfdxh46jtantj" path="res://Scenes/Enemies/fallen_cyborg.tscn" id="9_ydc0m"]
 [ext_resource type="PackedScene" uid="uid://cy2osx3ogepds" path="res://Scenes/Rooms/Tutorial Area/locked_door.tscn" id="10_l2g7j"]
-[ext_resource type="PackedScene" uid="uid://dairp1m0cp4k6" path="res://GeneralArt/Glows/glow.tscn" id="11_sod7b"]
 [ext_resource type="PackedScene" uid="uid://b0fyg7kdjcyou" path="res://Scenes/Enemies/repair_drone.tscn" id="13_gp64u"]
 [ext_resource type="PackedScene" uid="uid://usl0ryav6sdi" path="res://Scenes/Components/door_blocker.tscn" id="14_5p3vb"]
 [ext_resource type="PackedScene" uid="uid://b7lnb5mc2cxhl" path="res://Scenes/Components/station_powered_node.tscn" id="14_tnlk3"]
@@ -80,24 +79,6 @@ tile_set = ExtResource("5_qf1ib")
 [node name="SuperForeground" parent="VisualAssets" unique_id=2101826522 instance=ExtResource("8_sod7b")]
 tile_map_data = PackedByteArray("AAAKABoAAgAAAAAAAAAMABoAAgACAAAAAAAKABsAAgAAAAIAAAAMABsAAgACAAIAAAALABoAAgABAAAAAAALABsAAgABAAIAAAAQABwAAgAAAAAAAAAQAB0AAgAAAAIAAAARABwAAgABAAAAAAARAB0AAgABAAIAAAASABwAAgACAAAAAAASAB0AAgACAAIAAAADAAkAAgAAAAAAAAADAAoAAgAAAAIAAAAEAAkAAgABAAAAAAAEAAoAAgABAAIAAAAFAAkAAgABAAAAAAAFAAoAAgABAAIAAAAGAAkAAgACAAAAAAAGAAoAAgACAAIAAAANAAoAAgACAAAAAAAMAAoAAgAAAAAAAAAMAA4AAgAAAAIAAAAPAA4AAgACAAIAAAAOAA4AAgABAAIAAAANAA4AAgABAAIAAAAMAA0AAgAAAAEAAAAMAAwAAgAAAAEAAAAMAAsAAgAAAAEAAAANAAwAAgACAAEAAAANAAsAAgACAAEAAAAOAA0AAgABAAAAAAANAA0AAgABAAYAAAAPAA0AAgACAAAAAAAMABYAAgACAAIAAAAMABUAAgACAAAAAAALABUAAgAAAAAAAAALABYAAgAAAAIAAAAJAB8AAgAAAAAAAAAJACEAAgAAAAIAAAANAB8AAgACAAAAAAANACEAAgACAAIAAAAMACEAAgABAAIAAAALACEAAgABAAIAAAAKACEAAgABAAIAAAAJACAAAgAAAAEAAAANACAAAgACAAEAAAAMAB8AAgABAAAAAAALAB8AAgABAAAAAAAKAB8AAgABAAAAAAAFABgAAQABABYAAAAGABgAAQACABYAAAAHABgAAQADABYAAAAPABcAAQABABYAAAAQABcAAQACABYAAAARABcAAQACABYAAAASABcAAQADABYAAAAPABIAAQABABYAAAAQABIAAQACABYAAAARABIAAQACABYAAAASABIAAQACABYAAAATABIAAQACABYAAAAUABIAAQADABYAAAADACAAAQAAABYAAAAUACAAAQAAABYAAAA=")
 tile_set = ExtResource("5_qf1ib")
-
-[node name="GlowArc" parent="VisualAssets" unique_id=1848313483 instance=ExtResource("11_sod7b")]
-self_modulate = Color(1, 1, 0, 1)
-z_index = 21
-offset_left = -8.0
-offset_top = 856.0
-offset_right = 56.0
-offset_bottom = 920.0
-color = Color(1, 1, 0, 1)
-
-[node name="GlowArc2" parent="VisualAssets" unique_id=1230591176 instance=ExtResource("11_sod7b")]
-self_modulate = Color(1, 1, 0, 1)
-z_index = 21
-offset_left = -8.0
-offset_top = 1048.0
-offset_right = 56.0
-offset_bottom = 1112.0
-color = Color(1, 1, 0, 1)
 
 [node name="Fallen_Cyborg2" parent="." unique_id=708168055 instance=ExtResource("9_ydc0m")]
 position = Vector2(192, 1392)

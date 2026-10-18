@@ -97,9 +97,6 @@ position = Vector2(1967, 1451)
 position = Vector2(2120, 672)
 scale = Vector2(3, 3)
 
-[node name="HealthExtender" parent="." unique_id=545634817 instance=ExtResource("6_fo38q")]
-position = Vector2(2165, 663)
-
 [node name="HealthExtender2" parent="." unique_id=648412909 instance=ExtResource("6_fo38q")]
 position = Vector2(519, 170)
 

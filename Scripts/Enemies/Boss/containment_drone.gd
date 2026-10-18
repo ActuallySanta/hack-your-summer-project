@@ -201,7 +201,7 @@ func _handle_difficulty_changes() -> void:
 	max_speed_when_charging = DifficultyManager.scale_with_mode(max_speed_when_charging, 20)
 	if DifficultyManager.is_at_least(3): chances_for_attack = { "CHARGE_LASER": 1, "CHARGE": 0.2 }
 	navigator_force_maximum_when_charging = DifficultyManager.scale_with_mode(navigator_force_maximum_when_charging, 1.1)
-	max_laser_time = DifficultyManager.pick_from_difficulty([ 2.50, 3.15, 3.30 ])
+	max_laser_time = DifficultyManager.pick_from_difficulty([ 2.00, 3.00, 3.10 ])
 	min_laser_time = DifficultyManager.pick_from_difficulty([ 1.00, 2.00, 3.00 ])
 
 func _ready() -> void:
