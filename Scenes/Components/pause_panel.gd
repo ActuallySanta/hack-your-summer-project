@@ -119,8 +119,6 @@ func _draw_scroll_bar(percent: float) -> void:
 	constants.draw_scroll_bar(_scroll_bar_data, constants._get_scroll_bar_quarters_from_percent(SCROLL_BAR_SIZE, 1 - percent))
 
 #region Tabs
-## Switches to the map, which plays its turn-on. Already on the map this does nothing, so
-## clicking the tab again, or closing and reopening the menu, never replays it.
 func show_map() -> void:
 	if _tab == Tab.MAP: return
 	_tab = Tab.MAP

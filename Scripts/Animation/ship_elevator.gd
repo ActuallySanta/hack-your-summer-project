@@ -18,8 +18,7 @@ func setup() -> void:
 	_snap_to_player.call_deferred()
 
 func change_floor() -> void:
-	if _in_transit():
-		return
+	if _in_transit(): return
 	_target_floor = 1 if _target_floor == 0 else 0
 	CameraEffects.shake(6, 0.3, CameraEffects.Axis.VERTICAL, CameraEffects.Ease.EASE_OUT)
 	audio_player.play()
@@ -39,9 +38,7 @@ func _snap_to_player() -> void:
 		snap_to_floor( 0 )
 
 func _checker_shapes(checker: Area2D) -> Array:
-	if checker == null:
-		return []
-	# The checkers are there to be measured against, not to take part in physics.
+	if checker == null: return []
 	checker.monitoring = false
 	checker.monitorable = false
 	return PlayerOverlap.collect_shapes(checker)

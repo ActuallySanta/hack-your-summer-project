@@ -48,17 +48,17 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_cuwlc")
 }],
-"loop": 1,
+"loop": 2,
 "name": &"Idle",
-"speed": 5.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_i147v")
 }],
-"loop": 1,
+"loop": 0,
 "name": &"IdleOpen",
-"speed": 5.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -91,7 +91,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_i147v")
 }],
-"loop": 1,
+"loop": 0,
 "name": &"Opening",
-"speed": 5.0
+"speed": 10.0
 }]

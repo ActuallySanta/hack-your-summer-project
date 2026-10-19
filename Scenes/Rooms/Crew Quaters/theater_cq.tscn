@@ -56,7 +56,7 @@ door_name = "BRS Front Access"
 position = Vector2(608.6719, -37.23297)
 scale = Vector2(1.5, 1.5)
 sprite_frames = ExtResource("8_6geur")
-animation = &"Opening"
+animation = &"Idle"
 
 [node name="Door2" type="AnimatedSprite2D" parent="SmallAccessDoor" unique_id=394325281]
 position = Vector2(608.6719, 106.76703)
