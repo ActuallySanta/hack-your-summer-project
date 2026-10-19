@@ -246,6 +246,9 @@ func _process(_delta: float) -> void:
 	# the GameHUD pause menu are still here and still work, they are just not bound to anything.
 	if Input.is_action_just_pressed("pause"):
 		ListDisplay.toggle_menu()
+	elif Input.is_action_just_pressed("OpenMap"):
+		ListDisplay.open_menu()
+		ListDisplay.pause_panel.show_map()
 
 #region Camera bounds and axis regions
 ## Camera2D's own limits are pushed this far out on an axis we don't want it to
