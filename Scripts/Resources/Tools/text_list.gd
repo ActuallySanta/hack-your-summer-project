@@ -102,6 +102,15 @@ var is_ruled : bool:
 		if is_header: return false
 		return state == ItemState.ACTIVE or display_state == ItemState.CLICK
 
+## Whether this label is one the player has not opened yet, which puts a lit star in the empty
+## column in front of it. Clicking a label is opening it, so the first click takes the star away;
+## the rule lands in that same column, and once the player moves on it is left blank.
+var is_unread : bool = false:
+	set(new_value):
+		if is_unread == new_value: return
+		is_unread = new_value
+		dirty = true
+
 ## The width the whole list has to fit in. Only the root's copy is ever read; children walk up to it.
 var base_max_width : int
 
@@ -283,9 +292,17 @@ func _display_end_line(display: TextDisplay) -> void:
 ## the text runs out, carrying the eye across the gap. On a label that wraps, only the first line is
 ## ruled: the arrow column and the trailing bar sit on the same top row, and the lines below it are
 ## left to the text. Both ends read the display's highlight, so a lit label gets a lit rule.
+## An unread label that is not ruled puts its star in that empty column instead, drawn lit whether
+## or not the label is, the way the end line is, so it reads as a mark on the row and not the cursor.
 func _display_plain_label(display: TextDisplay) -> void:
 	display.draw_smart_text_at(item_name, start_pos + DROP_DOWN_OFFSET, Vector2i(label_width, 100))
-	if not is_ruled: return
+	if not is_ruled:
+		if is_unread:
+			var display_hightlight_cache = display.cursor_highlighted
+			display.set_hightlight( true )
+			display.draw_char_at("*", start_pos)
+			display.set_hightlight( display_hightlight_cache )
+		return
 
 	var first_line_width := TextDisplay.measure_smart_text_first_line(item_name, label_width)
 	display.draw_char_at(display.get_line_pieces()[ 0 ], start_pos)
@@ -358,12 +375,18 @@ func on_mouse_released(click_position: Vector2i) -> bool:
 	var item := pressed_item
 	cancel_press()
 	if item == null or item != item_at( click_position ): return false
-
-	if item.is_header: item.toggle_children()
-	else: _set_active_item( item )	# Only a label brings up a screen, so only a label moves where the player is
-	item.on_click.emit()		# Emitted after the move, so a listener opening its screen finds the list already agreeing with it
-	dirty = true
+	item.click()
 	return true
+
+## Does what a click on this item does, for when something other than the cursor makes the choice:
+## the map key going straight to the map still has to leave the list standing on the Map label.
+func click() -> void:
+	if is_header: toggle_children()
+	else:
+		root_item._set_active_item( self )	# Only a label brings up a screen, so only a label moves where the player is
+		is_unread = false
+	on_click.emit()		# Emitted after the move, so a listener opening its screen finds the list already agreeing with it
+	dirty = true
 
 ## Forgets a press without acting on it, for when the list stops taking input mid-click
 func cancel_press() -> void:

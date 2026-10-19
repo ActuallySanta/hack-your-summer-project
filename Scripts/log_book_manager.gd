@@ -37,8 +37,12 @@ func collect_event_log(log_name: StringName, event_display: String) -> void:
 	MessageDisplay.add_log_pop_up( event_display )
 	_add_entry(EVENTS_ACCESS, log_name, func(): ListDisplay.pause_panel.read_and_place( event_map[ log_name ] ))
 
-func _add_entry(access: StringName, region: StringName, callable: Callable) -> void:
-	ListDisplay.panel.root.insert_new_list_item_at(access + "/" + region).on_click.connect( callable )
+func _add_entry(access: StringName, entry_name: StringName, callable: Callable) -> void:
+	var item : TextListItem = ListDisplay.panel.root.insert_new_list_item_at(access + "/" + entry_name)
+	item.is_unread = not SaveManager.is_logbook_entry_read( entry_name )
+	item.on_click.connect( callable )
+	# The item takes its own star off when clicked, so only the save has to be told
+	item.on_click.connect( func(): SaveManager.read_logbook_entry( entry_name ) )
 
 func _match_list_to_save() -> void:
 	var root : TextListItem = ListDisplay.panel.root
@@ -54,3 +58,10 @@ func _match_list_to_save() -> void:
 		var region := StringName( entry )
 		if region_map.has( region ) and root.parse_path( REGIONS_ACCESS + "/" + region ) == null:
 			_add_region_entry( region )
+
+	# An entry read since the last save goes back to unread with everything else a death undoes
+	for access in [ REGIONS_ACCESS, EVENTS_ACCESS ]:
+		var group := root.parse_path( access )
+		if group == null: continue
+		for entry in group.sub_lists:
+			entry.is_unread = not SaveManager.is_logbook_entry_read( entry.item_name )

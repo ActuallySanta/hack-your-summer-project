@@ -24,7 +24,7 @@
 ## [member SaveData.values], written with [method _save_value_to_metsys] and read with
 ## [method _check_value_in_metsys]. Those two are deliberately dull, so that a new kind
 ## of fact is a pair of one-line wrappers over them with a prefix of its own rather
-## than a new storage mechanism -- see [method update_logbook], which is what that is
+## than a new storage mechanism -- see [method record_event], which is what that is
 ## meant to look like.
 extends Node
 
@@ -323,17 +323,43 @@ func power_station() -> void:
 #endregion
 
 #region The logbook and room events
-## Writes a logbook entry down, and reports whether it is one the player had not seen
-## before -- which is the question every caller has, so it is one call rather than a
-## check and a write.
+## Where the player is with a logbook entry. It is the entry's own value in the save,
+## so having an entry and having read it are one fact and cannot fall out of step: an
+## entry a death takes back takes its read mark with it. [constant LogState.Missing] is
+## zero, so the entry's value still reads false in [method _values_with_prefix] and the
+## other truthiness checks when it is not there.
+enum LogState { Missing, Unread, Read }
+
+## Writes a logbook entry down as unread, and reports whether it is one the player had
+## not seen before -- which is the question every caller has, so it is one call rather
+## than a check and a write.
 func update_logbook(entry: String) -> bool:
-	return _record_once(LOG_ENTRY_PREFIX + entry)
+	if check_logbook(entry):
+		return false
+	set_value(LOG_ENTRY_PREFIX + entry, LogState.Unread)
+	return true
 
 func check_logbook(entry: String) -> bool:
-	return _check_value_in_metsys(LOG_ENTRY_PREFIX + entry)
+	return _log_state(entry) != LogState.Missing
+
+func is_logbook_entry_read(entry: String) -> bool:
+	return _log_state(entry) == LogState.Read
+
+## Marks an entry the player has as read. One they do not have is left alone, so this
+## cannot put an entry into the logbook by itself.
+func read_logbook_entry(entry: String) -> void:
+	if check_logbook(entry):
+		set_value(LOG_ENTRY_PREFIX + entry, LogState.Read)
 
 func get_logbook_entries() -> Array:
 	return _values_with_prefix(LOG_ENTRY_PREFIX)
+
+func _log_state(entry: String) -> LogState:
+	var value: Variant = get_value(LOG_ENTRY_PREFIX + entry, LogState.Missing)
+	# Saves from before entries could be read hold true, and nothing was starred then
+	if value is bool:
+		return LogState.Read if value else LogState.Missing
+	return int(value) as LogState
 
 ## Records that something happened, for anything that is neither an object nor worth a
 ## wrapper of its own. Reports whether it had happened already.
