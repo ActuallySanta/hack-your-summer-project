@@ -22,17 +22,13 @@ position = Vector2(-7224, -194)
 position = Vector2(-4454, 2054)
 
 [node name="WorldMapBRS" parent="." unique_id=740908366 instance=ExtResource("1_jv6wm")]
-visible = false
 position = Vector2(1149, 456)
 
 [node name="WorldMapRS" parent="." unique_id=1107164827 instance=ExtResource("5_bj1wo")]
-visible = false
 position = Vector2(5897, 3479)
 
 [node name="WorldMapOP" parent="." unique_id=757348490 instance=ExtResource("8_wya1c")]
-visible = false
 position = Vector2(11380, 2726)
 
 [node name="WorldMapIN" parent="." unique_id=1098571671 instance=ExtResource("7_hlr02")]
-visible = false
 position = Vector2(1015, 5722)
