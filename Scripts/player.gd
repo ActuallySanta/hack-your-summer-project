@@ -41,6 +41,8 @@ enum MoveState {
 	Knockback,
 }
 
+static var active_player : Player
+
 @export_group("World")
 ## Size of one tile in world pixels. Components measure jumps and vaults in tiles.
 @export var tile_size := 48.0
@@ -108,6 +110,7 @@ func get_health_component() -> HealthComponent:
 	return health
 
 func _ready() -> void:
+	active_player = self
 	PlayerManager.player = self
 	facing_right = true
 	move_state = MoveState.Standing

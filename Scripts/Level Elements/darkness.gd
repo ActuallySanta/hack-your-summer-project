@@ -36,6 +36,7 @@ var _dark_alpha : float:
 @export_range(1.0, 4.0, 0.05, "or_greater") var entry_expansion := 1.8
 
 var _base_scale : Vector2
+var _expanded_scale : Vector2
 var _dark := false
 var _fade : Tween
 var _held := false
@@ -58,6 +59,7 @@ func _ready() -> void:
 	globle_darkness = self
 	add_to_group( GROUP )
 	_base_scale = scale
+	_expanded_scale = _base_scale * power_on_expansion
 	_apply_state( false )
 	handle_difficulty()
 	
@@ -84,11 +86,6 @@ func _on_station_power_restored() -> void:
 	_set_dark(false, true)
 
 #region Manual hold
-## Everything here exists so a cutscene or a boss fight can drive the darkness for a
-## moment through [CameraEffects] without the next room change or power-up snatching
-## it back. A hold is never saved: it is a moment, not state, and a reload lands on
-## whatever the station's power and the room say.
-
 ## Takes the darkness over and puts it to [param dark], fading if [param animate].
 ## It stays there through room changes and the station powering on until
 ## [method release] hands it back.
@@ -158,7 +155,7 @@ func _fade_out() -> void:
 	visible = true
 	_fade = create_tween().set_parallel().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	_fade.tween_property(self, "modulate:a", 0.0, power_on_seconds)
-	_fade.tween_property(self, "scale", _base_scale * power_on_expansion, power_on_seconds)
+	_fade.tween_property(self, "scale", _expanded_scale, power_on_seconds)
 	_fade.chain().tween_callback(_apply_state.bind(false))
 	_fade.finished.connect(_clear_fade)
 
@@ -169,10 +166,15 @@ func _stop_fade() -> void:
 	if is_instance_valid(_fade): _fade.kill()
 	_fade = null
 
+func fade_manual(percent: float) -> void:
+	if not _held: return
+	modulate.a = _dark_alpha * percent
+	scale = _expanded_scale - (_expanded_scale - _base_scale) * percent 
+
 #region Entry fade-in
 ## Closes the vignette in from wide and clear, the power-on fade run backwards.
 func _fade_in() -> void:
-	scale = _base_scale * entry_expansion
+	scale = _expanded_scale
 	modulate.a = 0.0
 	visible = true
 	_fade = create_tween().set_parallel().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
