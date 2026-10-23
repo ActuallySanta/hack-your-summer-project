@@ -22,3 +22,6 @@ func increment(delta: float) -> void:
 
 func pause() -> void: _paused = true
 func unpause() -> void: _paused = false
+func start(start_time: float) -> void:
+	unpause()
+	_timer = start_time

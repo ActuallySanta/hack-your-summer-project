@@ -6,6 +6,7 @@ const BULLET_SCENE := preload("res://Scenes/Enemies/turret_bullet.tscn")
 @export var do_chaos : bool = false
 @export var action_wait_time : float = 1.0
 @export var do_bullets_danger : bool
+@export_enum("Easy", "Standard", "Hard", "Bullshit") var danger_threshold : int = 3
 
 @onready var sprite := $Sprite2D
 @onready var audio_player := $AudioStreamPlayer2D
@@ -20,11 +21,8 @@ func _ready() -> void:
 	$RoboHealth.on_death_event.connect( _die )
 
 func _process(delta: float) -> void:
-	if is_dead:
-		return
-		
-	if not idle_audio.is_playing() and randi() % 200 < 2:
-		idle_audio.play()
+	if is_dead: return
+	if not idle_audio.is_playing() and randi() % 200 < 2: idle_audio.play()
 	
 	# decrease the timer
 	if timer > 0:
@@ -37,14 +35,10 @@ func _process(delta: float) -> void:
 		timer = action_wait_time
 	
 		match state:
-			0: # make straight
-				animator.play("Rotate_make_straight")
-			1: # attack
-				animator.play("Attack_Planar")
-			2: # make angular
-				animator.play("Rotate_make_angular")
-			3: # attack angular
-				animator.play("Attack_Angluar")
+			0: animator.play("Rotate_make_straight")
+			1: animator.play("Attack_Planar")
+			2: animator.play("Rotate_make_angular")
+			3: animator.play("Attack_Angluar")
 		return
 	
 	# handle actual behavior
@@ -79,10 +73,12 @@ func _process(delta: float) -> void:
 			animator.play("Rotate_make_straight")
 
 func _shoot(at_angle: bool) -> void:
-	if not $Visibility.is_on_screen() and Difficulty.current_difficulty < Difficulty.DifficultyID.Standard: return
+	if not $Visibility.is_on_screen() and DifficultyManager.is_lower_than(DifficultyManager.BULLSHIT): return
 	var dirs : Array = [ "UR","DR","DL","UL" ] if at_angle else [ "U","R","D","L" ]
 	for dir in dirs:
 		var bullet = BULLET_SCENE.instantiate() as TurretBullet
+		if DifficultyManager.is_at_least( danger_threshold ): 
+			bullet._make_dangerous()
 		bullet.initial_operations(position, dir, bullet_spawn_distance)
 		bullet.is_dangerous = do_bullets_danger
 		bullet.set_mode()

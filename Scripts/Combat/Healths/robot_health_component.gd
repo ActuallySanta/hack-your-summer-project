@@ -13,8 +13,8 @@ func _on_death() -> void:
 		get_parent().queue_free()
 
 func _on_hit(_hurtBox: Hurtbox, hit_info: HitInfo, source: Hitbox) -> void:
-	take_damage(hit_info.damage)
+	take_damage( hit_info.damage )
 	var parent = get_parent()
-	if parent.has_method("_on_hit"):
+	if parent.has_method( "_on_hit" ):
 		parent._on_hit(hit_info, source)
 	on_hit_event.emit()

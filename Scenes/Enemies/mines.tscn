@@ -89,6 +89,7 @@ angular_damp = 5.715
 [node name="Visuals" type="Node2D" parent="RigidBody2D" unique_id=1873405529]
 
 [node name="Flash" type="Node2D" parent="RigidBody2D/Visuals" unique_id=32652606]
+position = Vector2(1.5, 0)
 
 [node name="TextureRect" type="TextureRect" parent="RigidBody2D/Visuals/Flash" unique_id=1305258062]
 offset_right = 64.0
@@ -124,9 +125,11 @@ frame_progress = 1.0
 script = SubResource("GDScript_yprqx")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D" unique_id=1295162647]
+visible = false
 shape = SubResource("CircleShape2D_wrphf")
 
 [node name="PlayerCollider" type="Area2D" parent="." unique_id=653954399]
+visible = false
 collision_layer = 0
 collision_mask = 6
 
@@ -134,6 +137,7 @@ collision_mask = 6
 shape = SubResource("CircleShape2D_85ri6")
 
 [node name="Hitbox" type="Area2D" parent="." unique_id=1275812061]
+visible = false
 collision_layer = 512
 collision_mask = 518
 monitoring = false
@@ -147,6 +151,7 @@ metadata/_custom_type_script = "uid://ctc17oyja7fup"
 shape = SubResource("CircleShape2D_bpmhk")
 
 [node name="MinesExplorer" type="Area2D" parent="." unique_id=1282392390]
+visible = false
 collision_layer = 0
 collision_mask = 512
 

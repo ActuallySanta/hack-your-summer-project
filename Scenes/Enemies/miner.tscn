@@ -81,6 +81,7 @@ radius = 380.00525
 [node name="Miner" type="Node2D" unique_id=1446641281]
 z_index = 1
 script = ExtResource("1_ngnoe")
+spawn_time_in_seconds = 5.0
 
 [node name="VisualManager" type="Node2D" parent="." unique_id=1086391350]
 scale = Vector2(3, 3)
@@ -132,5 +133,4 @@ position = Vector2(27, 39)
 script = ExtResource("9_q0q0e")
 scene_to_spawn = ExtResource("10_yprqx")
 max_spawns = 64
-keep_as_child = null
 metadata/_custom_type_script = "uid://b51qvd5s4veat"

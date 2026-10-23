@@ -19,6 +19,7 @@ func spawn_object(num_to_spawn: int, spawn_offset: Vector2 = Vector2.ZERO) -> Ar
 	while num_to_spawn > 0 and nodes_I_spawned.size() < max_spawns:
 		var instance : Node2D = scene_to_spawn.instantiate()
 		instance.global_position = global_position + spawn_offset
+		#instance.tree_exiting.connect( func(): nodes_I_spawned.erase( instance ) )
 		nodes_I_spawned.push_back( instance )
 		spawned_objects_this_call.push_back( instance )
 		
