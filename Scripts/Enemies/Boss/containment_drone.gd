@@ -198,11 +198,11 @@ func face_left() -> void:
 	mini_gun.is_flipped = false
 
 func _handle_difficulty_changes() -> void:
-	max_speed_when_charging = DifficultyManager.scale_with_mode(max_speed_when_charging, 20)
-	if DifficultyManager.is_at_least(3): chances_for_attack = { "CHARGE_LASER": 1, "CHARGE": 0.2 }
-	navigator_force_maximum_when_charging = DifficultyManager.scale_with_mode(navigator_force_maximum_when_charging, 1.1)
-	max_laser_time = DifficultyManager.pick_from_difficulty([ 2.00, 3.00, 3.10 ])
-	min_laser_time = DifficultyManager.pick_from_difficulty([ 1.00, 2.00, 3.00 ])
+	max_speed_when_charging = Difficulty.scale_with_mode(max_speed_when_charging, 20)
+	if Difficulty.is_at_least(3): chances_for_attack = { "CHARGE_LASER": 1, "CHARGE": 0.2 }
+	navigator_force_maximum_when_charging = Difficulty.scale_with_mode(navigator_force_maximum_when_charging, 1.1)
+	max_laser_time = Difficulty.pick_from_difficulty([ 2.00, 3.00, 3.10 ])
+	min_laser_time = Difficulty.pick_from_difficulty([ 1.00, 2.00, 3.00 ])
 
 func _ready() -> void:
 	if SaveManager.is_item_id_collected(SaveManager.ITEM_GUN):
@@ -233,7 +233,7 @@ func _ready() -> void:
 	pause_sprite_animations = true
 
 func _swap_charge_chances() -> void:
-	if DifficultyManager.is_higher_than( 3 ): return
+	if Difficulty.is_higher_than( 3 ): return
 	chances_for_attack = {
 		"CHARGE_LASER": 0.69,
 		"MINIGUN": 0.30,

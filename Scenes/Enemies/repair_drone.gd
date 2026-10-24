@@ -65,8 +65,6 @@ var _rescan_left : float = 0.0
 var _last_heading : Vector2 = Vector2.ZERO
 
 func _ready() -> void:
-	# Bounce and friction are switched between flying and stunned, so this body needs
-	# its own copy of the material rather than the shared resource every drone loads.
 	physics_material_override = physics_material_override.duplicate()
 	health_component.on_death_event.connect( on_death )
 	_enable_thrusters()
@@ -102,19 +100,16 @@ func _process(delta: float) -> void:
 		Mode.Seeking:
 			_advance_path()
 		Mode.Repairing:
-			# The node frees itself the moment it is fixed, and another drone may have
-			# been the one to finish it.
-			if not is_instance_valid(_target):
+			if not is_valid_repair_node(_target):
 				restart_sequence()
 		Mode.Idle:
-			if idle_rescan_interval <= 0.0:
-				return
+			if idle_rescan_interval <= 0.0: return
 			_rescan_left -= delta
 			if _rescan_left <= 0.0:
 				restart_sequence()
 
 func _advance_path() -> void:
-	if not is_instance_valid(_target):
+	if not is_valid_repair_node(_target):
 		restart_sequence()
 		return
 	if _path.is_empty():
@@ -124,6 +119,11 @@ func _advance_path() -> void:
 		_path.remove_at(0)
 		if _path.is_empty():
 			_begin_repairs()
+
+func is_valid_repair_node(target) -> bool:
+	if not is_instance_valid(target): return false
+	if not target.can_repair: return false
+	return true
 
 func _destination() -> Vector2:
 	if _path.size() <= 1 and is_instance_valid(_target):
@@ -209,8 +209,6 @@ func _face(velocity: Vector2) -> void:
 func _enter_idle() -> void:
 	_mode = Mode.Idle
 	_rescan_left = idle_rescan_interval
-	# Coming to a stop and then finding nothing to do would leave the drone parked
-	# with no heading to snap, so give it its starting one back.
 	if linear_velocity.length() <= _STOPPED_SPEED:
 		linear_velocity = _start_heading().normalized() * speed
 

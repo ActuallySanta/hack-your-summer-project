@@ -138,6 +138,7 @@ metadata/_custom_type_script = "uid://b51qvd5s4veat"
 
 [node name="RepairNode" type="Node2D" parent="." unique_id=1323994081 groups=["Repairable"]]
 script = ExtResource("11_wwohx")
-repair_timer = 0.0
+repair_timer = 0.01
 start_repair_state = false
+destroy_on_completion = false
 metadata/_custom_type_script = "uid://42wdk8m1e0ck"

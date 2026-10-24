@@ -34,7 +34,7 @@ var _dead := false
 var _hurt_shape: CollisionShape2D
 
 var base_max_health:
-	get(): return DifficultyManager.get_curr_setting().start_health
+	get(): return Difficulty.get_curr_setting().start_health
 
 func _ready() -> void:
 	max_health = base_max_health

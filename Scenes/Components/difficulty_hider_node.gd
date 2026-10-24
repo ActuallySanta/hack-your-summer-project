@@ -5,8 +5,8 @@ class_name DifficultySelector extends Node2D
 @export_enum("Easy","Standard", "Hard", "Bullshit") var difficulty : Array[ int ]
 
 func _ready() -> void:
-	var choosen_options := difficulty as Array[ DifficultyManager.DifficultyID ]
-	var current_difficulty := DifficultyManager.get_curr_diff()
+	var choosen_options := difficulty as Array[ Difficulty.DifficultyID ]
+	var current_difficulty := Difficulty.current_difficulty
 	for option in choosen_options:
 		if current_difficulty == option:
 			visible = true

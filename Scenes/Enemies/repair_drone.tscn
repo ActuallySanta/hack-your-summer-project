@@ -28,6 +28,7 @@ lock_rotation = true
 script = ExtResource("2_420ha")
 speed = 150.0
 stun_time = 1.0
+idle_rescan_interval = 0.1
 
 [node name="Navigator" type="Node2D" parent="." unique_id=1912730645 node_paths=PackedStringArray("node_to_move_instead_of_me")]
 script = ExtResource("7_nav")

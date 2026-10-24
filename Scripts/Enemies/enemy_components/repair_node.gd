@@ -9,16 +9,20 @@ signal on_repair_failure
 @export var start_repair_state : bool = true
 @export var destroy_on_completion : bool = true
 
+var timer : float 
 var can_repair : bool = true
 var number_of_repairers : int
 
+func _enter_tree() -> void:
+	can_repair = start_repair_state
+	timer = repair_timer
+
 func _ready() -> void:
 	number_of_repairers = 0
-	can_repair = start_repair_state
 
 func _process(delta: float) -> void:
-	repair_timer -= delta * number_of_repairers
-	if repair_timer > 0: return
+	timer -= delta * number_of_repairers
+	if timer > 0: return
 	
 	number_of_repairers += 2
 	on_repair_end.emit()
@@ -26,7 +30,8 @@ func _process(delta: float) -> void:
 		queue_free()
 	else:
 		can_repair = false
-		number_of_repairers -= 2
+		number_of_repairers = 0
+		timer = repair_timer
 
 func start_repairs() -> void:
 	number_of_repairers += 1

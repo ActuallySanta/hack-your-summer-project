@@ -8,7 +8,7 @@ class_name Miner extends Node2D
 @onready var player_collider := $PlayerCollider
 @onready var health_component := $RoboHealth
 @onready var mine_spawner := $Spawner
-@onready var repair_node := $RepairNode
+@onready var repair_node : RepairNode = $RepairNode
 
 var _path : Path
 var _timer : SmartTimer
@@ -18,10 +18,19 @@ var _min_time : float
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	if get_parent() is Path: _path = get_parent() as Path
-	_min_time = float( DifficultyManager.pick_from_difficulty( [ spawn_time_in_seconds / 2, 0 ] ) )
-	max_mines = int(DifficultyManager.scale_with_mode( max_mines, 2.3 ))
-	if DifficultyManager.is_higher_than( DifficultyManager.EASY ):
-		health_component.on_low_health_entry.connect( func(): repair_node.can_repair = true )
+	_min_time = float( Difficulty.pick_from_difficulty( [ spawn_time_in_seconds / 2, 0 ] ) )
+	max_mines = int(Difficulty.scale_with_mode( max_mines, 2.3 ))
+	
+	if Difficulty.is_at_least(Difficulty.BULLSHIT):
+		health_component.on_hit_event.connect( enable_repairing )
+		modulate.a = 0.02
+	elif Difficulty.is_higher_than( Difficulty.EASY ):
+		health_component.on_low_health_entry.connect( enable_repairing )
+		
+	repair_node.on_repair_start.connect( on_repair_start )
+	repair_node.on_repair_failure.connect( on_repair_fail )
+	repair_node.on_repair_end.connect( on_repair_success )
+		
 	
 	health_component.on_low_health_entry.connect( visuals.switch_to_damaged )
 	if ignore_player_collider:
@@ -34,11 +43,14 @@ func _ready() -> void:
 
 #region repairing
 
+func enable_repairing() -> void:
+	repair_node.can_repair = true
+
 func on_repair_start() -> void:
-	pass
+	print("start repairs...")
 
 func on_repair_fail() -> void:
-	pass
+	print("failed")
 
 func on_repair_success() -> void:
 	health_component.max_out()

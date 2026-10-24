@@ -9,6 +9,10 @@ extends Node2D
 var _heavy_damage : bool
 var _do_falling : bool
 var _panel_velocity : float = 0
+var _panel_init_pos : Vector2
+
+func _ready() -> void:
+	_panel_init_pos = position
 
 func _process(delta: float) -> void:
 	if _do_falling:
@@ -22,8 +26,12 @@ func _animate_panel() -> void:
 	_do_falling = true
 
 func switch_to_healed() -> void:
+	_heavy_damage = false
 	panel.visible = false
 	body.frame = 0
+	_panel_velocity = 0
+	_do_falling = false
+	panel.position = _panel_init_pos
 
 func switch_to_damaged() -> void:
 	if _heavy_damage: return

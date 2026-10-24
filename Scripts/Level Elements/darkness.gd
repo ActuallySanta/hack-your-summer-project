@@ -20,7 +20,7 @@ static var globle_darkness : Darkness
 @export var alpha_for_difficulty : Array[ float ] = [ 150/255.0, 190/255.0, 190/255.0, 210/255.0 ]
 
 var _dark_alpha : float:
-	get(): return DifficultyManager.pick_from_difficulty(alpha_for_difficulty)
+	get(): return Difficulty.pick_from_difficulty(alpha_for_difficulty)
 
 @export_file("*.tscn") var non_station_rooms : Array[String] = [
 	"res://Scenes/Rooms/Ship Internals/ship_internals.tscn",
@@ -70,7 +70,7 @@ func _ready() -> void:
 
 func handle_difficulty() -> void:
 	var tex : GradientTexture2D = gradient.texture
-	tex.gradient = DifficultyManager.pick_from_difficulty([BASE_GRADIENT, BASE_GRADIENT, HARD_GRADIENT, BULLSHIT_GRADIENT])
+	tex.gradient = Difficulty.pick_from_difficulty([BASE_GRADIENT, BASE_GRADIENT, HARD_GRADIENT, BULLSHIT_GRADIENT])
 	update_opacity( _dark_alpha )
 
 func _on_player_spawned() -> void:

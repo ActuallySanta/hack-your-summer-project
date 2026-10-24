@@ -56,7 +56,7 @@ func preparations() -> void:
 	switch_state( "idle" )
 
 func _physics_process(delta: float) -> void:
-	if not DifficultyManager.is_higher_than(DifficultyManager.EASY):
+	if not Difficulty.is_higher_than(Difficulty.EASY):
 		set_physics_process( false )
 	timer = max( 0, timer - delta )
 	if bt_player.blackboard.get_var( "state" ) == "hurt": return
@@ -68,7 +68,7 @@ func _physics_process(delta: float) -> void:
 	elif animator.assigned_animation == "bear_arms": switch_state( "idle" )
 
 func handle_difficulty() -> void:
-	attackCooldown = DifficultyManager.pick_from_difficulty([ 0.5, 0.4, 0.1, 0 ])
+	attackCooldown = Difficulty.pick_from_difficulty([ 0.5, 0.4, 0.1, 0 ])
 
 func spawnBullet():
 	velocity = Vector2.ZERO
