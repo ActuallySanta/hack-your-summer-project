@@ -59,12 +59,9 @@ const _STOPPED_SPEED := 4.0
 
 var _mode : Mode = Mode.Idle
 var _target : RepairNode
-## Remaining waypoints, the target last. Emptied as each one is reached.
 var _path : Array[Vector2]
 var _stun_left : float = 0.0
 var _rescan_left : float = 0.0
-## Heading at the end of the last powered tick, to measure the next one against.
-## Zero while there is nothing worth comparing: stunned, or too slow to have a heading.
 var _last_heading : Vector2 = Vector2.ZERO
 
 func _ready() -> void:
@@ -157,8 +154,8 @@ func _find_closest_repair_node() -> RepairNode:
 	var closest_distance : float = INF
 	for node in get_tree().get_nodes_in_group(REPAIRABLE_GROUP):
 		var repairable := node as RepairNode
-		if repairable == null or repairable.is_queued_for_deletion():
-			continue
+		if repairable == null or repairable.is_queued_for_deletion(): continue
+		if not repairable.can_repair: continue
 		var distance := global_position.distance_squared_to(repairable.global_position)
 		if distance < closest_distance:
 			closest = repairable
@@ -175,12 +172,9 @@ func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 	_bang_if_deflected(state.linear_velocity)
 
 	match _mode:
-		Mode.Idle:
-			state.linear_velocity = _snap_to_diagonal(state.linear_velocity) * speed
-		Mode.Seeking:
-			state.linear_velocity = navigator.steer_towards(global_position, state.linear_velocity, _destination())
-		Mode.Repairing:
-			state.linear_velocity = navigator.brake(global_position, state.linear_velocity)
+		Mode.Idle: state.linear_velocity = _snap_to_diagonal(state.linear_velocity) * speed
+		Mode.Seeking: state.linear_velocity = navigator.steer_towards(global_position, state.linear_velocity, _destination())
+		Mode.Repairing: state.linear_velocity = navigator.brake(global_position, state.linear_velocity)
 	_face(state.linear_velocity)
 
 	var speed_now := state.linear_velocity.length()

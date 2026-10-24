@@ -8,6 +8,7 @@ class_name Miner extends Node2D
 @onready var player_collider := $PlayerCollider
 @onready var health_component := $RoboHealth
 @onready var mine_spawner := $Spawner
+@onready var repair_node := $RepairNode
 
 var _path : Path
 var _timer : SmartTimer
@@ -19,6 +20,8 @@ func _ready() -> void:
 	if get_parent() is Path: _path = get_parent() as Path
 	_min_time = float( DifficultyManager.pick_from_difficulty( [ spawn_time_in_seconds / 2, 0 ] ) )
 	max_mines = int(DifficultyManager.scale_with_mode( max_mines, 2.3 ))
+	if DifficultyManager.is_higher_than( DifficultyManager.EASY ):
+		health_component.on_low_health_entry.connect( func(): repair_node.can_repair = true )
 	
 	health_component.on_low_health_entry.connect( visuals.switch_to_damaged )
 	if ignore_player_collider:
@@ -28,6 +31,21 @@ func _ready() -> void:
 		player_collider.body_exited.connect( area_exited );
 	
 	_timer = SmartTimer.new( spawn_time_in_seconds, spawn_mine_task  )
+
+#region repairing
+
+func on_repair_start() -> void:
+	pass
+
+func on_repair_fail() -> void:
+	pass
+
+func on_repair_success() -> void:
+	health_component.max_out()
+	visuals.switch_to_healed()
+	repair_node.can_repair = false
+	
+#endregion
 
 func spawn_mine_task() -> void:
 	if _path == null: return
@@ -43,10 +61,7 @@ func spawn_mine_task() -> void:
 	
 	_path.node_speed = old_speed
 	var new_time = randf_range(_min_time, spawn_time_in_seconds)
-	print( new_time )
-	_timer.start(new_time)
-
-
+	_timer.start( new_time )
 
 func _on_hit(hit_info: HitInfo, _source: Hitbox) -> void:
 	if hit_info.damage > 0: $VisualManager/Flasher.flash()

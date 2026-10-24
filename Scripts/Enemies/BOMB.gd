@@ -14,6 +14,7 @@ const EXPLOSION := preload("res://Scenes/Enemies/enemy_death_boom.tscn")
 var _timer = -1
 var boomed = false
 var going_for_delete = false
+var at_rest = false
 
 func _ready() -> void:
 	manin_flash.modulate.a = 0
@@ -45,6 +46,10 @@ func _physics_process(_delta: float) -> void:
 		queue_free()
 	
 func _BOOM_BOOM_BOOM() -> void:
+	if not at_rest:
+		if is_zero_approx(rb.linear_velocity.length()):
+			at_rest = true
+		return
 	if _timer >= 0: return
 	_timer = 0
 

@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://dhgcprjrtfobr" path="res://Scripts/Combat/hurtbox.gd" id="7_n3qvy"]
 [ext_resource type="Script" uid="uid://b51qvd5s4veat" path="res://Scripts/Level Elements/spawner.gd" id="9_q0q0e"]
 [ext_resource type="PackedScene" uid="uid://ubb50nvnsfg8" path="res://Scenes/Enemies/mines.tscn" id="10_yprqx"]
+[ext_resource type="Script" uid="uid://42wdk8m1e0ck" path="res://Scripts/Enemies/enemy_components/repair_node.gd" id="11_wwohx"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3sgtg"]
 atlas = ExtResource("2_0wi3u")
@@ -134,3 +135,9 @@ script = ExtResource("9_q0q0e")
 scene_to_spawn = ExtResource("10_yprqx")
 max_spawns = 64
 metadata/_custom_type_script = "uid://b51qvd5s4veat"
+
+[node name="RepairNode" type="Node2D" parent="." unique_id=1323994081 groups=["Repairable"]]
+script = ExtResource("11_wwohx")
+repair_timer = 0.0
+start_repair_state = false
+metadata/_custom_type_script = "uid://42wdk8m1e0ck"

@@ -15,20 +15,21 @@ func _process(delta: float) -> void:
 		_panel_velocity += panel_fall_speed * delta
 		panel.position += Vector2.DOWN * _panel_velocity
 
-func _switch_body_state() -> void:
-	body.frame = 1
-
 func _animate_panel() -> void:
 	panel.visible = true
 	panel.play("PanelFall")
 	await panel.animation_finished
 	_do_falling = true
 
+func switch_to_healed() -> void:
+	panel.visible = false
+	body.frame = 0
+
 func switch_to_damaged() -> void:
 	if _heavy_damage: return
 	_heavy_damage = true
 	_animate_panel()
-	_switch_body_state()
+	body.frame = 1
 
 func move_eye(target_global_position: Vector2) -> void:
 	var target_position : Vector2 = ((target_global_position - eye.offset) - eye.global_position)
