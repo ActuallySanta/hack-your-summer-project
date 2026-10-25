@@ -2,7 +2,10 @@
 
 [ext_resource type="Script" uid="uid://pqgu7ct1c0hs" path="res://Scenes/Components/better_save_station.gd" id="1_eypdd"]
 [ext_resource type="Texture2D" uid="uid://cad6sr3l6nlsl" path="res://Textures/CommonRoomAssets/ImprovedSaveStation.png" id="1_x8m0b"]
+[ext_resource type="AudioStream" uid="uid://bvxr5wr16v805" path="res://Sounds/EnvSFX/StationDeploy.wav" id="2_dn7ww"]
+[ext_resource type="AudioStream" uid="uid://m0n81k44ggqa" path="res://Sounds/EnvSFX/SaveStation.wav" id="3_c76sv"]
 [ext_resource type="TileSet" uid="uid://bu771ujkgnmqt" path="res://Tileset/save_tiles.tres" id="3_hijst"]
+[ext_resource type="AudioStream" uid="uid://cj3l3fp1wgnip" path="res://Sounds/EnvSFX/SaveStationIdle.wav" id="3_nnug8"]
 [ext_resource type="PackedScene" uid="uid://dbrol0aebyxca" path="res://Scenes/Components/player_interactable.tscn" id="4_hijst"]
 [ext_resource type="Shape2D" uid="uid://dd1m4l8spcxm6" path="res://Resources/Shapes/player_interactable.tres" id="5_eypdd"]
 
@@ -60,6 +63,21 @@ tracks/3/keys = {
 "method": &"_save"
 }]
 }
+tracks/4/type = "audio"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("AudioPlayer")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("2_dn7ww")
+}],
+"times": PackedFloat32Array(0)
+}
+tracks/4/use_blend = true
 
 [sub_resource type="Animation" id="Animation_hijst"]
 resource_name = "Idle"
@@ -104,6 +122,21 @@ tracks/2/keys = {
 "update": 1,
 "values": [0.0]
 }
+tracks/3/type = "audio"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Hummer")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("3_c76sv")
+}],
+"times": PackedFloat32Array(0)
+}
+tracks/3/use_blend = true
 
 [sub_resource type="Animation" id="Animation_eypdd"]
 length = 0.001
@@ -254,6 +287,25 @@ tracks/2/keys = {
 "method": &"_anim_update"
 }]
 }
+tracks/3/type = "audio"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Hummer")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("3_c76sv")
+}, {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("3_nnug8")
+}],
+"times": PackedFloat32Array(0, 0.0001)
+}
+tracks/3/use_blend = true
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_t5t8k"]
 _data = {
@@ -317,3 +369,10 @@ interact_once = true
 visible = false
 position = Vector2(0, -12)
 shape = ExtResource("5_eypdd")
+
+[node name="AudioPlayer" type="AudioStreamPlayer2D" parent="." unique_id=1819366135]
+max_polyphony = 2
+bus = &"PlayerSFX"
+
+[node name="Hummer" type="AudioStreamPlayer2D" parent="." unique_id=1507793581]
+bus = &"PlayerSFX"
