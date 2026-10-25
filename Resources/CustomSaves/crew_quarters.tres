@@ -4,7 +4,8 @@
 
 [resource]
 script = ExtResource("1_mpmtu")
-start_room = "uid://qv7ay1j4dm6r"
+start_room = "uid://cj5egdgddtqx4"
+start_position = Vector2(483, 483)
 fuse = 2
 gun = 1
 wrench = 1

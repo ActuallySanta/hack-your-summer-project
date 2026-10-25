@@ -15,7 +15,9 @@ func is_at_most(difficulty_level: DifficultyID) -> bool: return Difficulty.curre
 func is_same_as(difficulty_level: DifficultyID) -> bool: return Difficulty.current_difficulty == difficulty_level
 func isnt_same_as(difficulty_level: DifficultyID) -> bool: return Difficulty.current_difficulty != difficulty_level
 
+## Deprecated. Do not use
 func get_curr_diff() -> DifficultyID: return Difficulty.current_difficulty
+## Deprecated. Do not use
 func get_curr_setting() -> DifficultyType: return Difficulty.get_setting()
 func scale_with_mode(base_value: float, factor: float) -> float: return get_curr_diff() * factor + base_value
 func pick_from_difficulty(set_of_choices: Array): 

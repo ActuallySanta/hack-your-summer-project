@@ -1,5 +1,6 @@
 [gd_scene format=4 uid="uid://bm1af6fqs7bpk"]
 
+[ext_resource type="Script" uid="uid://pqgu7ct1c0hs" path="res://Scenes/Components/better_save_station.gd" id="1_eypdd"]
 [ext_resource type="Texture2D" uid="uid://cad6sr3l6nlsl" path="res://Textures/CommonRoomAssets/ImprovedSaveStation.png" id="1_x8m0b"]
 [ext_resource type="TileSet" uid="uid://bu771ujkgnmqt" path="res://Tileset/save_tiles.tres" id="3_hijst"]
 [ext_resource type="PackedScene" uid="uid://dbrol0aebyxca" path="res://Scenes/Components/player_interactable.tscn" id="4_hijst"]
@@ -45,6 +46,20 @@ tracks/2/keys = {
 "update": 1,
 "values": [0.0, 3.0, 9.0, 15.0]
 }
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.4),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"_save"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_hijst"]
 resource_name = "Idle"
@@ -62,6 +77,32 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
 "values": [0, 1, 2, 3]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.4),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"_anim_update"
+}]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Colliders/PlatformCollider:position:y")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0.0]
 }
 
 [sub_resource type="Animation" id="Animation_eypdd"]
@@ -155,6 +196,20 @@ tracks/2/keys = {
 "update": 1,
 "values": [&"Idle"]
 }
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.4),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"on_save_anim_exit"
+}]
+}
 
 [sub_resource type="Animation" id="Animation_dn7ww"]
 resource_name = "Saving"
@@ -185,6 +240,20 @@ tracks/1/keys = {
 "update": 0,
 "values": [Vector2(0, 15)]
 }
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.4),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"_anim_update"
+}]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_t5t8k"]
 _data = {
@@ -196,6 +265,7 @@ _data = {
 }
 
 [node name="SuperiorSaveStation" type="Node2D" unique_id=1864793096]
+script = ExtResource("1_eypdd")
 
 [node name="Animator" type="AnimationPlayer" parent="." unique_id=132498728]
 libraries/ = SubResource("AnimationLibrary_t5t8k")
@@ -241,6 +311,7 @@ polygon = PackedVector2Array(45, 15, 24, 36, 120, 36, 99, 15)
 
 [node name="PlayerInteractable" parent="." unique_id=754245965 instance=ExtResource("4_hijst")]
 position = Vector2(72, 15)
+interact_once = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerInteractable" unique_id=574017135]
 visible = false

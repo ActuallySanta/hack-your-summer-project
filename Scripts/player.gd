@@ -24,7 +24,6 @@ extends CharacterBody2D
 
 #region Signals
 signal pickup_collected(pickup: Pickup)
-signal save_station_used()
 signal death_start(anim_duration: float)
 signal death_end()
 ## Emitted by whatever launched the player -- the floor jump or the wall jump -- so

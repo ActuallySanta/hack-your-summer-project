@@ -45,7 +45,6 @@ func _on_body_entered(body: Node2D) -> void:
 	if not player: return
 	if not Difficulty.get_setting().can_save: return
 	SaveManager.save_data_to_file(GameManager.current_save_name)
-	player.save_station_used.emit()
 	MessageDisplay.add_saving_data()
 	GlobalSignals.max_player_health.emit()
 	activate()
