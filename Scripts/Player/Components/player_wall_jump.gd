@@ -220,6 +220,9 @@ func is_wall_available() -> bool:
 func launched_recently() -> bool:
 	return _since_launch <= contact_buffer_seconds
 
+func clear_pending_input() -> void:
+	_input_buffer = 0.0
+
 func on_respawn() -> void:
 	_available = false
 	_contact_buffer = 0.0

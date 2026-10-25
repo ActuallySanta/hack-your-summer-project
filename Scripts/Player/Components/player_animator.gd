@@ -112,6 +112,8 @@ var _anchored := false
 var _action_held := false
 ## Set while a [constant FLIP_LOCKED_ACTIONS] one-shot runs; the flip it started on.
 var _flip_locked := false
+## The look shown over everything else, or empty. See [method set_override].
+var _override: StringName = &""
 
 func _bind() -> void:
 	if animation_player == null:
@@ -172,7 +174,7 @@ func request_action(action: StringName, min_duration := 0.0, from_time := 0.0, i
 	# Settled once, here, rather than left as whatever the last look happened to be:
 	# these are mirrored looks, so the value has to be worked out with the new action
 	# already in place.
-	if _flip_locked and is_instance_valid(sprite):
+	if _flip_locked and _override.is_empty() and is_instance_valid(sprite):
 		sprite.flip_h = not _sprite_faces_right()
 	_play(resolved, 1.0, from_time)
 	_action_timer = maxf(animation_length(resolved) - from_time, min_duration)
@@ -322,9 +324,30 @@ func set_reference_pixel(index: Vector2i, colour: Color) -> void:
 		_reference.set_pixel(index, colour)
 #endregion
 
+## Shows [param look] over everything else -- the pose, any one-shot, even a held look
+## like death -- until it is cleared with an empty name.
+##
+## Everything underneath keeps running while it is up: poses are still asked for and
+## one-shots still start and run out, they just are not shown. So clearing it puts back
+## whatever the player is actually doing by then, not whatever they were doing when it
+## went up.
+func set_override(look: StringName) -> void:
+	if look == _override:
+		return
+	_override = look
+	if not _override.is_empty():
+		_play(_override)
+	elif not _action.is_empty():
+		_play(_action)
+	elif not _pose.is_empty():
+		_play(_pose)
+
 func frame_update(delta: float) -> void:
 	if is_instance_valid(sprite):
-		if not (_flip_locked and not _action.is_empty()):
+		if not _override.is_empty():
+			# Facing the camera has no left or right to mirror.
+			sprite.flip_h = false
+		elif not (_flip_locked and not _action.is_empty()):
 			sprite.flip_h = not _sprite_faces_right()
 		if _anchored:
 			sprite.position = _sprite_anchor
@@ -346,6 +369,8 @@ func on_respawn() -> void:
 	_pose = &""
 
 func _play(name: StringName, speed_scale := 1.0, from_time := 0.0) -> void:
+	if not _override.is_empty() and name != _override:
+		return
 	var resolved := resolve(name)
 	if resolved.is_empty():
 		return

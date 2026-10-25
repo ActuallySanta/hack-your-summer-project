@@ -18,7 +18,7 @@ func _ready() -> void:
 func try_start() -> void:
 	if animator.current_animation == "Idle":
 		_save_queued = true
-		PlayerManager.canMove = false
+		PlayerManager.facesForward = true
 		PlayerManager.player.global_position.x = interact.global_position.x
 		print("Saving...")
 		await get_tree().create_timer( save_time ).timeout
@@ -39,7 +39,7 @@ func _anim_update() -> void:
 		animator.play("Deploy")
 
 func on_save_anim_exit() -> void:
-	PlayerManager.canMove = true
+	PlayerManager.facesForward = false
 
 func _save() -> void:
 	SaveManager.save_data_to_file(GameManager.current_save_name)

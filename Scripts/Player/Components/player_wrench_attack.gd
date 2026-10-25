@@ -138,6 +138,9 @@ func on_respawn() -> void:
 	_buffer_timer = 0.0
 	refresh_from_save()
 
+func clear_pending_input() -> void:
+	_buffer_timer = 0.0
+
 ## Puts the swing on cooldown from outside, so firing the gun still blocks a swing.
 func block_for(seconds: float) -> void:
 	_cooldown_timer = maxf(_cooldown_timer, seconds)

@@ -177,6 +177,9 @@ func on_respawn() -> void:
 	_cooldown_timer = 0.0
 	_buffer_timer = 0.0
 
+func clear_pending_input() -> void:
+	_buffer_timer = 0.0
+
 ## Puts the gun on cooldown from outside, so swinging the wrench still blocks a shot.
 func block_for(seconds: float) -> void:
 	_cooldown_timer = maxf(_cooldown_timer, seconds)

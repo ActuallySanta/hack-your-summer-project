@@ -61,6 +61,9 @@ static var active_player : Player
 ## off. Long enough to clear the tile that gave way; see [method _update_floor_snap].
 @export var crumbleSnapPause := 0.25
 
+## Shown over everything else while PlayerManager.facesForward is on.
+const FACE_FORWARD_ANIMATION := &"face_forward"
+
 #region Node references
 @onready var collision_manager: CollisionManager = $CollisionManager
 @onready var jump_sfx: AudioStreamPlayer2D = $SFX/JumpSFX
@@ -132,6 +135,10 @@ func _ready() -> void:
 
 	collision_manager.swap_active_collision(_collider_for_state(move_state))
 	_align_visuals_to_collider(_collider_for_state(move_state))
+
+	PlayerManager.faces_forward_changed.connect(_on_faces_forward_changed)
+	if PlayerManager.facesForward:
+		_on_faces_forward_changed(true)
 
 func _component_order(a: PlayerComponent, b: PlayerComponent) -> bool:
 	return _order_of(a) < _order_of(b)
@@ -211,8 +218,20 @@ func _on_jump_pressed() -> void:
 ## Whether the player is allowed to act on input at all. Not during a knockback: its
 ## arc is fixed, and a jump or thrust mid-way would be overwritten by it anyway.
 func can_act() -> bool:
-	return PlayerManager.canMove and not _dying and not (health and health.is_dead()) \
+	return PlayerManager.canMove and not PlayerManager.facesForward \
+		and not _dying and not (health and health.is_dead()) \
 		and knockback_timer <= 0.0
+
+## PlayerManager.facesForward going on or off. Input is dropped on the way in --
+## can_act() only stops new input being read, so whatever was held when it went on
+## would otherwise still be held for as long as it lasts -- and the run is stopped
+## dead rather than braked, or the forward-facing frame glides to a halt.
+func _on_faces_forward_changed(on: bool) -> void:
+	if on:
+		reset_all_inputs()
+		velocity.x = 0.0
+	if animator:
+		animator.set_override(FACE_FORWARD_ANIMATION if on else &"")
 #endregion
 
 #region Move state
@@ -475,8 +494,8 @@ func reset_all_inputs() -> void:
 	jump_held = false
 	shoot_held = false
 	attack_held = false
-	if floor_jump:
-		floor_jump.consume_jump_buffer()
+	for component in _components:
+		component.clear_pending_input()
 #endregion
 
 #region World interaction

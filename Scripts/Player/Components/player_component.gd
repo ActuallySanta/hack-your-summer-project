@@ -34,3 +34,9 @@ func frame_update(_delta: float) -> void:
 ## respawn. Anything a component is holding mid-action should be dropped here.
 func on_respawn() -> void:
 	pass
+
+## Forgets any press still waiting in a buffer. Called whenever the player's inputs
+## are reset, so a press made just before control is taken away cannot go off just
+## after it.
+func clear_pending_input() -> void:
+	pass

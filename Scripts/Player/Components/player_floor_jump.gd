@@ -95,6 +95,9 @@ func has_buffered_jump() -> bool:
 
 func consume_jump_buffer() -> void:
 	_jump_buffer = 0.0
+
+func clear_pending_input() -> void:
+	consume_jump_buffer()
 #endregion
 
 func on_jump_pressed() -> void:
