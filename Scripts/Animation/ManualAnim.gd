@@ -31,8 +31,7 @@ func _ready() -> void:
 	timer = 0.0
 
 func _process(delta: float) -> void:
-	if is_anim_paused:
-		return
+	if is_anim_paused: return
 	timer -= delta
 	while timer < 0:
 		anim_frame = (anim_frame + 1) % frames_in_sequence
