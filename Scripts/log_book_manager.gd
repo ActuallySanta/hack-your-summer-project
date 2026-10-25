@@ -35,6 +35,9 @@ func _add_region_entry(region: StringName) -> void:
 func collect_event_log(log_name: StringName, event_display: String) -> void:
 	if not SaveManager.update_logbook( log_name ): return
 	MessageDisplay.add_log_pop_up( event_display )
+	_add_event_entry( log_name )
+
+func _add_event_entry(log_name: StringName) -> void:
 	_add_entry(EVENTS_ACCESS, log_name, func(): ListDisplay.pause_panel.read_and_place( event_map[ log_name ] ))
 
 func _add_entry(access: StringName, entry_name: StringName, callable: Callable) -> void:
@@ -45,23 +48,29 @@ func _add_entry(access: StringName, entry_name: StringName, callable: Callable) 
 	item.on_click.connect( func(): SaveManager.read_logbook_entry( entry_name ) )
 
 func _match_list_to_save() -> void:
+	_match_group_to_save( REGIONS_ACCESS, region_map, _add_region_entry )
+	_match_group_to_save( EVENTS_ACCESS, event_map, _add_event_entry )
+
+## Makes one group of the log book hold exactly what the save has of its kind, no more and no less.
+## The save keeps regions and events under the one logbook prefix, so which group an entry belongs
+## in is answered by whose table names it.
+func _match_group_to_save(access: String, logs: Dictionary[ StringName, String ], add_entry: Callable) -> void:
 	var root : TextListItem = ListDisplay.panel.root
-	var regions := root.parse_path( REGIONS_ACCESS )
-	if regions != null:
-		for entry in regions.sub_lists.duplicate():
+	var group := root.parse_path( access )
+	if group != null:
+		for entry in group.sub_lists.duplicate():
 			if not SaveManager.check_logbook( entry.item_name ):
-				root.remove_label_at( REGIONS_ACCESS + "/" + entry.item_name )
-		if regions.sub_lists.is_empty(): root.remove_label_at( REGIONS_ACCESS )
+				root.remove_label_at( access + "/" + entry.item_name )
+		if group.sub_lists.is_empty(): root.remove_label_at( access )
 
 	# In the save's own order, which is the order they were found in
 	for entry in SaveManager.get_logbook_entries():
-		var region := StringName( entry )
-		if region_map.has( region ) and root.parse_path( REGIONS_ACCESS + "/" + region ) == null:
-			_add_region_entry( region )
+		var log_name := StringName( entry )
+		if logs.has( log_name ) and root.parse_path( access + "/" + log_name ) == null:
+			add_entry.call( log_name )
 
 	# An entry read since the last save goes back to unread with everything else a death undoes
-	for access in [ REGIONS_ACCESS, EVENTS_ACCESS ]:
-		var group := root.parse_path( access )
-		if group == null: continue
-		for entry in group.sub_lists:
-			entry.is_unread = not SaveManager.is_logbook_entry_read( entry.item_name )
+	group = root.parse_path( access )
+	if group == null: return
+	for entry in group.sub_lists:
+		entry.is_unread = not SaveManager.is_logbook_entry_read( entry.item_name )

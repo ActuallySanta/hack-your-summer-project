@@ -44,6 +44,9 @@ var _desire_to_hide : HideState = HideState.SHOW_REST:
 		_apply_input()
 var _tab : Tab = Tab.TEXT
 
+var showing_map : bool:
+	get(): return _tab == Tab.MAP
+
 var fully_hidden : bool:
 	get(): return _desire_to_hide == HideState.HIDE_REST
 

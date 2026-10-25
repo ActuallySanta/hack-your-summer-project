@@ -38,10 +38,14 @@ func toggle_menu() -> void:
 	if panel_open: open_menu()
 	else: close_menu()
 
-## Opens the menu straight onto the map, for the map key. It goes by way of the list's own Map label
-## rather than to the map directly, so the list is left standing on Map just as a click leaves it,
-## and it counts as the menu being open, so the next pause press closes it rather than opening it.
-func open_map() -> void:
+## The map key: opens the menu straight onto the map, or closes it if the map is what it is already
+## showing. Open on anything else, it only switches over to the map. It goes by way of the list's
+## own Map label rather than to the map directly, so the list is left standing on Map just as a
+## click leaves it, and it counts as the menu being open, so the next pause press closes it.
+func toggle_map() -> void:
+	if panel_open and pause_panel.showing_map:
+		toggle_menu()
+		return
 	panel_open = true
 	open_menu()
 	panel.root.parse_path(".../Map").click()
