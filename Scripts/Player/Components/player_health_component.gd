@@ -36,6 +36,12 @@ var _hurt_shape: CollisionShape2D
 var base_max_health:
 	get(): return Difficulty.get_curr_setting().start_health
 
+## What the extenders collected so far add to [member base_max_health]. Each is worth
+## [member DifficultyType.health_rune_reward_scale] of a point and only whole points
+## count, so at 0.5 it takes two extenders to add one.
+var upgrade_health: int:
+	get(): return floori(SaveManager.get_health_upgrade_count() * Difficulty.get_setting().health_rune_reward_scale)
+
 func _ready() -> void:
 	max_health = base_max_health
 	start_health = base_max_health
@@ -52,7 +58,7 @@ func _ready() -> void:
 
 func _on_difficulty_changed() -> void:
 	print("Base: ", base_max_health, " Saved: ", SaveManager.get_health_upgrade_count(), " Current_max: ", max_health, " Current_va: ", _curr_health)
-	max_health = base_max_health + SaveManager.get_health_upgrade_count()
+	max_health = base_max_health + upgrade_health
 	
 	if _curr_health > max_health: max_out()
 	print("Updated: ", max_health, " :Max || Curr: ", _curr_health)
@@ -111,14 +117,14 @@ func refresh_from_save() -> void:
 		player.animator.set_body_hidden_for_blink(false)
 	ignore_effects = false
 	hurtbox.process_mode = Node.PROCESS_MODE_INHERIT
-	max_health = base_max_health + SaveManager.get_health_upgrade_count()
+	max_health = base_max_health + upgrade_health
 	max_out()
 	_announce()
 
-## An extender was collected for the first time. Both the ceiling and the current
-## health go up, so the new point is usable straight away.
+## An extender was collected for the first time. The ceiling is recounted, which on a
+## reward scale below 1 may leave it where it was, and health is filled up to it.
 func _on_extender_collected() -> void:
-	max_health = base_max_health + SaveManager.get_health_upgrade_count()
+	max_health = base_max_health + upgrade_health
 	max_out()
 	_announce()
 

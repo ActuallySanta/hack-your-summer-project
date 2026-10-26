@@ -40,6 +40,10 @@ var _expanded_scale : Vector2
 var _dark := false
 var _fade : Tween
 var _held := false
+var _manual := false
+## The room the player is in, or is on the way into. A hold ends when the room that took
+## it is unloaded, mid-swap, and by then MetSys names the room being left or no room at all.
+var _room := ""
 var _was_toggled := false
 
 @onready var gradient := $TextureRect
@@ -74,10 +78,12 @@ func handle_difficulty() -> void:
 	update_opacity( _dark_alpha )
 
 func _on_player_spawned() -> void:
+	_room = MetSys.get_current_room_name()
 	if _held: return
-	_set_dark(_should_be_dark(MetSys.get_current_room_name()), false)
+	_set_dark(_should_be_dark(_room), false)
 
 func _on_room_changed(new_room: String) -> void:
+	_room = new_room
 	if _held: return
 	_set_dark(_should_be_dark(new_room), true)
 
@@ -93,12 +99,28 @@ func hold(dark: bool, animate := true) -> void:
 	_held = true
 	_set_dark(dark, animate)
 
-## Hands the darkness back to the station's power and the current room, moving it to
-## whichever they call for.
+## Takes the darkness over to be faded by hand with [method fade_manual], from wherever
+## it is now. Like [method hold], it stays taken until [method release].
+func hold_manual() -> void:
+	_held = true
+	_manual = true
+	_stop_fade()
+	visible = true
+
+## Hands the darkness back to the station's power and the room the player is in, moving
+## it to whichever they call for. A darkness faded by hand is put there outright,
+## whatever [param animate] says.
 func release(animate := true) -> void:
 	if not _held: return
 	_held = false
-	_set_dark(_should_be_dark(MetSys.get_current_room_name()), animate)
+	var dark := _should_be_dark(_room)
+	if _manual:
+		# Part way between on and off, so _set_dark's "already there" check would compare
+		# against a state the darkness is not actually showing.
+		_manual = false
+		_apply_state( dark )
+	else:
+		_set_dark( dark, animate )
 
 ## Whether something is currently driving the darkness by hand.
 func is_held() -> bool:
@@ -166,8 +188,11 @@ func _stop_fade() -> void:
 	if is_instance_valid(_fade): _fade.kill()
 	_fade = null
 
+## Puts a darkness taken with [method hold_manual] [param percent] of the way from clear
+## and wide (0) to fully dark (1).
 func fade_manual(percent: float) -> void:
-	if not _held: return
+	if not _manual: return
+	percent = clampf(percent, 0.0, 1.0)
 	modulate.a = _dark_alpha * percent
 	scale = _expanded_scale - (_expanded_scale - _base_scale) * percent 
 
