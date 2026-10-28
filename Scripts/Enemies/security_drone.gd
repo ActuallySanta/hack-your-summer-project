@@ -8,7 +8,6 @@ const BULLET_SCENE := preload("res://Scenes/Enemies/turret_bullet.tscn")
 @export var do_bullets_danger : bool
 @export_enum("Easy", "Standard", "Hard", "Bullshit") var danger_threshold : int = 3
 
-@onready var sprite := $Sprite2D
 @onready var audio_player := $AudioStreamPlayer2D
 @onready var animator := $AnimationPlayer
 @onready var idle_audio : AudioStreamPlayer2D = $IdleAudioPlayer
@@ -20,9 +19,12 @@ var is_dead := false
 func _ready() -> void:
 	$RoboHealth.on_death_event.connect( _die )
 
+func _physics_process(_delta: float) -> void:
+	if not $Visibility.is_on_screen(): return
+	if not idle_audio.is_playing() and randi() % 50 < 2: idle_audio.play()
+
 func _process(delta: float) -> void:
 	if is_dead: return
-	if not idle_audio.is_playing() and randi() % 200 < 2: idle_audio.play()
 	
 	# decrease the timer
 	if timer > 0:

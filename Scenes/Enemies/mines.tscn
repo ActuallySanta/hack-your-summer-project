@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://bdgk11k35o1b4" path="res://Scripts/Enemies/BOMB.gd" id="1_thrjk"]
 [ext_resource type="Texture2D" uid="uid://crpcsnsk24ei3" path="res://Sprites/Characters/Enemy SpriteSheets/Miner/Mines.png" id="1_xsf2c"]
 [ext_resource type="Script" uid="uid://ctc17oyja7fup" path="res://Scripts/Combat/hitbox.gd" id="3_tvqek"]
+[ext_resource type="AudioStream" uid="uid://bvpxcl1tb44gm" path="res://Sounds/Entities/Enemies/Machines/Miner/Mine_Flash.wav" id="4_n14v1"]
 
 [sub_resource type="Gradient" id="Gradient_thrjk"]
 offsets = PackedFloat32Array(0, 0.30020705, 0.72670805, 1)
@@ -53,6 +54,10 @@ resource_name = "MinesAnimator"
 script/source = "extends AnimatedSprite2D
 
 @export var flash_time_delta_seconds : float = 1.0
+@export var banger : AudioStreamPlayer2D
+@export var fade_time : float = 0.35
+
+@onready var flash_light := $TextureProgressBar
 
 var _timer : SmartTimer
 
@@ -60,11 +65,27 @@ var _timer : SmartTimer
 func _ready() -> void:
 	_timer = SmartTimer.new(flash_time_delta_seconds, bling, randf() * flash_time_delta_seconds)
 
-func _process(delta: float) -> void: _timer.increment( delta)
+func _process(delta: float) -> void: 
+	_timer.increment( delta)
+	if flash_light.modulate.a > 0:
+		flash_light.modulate.a -= delta / fade_time
 
 func bling() -> void:
 	play(\"idle\")
+	banger.play()
+	flash_light.modulate.a = 1
 "
+
+[sub_resource type="Gradient" id="Gradient_n14v1"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0, 0.3301887, 0.6132075)
+colors = PackedColorArray(1, 0, 0, 1, 1, 0.078755856, 0.09352258, 0.37241432, 1, 0.1254902, 0.14901961, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_npwjr"]
+gradient = SubResource("Gradient_n14v1")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.315)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_wrphf"]
 radius = 4.5
@@ -115,7 +136,7 @@ texture = SubResource("GradientTexture2D_bpmhk")
 flip_h = true
 flip_v = true
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="RigidBody2D/Visuals" unique_id=1021085952]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="RigidBody2D/Visuals" unique_id=1021085952 node_paths=PackedStringArray("banger")]
 position = Vector2(0, -2)
 scale = Vector2(3, 3)
 sprite_frames = SubResource("SpriteFrames_bpmhk")
@@ -123,6 +144,22 @@ animation = &"idle"
 frame = 3
 frame_progress = 1.0
 script = SubResource("GDScript_yprqx")
+banger = NodePath("../../../AudioStreamPlayer2D")
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="RigidBody2D/Visuals/AnimatedSprite2D" unique_id=310555383]
+offset_left = -31.333334
+offset_top = -30.666668
+offset_right = 32.666664
+offset_bottom = 33.333332
+offset_transform_enabled = true
+offset_transform_scale = Vector2(1, 0.5)
+value = 100.0
+rounded = true
+fill_mode = 4
+radial_initial_angle = 340.0
+radial_fill_degrees = 40.0
+texture_progress = SubResource("GradientTexture2D_npwjr")
+texture_progress_offset = Vector2(-0.5, -1.57)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D" unique_id=1295162647]
 visible = false
@@ -157,6 +194,12 @@ collision_mask = 512
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MinesExplorer" unique_id=586852610]
 shape = SubResource("CircleShape2D_bpmhk")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=713942788]
+stream = ExtResource("4_n14v1")
+volume_db = 9.08
+attenuation = 2.0
+bus = &"EnemySFXZ"
 
 [connection signal="area_entered" from="PlayerCollider" to="." method="_on_player_collider_area_entered"]
 [connection signal="body_entered" from="PlayerCollider" to="." method="_on_player_collider_body_entered"]

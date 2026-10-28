@@ -21,9 +21,10 @@ var _was_low : bool = false
 
 var _curr_health : int:
 	set(value):
-		if ignore_effects:
-			return
-		_curr_health = clampi(value, 0, max_health)
+		if ignore_effects: return
+		var new_health = clampi(value, 0, max_health)
+		if new_health == _curr_health: return
+		_curr_health = new_health
 		if _curr_health <= 0:
 			_on_death()
 
