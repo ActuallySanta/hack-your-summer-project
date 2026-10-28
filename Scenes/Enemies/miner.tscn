@@ -5,12 +5,15 @@
 [ext_resource type="Texture2D" uid="uid://cv72dg5owh8kp" path="res://Sprites/Characters/Enemy SpriteSheets/Miner/Miner.png" id="1_v6q4p"]
 [ext_resource type="Texture2D" uid="uid://dstaq3pgb8wok" path="res://Sprites/Characters/Enemy SpriteSheets/Miner/MinerPanel.png" id="2_0wi3u"]
 [ext_resource type="Texture2D" uid="uid://dxei5b815ew5q" path="res://Sprites/Characters/Enemy SpriteSheets/Miner/MinerEye.png" id="2_3khq3"]
+[ext_resource type="Script" uid="uid://ctc17oyja7fup" path="res://Scripts/Combat/hitbox.gd" id="2_tniv8"]
 [ext_resource type="PackedScene" uid="uid://c744kphkhs1tv" path="res://Scenes/Components/flasher.tscn" id="3_ngnoe"]
 [ext_resource type="Script" uid="uid://p46g50v8y7y4" path="res://Scripts/Combat/Healths/robot_health_component.gd" id="6_6tgu0"]
 [ext_resource type="Script" uid="uid://dhgcprjrtfobr" path="res://Scripts/Combat/hurtbox.gd" id="7_n3qvy"]
 [ext_resource type="Script" uid="uid://b51qvd5s4veat" path="res://Scripts/Level Elements/spawner.gd" id="9_q0q0e"]
 [ext_resource type="PackedScene" uid="uid://ubb50nvnsfg8" path="res://Scenes/Enemies/mines.tscn" id="10_yprqx"]
 [ext_resource type="Script" uid="uid://42wdk8m1e0ck" path="res://Scripts/Enemies/enemy_components/repair_node.gd" id="11_wwohx"]
+[ext_resource type="AudioStream" uid="uid://1jnwoym5mlvj" path="res://Sounds/Entities/Enemies/Machines/Miner/Miner_place.wav" id="12_81naf"]
+[ext_resource type="AudioStream" uid="uid://bgkf5lw8xusfu" path="res://Sounds/Entities/Enemies/Machines/Miner/Miner_ouch.wav" id="13_tniv8"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3sgtg"]
 atlas = ExtResource("2_0wi3u")
@@ -84,6 +87,17 @@ z_index = 1
 script = ExtResource("1_ngnoe")
 spawn_time_in_seconds = 5.0
 
+[node name="Hurtbox" type="Area2D" parent="." unique_id=1470983442]
+z_index = 200
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("2_tniv8")
+metadata/_custom_type_script = "uid://ctc17oyja7fup"
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Hurtbox" unique_id=1009051760]
+visible = false
+polygon = PackedVector2Array(9, 39, 48, 39, 48, -48, -45, -42, -45, 7, -12, 12)
+
 [node name="VisualManager" type="Node2D" parent="." unique_id=1086391350]
 scale = Vector2(3, 3)
 script = ExtResource("1_3sgtg")
@@ -142,3 +156,16 @@ repair_timer = 0.01
 start_repair_state = false
 destroy_on_completion = false
 metadata/_custom_type_script = "uid://42wdk8m1e0ck"
+
+[node name="AudioSources" type="Node2D" parent="." unique_id=1309432256]
+
+[node name="DropSFX" type="AudioStreamPlayer2D" parent="AudioSources" unique_id=1484159794]
+stream = ExtResource("12_81naf")
+pitch_scale = 0.75
+max_distance = 1020.0
+bus = &"EnemySFXZ"
+
+[node name="OwieSFX" type="AudioStreamPlayer2D" parent="AudioSources" unique_id=111883696]
+stream = ExtResource("13_tniv8")
+volume_db = 9.427
+bus = &"EnemySFXZ"

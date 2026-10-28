@@ -11,6 +11,7 @@ const BULLET_SCENE := preload("res://Scenes/Enemies/turret_bullet.tscn")
 @onready var audio_player := $AudioStreamPlayer2D
 @onready var animator := $AnimationPlayer
 @onready var idle_audio : AudioStreamPlayer2D = $IdleAudioPlayer
+@onready var hurtSFX : AudioStreamPlayer2D = $HurtSFX
 
 var timer := 0.0
 var state := 0
@@ -98,3 +99,5 @@ func _die() -> void:
 func _on_hit(hit_info: HitInfo, _source: Hitbox) -> void:
 	if hit_info.damage == 0: return
 	$Flasher.flash()
+	hurtSFX.play()
+	

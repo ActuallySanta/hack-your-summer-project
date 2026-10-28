@@ -10,6 +10,9 @@ class_name Miner extends Node2D
 @onready var mine_spawner := $Spawner
 @onready var repair_node : RepairNode = $RepairNode
 
+@onready var dropSFX : AudioStreamPlayer2D = $AudioSources/DropSFX
+@onready var ouchSFX : AudioStreamPlayer2D = $AudioSources/OwieSFX
+
 var _path : Path
 var _timer : SmartTimer
 var _player : Node2D
@@ -68,6 +71,7 @@ func spawn_mine_task() -> void:
 	await get_tree().create_timer( 0.3 ).timeout
 	
 	mine_spawner.spawn_object(1)
+	dropSFX.play()
 	
 	await get_tree().create_timer( 1.0 ).timeout
 	
@@ -76,7 +80,9 @@ func spawn_mine_task() -> void:
 	_timer.start( new_time )
 
 func _on_hit(hit_info: HitInfo, _source: Hitbox) -> void:
-	if hit_info.damage > 0: $VisualManager/Flasher.flash()
+	if hit_info.damage <= 0: return 
+	$VisualManager/Flasher.flash()
+	ouchSFX.play()
 
 func _process(delta: float) -> void:
 	if _player: visuals.move_eye( _player.global_position )

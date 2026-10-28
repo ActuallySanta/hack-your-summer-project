@@ -18,6 +18,7 @@ signal on_low_health_exit
 var ignore_effects : bool = false
 
 var _was_low : bool = false
+var _is_dead : bool = false
 
 var _curr_health : int:
 	set(value):
@@ -27,6 +28,7 @@ var _curr_health : int:
 		_curr_health = new_health
 		if _curr_health <= 0:
 			_on_death()
+			_is_dead = true
 
 ## The player_damage_factor [method mod_for_difficulty] divided health by; stays 1.0 where it is overridden.
 var _difficulty_factor := 1.0
@@ -58,6 +60,7 @@ func unscaled_health() -> float:
 	return _curr_health * _difficulty_factor
 
 func take_damage(amount: int) -> void:
+	if _is_dead == true: return
 	_curr_health -= amount
 	_check_low_health()
 

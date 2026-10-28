@@ -274,6 +274,7 @@ bus = &"EnemySFXZ"
 
 [node name="HurtSFX" type="AudioStreamPlayer2D" parent="." unique_id=1740918300]
 stream = ExtResource("8_q4z8c")
+volume_db = -0.82
 bus = &"EnemySFXZ"
 
 [node name="RoboHealth" type="Node2D" parent="." unique_id=1501417485]
