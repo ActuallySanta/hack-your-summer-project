@@ -94,5 +94,5 @@ func _die() -> void:
 	is_dead = true
 
 func _on_hit(hit_info: HitInfo, _source: Hitbox) -> void:
-	if hit_info.damage == 0:
-		pass
+	if hit_info.damage == 0: return
+	$Flasher.flash()

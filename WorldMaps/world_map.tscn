@@ -13,7 +13,6 @@
 script = ExtResource("1_v4sft")
 
 [node name="WorldMapLimbo" parent="." unique_id=1902216411 instance=ExtResource("6_w76ui")]
-visible = false
 position = Vector2(-12367, 94)
 
 [node name="WorldMapDB" parent="." unique_id=19893736 instance=ExtResource("2_boi75")]

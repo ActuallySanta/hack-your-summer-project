@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://tnioey3ra6xq" path="res://Scripts/Enemies/security_drone.gd" id="1_bgcgs"]
 [ext_resource type="Texture2D" uid="uid://bnp6q4gtivnuy" path="res://Sprites/Characters/Enemy SpriteSheets/SecurityDrone.png" id="1_wvc68"]
+[ext_resource type="PackedScene" uid="uid://c744kphkhs1tv" path="res://Scenes/Components/flasher.tscn" id="2_hr42x"]
 [ext_resource type="AudioStream" uid="uid://fbwbyra25x88" path="res://Sounds/Entities/Enemies/Machines/Security Drone/Security_attack.wav" id="3_xtf7i"]
 [ext_resource type="AudioStream" uid="uid://bggj2rona36fy" path="res://Sounds/Entities/Enemies/Machines/Security Drone/Security_ouch.wav" id="4_b5bhe"]
 [ext_resource type="AudioStream" uid="uid://v3q2h1ebeikg" path="res://Sounds/Entities/Enemies/Machines/Security Drone/Security_idle.wav" id="5_bl4by"]
@@ -17,7 +18,7 @@ step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame_coords")
+tracks/0/path = NodePath("Flasher/Sprite2D:frame_coords")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -62,7 +63,7 @@ step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame_coords")
+tracks/0/path = NodePath("Flasher/Sprite2D:frame_coords")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -107,11 +108,11 @@ step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame_coords")
+tracks/0/path = NodePath("Flasher/Sprite2D:frame_coords")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2),
+"times": PackedFloat32Array(0, 0.2, 0.4),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
 "values": [Vector2i(1, 3), Vector2i(2, 3), Vector2i(3, 3)]
@@ -137,7 +138,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame_coords")
+tracks/0/path = NodePath("Flasher/Sprite2D:frame_coords")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -154,7 +155,7 @@ step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame_coords")
+tracks/0/path = NodePath("Flasher/Sprite2D:frame_coords")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -171,7 +172,7 @@ step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame_coords")
+tracks/0/path = NodePath("Flasher/Sprite2D:frame_coords")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -189,7 +190,7 @@ step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame_coords")
+tracks/0/path = NodePath("Flasher/Sprite2D:frame_coords")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -242,7 +243,9 @@ do_bullets_danger = true
 [node name="Visibility" type="VisibleOnScreenNotifier2D" parent="." unique_id=493969828]
 rect = Rect2(-22, -22, 45, 45)
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1084366026]
+[node name="Flasher" parent="." unique_id=734208757 instance=ExtResource("2_hr42x")]
+
+[node name="Sprite2D" type="Sprite2D" parent="Flasher" unique_id=1084366026]
 position = Vector2(1.5, 1.5)
 scale = Vector2(3, 3)
 texture = ExtResource("1_wvc68")
@@ -254,6 +257,7 @@ visible = false
 shape = SubResource("CircleShape2D_bpmhk")
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=214273928]
+volume_db = -5.81
 max_polyphony = 3
 panning_strength = 0.0
 
@@ -262,7 +266,8 @@ libraries/ = SubResource("AnimationLibrary_pn02w")
 
 [node name="IdleAudioPlayer" type="AudioStreamPlayer2D" parent="." unique_id=757052066]
 stream = ExtResource("5_bl4by")
-max_distance = 4096.0
+volume_db = -8.46
+attenuation = 1.4142138
 
 [node name="RoboHealth" type="Node2D" parent="." unique_id=1501417485]
 visible = false
