@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://usl0ryav6sdi" path="res://Scenes/Components/door_blocker.tscn" id="10_clkw6"]
 [ext_resource type="Script" uid="uid://6f15nb6r34b0" path="res://Scripts/EnvironmentalHazards/path.gd" id="11_7xd8o"]
 [ext_resource type="PackedScene" uid="uid://bywk7doxfo4dy" path="res://Scenes/Enemies/miner.tscn" id="12_c6fbr"]
+[ext_resource type="Script" uid="uid://bhji22p8wcn21" path="res://Scenes/Components/difficulty_hider_node.gd" id="12_mphvs"]
 [ext_resource type="PackedScene" uid="uid://dst5y4sttk4ir" path="res://Scenes/Enemies/security_drone.tscn" id="13_c6fbr"]
 [ext_resource type="PackedScene" uid="uid://bnpsyl86ggbjm" path="res://Scenes/Pickups/health_extender.tscn" id="15_nhosp"]
 
@@ -99,7 +100,12 @@ position = Vector2(2877.9998, 6)
 rotation = 1.5707964
 scale = Vector2(1.1, 1.1)
 
-[node name="Path" type="Node2D" parent="." unique_id=1281024964]
+[node name="DifficultySelector" type="Node2D" parent="." unique_id=1322738998]
+script = ExtResource("12_mphvs")
+difficulty = Array[int]([2, 3])
+metadata/_custom_type_script = "uid://bhji22p8wcn21"
+
+[node name="Path" type="Node2D" parent="DifficultySelector" unique_id=1281024964]
 script = ExtResource("11_7xd8o")
 loop_mode = "Ping Pong"
 wait_time_seconds = 0.0
@@ -107,7 +113,7 @@ node_speed = 100.0
 points = Array[Vector2]([Vector2(2581, 227), Vector2(1138, 227)])
 metadata/_custom_type_script = "uid://6f15nb6r34b0"
 
-[node name="Miner" parent="Path" unique_id=1446641281 instance=ExtResource("12_c6fbr")]
+[node name="Miner" parent="DifficultySelector/Path" unique_id=1446641281 instance=ExtResource("12_c6fbr")]
 position = Vector2(2944, 247)
 
 [node name="Path2" type="Node2D" parent="." unique_id=2108436496]
