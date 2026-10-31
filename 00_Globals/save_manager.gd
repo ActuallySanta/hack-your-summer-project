@@ -152,7 +152,7 @@ func save_data_to_file(save_name: String, use_checkpoint := true) -> void:
 		printerr("SaveManager: cannot write \"%s\". Error %d." % [path, FileAccess.get_open_error()])
 		return
 
-	file.store_string(var_to_str(_data.to_dict()))
+	file.store_string( var_to_str( _data.to_dict() ) )
 
 func get_save_path(save_name: String) -> String:
 	return "%s/%s.%s" % [SAVE_DIR, save_name, SAVE_EXTENSION]
@@ -500,30 +500,21 @@ func _capture_world_state(use_checkpoint: bool) -> void:
 	_data.has_fuse = is_item_id_collected(ITEM_FUSE)
 	_data.has_jetpack = is_item_id_collected(ITEM_JETPACK)
 
-	if is_item_id_collected(ITEM_PLASMA_GUN):
-		_data.gun = SaveData.GunState.Plasma
-	elif is_item_id_collected(ITEM_GUN):
-		_data.gun = SaveData.GunState.Stun
-	else:
-		_data.gun = SaveData.GunState.None
+	if is_item_id_collected(ITEM_PLASMA_GUN): _data.gun = SaveData.GunState.Plasma
+	elif is_item_id_collected(ITEM_GUN): _data.gun = SaveData.GunState.Stun
+	else: _data.gun = SaveData.GunState.None
 
-	if is_item_id_collected(ITEM_STRONG_WRENCH):
-		_data.wrench = SaveData.WrenchState.Allen
-	elif is_item_id_collected(ITEM_WRENCH):
-		_data.wrench = SaveData.WrenchState.Basic
-	else:
-		_data.wrench = SaveData.WrenchState.None
+	if is_item_id_collected(ITEM_STRONG_WRENCH): _data.wrench = SaveData.WrenchState.Allen
+	elif is_item_id_collected(ITEM_WRENCH): _data.wrench = SaveData.WrenchState.Basic
+	else: _data.wrench = SaveData.WrenchState.None
 
 	var room := MetSys.get_current_room_name()
-	if not room.is_empty():
-		_data.current_room = room
+	if not room.is_empty(): _data.current_room = room
 
 	var player := PlayerManager.player
-	if player:
-		_data.player_pos = player.global_position
+	if player: _data.player_pos = player.global_position
 
-	if not use_checkpoint:
-		return
+	if not use_checkpoint: return
 
 	# The station is what the player walked into, so it is where they come back to --
 	# both on a reload and on the respawn that does not go through a file at all.

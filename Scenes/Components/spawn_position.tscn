@@ -1,0 +1,3 @@
+[gd_scene format=3 uid="uid://c2xiessksns43"]
+
+[node name="SpawnPosition" type="Marker2D" unique_id=1705385348 groups=["save_checkpoint"]]

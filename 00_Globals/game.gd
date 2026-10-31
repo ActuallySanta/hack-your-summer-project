@@ -28,6 +28,8 @@ const TRANSITIONS_MODULE := "res://Scripts/Level Elements/faded_room_transitions
 ## not travel, so they never claim a camera region.
 const CAMERA_TELEPORT_SPEED := 4000.0
 
+static var loadedRoom := false
+
 var isInGame : bool = false
 var paused : bool = false
 # Camera axis region state (see _apply_camera_axis_regions).
@@ -157,6 +159,7 @@ func _begin_transition() -> void:
 ## revert to it, rather than to whatever the last playthrough left on disk.
 func _enter_world(write_starting_save: bool) -> void:
 	_player_positioned = false
+	loadedRoom = true
 	_reset_world_state()
 	await load_room(SaveManager.get_spawn_room())
 	await get_tree().create_timer(artificial_load_time).timeout

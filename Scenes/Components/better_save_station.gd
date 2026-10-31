@@ -1,5 +1,6 @@
 extends Node2D
 
+
 @export_range(0.4,5,0.1,"or_greater") var save_time : float = 2.5
 
 @onready var animator : AnimationPlayer = $Animator
@@ -10,8 +11,11 @@ var _idle_queued : bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	if not Difficulty.get_setting().can_save: interact.queue_free()
+	if not Difficulty.get_setting().can_save or GameManager.loadedRoom: interact.queue_free()
 	interact.on_player_confirm_interaction.connect( try_start )
+
+func _exit_tree() -> void:
+	GameManager.loadedRoom = false
 
 ## Attempts to run the save protocal
 ## Assumes that this function will never be called twice in a row; no stale interact calls

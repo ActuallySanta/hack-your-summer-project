@@ -24,7 +24,7 @@ position = Vector2(2922, -384)
 position = Vector2(1770, 960)
 
 [node name="StorageRoom" parent="." unique_id=1041062810 instance=ExtResource("6_5jwjo")]
-position = Vector2(6378, 288)
+position = Vector2(6381, 288)
 
 [node name="WaitingRoomDB" parent="." unique_id=295914285 instance=ExtResource("7_bewut")]
 position = Vector2(1770, 1632)
@@ -33,7 +33,7 @@ position = Vector2(1770, 1632)
 position = Vector2(-535, -384)
 
 [node name="BayAlphaDB" parent="." unique_id=1161255728 instance=ExtResource("7_rf76t")]
-position = Vector2(-535, 960)
+position = Vector2(-535, 957)
 
 [node name="BayGammaDb" parent="." unique_id=1040202241 instance=ExtResource("8_e6yji")]
 position = Vector2(4074, 288)

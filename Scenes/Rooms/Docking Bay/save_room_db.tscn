@@ -85,8 +85,5 @@ collision_enabled = false
 [node name="Dors" parent="." unique_id=197313074 instance=ExtResource("9_xr133")]
 tile_map_data = PackedByteArray("AAAWAAUAAQACAAAAAAAWAAYAAQACAAEAAAAWAAcAAQACAAIAAAAXAAUAAQADAAAAAAAXAAYAAQADAAEAAAAXAAcAAQADAAIAAAA=")
 
-[node name="Marker2D" type="Marker2D" parent="." unique_id=286963146 groups=["save_checkpoint"]]
-position = Vector2(647, 325)
-
 [node name="SuperiorSaveStation" parent="." unique_id=1864793096 instance=ExtResource("10_sew1r")]
 position = Vector2(576, 336)
