@@ -6,6 +6,8 @@
 [ext_resource type="PackedScene" uid="uid://c744kphkhs1tv" path="res://Scenes/Components/flasher.tscn" id="3_tju6i"]
 [ext_resource type="Script" uid="uid://p46g50v8y7y4" path="res://Scripts/Combat/Healths/robot_health_component.gd" id="5_figc4"]
 [ext_resource type="Script" uid="uid://ctc17oyja7fup" path="res://Scripts/Combat/hitbox.gd" id="5_sy4jm"]
+[ext_resource type="AudioStream" uid="uid://c5thacioorfkn" path="res://Sounds/Entities/Enemies/Machines/RobotOuch.wav" id="8_0ph2o"]
+[ext_resource type="AudioStream" uid="uid://dlmq2r0g7qa57" path="res://Sounds/Entities/Enemies/Machines/RobotHit.wav" id="9_3oe0o"]
 [ext_resource type="PackedScene" uid="uid://djmeyycufny61" path="res://Scenes/Components/Hurtbox.tscn" id="18_6j4xf"]
 
 [sub_resource type="BlackboardPlan" id="BlackboardPlan_be0ij"]
@@ -147,13 +149,15 @@ radius = 20.0
 radius = 19.0
 height = 86.0
 
-[node name="Ranged Enemy" type="CharacterBody2D" unique_id=1835408748 node_paths=PackedStringArray("health_component", "hurtbox")]
+[node name="Ranged Enemy" type="CharacterBody2D" unique_id=1835408748 node_paths=PackedStringArray("health_component", "hurtbox", "stun_sfx", "ouch_sfx")]
 collision_layer = 4
 script = ExtResource("1_yfht6")
 attackCooldown = 3.5
 wanderDistance = 500.0
 health_component = NodePath("RoboHealth")
 hurtbox = NodePath("RoboHealth/Hurtbox")
+stun_sfx = NodePath("StunSFX")
+ouch_sfx = NodePath("HurtSFX")
 
 [node name="BTPlayer" type="BTPlayer" parent="." unique_id=1291468803]
 behavior_tree = ExtResource("2_qj8iq")
@@ -200,6 +204,7 @@ start_health = 5
 metadata/_custom_type_script = "uid://p46g50v8y7y4"
 
 [node name="Hurtbox" parent="RoboHealth" unique_id=470143312 instance=ExtResource("18_6j4xf")]
+visible = false
 collision_layer = 4
 
 [node name="Shape" type="CollisionShape2D" parent="RoboHealth/Hurtbox" unique_id=326280550]
@@ -223,16 +228,8 @@ collide_with_areas = true
 visible = false
 position = Vector2(44, -8)
 
-[node name="Contact Damage Hitbox" type="Area2D" parent="." unique_id=1261742805]
-visible = false
-script = ExtResource("5_sy4jm")
-metadata/_custom_type_script = "uid://ctc17oyja7fup"
-
-[node name="Shape" type="CollisionShape2D" parent="Contact Damage Hitbox" unique_id=786773970]
-position = Vector2(8, 3)
-shape = SubResource("CapsuleShape2D_mgs6e")
-
 [node name="Hitbox" type="Area2D" parent="." unique_id=555091075]
+visible = false
 position = Vector2(8, 0)
 collision_layer = 4
 collision_mask = 2
@@ -242,3 +239,10 @@ metadata/_custom_type_script = "uid://ctc17oyja7fup"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=1689117445]
 position = Vector2(0, 3)
 shape = SubResource("CapsuleShape2D_bpmhk")
+
+[node name="HurtSFX" type="AudioStreamPlayer2D" parent="." unique_id=830826158]
+stream = ExtResource("8_0ph2o")
+bus = &"EnemySFXZ"
+
+[node name="StunSFX" type="AudioStreamPlayer2D" parent="." unique_id=1389128737]
+stream = ExtResource("9_3oe0o")

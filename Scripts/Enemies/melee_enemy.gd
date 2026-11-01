@@ -1,7 +1,6 @@
 extends Enemy
 
 @onready var melee_hitbox : Hitbox= $"Melee Hitbox"
-
 @onready var attack_duration: Timer = $"Attack Duration"
 
 func generateAttack():
@@ -19,3 +18,4 @@ func generateAttack():
 
 func _on_melee_hitbox_on_hit(hitbox: Hitbox, target: Hurtbox) -> void:
 	pass
+	

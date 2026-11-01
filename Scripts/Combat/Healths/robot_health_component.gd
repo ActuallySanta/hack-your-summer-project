@@ -1,5 +1,8 @@
 class_name RoboHealth extends HealthComponent
 
+const STUN_SFX := preload("res://Sounds/Entities/Enemies/Machines/RobotHit.wav")
+const HURT_SFX := preload("res://Sounds/Entities/Enemies/Machines/RobotOuch.wav")
+
 @export var destroy_on_death : bool = false
 
 const EXPLOSION := preload("res://Scenes/Enemies/enemy_death_boom.tscn")

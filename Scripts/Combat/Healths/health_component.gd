@@ -77,10 +77,8 @@ func _check_low_health() -> void:
 	if low == _was_low:
 		return
 	_was_low = low
-	if low:
-		on_low_health_entry.emit()
-	else:
-		on_low_health_exit.emit()
+	if low: on_low_health_entry.emit()
+	else: on_low_health_exit.emit()
 
 func kill_self() -> void:
 	_curr_health = 0

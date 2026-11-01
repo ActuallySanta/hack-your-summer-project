@@ -80,8 +80,10 @@ stream = ExtResource("10_lejhb")
 autoplay = true
 max_distance = 671.0
 attenuation = 1.5691681
+bus = &"EnemySFXZ"
 
 [node name="Bangs" type="AudioStreamPlayer2D" parent="." unique_id=344619955]
-max_distance = 624.0
-attenuation = 1.8025012
+volume_db = 1.18
+attenuation = 1.4640859
 max_polyphony = 4
+bus = &"EnemySFXZ"

@@ -1,7 +1,5 @@
 extends Enemy
 
-const STUN_SFX := preload("res://Sounds/Entities/Enemies/Machines/RobotHit.wav")
-const HURT_SFX := preload("res://Sounds/Entities/Enemies/Machines/RobotOuch.wav")
 const REPAIR_SFX := preload("res://Sounds/Entities/Enemies/Machines/FallenAndroidRepair.wav")
 
 @export var repaired_scene : PackedScene
@@ -19,7 +17,6 @@ func get_start_flipped() -> bool: return start_flipped
 @onready var repair_sprite := $RepairSprite
 @onready var animator := $AnimationPlayer
 @onready var repair_node : RepairNode = $RepairNode
-@onready var ouch_sfx : AudioStreamPlayer2D = $OuchSFX
 @onready var banger_sfx : AudioStreamPlayer2D = $Bangers
 
 var is_weapon_raised : bool = false
@@ -82,15 +79,3 @@ func spawnBullet():
 
 func set_weapon_raised(val: bool) -> void:
 	is_weapon_raised = val
-
-func play_sfx_at_hurt(stream: AudioStreamWAV) -> void:
-	ouch_sfx.stream = stream
-	ouch_sfx.play()
-
-func _on_hit(_hit_info: HitInfo, source: Hitbox) -> void:
-	if source.has_method( "get_damage_type" ):
-		var dmg_type : StringName = source.get_damage_type()
-		if dmg_type == "stun_bullet":
-			play_sfx_at_hurt(STUN_SFX)
-			return
-	play_sfx_at_hurt(HURT_SFX)

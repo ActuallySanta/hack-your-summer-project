@@ -9,6 +9,10 @@ const SPEED:float = 50
 @export var health_component : HealthComponent
 @export var hurtbox: Hurtbox
 @export_enum("none", "face threat", "custom") var retaliation_method : String = "none"
+
+@export var stun_sfx : AudioStreamPlayer2D
+@export var ouch_sfx : AudioStreamPlayer2D
+
 @onready var mainScene : Node = get_tree().current_scene
 @onready var visual: Sprite2D = $Flasher/Visual
 @onready var flasher : Flasher = $Flasher
@@ -107,7 +111,10 @@ func takeDamage(_hurtBox: Hurtbox, _hit_info: HitInfo, source: Hitbox):
 		var dmg_type : StringName = source.get_damage_type()
 		if dmg_type == "stun_bullet":
 			switch_state( "hurt" )
+			stun_sfx.play()
 			return
+			
+	ouch_sfx.play()
 	flasher.flash()
 
 func can_see_player() -> bool:

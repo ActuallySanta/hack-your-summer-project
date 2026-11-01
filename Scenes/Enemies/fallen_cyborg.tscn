@@ -13,6 +13,8 @@
 [ext_resource type="Script" uid="uid://ctc17oyja7fup" path="res://Scripts/Combat/hitbox.gd" id="6_tos5j"]
 [ext_resource type="Script" uid="uid://42wdk8m1e0ck" path="res://Scripts/Enemies/enemy_components/repair_node.gd" id="7_bjx1m"]
 [ext_resource type="Script" uid="uid://p46g50v8y7y4" path="res://Scripts/Combat/Healths/robot_health_component.gd" id="8_4jg48"]
+[ext_resource type="AudioStream" uid="uid://c5thacioorfkn" path="res://Sounds/Entities/Enemies/Machines/RobotOuch.wav" id="14_cpnfp"]
+[ext_resource type="AudioStream" uid="uid://dlmq2r0g7qa57" path="res://Sounds/Entities/Enemies/Machines/RobotHit.wav" id="15_e3mwi"]
 
 [sub_resource type="BlackboardPlan" id="BlackboardPlan_65w47"]
 
@@ -270,7 +272,7 @@ size = Vector2(27, 48)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_bpmhk"]
 
-[node name="Fallen_Cyborg" type="CharacterBody2D" unique_id=2020790701 node_paths=PackedStringArray("health_component", "hurtbox")]
+[node name="Fallen_Cyborg" type="CharacterBody2D" unique_id=2020790701 node_paths=PackedStringArray("health_component", "hurtbox", "stun_sfx", "ouch_sfx")]
 collision_layer = 5
 script = ExtResource("1_65w47")
 repaired_scene = ExtResource("2_b4axf")
@@ -279,6 +281,8 @@ bulletScene = ExtResource("3_262vs")
 attackCooldown = 0.1
 health_component = NodePath("RoboHealth")
 hurtbox = NodePath("RoboHealth/Hurtbox")
+stun_sfx = NodePath("StunSFX")
+ouch_sfx = NodePath("OuchSFX")
 
 [node name="BTPlayer" type="BTPlayer" parent="." unique_id=635174070]
 behavior_tree = ExtResource("2_jcgcb")
@@ -376,5 +380,12 @@ shape = SubResource("CircleShape2D_bpmhk")
 disabled = true
 
 [node name="Bangers" type="AudioStreamPlayer2D" parent="." unique_id=255187624]
+bus = &"EnemySFXZ"
 
 [node name="OuchSFX" type="AudioStreamPlayer2D" parent="." unique_id=1636576835]
+stream = ExtResource("14_cpnfp")
+bus = &"EnemySFXZ"
+
+[node name="StunSFX" type="AudioStreamPlayer2D" parent="." unique_id=1631681894]
+stream = ExtResource("15_e3mwi")
+bus = &"EnemySFXZ"
