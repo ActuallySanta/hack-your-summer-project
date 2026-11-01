@@ -8,6 +8,11 @@
 ## [signal GlobalSignals.room_transition_faded_out]) and waits to be told the swap is
 ## done. [i]FadedRoomTransitions[/i] is the other half of that conversation.
 ##
+## Starting or loading a game uses the same fade without its first part. The button
+## press is already a cut, so [method cover] goes straight to black, and
+## [method fade_in] clears it on the loaded room exactly as it ends a room transition.
+## [GameHUD] calls both, as its load screen.
+##
 ## The darkness and the world's speed are driven off the same number, so time runs out
 ## exactly as the last of the light does and the room is swapped into a world that has
 ## stopped. [member Engine.time_scale] is the lever: it scales the delta handed to every
@@ -33,7 +38,7 @@ signal screen_faded_out
 enum State {
 	Idle, ## Clear. Nothing is happening.
 	FadingOut, ## Darkening towards black.
-	Covered, ## Fully black, waiting on the room swap.
+	Covered, ## Fully black, waiting on a room swap or a load.
 	FadingIn, ## Clearing again, on the new room.
 }
 
@@ -86,6 +91,24 @@ func on_room_transition() -> void:
 	_start_fade(State.FadingOut)
 
 func on_room_transition_complete() -> void:
+	fade_in()
+
+## Puts the screen straight into the middle of a fade: black, with the world stopped,
+## exactly where a fade-out would have left it. For a game being started or loaded.
+##
+## The world is stopped as well as hidden so that [method fade_in] hands time back the
+## way it does after a room swap. Left running, the world would drop from full speed
+## to a standstill on the first frame of the fade-in.
+func cover() -> void:
+	_state = State.Covered
+	_set_fade_amount(1)
+	_time_scale(1)
+	# No screen_faded_out. That is a room transition's cue to swap rooms, and a load puts
+	# its room up itself.
+
+## Clears the screen over [member fade_out_time], handing the world its time back as
+## the light comes up. Ends every room transition, and every load.
+func fade_in() -> void:
 	_start_fade(State.FadingIn)
 
 func _start_fade(state: State) -> void:

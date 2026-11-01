@@ -4,7 +4,6 @@ extends Menu
 signal go_to_main_menu()
 
 @export var mainMenu : Control
-@onready var loading_screen: ColorRect = $"../LoadingScreen"
 
 #Return to main menu
 func _on_main_menu_button_2_pressed() -> void:

@@ -9,17 +9,15 @@ signal load_game(ignore_custom_save : bool)
 signal resume_game()
 signal quit_game()
 
-@onready var loading_screen: Control = $LoadingScreen
 @onready var death_screen: Control = $DeathScreen
 @onready var main_menu: Menu = $"Main Menu"
 @onready var game_over_menu: EndMenu = $"Game Over Menu"
 @onready var game_complete_menu: EndMenu = $"Game Complete Menu"
 @onready var player_hud : PlayerHUD = $"Player HUD Layer/Player HUD"
+@onready var transition_fade : RoomTransitionFade = $"Player HUD Layer/Player HUD/TransitionFade"
 @onready var menus: Array[Control] = [main_menu, game_over_menu, game_complete_menu ]
-@export var load_screen_fade_time := 0.8
 @export var death_screen_fade_time := 1.5
 
-var load_fade_timer: SceneTreeTimer
 var death_fade_timer: SceneTreeTimer
 var death_fade_in: bool
 
@@ -39,22 +37,19 @@ func _ready() -> void:
 	game_complete_menu.go_to_main_menu.connect(show_menu.bind(MenuType.MainMenu))
 
 func _process(_delta: float) -> void:
-	if load_fade_timer:
-		loading_screen.modulate.a = load_fade_timer.time_left / load_screen_fade_time
 	if death_fade_timer:
 		death_screen.modulate.a = death_fade_timer.time_left / death_screen_fade_time
 		if death_fade_in:
 			death_screen.modulate.a = 1 - death_screen.modulate.a
 
+## Blacks the screen out the moment a game is asked for, so none of the load is seen.
+## The load screen is the room transition's own fade, see [method RoomTransitionFade.cover].
 func show_load_screen() -> void:
-	loading_screen.modulate.a = 1
+	transition_fade.cover()
 
-func hide_load_screen(fade := true) -> void:
-	if fade:
-		load_fade_timer = get_tree().create_timer(load_screen_fade_time)
-		load_fade_timer.timeout.connect(hide_load_screen.bind(false))
-	else:
-		loading_screen.modulate.a = 0
+## Fades in on the game that has just been put up, at the rate a room transition clears.
+func hide_load_screen() -> void:
+	transition_fade.fade_in()
 
 func fade_in_death_screen() -> void:
 	death_fade_timer = get_tree().create_timer(death_screen_fade_time)

@@ -162,7 +162,9 @@ func _enter_world(write_starting_save: bool) -> void:
 	loadedRoom = true
 	_reset_world_state()
 	await load_room(SaveManager.get_spawn_room())
-	await get_tree().create_timer(artificial_load_time).timeout
+	# On the real clock. The load screen stops the world while it is up, and a timer
+	# counting scaled time would never run out.
+	await get_tree().create_timer(artificial_load_time, true, false, true).timeout
 
 	_player.global_position = SaveManager.get_spawn_position()
 	_player_positioned = true
@@ -657,7 +659,4 @@ func _on_player_death(_anim_duration: float) -> void:
 
 func end_game():
 	PlayerManager.player.process_mode = Node.PROCESS_MODE_DISABLED
-	
-	_hud.show_load_screen()
 	_hud.show_menu(GameHUD.MenuType.GameComplete)
-	_hud.hide_load_screen()

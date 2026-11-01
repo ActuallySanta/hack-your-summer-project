@@ -98,7 +98,6 @@ tile_map_data = PackedByteArray("AAAJABsABQAAAAAAAAAJABoABQAAAAAAAAAJABkABQAAAAA
 tile_set = ExtResource("3_l2p6i")
 
 [node name="Area2DHider" type="Area2D" parent="." unique_id=1971533067]
-visible = false
 script = ExtResource("8_fyvrq")
 metadata/_custom_type_script = "uid://bolhkxg50t11x"
 
