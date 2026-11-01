@@ -28,6 +28,10 @@ var _could_move := true
 ## What [code]health.ignore_effects[/code] was before the transition took it.
 var _ignored_effects := false
 
+## Bumped by [method abandon]. A transition notes it before waiting on the fade, and one
+## that finds it changed on waking has been given up on and has no swap left to make.
+var _abandoned := 0
+
 func _initialize() -> void:
 	player = game.player
 	assert(player)
@@ -42,15 +46,32 @@ func _on_room_changed(target_room: String) -> void:
 
 	_transitioning = true
 	_suspend_player(true)
+	var abandoned := _abandoned
 
 	GlobalSignals.room_transition.emit()
 	await GlobalSignals.room_transition_faded_out
+	if abandoned != _abandoned:
+		return
 
 	await _swap_room(target_room)
 
 	_suspend_player(false)
 	_transitioning = false
 	GlobalSignals.room_transition_complete.emit()
+
+## Gives up on a transition that has not swapped its room in yet, because a game is being
+## loaded over the top of it. A dead player's body can still be carried across a boundary
+## while the Game Over menu is up, so one can be part way when Respawn is pressed.
+##
+## The load blacks the screen out at once, so the fade-out this transition is waiting on
+## never finishes. Left alone, it waited for good, and kept the player's controls and
+## every later room change with it.
+func abandon() -> void:
+	if not _transitioning:
+		return
+	_abandoned += 1
+	_transitioning = false
+	_suspend_player(false)
 
 ## Takes the old room out, brings [param target_room] in, and moves the player by the
 ## distance between the two rooms' origins so they come out of the boundary where they

@@ -30,6 +30,10 @@ const CAMERA_TELEPORT_SPEED := 4000.0
 
 static var loadedRoom := false
 
+## The [constant TRANSITIONS_MODULE] instance, kept so a load can call off a room
+## transition it interrupts.
+var _room_transitions
+
 var isInGame : bool = false
 var paused : bool = false
 # Camera axis region state (see _apply_camera_axis_regions).
@@ -102,7 +106,7 @@ func _ready() -> void:
 func _init_metsys_and_objects() -> void:
 	MetSys.reset_state()
 	set_player(_player)
-	add_module(TRANSITIONS_MODULE)
+	_room_transitions = add_module(TRANSITIONS_MODULE)
 	GlobalSignals.room_transition_complete.connect(_on_room_swapped)
 	_player.pickup_collected.connect(_on_pickup_collected)
 	_player.death_start.connect(_on_player_death)
@@ -150,6 +154,7 @@ func _begin_transition() -> void:
 	get_tree().paused = false
 	paused = false
 	_hud.hide_menus()
+	_room_transitions.abandon()
 	_hud.show_load_screen()
 
 ## Brings up the room the loaded save names and puts the player into it.

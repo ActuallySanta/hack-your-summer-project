@@ -449,6 +449,12 @@ func _load(data: SaveData) -> void:
 	# set_save_data with an empty dictionary is how MetSys is initialised for a new
 	# game, so this one call covers both.
 	MetSys.set_save_data(_data.metsys)
+	# MetSys only explores a cell when the player is reported somewhere other than the
+	# cell it last saw them in, and that cell belongs to the save being replaced. Kept,
+	# a respawn into the cell the player died in counts as not having moved: the cell
+	# stays unexplored, and a starting save, written before anything was explored, came
+	# back with an empty map.
+	MetSys.last_player_position = Vector3i.MAX
 	_apply_carried_items()
 	_apply_to_player()
 

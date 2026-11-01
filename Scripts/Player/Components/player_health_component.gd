@@ -107,6 +107,9 @@ func mod_for_difficulty() -> void:
 ## run happened to leave behind.
 func refresh_from_save() -> void:
 	_dead = false
+	# HealthComponent keeps a dead flag of its own, which turns every later hit away. The
+	# player is the one thing that comes back, so it is cleared here too.
+	_is_dead = false
 	_invuln_timer = 0.0
 	_blink_timer = 0.0
 	# Same reason as in [method _on_death]: clearing the timer stops the only other
