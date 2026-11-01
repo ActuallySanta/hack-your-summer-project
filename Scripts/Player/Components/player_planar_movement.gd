@@ -73,11 +73,14 @@ func _bind() -> void:
 	player.floor_block_on_wall = block_on_wall
 
 func physics_update(delta: float) -> void:
-	match player.move_state:
-		Player.MoveState.Knockback:
-			_knockback(delta)
-		_:
-			_walk()
+	# Asked of the timer rather than the move state. Under a ceiling too low to stand up
+	# in, the player is held Crouching for the whole of a knockback, and while only the
+	# Knockback state ran the arc, a hit taken in a crawl space never ran its clock down --
+	# the player had no control until they found headroom. The ceiling flattens the hop.
+	if player.knockback_timer > 0.0:
+		_knockback(delta)
+	else:
+		_walk()
 
 func _walk() -> void:
 	# A launch that owns the horizontal (a wall jump) keeps it for its hold window, so
